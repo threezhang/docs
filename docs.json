@@ -9,7 +9,7 @@
     "light": "#3b82f6",
     "dark": "#1d4ed8"
   },
-  "favicon": "/logo/logo.webp",
+  "favicon": "/logo/favicon.svg",
   "modeToggle": {
     "default": "light",
     "isHidden": false
@@ -189,12 +189,12 @@
     "og:type": "website",
     "og:title": "老张API - 企业级AI大模型API中转站",
     "og:description": "国内访问ChatGPT、Claude、Gemini等200+AI模型API。完全兼容OpenAI接口，支持支付宝微信付款，提供中文技术支持。",
-    "og:image": "/logo/logo.webp",
+    "og:image": "/logo/logo-default.webp",
     "og:url": "https://docs.laozhang.ai",
     "twitter:card": "summary_large_image",
     "twitter:title": "老张API - 企业级AI大模型API中转站",
     "twitter:description": "国内访问ChatGPT、Claude、Gemini等200+AI模型API。OpenAI兼容接口，支付宝微信付款。",
-    "twitter:image": "/logo/logo.webp"
+    "twitter:image": "/logo/logo-default.webp"
   },
   "redirects": [
     {
