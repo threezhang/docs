@@ -64,7 +64,7 @@
 
 **接入端点：**
 - 主端点：https://api.laozhang.ai/v1
-- 备用端点：https://vip.laozhang.ai/v1
+- 备用端点：https://api-cf.laozhang.ai/v1
 
 **认证方式：**
 - Bearer Token认证

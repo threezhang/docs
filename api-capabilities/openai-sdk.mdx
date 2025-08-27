@@ -336,7 +336,7 @@ import com.theokanning.openai.completion.chat.*;
 import java.time.Duration;
 import java.util.List;
 
-public class APIYiExample {
+public class LaoZhangExample {
     public static void main(String[] args) {
         OpenAiService service = new OpenAiService(
             "YOUR_API_KEY", 
@@ -518,11 +518,11 @@ except APIError as e:
 import os
 from openai import OpenAI
 
-class APIYiClient:
+class LaoZhangClient:
     def __init__(self):
         self.client = OpenAI(
-            api_key=os.getenv("APIYI_API_KEY"),
-            base_url=os.getenv("APIYI_BASE_URL", "https://api.laozhang.ai/v1")
+            api_key=os.getenv("LaoZhang_API_KEY"),
+            base_url=os.getenv("LaoZhang_BASE_URL", "https://api.laozhang.ai/v1")
         )
     
     def chat(self, message: str, model: str = "gpt-3.5-turbo"):
@@ -581,7 +581,7 @@ client = OpenAI(api_key="sk-...")
 
 # 改为 老张API
 client = OpenAI(
-    api_key="YOUR_APIYI_KEY", 
+    api_key="YOUR_LaoZhang_KEY", 
     base_url="https://api.laozhang.ai/v1"
 )
 ```
@@ -592,7 +592,7 @@ client = OpenAI(
 export OPENAI_API_KEY="sk-..."
 
 # 改为
-export OPENAI_API_KEY="YOUR_APIYI_KEY"
+export OPENAI_API_KEY="YOUR_LaoZhang_KEY"
 export OPENAI_BASE_URL="https://api.laozhang.ai/v1"
 ```
 
@@ -608,7 +608,7 @@ export OPENAI_BASE_URL="https://api.laozhang.ai/v1"
 class MultiProviderClient:
     def __init__(self):
         self.laozhang_client = OpenAI(
-            api_key="APIYI_KEY",
+            api_key="LaoZhang_KEY",
             base_url="https://api.laozhang.ai/v1"
         )
         self.openai_client = OpenAI(api_key="OPENAI_KEY")

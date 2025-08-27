@@ -1,120 +1,272 @@
 ---
-title: 快速开始
-description: 只需简单三步，即可开始使用 老张API 访问各种 AI 模型。
+title: 快速接入指南
+sidebarTitle: 快速开始
+description: 三步完成ChatGPT、Claude等AI模型API接入。支持支付宝付款，5分钟上手，完全兼容OpenAI格式。
 icon: "rocket"
 ---
 
-## 第一步：账户准备
+## 🌟 开始之前
 
-### 1.1 注册账号
+很多开发者问我们：**“在国内怎么用ChatGPT API？”**
 
-访问 [老张API官网](https://api.laozhang.ai) 注册账号：
+答案很简单：不需要VPN，不需要国外信用卡，只需要：
+1️⃣ 一个老张API账号（支付宝注册）
+2️⃣ 一行代码修改（改个URL）
+3️⃣ 五分钟配置（真的很快）
 
-- 使用邮箱注册（推荐高校、企业邮箱注册）
-- 验证邮箱地址
-- 登录控制台
+本文会用**最简单**的方式，帮您实现：
+- 💳 用支付宝充值，人民币结算
+- 🌏 国内直连，无需代理
+- ⚡ 低延迟、高速度
+- 🔄 一键切换所有模型
 
-### 1.2 账户充值
+## 第一步：5分钟注册并充值
 
-在控制台进行充值：
+### 📧 注册账号（免费送300万Token）
 
-1. 点击"充值"菜单
-2. 选择充值金额（最低 5 美金起，100 美金可加赠 10%）
-3. 完成支付（支持支付宝、微信）
+<Steps>
+  <Step title="访问注册页面">
+    打开 [老张API注册页](https://api.laozhang.ai/register/?aff_code=Snip)
+    
+    🎁 **新用户福利**：注册即送300万Token测试额度
+  </Step>
+  
+  <Step title="填写信息">
+    - 邮箱：任意邮箱即可
+    - 密码：至少8位字符
+    - 验证码：检查垃圾邮箱
+  </Step>
+  
+  <Step title="登录控制台">
+    登录后进入[控制台首页](https://api.laozhang.ai/account/profile)
+    
+    您会看到：
+    - 账户余额（含赠送额度）
+    - 使用统计
+    - 快速入门指引
+  </Step>
+</Steps>
 
-<Note>
-新用户首次充值可获得额外赠送，充值后余额立即到账，首充加赠额度需要加工作人员微信后为你人工加赠（微信：laozhangdaichong）。
-</Note>
-
-## 第二步：创建 API 密钥
-
-### 2.1 生成密钥
-
-1. 在后台导航点击"令牌"栏目，https://api.laozhang.ai/token
-2. 可以复制【默认令牌】直接使用（右侧有个 复制 图标）
-2. 或者新创建令牌：点击右上侧"新增"按钮，为密钥命名（如：test-key），点击确认创建，即拥有新的令牌。
-
-## 第三步：开始调用
-
-### 3.1 获取接入信息
-
-- **API 地址（所谓的 Base_Url）**：`https://api.laozhang.ai`
-- **API 密钥**：您刚创建的密钥
-- **请求格式**：完全兼容 OpenAI API，兼容 OpenAI 格式调用。
-
-### 3.2 测试调用
-
-使用 curl 快速测试：
-
-```bash
-curl https://api.laozhang.ai/v1/chat/completions \
-  -H "Content-Type: application/json" \
-  -H "Authorization: Bearer YOUR_API_KEY" \
-  -d '{
-    "model": "gpt-4.1-mini",
-    "messages": [{"role": "user", "content": "Hello!"}]
-  }'
-```
-
-### 3.3 代码示例
+### 💰 快速充值（支付宝秒到账）
 
 <Tabs>
-  <Tab title="Python">
-    ```python
-    from openai import OpenAI
-    
-    client = OpenAI(
-        api_key="YOUR_API_KEY",
-        base_url="https://api.laozhang.ai/v1"
-    )
-    
-    response = client.chat.completions.create(
-        model="gpt-4.1-mini",
-        messages=[
-            {"role": "user", "content": "Hello!"}
-        ]
-    )
-    
-    print(response.choices[0].message.content)
-    ```
+  <Tab title="支付宝扫码">
+    1. 点击[充值页面](https://api.laozhang.ai/topup)
+    2. 选择金额：
+       - 🆕 5美元（体验版） = 35元
+       - 🔥 20美元（常用） = 140元
+       - 💰 100美元（赠送10%） = 700元得110美元
+    3. 支付宝扫码支付
+    4. 秒级到账，立即使用
   </Tab>
   
-  <Tab title="Node.js">
+  <Tab title="企业对公">
+    支持企业对公转账：
+    - 开具增值税发票
+    - 提供采购合同
+    - 支持月结等方式
+    
+    联系微信：laozhangdaichong
+  </Tab>
+</Tabs>
+
+<Note>
+  🎉 **新人福利**：
+  - 注册送300万Token测试额度
+  - 首充额外赠送（充100送额外的1美元）
+  - 充值秒到账，无需等待
+  - 微信：`laozhangdaichong` 领取首充赠送
+</Note>
+
+## 第二步：1分钟获取API密钥
+
+### 🔑 两种方式获取密钥
+
+<Tabs>
+  <Tab title="使用默认密钥（推荐）">
+    1. 进入[令牌管理页](https://api.laozhang.ai/token)
+    2. 找到**默认令牌**
+    3. 点击右侧**复制**按钮
+    
+    ✅ 优点：立即可用，无需配置
+  </Tab>
+  
+  <Tab title="创建新密钥">
+    1. 点击右上角[新增]按钮
+    2. 输入密钥名称：
+       - `dev-key`：开发环境
+       - `prod-key`：生产环境
+       - `test-claude`：测试Claude模型
+    3. 设置额度限制（可选）
+    4. 点击创建
+    
+    💡 优点：精细管理，按项目分配
+  </Tab>
+</Tabs>
+
+<Warning>
+  **安全提醒**：
+  - 密钥只显示一次，请妥善保存
+  - 不要提交到GitHub公开仓库
+  - 建议使用环境变量存储
+</Warning>
+
+## 第三步：30秒完成首次调用
+
+### 🎯 最简单的测试方法
+
+<Tabs>
+  <Tab title="在线测试（推荐）">
+    直接在[控制台Playground](https://api.laozhang.ai/playground)测试：
+    
+    1. 选择模型：gpt-4.1-mini
+    2. 输入提示词：“你好，请介绍一下你自己”
+    3. 点击发送
+    
+    ✅ 免费测试额度可调用约4万次
+  </Tab>
+  
+  <Tab title="命令行测试">
+    ```bash
+    # 替换YOUR_API_KEY为您的密钥
+    curl -X POST https://api.laozhang.ai/v1/chat/completions -H "Content-Type: application/json" -H "Authorization: Bearer YOUR_API_KEY" -d '{"model": "gpt-4.1-mini", "messages": [{"role": "system", "content": "你是一个友好的AI助手"}, {"role": "user", "content": "用中文回答：今天天气怎么样？"}], "temperature": 0.7}'
+    ```
+    
+    🚀 响应速度低于500ms
+  </Tab>
+</Tabs>
+
+### 🔧 接入配置信息
+
+<Card title="记住这三个信息" icon="key">
+  ```yaml
+  # API基础地址
+  base_url: https://api.laozhang.ai/v1
+  
+  # API密钥（以sk-开头）
+  api_key: sk-xxxxxxxxxxxxxx
+  
+  # 模型名称（即插即用）
+  model: gpt-4.1-mini  # 或 claude-sonnet-4-20250514 等
+  ```
+</Card>
+
+### 💻 各语言完整示例
+
+<Tabs>
+  <Tab title="Python（最常用）">
+    ```python
+    # 安装：pip install openai
+    from openai import OpenAI
+    
+    # 初始化客户端
+    client = OpenAI(
+        api_key="您的API密钥",  # 在老张API获取
+        base_url="https://api.laozhang.ai/v1"  # 国内直连地址
+    )
+    
+    # 调用不同模型的示例
+    def test_models():
+        models = [
+            "gpt-4.1-mini",  # 性价比最高
+            "claude-sonnet-4-20250514",  # 编程能力最强
+            "deepseek-v3"  # 国产最强
+        ]
+        
+        for model in models:
+            try:
+                response = client.chat.completions.create(
+                    model=model,
+                    messages=[
+                        {"role": "system", "content": "你是一个友好的AI助手"},
+                        {"role": "user", "content": "用一句话介绍你自己"}
+                    ],
+                    temperature=0.7,
+                    max_tokens=100
+                )
+                print(f"{model}: {response.choices[0].message.content}")
+                print(f"使用Token数: {response.usage.total_tokens}\n")
+            except Exception as e:
+                print(f"{model} 调用失败: {e}\n")
+    
+    if __name__ == "__main__":
+        test_models()
+    ```
+    
+    <Tip>
+      **最佳实践**：使用环境变量存储API密钥
+      ```python
+      import os
+      client = OpenAI(
+          api_key=os.getenv("LAOZHANG_API_KEY"),
+          base_url="https://api.laozhang.ai/v1"
+      )
+      ```
+    </Tip>
+  </Tab>
+  
+  <Tab title="Node.js / TypeScript">
     ```javascript
+    // 安装：npm install openai
     import OpenAI from 'openai';
     
-    const openai = new OpenAI({
-      apiKey: 'YOUR_API_KEY',
+    // 初始化客户端
+    const client = new OpenAI({
+      apiKey: process.env.LAOZHANG_API_KEY || '您的API密钥',
       baseURL: 'https://api.laozhang.ai/v1'
     });
     
-    const response = await openai.chat.completions.create({
-      model: 'gpt-4.1-mini',
-      messages: [{ role: 'user', content: 'Hello!' }]
-    });
+    // 流式输出示例（实时响应）
+    async function streamChat() {
+      const stream = await client.chat.completions.create({
+        model: 'gpt-4.1-mini',
+        messages: [
+          { role: 'system', content: '你是一个有帮助的AI助手' },
+          { role: 'user', content: '请写一个简单的React组件' }
+        ],
+        stream: true,  // 启用流式输出
+        temperature: 0.7
+      });
+      
+      // 逐字输出
+      for await (const chunk of stream) {
+        process.stdout.write(chunk.choices[0]?.delta?.content || '');
+      }
+    }
     
-    console.log(response.choices[0].message.content);
+    // 并发调用多个模型
+    async function compareModels(prompt) {
+      const models = ['gpt-4.1', 'claude-sonnet-4-20250514', 'gemini-2.5-pro'];
+      
+      const promises = models.map(model => 
+        client.chat.completions.create({
+          model,
+          messages: [{ role: 'user', content: prompt }],
+          max_tokens: 100
+        })
+      );
+      
+      const results = await Promise.all(promises);
+      results.forEach((result, index) => {
+        console.log(`\n${models[index]}:\n${result.choices[0].message.content}`);
+      });
+    }
+    
+    // 运行示例
+    streamChat().catch(console.error);
     ```
   </Tab>
   
-  <Tab title="Java">
-    ```java
-    // 使用官方 OpenAI Java 库
-    OpenAiService service = new OpenAiService(
-        "YOUR_API_KEY", 
-        Duration.ofSeconds(60), 
-        "https://api.laozhang.ai/v1"
-    );
+  <Tab title="Curl / 命令行">
+    ```bash
+    # 基础调用
+    curl -X POST https://api.laozhang.ai/v1/chat/completions -H "Authorization: Bearer YOUR_API_KEY" -H "Content-Type: application/json" -d '{"model": "gpt-4.1-mini", "messages": [{"role": "user", "content": "你好"}]}'
     
-    ChatCompletionRequest request = ChatCompletionRequest.builder()
-        .model("gpt-4.1-mini")
-        .messages(List.of(
-            new ChatMessage(ChatMessageRole.USER, "Hello!")
-        ))
-        .build();
+    # 流式输出（SSE）  
+    curl -X POST https://api.laozhang.ai/v1/chat/completions -H "Authorization: Bearer YOUR_API_KEY" -H "Content-Type: application/json" -d '{"model": "gpt-4.1", "messages": [{"role": "user", "content": "写一个Python快速排序"}], "stream": true}'
     
-    ChatCompletionResult result = service.createChatCompletion(request);
-    System.out.println(result.getChoices().get(0).getMessage().getContent());
+    # 调用图像生成
+    curl -X POST https://api.laozhang.ai/v1/images/generations -H "Authorization: Bearer YOUR_API_KEY" -H "Content-Type: application/json" -d '{"model": "gpt-4o-image", "prompt": "一只可爱的小猫", "n": 1, "size": "1024x1024"}'
     ```
   </Tab>
 </Tabs>
@@ -141,45 +293,77 @@ curl https://api.laozhang.ai/v1/chat/completions \
   </Card>
 </CardGroup>
 
-## 常见问题
+## 🔥 常见问题速查
 
-### 如何切换模型？
-
-只需修改请求中的 `model` 参数：
-
-```json
-{
-  "model": "gpt-4.1",           // 使用 GPT-4.1
-  "model": "claude-sonnet-4-20250514",   // 使用 Claude 4 Sonnet
-  "model": "gemini-2.5-pro"       // 使用 Gemini 2.5 Pro
-}
-```
-
-### 支持哪些编程语言？
-
-老张API 兼容 OpenAI API 标准，支持所有 OpenAI SDK 支持的语言：
-
-- Python
-- JavaScript/TypeScript
-- Java
-- C#/.NET
-- Go
-- Ruby
-- PHP
-- 更多...
-
-### 如何查看余额？
-
-登录 [控制台](https://api.laozhang.ai/account/profile) 即可查看：
-- 账户余额
-- 使用记录
-- 消费统计
-
-### 遇到问题怎么办？
-
-1. 查看 [API 文档](/api-reference/introduction)
-2. 检查 [常见错误](/api-reference/errors)
-3. 联系客服：threezhang.cn@gmail.com
+<AccordionGroup>
+  <Accordion title="怎么判断接入成功？">
+    **三个标志**：
+    1. ✅ API调用返回正常结果（没有报错）
+    2. ✅ 响应时间低于1秒
+    3. ✅ 控制台能看到调用记录
+    
+    查看调用记录：[使用日志](https://api.laozhang.ai/log)
+  </Accordion>
+  
+  <Accordion title="怎么选择合适的模型？">
+    **根据场景选择**：
+    
+    💻 **编程开发**：
+    - 首选：`claude-sonnet-4-20250514`
+    - 备选：`deepseek-coder-v3`
+    
+    📝 **文章写作**：
+    - 首选：`gpt-4o`
+    - 备选：`claude-3.5-sonnet`
+    
+    ⚡ **快速响应**：
+    - 首选：`gpt-4.1-mini`
+    - 备选：`gemini-2.5-flash`
+    
+    💰 **成本敏感**：
+    - 首选：`deepseek-v3`
+    - 备选：`qwen-max`
+  </Accordion>
+  
+  <Accordion title="API密钥泄露了怎么办？">
+    **立即操作**：
+    1. 登录[令牌管理](https://api.laozhang.ai/token)
+    2. 删除泄露的密钥
+    3. 创建新密钥
+    4. 更新所有应用中的密钥
+    
+    🔒 **预防措施**：
+    - 使用环境变量
+    - 设置额度限制
+    - 定期轮换密钥
+  </Accordion>
+  
+  <Accordion title="为什么提示余额不足？">
+    **可能原因**：
+    1. 免费额度已用完（300万Token）
+    2. 调用的模型费用较高
+    3. 批量请求消耗过快
+    
+    **解决方法**：
+    - [立即充值](https://api.laozhang.ai/topup)
+    - 切换到便宜的模型
+    - 设置`max_tokens`限制
+  </Accordion>
+  
+  <Accordion title="支持哪些支付方式？">
+    **个人用户**：
+    - 💳 支付宝扫码（秒到账）
+    - 💳 微信扫码（秒到账）
+    - 🎪 USDT（TRC20）
+    
+    **企业用户**：
+    - 🏢 对公转账
+    - 🧾 开具增值税发票
+    - 📝 签订采购合同
+    
+    联系微信：`laozhangdaichong`
+  </Accordion>
+</AccordionGroup>
 
 <Info>
 提示：保存好您的 API 密钥，并定期在控制台查看使用日志，每笔请求都有消息历史，合理优化成本。
