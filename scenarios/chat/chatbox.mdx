@@ -4,7 +4,7 @@ description: 跨平台 AI 客户端应用集成指南
 icon: "message-square"
 ---
 
-Chatbox AI 是一个功能强大的跨平台 AI 客户端应用，支持多种大语言模型和 API。通过 API易，您可以在 Chatbox 中访问各种主流 AI 模型，享受本地存储的隐私保护。
+Chatbox AI 是一个功能强大的跨平台 AI 客户端应用，支持多种大语言模型和 API。通过 老张API，您可以在 Chatbox 中访问各种主流 AI 模型，享受本地存储的隐私保护。
 
 ## 快速开始
 
@@ -17,7 +17,7 @@ Chatbox AI 支持多平台安装：
 
 访问 [Chatbox AI 官网](https://chatboxai.app/en) 下载适合您平台的版本。
 
-### 配置 API易
+### 配置 老张API
 
 #### 步骤 1：打开设置
 
@@ -27,16 +27,16 @@ Chatbox AI 支持多平台安装：
 
 #### 步骤 2：添加自定义提供商
 
-<img src="/images/chatbox-setting.png" alt="Chatbox AI 设置界面 - API易配置示例" />
+<img src="/images/chatbox-setting.png" alt="Chatbox AI 设置界面 - 老张API配置示例" />
 
 按照上图所示的配置界面，完成以下设置步骤：
 
 1. 在"模型提供商"部分点击 **+ 添加** 按钮
 2. 填写提供商信息：
-   - **名称**：API易（可自定义名称）
+   - **名称**：老张API（可自定义名称）
    - **API 模式**：选择 **OpenAI API 兼容**
-   - **API 密钥**：输入您的 API易 密钥
-   - **API 主机**：`https://api.apiyi.com/v1`
+   - **API 密钥**：输入您的 老张API 密钥
+   - **API 主机**：`https://api.laozhang.ai/v1`
    - **API 路径**：`/chat/completions`（默认值）
 
 3. **高级配置**（可选）：
@@ -47,7 +47,7 @@ Chatbox AI 支持多平台安装：
 **配置要点**
 - API 主机字段对应 Base URL，必须包含 `/v1` 后缀
 - API 路径字段用于指定具体的端点路径
-- API 密钥可在 [API易控制台](https://api.apiyi.com) 获取
+- API 密钥可在 [老张API控制台](https://api.laozhang.ai) 获取
 - 配置完成后点击右下角的 **+ 新建** 按钮添加模型
 </Info>
 
@@ -59,7 +59,7 @@ Chatbox AI 支持多平台安装：
 
 ### 模型支持
 
-Chatbox AI 通过 API易 支持多种主流 AI 模型，包括：
+Chatbox AI 通过 老张API 支持多种主流 AI 模型，包括：
 
 - **GPT 系列**：GPT-5系列、GPT-4o、gpt-4.1、o3 等
 - **Claude 系列**：Claude 4 Sonnet、Claude 3.5 Haiku 等
@@ -68,7 +68,7 @@ Chatbox AI 通过 API易 支持多种主流 AI 模型，包括：
 
 <Info>
 **查看完整模型列表**
-详细的模型信息、定价和功能对比，请访问 [模型信息页面](https://docs.apiyi.com/api-capabilities/model-info)
+详细的模型信息、定价和功能对比，请访问 [模型信息页面](https://docs.laozhang.ai/api-capabilities/model-info)
 </Info>
 
 ## 核心功能
@@ -154,10 +154,10 @@ Chatbox AI 采用"隐私设计"理念：
 #### 聊天完成端点配置
 ```yaml
 基础聊天配置:
-  提供商名称: API易
+  提供商名称: 老张API
   API模式: OpenAI API Compatible
-  API密钥: sk-your-apiyi-key
-  API主机: https://api.apiyi.com/v1
+  API密钥: sk-your-laozhang-key
+  API主机: https://api.laozhang.ai/v1
   API路径: /chat/completions
 ```
 
@@ -166,10 +166,10 @@ Chatbox AI 采用"隐私设计"理念：
 **方式一：使用专属 Image API**
 ```yaml
 图像生成配置:
-  提供商名称: API易-图像
+  提供商名称: 老张API-图像
   API模式: OpenAI API Compatible
-  API密钥: sk-your-apiyi-key
-  API主机: https://api.apiyi.com/v1
+  API密钥: sk-your-laozhang-key
+  API主机: https://api.laozhang.ai/v1
   API路径: /images/generations  # 标准图像生成端点
   模型适用：gpt-image-1、flux-kontext-pro
 ```
@@ -177,10 +177,10 @@ Chatbox AI 采用"隐私设计"理念：
 **方式二：使用 Responses 端点**
 ```yaml
 Responses配置:
-  提供商名称: API易-Responses
+  提供商名称: 老张API-Responses
   API模式: OpenAI API Compatible
-  API密钥: sk-your-apiyi-key
-  API主机: https://api.apiyi.com
+  API密钥: sk-your-laozhang-key
+  API主机: https://api.laozhang.ai
   API路径: /v1/responses  # 通用响应端点
 ```
 
@@ -215,7 +215,7 @@ Responses配置:
 移动端配置与桌面版相同：
 1. 下载 Chatbox AI 移动应用
 2. 进入设置 > 模型配置
-3. 添加 API易 自定义提供商
+3. 添加 老张API 自定义提供商
 4. 配置相同的 API Base URL 和密钥
 
 ### 移动端特色功能
@@ -230,7 +230,7 @@ Responses配置:
 ### 常见问题
 
 **连接失败**
-- 检查 API Base URL：`https://api.apiyi.com/v1`
+- 检查 API Base URL：`https://api.laozhang.ai/v1`
 - 验证 API 密钥有效性
 - 确认网络连接正常
 
@@ -311,4 +311,4 @@ Responses配置:
 4. **功能丰富**：提示词库、文档处理等
 5. **持续更新**：活跃的开发维护
 
-需要更多帮助？请查看 [Chatbox AI 帮助中心](https://chatboxai.app/en/help-center) 或访问 [API易官网](https://api.apiyi.com)。
+需要更多帮助？请查看 [Chatbox AI 帮助中心](https://chatboxai.app/en/help-center) 或访问 [老张API官网](https://api.laozhang.ai)。

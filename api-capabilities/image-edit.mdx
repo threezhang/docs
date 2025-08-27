@@ -7,7 +7,7 @@ icon: "image"
 
 # 图像编辑 API
 
-通过 API易 使用 OpenAI 标准的图像编辑 API，可以对现有图像进行局部编辑和修改。本文档详细介绍如何使用 Image Edit API 进行图像编辑。
+通过 老张API 使用 OpenAI 标准的图像编辑 API，可以对现有图像进行局部编辑和修改。本文档详细介绍如何使用 Image Edit API 进行图像编辑。
 
 ## 概述
 
@@ -40,8 +40,8 @@ from PIL import Image
 import requests
 from io import BytesIO
 
-# 配置 API易
-openai.api_base = "https://api.apiyi.com/v1"
+# 配置 老张API
+openai.api_base = "https://api.laozhang.ai/v1"
 openai.api_key = "your-api-key"
 ```
 
@@ -167,7 +167,7 @@ from io import BytesIO
 import os
 
 # 配置
-openai.api_base = "https://api.apiyi.com/v1"
+openai.api_base = "https://api.laozhang.ai/v1"
 openai.api_key = "your-api-key"
 
 class ImageEditor:
@@ -247,7 +247,7 @@ const { createCanvas, loadImage } = require('canvas');
 // 初始化客户端
 const openai = new OpenAI({
   apiKey: 'your-api-key',
-  baseURL: 'https://api.apiyi.com/v1'
+  baseURL: 'https://api.laozhang.ai/v1'
 });
 
 // 创建遮罩
@@ -569,7 +569,7 @@ A: 图像文件必须小于 4MB，建议在上传前进行压缩。
 
 - [OpenAI 图像编辑指南](https://platform.openai.com/docs/guides/images/edits)
 - [PIL/Pillow 文档](https://pillow.readthedocs.io/)
-- [API易控制台](https://api.apiyi.com)
+- [老张API控制台](https://api.laozhang.ai)
 
 <Note>
 图像编辑 API 特别适合需要精确控制编辑区域的场景。通过合理设计遮罩和优化提示词，可以实现专业级的图像编辑效果。

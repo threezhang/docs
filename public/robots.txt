@@ -23,7 +23,7 @@ Disallow: /api/_internal/
 Disallow: *.json
 
 # Sitemap
-Sitemap: https://docs.apiyi.com/sitemap.xml
+Sitemap: https://docs.laozhang.ai/sitemap.xml
 
 # 爬取延迟（可选）
 Crawl-delay: 1

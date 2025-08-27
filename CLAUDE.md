@@ -1,7 +1,7 @@
-# 项目配置 - API易文档中心
+# 项目配置 - 老张API文档中心
 
 ## 项目概述
-这是一个基于 Mintlify 的文档网站项目，为 API易 提供技术文档和FAQ支持。官网 https://mintlify.com/
+这是一个基于 Mintlify 的文档网站项目，为 老张API 提供技术文档和FAQ支持。官网 https://mintlify.com/
 
 ## 文档编写规范
 

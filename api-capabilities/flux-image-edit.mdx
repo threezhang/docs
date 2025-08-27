@@ -25,7 +25,7 @@ Flux 图像编辑功能基于先进的 Flux Kontext Max 模型，可以根据文
 
 | 特性 | Flux Kontext Max | 说明 |
 |------|----------------|------|
-| **API易 价格** | $0.07/次 | 比官方节省 12.5% |
+| **老张API 价格** | $0.07/次 | 比官方节省 12.5% |
 | **官方价格** | $0.08/张 | 原始定价 |
 | **输入格式** | PNG, JPEG, WebP, GIF | 支持常见图片格式 |
 | **文件大小** | 最大 20MB 或 20MP | 单张图片限制 |
@@ -34,7 +34,7 @@ Flux 图像编辑功能基于先进的 Flux Kontext Max 模型，可以根据文
 | **结果 URL** | 10 分钟有效期 | 需及时下载保存 |
 
 <Tip>
-💡 **节省成本**：通过 API易 调用 Flux 图像编辑，结合汇率优势和充值加赠，比官方价格节省超过 12.5%！
+💡 **节省成本**：通过 老张API 调用 Flux 图像编辑，结合汇率优势和充值加赠，比官方价格节省超过 12.5%！
 </Tip>
 
 ## 🚀 快速开始
@@ -47,7 +47,7 @@ from openai import OpenAI
 # 初始化客户端
 client = OpenAI(
     api_key="YOUR_API_KEY",
-    base_url="https://api.apiyi.com/v1"
+    base_url="https://api.laozhang.ai/v1"
 )
 
 def edit_local_image(image_path, prompt, aspect_ratio="1:1", mask_path=None, 
@@ -827,7 +827,7 @@ A:
 
 ```bash 下载并运行脚本
 # 下载多图处理脚本
-curl -O https://raw.githubusercontent.com/apiyi-api/ai-api-code-samples/main/flux-Image-API/flux-simple-batch.sh
+curl -O https://raw.githubusercontent.com/laozhang-api/ai-api-code-samples/main/flux-Image-API/flux-simple-batch.sh
 chmod +x flux-simple-batch.sh
 
 # 查看使用说明
@@ -879,7 +879,7 @@ def dual_image_edit(reference_url, base_url, prompt, api_key):
         # 5. 调用 Flux API
         with open(temp_path, 'rb') as f:
             response = requests.post(
-                'https://api.apiyi.com/v1/images/edits',
+                'https://api.laozhang.ai/v1/images/edits',
                 headers={'Authorization': f'Bearer {api_key}'},
                 files={'image': f},
                 data={
@@ -969,11 +969,11 @@ else:
 
 ## 🔗 相关资源
 
-- [完整示例代码](https://github.com/apiyi-api/ai-api-code-samples/tree/main/flux-Image-API)
-- [多图处理脚本](https://github.com/apiyi-api/ai-api-code-samples/blob/main/flux-Image-API/flux-simple-batch.sh)
+- [完整示例代码](https://github.com/laozhang-api/ai-api-code-samples/tree/main/flux-Image-API)
+- [多图处理脚本](https://github.com/laozhang-api/ai-api-code-samples/blob/main/flux-Image-API/flux-simple-batch.sh)
 - [Flux 图像生成 API](/api-capabilities/flux-image-generation) - 文生图功能
-- [蒙版制作教程](https://docs.apiyi.com/tutorials/mask-creation) - 详细制作指南
-- [在线蒙版工具](https://mask.apiyi.com) - 在线制作蒙版
+- [蒙版制作教程](https://docs.laozhang.ai/tutorials/mask-creation) - 详细制作指南
+- [在线蒙版工具](https://mask.laozhang.ai) - 在线制作蒙版
 
 <Note>
 🎨 **专业建议**：对于复杂编辑任务，建议先用较低成本的模型测试效果，确认满意后再使用 Flux Kontext Max 进行最终编辑。

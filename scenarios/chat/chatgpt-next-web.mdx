@@ -14,8 +14,8 @@ ChatGPT Next Web 是一款精心设计的 ChatGPT 网页客户端，支持一键
 
 1. 点击 [一键部署](https://vercel.com/new/clone?repository-url=https://github.com/Yidadaa/ChatGPT-Next-Web)
 2. 设置环境变量：
-   - `OPENAI_API_KEY`：您的 API易 密钥
-   - `BASE_URL`：`https://api.apiyi.com`
+   - `OPENAI_API_KEY`：您的 老张API 密钥
+   - `BASE_URL`：`https://api.laozhang.ai`
 3. 完成部署
 
 ### Docker 部署
@@ -24,8 +24,8 @@ ChatGPT Next Web 是一款精心设计的 ChatGPT 网页客户端，支持一键
 docker run -d \
   --name chatgpt-next-web \
   -p 3000:3000 \
-  -e OPENAI_API_KEY="您的API易密钥" \
-  -e BASE_URL="https://api.apiyi.com" \
+  -e OPENAI_API_KEY="您的老张API密钥" \
+  -e BASE_URL="https://api.laozhang.ai" \
   yidadaa/chatgpt-next-web
 ```
 
@@ -34,8 +34,8 @@ docker run -d \
 ### 基础配置
 
 在设置页面配置：
-- **API Key**：输入 API易 密钥
-- **接口地址**：`https://api.apiyi.com`
+- **API Key**：输入 老张API 密钥
+- **接口地址**：`https://api.laozhang.ai`
 
 ### 非 OpenAI 模型
 
@@ -62,8 +62,8 @@ docker run -d \
 
 ```bash
 # API 配置
-OPENAI_API_KEY=您的API易密钥
-BASE_URL=https://api.apiyi.com
+OPENAI_API_KEY=您的老张API密钥
+BASE_URL=https://api.laozhang.ai
 
 # 访问控制
 CODE=您的访问密码
@@ -104,7 +104,7 @@ CUSTOM_MODELS=+claude-3-opus-20240229@OpenAI
 确保使用 v2.13.0+ 版本
 
 ### 连接失败
-检查 API 地址：`https://api.apiyi.com`
+检查 API 地址：`https://api.laozhang.ai`
 
 ### 回复中断
 检查账户余额和网络连接

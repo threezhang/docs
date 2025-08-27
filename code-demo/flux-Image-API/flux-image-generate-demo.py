@@ -50,7 +50,7 @@ import time
 # 中转站 API 配置
 client = OpenAI(
   api_key="sk-", # 中转站 API KEY（按次计费）- 请替换为您的真实 API Key
-  base_url="https://vip.apiyi.com/v1"  # 中转站的 base URL
+  base_url="https://vip.laozhang.ai/v1"  # 中转站的 base URL
 )
 
 # ===== 参数配置区域 =====

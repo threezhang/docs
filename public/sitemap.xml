@@ -2,7 +2,7 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <!-- 首页 -->
   <url>
-    <loc>https://docs.apiyi.com/</loc>
+    <loc>https://docs.laozhang.ai/</loc>
     <lastmod>2025-01-23</lastmod>
     <changefreq>weekly</changefreq>
     <priority>1.0</priority>
@@ -10,14 +10,14 @@
   
   <!-- 主要功能页面 -->
   <url>
-    <loc>https://docs.apiyi.com/getting-started</loc>
+    <loc>https://docs.laozhang.ai/getting-started</loc>
     <lastmod>2025-01-23</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.9</priority>
   </url>
   
   <url>
-    <loc>https://docs.apiyi.com/api-manual</loc>
+    <loc>https://docs.laozhang.ai/api-manual</loc>
     <lastmod>2025-01-23</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.9</priority>
@@ -25,35 +25,35 @@
   
   <!-- API 能力页面 -->
   <url>
-    <loc>https://docs.apiyi.com/api-capabilities/model-info</loc>
+    <loc>https://docs.laozhang.ai/api-capabilities/model-info</loc>
     <lastmod>2025-01-23</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   
   <url>
-    <loc>https://docs.apiyi.com/api-capabilities/openai-sdk</loc>
+    <loc>https://docs.laozhang.ai/api-capabilities/openai-sdk</loc>
     <lastmod>2025-01-23</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   
   <url>
-    <loc>https://docs.apiyi.com/api-capabilities/openai-responses</loc>
+    <loc>https://docs.laozhang.ai/api-capabilities/openai-responses</loc>
     <lastmod>2025-01-23</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   
   <url>
-    <loc>https://docs.apiyi.com/gpt-image-1</loc>
+    <loc>https://docs.laozhang.ai/gpt-image-1</loc>
     <lastmod>2025-01-23</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   
   <url>
-    <loc>https://docs.apiyi.com/image-edit</loc>
+    <loc>https://docs.laozhang.ai/image-edit</loc>
     <lastmod>2025-01-23</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
@@ -61,63 +61,63 @@
   
   <!-- 使用场景页面 -->
   <url>
-    <loc>https://docs.apiyi.com/scenarios/chat/cherry-studio</loc>
+    <loc>https://docs.laozhang.ai/scenarios/chat/cherry-studio</loc>
     <lastmod>2025-01-23</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
   
   <url>
-    <loc>https://docs.apiyi.com/scenarios/chat/open-webui</loc>
+    <loc>https://docs.laozhang.ai/scenarios/chat/open-webui</loc>
     <lastmod>2025-01-23</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
   
   <url>
-    <loc>https://docs.apiyi.com/scenarios/chat/chatgpt-next-web</loc>
+    <loc>https://docs.laozhang.ai/scenarios/chat/chatgpt-next-web</loc>
     <lastmod>2025-01-23</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
   
   <url>
-    <loc>https://docs.apiyi.com/scenarios/programming/cursor</loc>
+    <loc>https://docs.laozhang.ai/scenarios/programming/cursor</loc>
     <lastmod>2025-01-23</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
   
   <url>
-    <loc>https://docs.apiyi.com/scenarios/programming/cline</loc>
+    <loc>https://docs.laozhang.ai/scenarios/programming/cline</loc>
     <lastmod>2025-01-23</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
   
   <url>
-    <loc>https://docs.apiyi.com/scenarios/engineering/langchain</loc>
+    <loc>https://docs.laozhang.ai/scenarios/engineering/langchain</loc>
     <lastmod>2025-01-23</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
   
   <url>
-    <loc>https://docs.apiyi.com/scenarios/engineering/dify</loc>
+    <loc>https://docs.laozhang.ai/scenarios/engineering/dify</loc>
     <lastmod>2025-01-23</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
   
   <url>
-    <loc>https://docs.apiyi.com/scenarios/translation/bob</loc>
+    <loc>https://docs.laozhang.ai/scenarios/translation/bob</loc>
     <lastmod>2025-01-23</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
   
   <url>
-    <loc>https://docs.apiyi.com/scenarios/translation/immersive</loc>
+    <loc>https://docs.laozhang.ai/scenarios/translation/immersive</loc>
     <lastmod>2025-01-23</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
@@ -125,7 +125,7 @@
   
   <!-- 资源导航 -->
   <url>
-    <loc>https://docs.apiyi.com/resources</loc>
+    <loc>https://docs.laozhang.ai/resources</loc>
     <lastmod>2025-01-23</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.6</priority>

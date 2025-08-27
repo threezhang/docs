@@ -1,9 +1,9 @@
 {
   "$schema": "https://mintlify.com/docs.json",
   "theme": "mint",
-  "name": "API易文档中心",
+  "name": "老张API",
   "description": "企业级专业稳定的AI大模型API中转站，一个令牌、无限模型。支持OpenAI、Claude、Gemini、DeepSeek、Qwen等200+热门AI模型。",
-  "url": "https://docs.apiyi.com",
+  "url": "https://docs.laozhang.ai",
   "colors": {
     "primary": "#2563eb",
     "light": "#3b82f6",
@@ -334,35 +334,31 @@
     "links": [
       {
         "label": "首页",
-        "href": "https://api.apiyi.com"
-      },
-      {
-        "label": "AI出图",
-        "href": "https://imagen.apiyi.com"
+        "href": "https://api.laozhang.ai"
       }
     ],
     "primary": {
       "type": "button",
       "label": "控制台",
-      "href": "https://api.apiyi.com/account/profile"
+      "href": "https://api.laozhang.ai/account/profile"
     }
   },
   "footer": {
     "socials": {
-      "website": "https://api.apiyi.com"
+      "website": "https://api.laozhang.ai"
     }
   },
   "topbarLinks": [
     {
       "name": "控制台",
-      "url": "https://api.apiyi.com/account/profile"
+      "url": "https://api.laozhang.ai/account/profile"
     }
   ],
   "anchors": [
     {
       "name": "API Key",
       "icon": "key",
-      "url": "https://api.apiyi.com"
+      "url": "https://api.laozhang.ai"
     }
   ],
   "tabs": [],
@@ -378,12 +374,12 @@
   },
   "metadata": {
     "og:type": "website",
-    "og:title": "API易文档中心 - 企业级AI大模型API中转站",
+    "og:title": "老张API - 企业级AI大模型API中转站",
     "og:description": "支持200+热门AI模型，一个令牌调用OpenAI、Claude、Gemini、DeepSeek、Qwen等所有主流大模型。企业级专业稳定的AI API服务。",
     "og:image": "/logo/logo.webp",
-    "og:url": "https://docs.apiyi.com",
+    "og:url": "https://docs.laozhang.ai",
     "twitter:card": "summary_large_image",
-    "twitter:title": "API易文档中心 - 企业级AI大模型API中转站",
+    "twitter:title": "老张API - 企业级AI大模型API中转站",
     "twitter:description": "支持200+热门AI模型，一个令牌调用OpenAI、Claude、Gemini、DeepSeek、Qwen等所有主流大模型。",
     "twitter:image": "/logo/logo.webp"
   },

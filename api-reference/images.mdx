@@ -1,11 +1,11 @@
 ---
 title: 'Images API'
-description: 'API易图像处理完整指南 - 生成、编辑、理解全覆盖'
+description: '老张API图像处理完整指南 - 生成、编辑、理解全覆盖'
 ---
 
 # Images API
 
-API易提供全面的图像处理能力，涵盖图像生成、编辑、理解等多个方面。支持 OpenAI DALL-E、Flux、Sora Image、GPT-Image-1 等多个顶级模型，为您提供最具性价比的图像处理解决方案。
+老张API提供全面的图像处理能力，涵盖图像生成、编辑、理解等多个方面。支持 OpenAI DALL-E、Flux、Sora Image、GPT-Image-1 等多个顶级模型，为您提供最具性价比的图像处理解决方案。
 
 ## 🎯 图像处理能力概览
 
@@ -58,12 +58,12 @@ API易提供全面的图像处理能力，涵盖图像生成、编辑、理解�
 
 所有文生图模型均使用统一的 OpenAI Images API 格式：
 
-**接口地址**：`POST https://api.apiyi.com/v1/images/generations`
+**接口地址**：`POST https://api.laozhang.ai/v1/images/generations`
 
 <CodeGroup>
 
 ```bash cURL
-curl https://api.apiyi.com/v1/images/generations \
+curl https://api.laozhang.ai/v1/images/generations \
   -H "Content-Type: application/json" \
   -H "Authorization: Bearer YOUR_API_KEY" \
   -d '{
@@ -79,7 +79,7 @@ from openai import OpenAI
 
 client = OpenAI(
     api_key="YOUR_API_KEY",
-    base_url="https://api.apiyi.com/v1"
+    base_url="https://api.laozhang.ai/v1"
 )
 
 response = client.images.generate(
@@ -97,7 +97,7 @@ import OpenAI from 'openai';
 
 const openai = new OpenAI({
   apiKey: 'YOUR_API_KEY',
-  baseURL: 'https://api.apiyi.com/v1'
+  baseURL: 'https://api.laozhang.ai/v1'
 });
 
 const image = await openai.images.generate({
@@ -520,7 +520,7 @@ from openai import AsyncOpenAI
 
 client = AsyncOpenAI(
     api_key="YOUR_API_KEY",
-    base_url="https://api.apiyi.com/v1"
+    base_url="https://api.laozhang.ai/v1"
 )
 
 async def generate_batch_images(prompts):
@@ -553,7 +553,7 @@ from openai import AsyncOpenAI
 
 client = AsyncOpenAI(
     api_key="YOUR_API_KEY",
-    base_url="https://api.apiyi.com/v1"
+    base_url="https://api.laozhang.ai/v1"
 )
 
 async def generate_batch_chat(prompts):
@@ -648,7 +648,7 @@ print(f"Image saved as: {saved_file}")
 
 ## 📊 使用统计
 
-通过 API易控制台可以查看：
+通过 老张API控制台可以查看：
 - 各模型使用量统计
 - 每日/每月生成数量
 - 费用明细和趋势

@@ -5,7 +5,7 @@ description: 'GPT-4o、GPT-4、O1系列模型的详细使用指南'
 
 # OpenAI模型使用指南
 
-OpenAI是全球领先的AI公司，其GPT系列模型在API易平台上完全可用。本指南将详细介绍如何使用GPT-4o、GPT-4、O1等系列模型，帮助你充分发挥这些顶级AI模型的能力。
+OpenAI是全球领先的AI公司，其GPT系列模型在老张API平台上完全可用。本指南将详细介绍如何使用GPT-4o、GPT-4、O1等系列模型，帮助你充分发挥这些顶级AI模型的能力。
 
 ## 🚀 模型概览
 
@@ -64,7 +64,7 @@ from openai import OpenAI
 
 client = OpenAI(
     api_key="YOUR_API_KEY",
-    base_url="https://api.apiyi.com/v1"
+    base_url="https://api.laozhang.ai/v1"
 )
 
 # 基础文本对话
@@ -85,7 +85,7 @@ import OpenAI from 'openai';
 
 const openai = new OpenAI({
   apiKey: 'YOUR_API_KEY',
-  baseURL: 'https://api.apiyi.com/v1'
+  baseURL: 'https://api.laozhang.ai/v1'
 });
 
 const completion = await openai.chat.completions.create({
@@ -733,6 +733,6 @@ for chunk in stream_completion(
     icon="list"
     href="/models"
   >
-    浏览API易支持的所有200+AI模型
+    浏览老张API支持的所有200+AI模型
   </Card>
 </CardGroup> 

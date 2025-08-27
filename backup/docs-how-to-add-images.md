@@ -50,7 +50,7 @@
   ![Cursor 配置界面](/images/cursor-setting.png)
 
   <Caption>
-    图 1：在 Cursor 中配置 API易 的设置界面
+    图 1：在 Cursor 中配置 老张API 的设置界面
   </Caption>
 
   8. 响应式考虑

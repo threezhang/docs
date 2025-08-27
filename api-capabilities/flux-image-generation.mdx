@@ -6,7 +6,7 @@ icon: "sparkles"
 
 # Flux 图像生成 API
 
-Flux 是业界领先的图像生成模型，通过 API易 的 OpenAI 兼容接口，您可以轻松调用 Flux Kontext Pro 和 Max 模型生成高质量图像。我们提供了比官方更优惠的价格，结合汇率优势和充值加赠，为您节省更多成本。
+Flux 是业界领先的图像生成模型，通过 老张API 的 OpenAI 兼容接口，您可以轻松调用 Flux Kontext Pro 和 Max 模型生成高质量图像。我们提供了比官方更优惠的价格，结合汇率优势和充值加赠，为您节省更多成本。
 
 <Note>
 **🎯 高质量生成**  
@@ -24,13 +24,13 @@ Flux 模型以其出色的图像质量和细节表现著称，支持从 3:7 到 
 
 ## 📋 模型对比
 
-| 模型 | 模型 ID | API易 价格 | 官方价格 | 节省比例 | 特点 |
+| 模型 | 模型 ID | 老张API 价格 | 官方价格 | 节省比例 | 特点 |
 |------|---------|-----------|----------|----------|------|
 | **Flux Kontext Pro** | `flux-kontext-pro` | $0.035/次 | $0.040/张 | 12.5% | 高性价比，适合批量使用 |
 | **Flux Kontext Max** | `flux-kontext-max` | $0.07/次 | $0.08/张 | 12.5% | 最高质量，适合专业用途 |
 
 <Tip>
-💡 **价格优势**：通过 API易 平台调用 Flux 模型，结合汇率优势（1:7）和充值加赠政策（单次充值 100 美金加赠 15%，比官方定价节省超过 25%！
+💡 **价格优势**：通过 老张API 平台调用 Flux 模型，结合汇率优势（1:7）和充值加赠政策（单次充值 100 美金加赠 15%，比官方定价节省超过 25%！
 </Tip>
 
 ## 📐 支持的宽高比
@@ -63,7 +63,7 @@ from openai import OpenAI
 # 初始化客户端
 client = OpenAI(
     api_key="YOUR_API_KEY",
-    base_url="https://api.apiyi.com/v1"
+    base_url="https://api.laozhang.ai/v1"
 )
 
 # 生成图像（完整参数版）
@@ -237,7 +237,7 @@ const https = require('https');
 // 初始化客户端
 const openai = new OpenAI({
   apiKey: 'YOUR_API_KEY',
-  baseURL: 'https://api.apiyi.com/v1'
+  baseURL: 'https://api.laozhang.ai/v1'
 });
 
 // 生成 Flux 图像
@@ -380,7 +380,7 @@ import requests
 class FluxImageManager:
     """Flux 图像生成和下载管理器"""
     
-    def __init__(self, api_key, base_url="https://api.apiyi.com/v1"):
+    def __init__(self, api_key, base_url="https://api.laozhang.ai/v1"):
         self.client = OpenAI(api_key=api_key, base_url=base_url)
         
     def generate_and_save(self, prompt, **kwargs):
@@ -502,7 +502,7 @@ async def generate_async(session, prompt, ratio, model):
     }
     
     async with session.post(
-        "https://api.apiyi.com/v1/images/generations",
+        "https://api.laozhang.ai/v1/images/generations",
         json=payload,
         headers=headers
     ) as response:
@@ -525,17 +525,17 @@ async def batch_generate_async(tasks):
 def calculate_flux_costs(num_images, model_type="pro"):
     """计算 Flux 生成成本"""
     prices = {
-        "pro": {"apiyi": 0.035, "official": 0.040},
-        "max": {"apiyi": 0.07, "official": 0.08}
+        "pro": {"laozhang": 0.035, "official": 0.040},
+        "max": {"laozhang": 0.07, "official": 0.08}
     }
     
-    apiyi_cost = num_images * prices[model_type]["apiyi"]
+    laozhang_cost = num_images * prices[model_type]["laozhang"]
     official_cost = num_images * prices[model_type]["official"]
-    savings = official_cost - apiyi_cost
+    savings = official_cost - laozhang_cost
     
     print(f"Flux Kontext {model_type.upper()} 成本分析:")
     print(f"生成数量: {num_images} 张")
-    print(f"API易价格: ${apiyi_cost:.2f}")
+    print(f"老张API价格: ${laozhang_cost:.2f}")
     print(f"官方价格: ${official_cost:.2f}")
     print(f"节省金额: ${savings:.2f}")
     print(f"节省比例: {(savings/official_cost*100):.1f}%")
@@ -644,7 +644,7 @@ Flux API 原生只支持单张图片输入，但通过我们提供的批量处�
 
 ```bash Shell脚本
 # 下载批量处理脚本
-wget https://raw.githubusercontent.com/apiyi-api/ai-api-code-samples/main/flux-Image-API/flux-simple-batch.sh
+wget https://raw.githubusercontent.com/laozhang-api/ai-api-code-samples/main/flux-Image-API/flux-simple-batch.sh
 chmod +x flux-simple-batch.sh
 
 # 修改配置
@@ -683,7 +683,7 @@ def merge_and_process(ref_url, base_url, prompt):
     # 调用Flux API
     with open('temp_merged.jpg', 'rb') as f:
         response = requests.post(
-            'https://api.apiyi.com/v1/images/edits',
+            'https://api.laozhang.ai/v1/images/edits',
             headers={'Authorization': f'Bearer {API_KEY}'},
             files={'image': f},
             data={
@@ -718,11 +718,11 @@ IMAGE_PAIRS=(
 
 ## 🔗 相关资源
 
-- [完整示例代码](https://github.com/apiyi-api/ai-api-code-samples/tree/main/flux-Image-API)
-- [多图处理脚本](https://github.com/apiyi-api/ai-api-code-samples/blob/main/flux-Image-API/flux-simple-batch.sh)
+- [完整示例代码](https://github.com/laozhang-api/ai-api-code-samples/tree/main/flux-Image-API)
+- [多图处理脚本](https://github.com/laozhang-api/ai-api-code-samples/blob/main/flux-Image-API/flux-simple-batch.sh)
 - [Flux 图像编辑 API](/api-capabilities/flux-image-edit) - 编辑现有图片
-- [价格对比计算器](https://api.apiyi.com/account/pricing) - 实时价格查询
-- [在线体验 Demo](https://imagen.apiyi.com) - 测试 Flux 效果
+- [价格对比计算器](https://api.laozhang.ai/account/pricing) - 实时价格查询
+- [在线体验 Demo](https://imagen.laozhang.ai) - 测试 Flux 效果
 
 <Note>
 🎨 **专业提示**：结合不同宽高比和模型版本，可以满足从社交媒体到专业设计的各种需求！

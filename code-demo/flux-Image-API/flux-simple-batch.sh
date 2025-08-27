@@ -13,7 +13,7 @@ set -e
 
 # 配置变量
 API_KEY="sk-"
-API_URL="https://vip.apiyi.com/v1/images/edits"
+API_URL="https://vip.laozhang.ai/v1/images/edits"
 MODEL="flux-kontext-max"
 SIZE="1024x1024"
 OUTPUT_DIR="./batch_output"

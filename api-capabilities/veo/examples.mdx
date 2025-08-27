@@ -82,7 +82,7 @@ class VEOVideoClient:
 
 # 使用示例
 if __name__ == "__main__":
-    client = VEOVideoClient('https://api.apiyi.com', 'your-api-key')
+    client = VEOVideoClient('https://api.laozhang.ai', 'your-api-key')
     
     try:
         # 提交任务
@@ -185,7 +185,7 @@ class VEOVideoClient {
 
 // 使用示例
 async function main() {
-    const client = new VEOVideoClient('https://api.apiyi.com', 'your-api-key');
+    const client = new VEOVideoClient('https://api.laozhang.ai', 'your-api-key');
 
     try {
         // 提交任务
@@ -304,7 +304,7 @@ func (c *VEOClient) GetStatus(taskID string) (*Response, error) {
 
 func main() {
     client := VEOClient{
-        BaseURL: "https://api.apiyi.com",
+        BaseURL: "https://api.laozhang.ai",
         APIKey:  "your-api-key",
     }
 
@@ -435,7 +435,7 @@ public class VEOVideoClient {
 
     public static void main(String[] args) throws Exception {
         VEOVideoClient client = new VEOVideoClient(
-                "https://api.apiyi.com", "your-api-key");
+                "https://api.laozhang.ai", "your-api-key");
 
         // 提交任务
         String taskId = client.submitTask(
@@ -470,7 +470,7 @@ public class VEOVideoClient {
 
 ```bash
 # 提交任务
-curl -X POST "https://api.apiyi.com/veo/v1/api/video/submit" \
+curl -X POST "https://api.laozhang.ai/veo/v1/api/video/submit" \
   -H "Content-Type: application/json" \
   -H "Authorization: Bearer your-api-key" \
   -d '{
@@ -479,7 +479,7 @@ curl -X POST "https://api.apiyi.com/veo/v1/api/video/submit" \
   }'
 
 # 查询状态
-curl -X GET "https://api.apiyi.com/veo/v1/api/video/status/YOUR_TASK_ID" \
+curl -X GET "https://api.laozhang.ai/veo/v1/api/video/status/YOUR_TASK_ID" \
   -H "Authorization: Bearer your-api-key"
 ```
 
@@ -489,7 +489,7 @@ curl -X GET "https://api.apiyi.com/veo/v1/api/video/status/YOUR_TASK_ID" \
 #!/bin/bash
 
 API_KEY="your-api-key"
-BASE_URL="https://api.apiyi.com"
+BASE_URL="https://api.laozhang.ai"
 
 # 提交任务
 submit_video() {

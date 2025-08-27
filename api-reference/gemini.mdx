@@ -5,7 +5,7 @@ description: 'Google Gemini系列模型的详细使用指南'
 
 # Gemini模型使用指南
 
-Google Gemini是谷歌开发的先进多模态AI模型，具有强大的文本理解、代码生成、图像分析和推理能力。在API易平台上，你可以使用Gemini的最新模型版本。
+Google Gemini是谷歌开发的先进多模态AI模型，具有强大的文本理解、代码生成、图像分析和推理能力。在老张API平台上，你可以使用Gemini的最新模型版本。
 
 ## 🚀 模型概览
 
@@ -65,7 +65,7 @@ from openai import OpenAI
 
 client = OpenAI(
     api_key="YOUR_API_KEY",
-    base_url="https://api.apiyi.com/v1"
+    base_url="https://api.laozhang.ai/v1"
 )
 
 # 基础对话
@@ -93,7 +93,7 @@ import OpenAI from 'openai';
 
 const openai = new OpenAI({
   apiKey: 'YOUR_API_KEY',
-  baseURL: 'https://api.apiyi.com/v1'
+  baseURL: 'https://api.laozhang.ai/v1'
 });
 
 const completion = await openai.chat.completions.create({
@@ -116,7 +116,7 @@ console.log(completion.choices[0].message.content);
 ```
 
 ```bash cURL
-curl -X POST "https://api.apiyi.com/v1/chat/completions" \
+curl -X POST "https://api.laozhang.ai/v1/chat/completions" \
   -H "Content-Type: application/json" \
   -H "Authorization: Bearer YOUR_API_KEY" \
   -d '{
@@ -847,7 +847,7 @@ class GeminiClient:
     def __init__(self, api_key: str, max_retries: int = 3):
         self.client = OpenAI(
             api_key=api_key,
-            base_url="https://api.apiyi.com/v1"
+            base_url="https://api.laozhang.ai/v1"
         )
         self.max_retries = max_retries
         self.logger = logging.getLogger(__name__)

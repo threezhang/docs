@@ -5,7 +5,7 @@ description: 'Anthropic Claude系列模型的详细使用指南'
 
 # Claude模型使用指南
 
-Claude是由Anthropic开发的先进AI助手，以其出色的推理能力、安全性和有用性而闻名。在API易平台上，你可以使用Claude的最新模型，包括Claude 3.5 Sonnet、Claude 3 Opus等。
+Claude是由Anthropic开发的先进AI助手，以其出色的推理能力、安全性和有用性而闻名。在老张API平台上，你可以使用Claude的最新模型，包括Claude 3.5 Sonnet、Claude 3 Opus等。
 
 ## 🚀 模型概览
 
@@ -65,7 +65,7 @@ from openai import OpenAI
 
 client = OpenAI(
     api_key="YOUR_API_KEY",
-    base_url="https://api.apiyi.com/v1"
+    base_url="https://api.laozhang.ai/v1"
 )
 
 # 基础对话
@@ -93,7 +93,7 @@ import OpenAI from 'openai';
 
 const openai = new OpenAI({
   apiKey: 'YOUR_API_KEY',
-  baseURL: 'https://api.apiyi.com/v1'
+  baseURL: 'https://api.laozhang.ai/v1'
 });
 
 const completion = await openai.chat.completions.create({
@@ -128,7 +128,7 @@ import (
 
 func main() {
     config := openai.DefaultConfig("YOUR_API_KEY")
-    config.BaseURL = "https://api.apiyi.com/v1"
+    config.BaseURL = "https://api.laozhang.ai/v1"
     client := openai.NewClientWithConfig(config)
     
     resp, err := client.CreateChatCompletion(
@@ -159,7 +159,7 @@ func main() {
 ```
 
 ```bash cURL
-curl -X POST "https://api.apiyi.com/v1/chat/completions" \
+curl -X POST "https://api.laozhang.ai/v1/chat/completions" \
   -H "Content-Type: application/json" \
   -H "Authorization: Bearer YOUR_API_KEY" \
   -d '{

@@ -1,16 +1,16 @@
 ---
 title: OpenAI 官方库使用
-description: 使用官方 OpenAI SDK 无缝接入 API易 服务
+description: 使用官方 OpenAI SDK 无缝接入 老张API 服务
 icon: "code"
 ---
 
 # 在 OpenAI 官方库使用
 
-API易 完全兼容 OpenAI API 格式，您可以直接使用官方 OpenAI SDK，只需简单修改配置即可无缝切换到 API易 服务。
+老张API 完全兼容 OpenAI API 格式，您可以直接使用官方 OpenAI SDK，只需简单修改配置即可无缝切换到 老张API 服务。
 
 ## 支持的官方 SDK
 
-API易 支持所有官方 OpenAI SDK：
+老张API 支持所有官方 OpenAI SDK：
 
 - Python (`openai`)
 - Node.js (`openai`)
@@ -33,10 +33,10 @@ pip install openai
 ```python
 from openai import OpenAI
 
-# 配置 API易 服务
+# 配置 老张API 服务
 client = OpenAI(
-    api_key="YOUR_API_KEY",  # 您的 API易 密钥
-    base_url="https://api.apiyi.com/v1"  # API易 端点
+    api_key="YOUR_API_KEY",  # 您的 老张API 密钥
+    base_url="https://api.laozhang.ai/v1"  # 老张API 端点
 )
 
 # 使用方式与官方完全相同
@@ -58,7 +58,7 @@ from openai import OpenAI
 
 # 设置环境变量
 os.environ["OPENAI_API_KEY"] = "YOUR_API_KEY"
-os.environ["OPENAI_BASE_URL"] = "https://api.apiyi.com/v1"
+os.environ["OPENAI_BASE_URL"] = "https://api.laozhang.ai/v1"
 
 # 使用默认配置
 client = OpenAI()
@@ -78,7 +78,7 @@ from openai import AsyncOpenAI
 async def main():
     client = AsyncOpenAI(
         api_key="YOUR_API_KEY",
-        base_url="https://api.apiyi.com/v1"
+        base_url="https://api.laozhang.ai/v1"
     )
     
     response = await client.chat.completions.create(
@@ -98,7 +98,7 @@ from openai import OpenAI
 
 client = OpenAI(
     api_key="YOUR_API_KEY",
-    base_url="https://api.apiyi.com/v1"
+    base_url="https://api.laozhang.ai/v1"
 )
 
 stream = client.chat.completions.create(
@@ -127,7 +127,7 @@ import OpenAI from 'openai';
 
 const openai = new OpenAI({
   apiKey: 'YOUR_API_KEY',
-  baseURL: 'https://api.apiyi.com/v1'
+  baseURL: 'https://api.laozhang.ai/v1'
 });
 
 const response = await openai.chat.completions.create({
@@ -143,7 +143,7 @@ console.log(response.choices[0].message.content);
 ```javascript
 // 设置环境变量
 process.env.OPENAI_API_KEY = 'YOUR_API_KEY';
-process.env.OPENAI_BASE_URL = 'https://api.apiyi.com/v1';
+process.env.OPENAI_BASE_URL = 'https://api.laozhang.ai/v1';
 
 import OpenAI from 'openai';
 
@@ -180,7 +180,7 @@ import type { ChatCompletionCreateParamsNonStreaming } from 'openai/resources/ch
 
 const openai = new OpenAI({
   apiKey: process.env.OPENAI_API_KEY!,
-  baseURL: 'https://api.apiyi.com/v1'
+  baseURL: 'https://api.laozhang.ai/v1'
 });
 
 const params: ChatCompletionCreateParamsNonStreaming = {
@@ -208,7 +208,7 @@ using OpenAI.Chat;
 
 var client = new OpenAIClient("YOUR_API_KEY", new OpenAIClientOptions
 {
-    Endpoint = new Uri("https://api.apiyi.com/v1")
+    Endpoint = new Uri("https://api.laozhang.ai/v1")
 });
 
 var chatClient = client.GetChatClient("gpt-3.5-turbo");
@@ -251,7 +251,7 @@ import (
 
 func main() {
     config := openai.DefaultConfig("YOUR_API_KEY")
-    config.BaseURL = "https://api.apiyi.com/v1"
+    config.BaseURL = "https://api.laozhang.ai/v1"
     
     client := openai.NewClientWithConfig(config)
     
@@ -341,7 +341,7 @@ public class APIYiExample {
         OpenAiService service = new OpenAiService(
             "YOUR_API_KEY", 
             Duration.ofSeconds(60),
-            "https://api.apiyi.com/v1/"
+            "https://api.laozhang.ai/v1/"
         );
         
         ChatCompletionRequest request = ChatCompletionRequest.builder()
@@ -522,7 +522,7 @@ class APIYiClient:
     def __init__(self):
         self.client = OpenAI(
             api_key=os.getenv("APIYI_API_KEY"),
-            base_url=os.getenv("APIYI_BASE_URL", "https://api.apiyi.com/v1")
+            base_url=os.getenv("APIYI_BASE_URL", "https://api.laozhang.ai/v1")
         )
     
     def chat(self, message: str, model: str = "gpt-3.5-turbo"):
@@ -572,17 +572,17 @@ def controlled_chat(message: str, max_tokens: int = 150):
 
 ### 从 OpenAI 迁移
 
-如果您已经在使用 OpenAI 官方服务，迁移到 API易 非常简单：
+如果您已经在使用 OpenAI 官方服务，迁移到 老张API 非常简单：
 
 1. **更改 base_url**
 ```python
 # 原来的配置
 client = OpenAI(api_key="sk-...")
 
-# 改为 API易
+# 改为 老张API
 client = OpenAI(
     api_key="YOUR_APIYI_KEY", 
-    base_url="https://api.apiyi.com/v1"
+    base_url="https://api.laozhang.ai/v1"
 )
 ```
 
@@ -593,7 +593,7 @@ export OPENAI_API_KEY="sk-..."
 
 # 改为
 export OPENAI_API_KEY="YOUR_APIYI_KEY"
-export OPENAI_BASE_URL="https://api.apiyi.com/v1"
+export OPENAI_BASE_URL="https://api.laozhang.ai/v1"
 ```
 
 3. **代码无需修改**
@@ -607,18 +607,18 @@ export OPENAI_BASE_URL="https://api.apiyi.com/v1"
 ```python
 class MultiProviderClient:
     def __init__(self):
-        self.apiyi_client = OpenAI(
+        self.laozhang_client = OpenAI(
             api_key="APIYI_KEY",
-            base_url="https://api.apiyi.com/v1"
+            base_url="https://api.laozhang.ai/v1"
         )
         self.openai_client = OpenAI(api_key="OPENAI_KEY")
     
-    def chat(self, message: str, provider: str = "apiyi"):
-        client = self.apiyi_client if provider == "apiyi" else self.openai_client
+    def chat(self, message: str, provider: str = "laozhang"):
+        client = self.laozhang_client if provider == "laozhang" else self.openai_client
         return client.chat.completions.create(
             model="gpt-3.5-turbo",
             messages=[{"role": "user", "content": message}]
         )
 ```
 
-需要更多帮助？请访问 [API易官网](https://vip.apiyi.com) 或查看 [官方 SDK 文档](https://platform.openai.com/docs/libraries)。
+需要更多帮助？请访问 [老张API官网](https://vip.laozhang.ai) 或查看 [官方 SDK 文档](https://platform.openai.com/docs/libraries)。

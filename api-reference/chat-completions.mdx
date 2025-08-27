@@ -5,11 +5,11 @@ description: '与AI模型进行对话交流的核心接口'
 
 # Chat Completions API
 
-Chat Completions 是API易最核心的接口，用于与AI模型进行对话交流。支持200+AI模型，包括OpenAI、Claude、Gemini、DeepSeek等所有主流大模型。
+Chat Completions 是老张API最核心的接口，用于与AI模型进行对话交流。支持200+AI模型，包括OpenAI、Claude、Gemini、DeepSeek等所有主流大模型。
 
 ## 接口信息
 
-**接口地址**：`POST https://api.apiyi.com/v1/chat/completions`
+**接口地址**：`POST https://api.laozhang.ai/v1/chat/completions`
 
 **兼容性**：完全兼容OpenAI官方API格式
 
@@ -82,7 +82,7 @@ Chat Completions 是API易最核心的接口，用于与AI模型进行对话交�
 <CodeGroup>
 
 ```bash cURL
-curl https://api.apiyi.com/v1/chat/completions \
+curl https://api.laozhang.ai/v1/chat/completions \
   -H "Content-Type: application/json" \
   -H "Authorization: Bearer YOUR_API_KEY" \
   -d '{
@@ -94,7 +94,7 @@ curl https://api.apiyi.com/v1/chat/completions \
       },
       {
         "role": "user",
-        "content": "请介绍一下API易平台的特色功能"
+        "content": "请介绍一下老张API平台的特色功能"
       }
     ],
     "temperature": 0.7,
@@ -107,7 +107,7 @@ import OpenAI from 'openai';
 
 const openai = new OpenAI({
   apiKey: 'YOUR_API_KEY',
-  baseURL: 'https://api.apiyi.com/v1'
+  baseURL: 'https://api.laozhang.ai/v1'
 });
 
 async function chatCompletion() {
@@ -120,7 +120,7 @@ async function chatCompletion() {
       },
       {
         role: 'user',
-        content: '请介绍一下API易平台的特色功能'
+        content: '请介绍一下老张API平台的特色功能'
       }
     ],
     temperature: 0.7,
@@ -138,7 +138,7 @@ from openai import OpenAI
 
 client = OpenAI(
     api_key="YOUR_API_KEY",
-    base_url="https://api.apiyi.com/v1"
+    base_url="https://api.laozhang.ai/v1"
 )
 
 completion = client.chat.completions.create(
@@ -150,7 +150,7 @@ completion = client.chat.completions.create(
         },
         {
             "role": "user",
-            "content": "请介绍一下API易平台的特色功能"
+            "content": "请介绍一下老张API平台的特色功能"
         }
     ],
     temperature=0.7,
@@ -171,7 +171,7 @@ import (
 
 func main() {
     config := openai.DefaultConfig("YOUR_API_KEY")
-    config.BaseURL = "https://api.apiyi.com/v1"
+    config.BaseURL = "https://api.laozhang.ai/v1"
     
     client := openai.NewClientWithConfig(config)
     
@@ -186,7 +186,7 @@ func main() {
                 },
                 {
                     Role:    openai.ChatMessageRoleUser,
-                    Content: "请介绍一下API易平台的特色功能",
+                    Content: "请介绍一下老张API平台的特色功能",
                 },
             },
             Temperature: 0.7,
@@ -220,7 +220,7 @@ func main() {
       "index": 0,
       "message": {
         "role": "assistant",
-        "content": "API易是一个企业级专业稳定的AI大模型API中转站..."
+        "content": "老张API是一个企业级专业稳定的AI大模型API中转站..."
       },
       "finish_reason": "stop"
     }
@@ -259,7 +259,7 @@ func main() {
 <CodeGroup>
 
 ```bash cURL
-curl https://api.apiyi.com/v1/chat/completions \
+curl https://api.laozhang.ai/v1/chat/completions \
   -H "Content-Type: application/json" \
   -H "Authorization: Bearer YOUR_API_KEY" \
   -d '{
@@ -344,7 +344,7 @@ data: [DONE]
 Claude模型同时支持OpenAI格式和原生格式。使用原生格式时，需要调用 `/v1/messages` 端点：
 
 ```bash
-curl https://api.apiyi.com/v1/messages \
+curl https://api.laozhang.ai/v1/messages \
   -H "Content-Type: application/json" \
   -H "Authorization: Bearer YOUR_API_KEY" \
   -H "anthropic-version: 2023-06-01" \
@@ -451,7 +451,7 @@ O1系列模型专为复杂推理任务设计，不支持部分参数：
 
 ## 计费说明
 
-API易采用按Token计费模式，不同模型价格不同：
+老张API采用按Token计费模式，不同模型价格不同：
 
 | 模型类型 | 输入价格 | 输出价格 | 特点 |
 |----------|----------|----------|------|

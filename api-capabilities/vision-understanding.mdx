@@ -6,7 +6,7 @@ icon: "eye"
 
 # 图像理解（识图）API
 
-API易 提供强大的图像理解能力，支持使用多种先进的 AI 模型对图像进行深度分析和理解。通过统一的 OpenAI API 格式，您可以轻松实现图像识别、场景描述、OCR 文字识别等功能。
+老张API 提供强大的图像理解能力，支持使用多种先进的 AI 模型对图像进行深度分析和理解。通过统一的 OpenAI API 格式，您可以轻松实现图像识别、场景描述、OCR 文字识别等功能。
 
 <Note>
 **🔍 智能视觉分析**  
@@ -38,7 +38,7 @@ API易 提供强大的图像理解能力，支持使用多种先进的 AI 模型
 ```python
 import requests
 
-url = "https://api.apiyi.com/v1/chat/completions"
+url = "https://api.laozhang.ai/v1/chat/completions"
 headers = {
     "Authorization": "Bearer YOUR_API_KEY",
     "Content-Type": "application/json"
@@ -84,7 +84,7 @@ def image_to_base64(image_path):
 # 读取本地图片
 base64_image = image_to_base64("path/to/your/image.jpg")
 
-url = "https://api.apiyi.com/v1/chat/completions"
+url = "https://api.laozhang.ai/v1/chat/completions"
 headers = {
     "Authorization": "Bearer YOUR_API_KEY",
     "Content-Type": "application/json"
@@ -120,7 +120,7 @@ print(response.json()['choices'][0]['message']['content'])
 ```python
 import requests
 
-url = "https://api.apiyi.com/v1/chat/completions"
+url = "https://api.laozhang.ai/v1/chat/completions"
 headers = {
     "Authorization": "Bearer YOUR_API_KEY",
     "Content-Type": "application/json"
@@ -230,7 +230,7 @@ def analyze_image_with_retry(image_url, prompt, max_retries=3):
     for attempt in range(max_retries):
         try:
             response = requests.post(
-                "https://api.apiyi.com/v1/chat/completions",
+                "https://api.laozhang.ai/v1/chat/completions",
                 headers={
                     "Authorization": f"Bearer {API_KEY}",
                     "Content-Type": "application/json"
@@ -352,8 +352,8 @@ payload = {
 
 ## 🔗 相关资源
 
-- [完整代码示例](https://github.com/apiyi-api/ai-api-code-samples/tree/main/Vision-API-OpenAI)
-- [API 定价说明](https://api.apiyi.com/account/pricing)
+- [完整代码示例](https://github.com/laozhang-api/ai-api-code-samples/tree/main/Vision-API-OpenAI)
+- [API 定价说明](https://api.laozhang.ai/account/pricing)
 
 <Note>
 💡 **小贴士**：建议先使用 GPT-4.1 Mini 或 Gemini 2.5 Flash 进行测试，确认效果后再使用高级模型进行生产部署。

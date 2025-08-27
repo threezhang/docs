@@ -12,7 +12,7 @@ from typing import Dict, Any, List
 
 def generate_image_from_text(api_key: str, prompt: str, model: str = "gpt-4o-image", n: int = 1) -> Dict[str, Any]:
     """调用文生图 API 生成图片"""
-    url = "https://vip.apiyi.com/v1/chat/completions"
+    url = "https://vip.laozhang.ai/v1/chat/completions"
     headers = {"Authorization": f"Bearer {api_key}", "Content-Type": "application/json"}
     
     payload = {"model": model, "messages": [{"role": "user", "content": prompt}]}

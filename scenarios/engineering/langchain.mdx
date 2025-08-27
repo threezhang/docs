@@ -6,7 +6,7 @@ icon: "link"
 
 # LangChain
 
-LangChain 是一个强大的框架，用于开发基于语言模型的应用程序。通过 API易，您可以在 LangChain 中使用各种主流 AI 模型。
+LangChain 是一个强大的框架，用于开发基于语言模型的应用程序。通过 老张API，您可以在 LangChain 中使用各种主流 AI 模型。
 
 ## 快速开始
 
@@ -23,8 +23,8 @@ import os
 from langchain_openai import ChatOpenAI
 
 # 设置环境变量
-os.environ["OPENAI_API_KEY"] = "您的API易密钥"
-os.environ["OPENAI_BASE_URL"] = "https://api.apiyi.com/v1"
+os.environ["OPENAI_API_KEY"] = "您的老张API密钥"
+os.environ["OPENAI_BASE_URL"] = "https://api.laozhang.ai/v1"
 
 # 初始化模型
 llm = ChatOpenAI(
@@ -79,8 +79,8 @@ from langchain.chains import RetrievalQA
 
 # 配置嵌入模型
 embeddings = OpenAIEmbeddings(
-    api_key="您的API易密钥",
-    base_url="https://api.apiyi.com/v1"
+    api_key="您的老张API密钥",
+    base_url="https://api.laozhang.ai/v1"
 )
 
 # 加载文档
@@ -116,15 +116,15 @@ result = qa.run("文档中的关键概念是什么？")
 # GPT-4
 gpt4 = ChatOpenAI(
     model="gpt-4",
-    api_key="您的API易密钥",
-    base_url="https://api.apiyi.com/v1"
+    api_key="您的老张API密钥",
+    base_url="https://api.laozhang.ai/v1"
 )
 
 # Claude 3
 claude = ChatOpenAI(
     model="claude-3-opus-20240229",
-    api_key="您的API易密钥", 
-    base_url="https://api.apiyi.com/v1"
+    api_key="您的老张API密钥", 
+    base_url="https://api.laozhang.ai/v1"
 )
 
 # 比较不同模型的回答
@@ -258,8 +258,8 @@ from langchain_openai import AsyncChatOpenAI
 async def async_chat():
     async_llm = AsyncChatOpenAI(
         model="gpt-3.5-turbo",
-        api_key="您的API易密钥",
-        base_url="https://api.apiyi.com/v1"
+        api_key="您的老张API密钥",
+        base_url="https://api.laozhang.ai/v1"
     )
     
     response = await async_llm.ainvoke("异步生成的内容")

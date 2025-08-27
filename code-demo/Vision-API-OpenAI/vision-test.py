@@ -21,7 +21,7 @@ def load_image_to_base64(image_path):
 
 def api_inference(prompt, base64_image, model_id="gemini-2.5-pro", api_key="sk-"):
     """调用API进行图像视觉理解"""
-    url = "https://vip.apiyi.com/v1/chat/completions"
+    url = "https://vip.laozhang.ai/v1/chat/completions"
     headers = {"Authorization": f"Bearer {api_key}", "Content-Type": "application/json"}
 
     content = [

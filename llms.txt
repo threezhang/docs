@@ -1,10 +1,10 @@
-# API易文档中心
+# 老张API文档中心
 
-> API易是企业级专业稳定的AI大模型API中转站，基于统一的OpenAI API标准，支持200+热门AI模型。一个令牌，即可轻松调用OpenAI、Claude、Gemini、DeepSeek、Qwen等所有主流大模型。
+> 老张API是企业级专业稳定的AI大模型API中转站，基于统一的OpenAI API标准，支持200+热门AI模型。一个令牌，即可轻松调用OpenAI、Claude、Gemini、DeepSeek、Qwen等所有主流大模型。
 
 ## 核心产品信息
 
-API易（apiyi.com）是由APIYI, LLC（美国）运营的AI大模型API聚合服务平台，与微软Azure、AWS、Google Cloud等官方合作，为企业和开发者提供统一的AI模型访问接口。
+老张API（laozhang.ai）是由Laozhang AI, LLC（美国）运营的AI大模型API聚合服务平台，与微软Azure、AWS、Google Cloud等官方合作，为企业和开发者提供统一的AI模型访问接口。
 
 **主要特色：**
 - 支持200+顶级AI模型，包括最新的O3、Claude 4、Gemini 2.5、DeepSeek R1等
@@ -30,7 +30,7 @@ API易（apiyi.com）是由APIYI, LLC（美国）运营的AI大模型API聚合�
 
 ### 文本对话模型
 - [模型信息](/api-capabilities/model-info): 查看支持的200+AI模型详细信息
-- [OpenAI SDK使用](/api-capabilities/openai-sdk): 使用官方SDK无缝接入API易
+- [OpenAI SDK使用](/api-capabilities/openai-sdk): 使用官方SDK无缝接入老张API
 - [OpenAI兼容响应](/api-capabilities/openai-responses): 兼容OpenAI响应格式的标准接口
 
 ### 图像处理能力
@@ -63,8 +63,8 @@ API易（apiyi.com）是由APIYI, LLC（美国）运营的AI大模型API聚合�
 ## 技术规格
 
 **接入端点：**
-- 主端点：https://api.apiyi.com/v1
-- 备用端点：https://vip.apiyi.com/v1
+- 主端点：https://api.laozhang.ai/v1
+- 备用端点：https://vip.laozhang.ai/v1
 
 **认证方式：**
 - Bearer Token认证
@@ -96,11 +96,11 @@ API易（apiyi.com）是由APIYI, LLC（美国）运营的AI大模型API聚合�
 
 ## 联系方式
 
-- 官方网站：https://api.apiyi.com
-- 技术支持：support@apiyi.com
+- 官方网站：https://api.laozhang.ai
+- 技术支持：support@laozhang.ai
 - 在线客服：通过官网联系
-- 微信：8765058
+- 微信：laozhangdaichong
 
 ---
 
-API易致力于为全球开发者和企业提供最优质、最具性价比的AI模型API服务，让AI技术的应用更加简单和高效。
+老张API致力于为全球开发者和企业提供最优质、最具性价比的AI模型API服务，让AI技术的应用更加简单和高效。

@@ -1,13 +1,13 @@
 ---
 title: GPT-Image-1 图像生成 API - OpenAI 当下最新图片 API
 sidebarTitle: GPT-Image-1 生成图片
-description: "使用OpenAI官方 Image API 格式调用 GPT-Image-1 模型进行高质量图像生成，API易 完全兼容 OpenAI 格式。"
+description: "使用OpenAI官方 Image API 格式调用 GPT-Image-1 模型进行高质量图像生成，老张API 完全兼容 OpenAI 格式。"
 icon: "palette"
 ---
 
 # GPT-Image-1 图像生成
 
-GPT-Image-1 是 OpenAI 最新的图像生成模型，提供高质量的图片生成能力。本文档介绍如何通过 API易 使用标准的 OpenAI Image API 格式调用此模型。
+GPT-Image-1 是 OpenAI 最新的图像生成模型，提供高质量的图片生成能力。本文档介绍如何通过 老张API 使用标准的 OpenAI Image API 格式调用此模型。
 
 ## 概述
 
@@ -27,8 +27,8 @@ GPT-Image-1 支持通过文本提示词生成高质量图像，完全兼容 Open
 ```python
 import openai
 
-# 配置 API易 的接入点和密钥
-openai.api_base = "https://api.apiyi.com/v1"
+# 配置 老张API 的接入点和密钥
+openai.api_base = "https://api.laozhang.ai/v1"
 openai.api_key = "your-api-key"
 ```
 
@@ -121,7 +121,7 @@ from PIL import Image
 from io import BytesIO
 
 # 配置
-openai.api_base = "https://api.apiyi.com/v1"
+openai.api_base = "https://api.laozhang.ai/v1"
 openai.api_key = "your-api-key"
 
 # 生成图像（使用新参数）
@@ -196,7 +196,7 @@ const https = require('https');
 // 初始化客户端
 const openai = new OpenAI({
   apiKey: 'your-api-key',
-  baseURL: 'https://api.apiyi.com/v1'
+  baseURL: 'https://api.laozhang.ai/v1'
 });
 
 // 生成图像（使用新参数）
@@ -263,7 +263,7 @@ main();
 ### cURL 示例
 
 ```bash
-curl https://api.apiyi.com/v1/images/generations \
+curl https://api.laozhang.ai/v1/images/generations \
   -H "Content-Type: application/json" \
   -H "Authorization: Bearer YOUR_API_KEY" \
   -d '{
@@ -396,7 +396,7 @@ from openai import OpenAI
 
 client = OpenAI(
     api_key="your-api-key",
-    base_url="https://api.apiyi.com/v1"
+    base_url="https://api.laozhang.ai/v1"
 )
 
 def generate_with_retry(prompt, max_retries=3):
@@ -489,8 +489,8 @@ A: 使用详细、具体的描述，包括风格、光线、构图等细节。
 ## 相关资源
 
 - [OpenAI 官方图像生成指南](https://platform.openai.com/docs/guides/images)
-- [API易控制台](https://api.apiyi.com)
-- [技术支持](mailto:support@apiyi.com)
+- [老张API控制台](https://api.laozhang.ai)
+- [技术支持](mailto:support@laozhang.ai)
 
 <Note>
 GPT-Image-1 采用按 Token 计费模式（输入 $10/M Tokens，输出 $40/M Tokens），实际成本取决于提示词长度和响应内容。相比固定价格的 Sora Image（$0.01/张），更适合需要灵活控制成本的场景。

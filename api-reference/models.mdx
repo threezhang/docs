@@ -5,11 +5,11 @@ description: '获取可用模型列表和详细信息'
 
 # Models API
 
-Models API用于获取API易平台支持的AI模型列表和详细信息。通过此接口，你可以查看所有可用的模型、了解模型特性和定价信息。
+Models API用于获取老张API平台支持的AI模型列表和详细信息。通过此接口，你可以查看所有可用的模型、了解模型特性和定价信息。
 
 ## 接口信息
 
-**接口地址**：`GET https://api.apiyi.com/v1/models`
+**接口地址**：`GET https://api.laozhang.ai/v1/models`
 
 **兼容性**：完全兼容OpenAI官方API格式
 
@@ -20,7 +20,7 @@ Models API用于获取API易平台支持的AI模型列表和详细信息。通�
 <CodeGroup>
 
 ```bash cURL
-curl https://api.apiyi.com/v1/models \
+curl https://api.laozhang.ai/v1/models \
   -H "Authorization: Bearer YOUR_API_KEY"
 ```
 
@@ -29,7 +29,7 @@ import OpenAI from 'openai';
 
 const openai = new OpenAI({
   apiKey: 'YOUR_API_KEY',
-  baseURL: 'https://api.apiyi.com/v1'
+  baseURL: 'https://api.laozhang.ai/v1'
 });
 
 async function getModels() {
@@ -45,7 +45,7 @@ from openai import OpenAI
 
 client = OpenAI(
     api_key="YOUR_API_KEY",
-    base_url="https://api.apiyi.com/v1"
+    base_url="https://api.laozhang.ai/v1"
 )
 
 models = client.models.list()
@@ -63,7 +63,7 @@ import (
 
 func main() {
     config := openai.DefaultConfig("YOUR_API_KEY")
-    config.BaseURL = "https://api.apiyi.com/v1"
+    config.BaseURL = "https://api.laozhang.ai/v1"
     
     client := openai.NewClientWithConfig(config)
     
@@ -131,7 +131,7 @@ func main() {
 <CodeGroup>
 
 ```bash cURL
-curl https://api.apiyi.com/v1/models/gpt-4o \
+curl https://api.laozhang.ai/v1/models/gpt-4o \
   -H "Authorization: Bearer YOUR_API_KEY"
 ```
 
@@ -360,7 +360,7 @@ fmt.Printf("Model: %+v\n", model)
 |--------|------|------|------|
 | `dall-e-3` | OpenAI | 高质量图像生成 | $0.04/张 |
 | `dall-e-2` | OpenAI | 经典图像生成 | $0.02/张 |
-| `gpt-4o-image` | API易优化 | 超高性价比 | $0.01/张 |
+| `gpt-4o-image` | 老张API优化 | 超高性价比 | $0.01/张 |
 | `flux-pro` | Flux | 专业级质量 | $0.05/张 |
 | `flux-dev` | Flux | 开发版本 | $0.03/张 |
 | `midjourney-v6` | Midjourney | 艺术性强 | $0.08/张 |
@@ -482,7 +482,7 @@ import requests
 
 # 获取模型列表
 response = requests.get(
-    "https://api.apiyi.com/v1/models",
+    "https://api.laozhang.ai/v1/models",
     headers={"Authorization": "Bearer YOUR_API_KEY"}
 )
 
