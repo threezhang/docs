@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 180 48" width="180" height="48">
+  <!-- API圆形图标 -->
+  <circle cx="24" cy="24" r="24" fill="#2563EB" stroke="none"/>
+  
+  <!-- API文字 -->
+  <text x="24" y="24" font-family="Arial, sans-serif" font-size="18" font-weight="bold" fill="white" text-anchor="middle" dominant-baseline="central">API</text>
+  
+  <!-- API易文字 -->
+  <text x="64" y="24" font-family="PingFang SC, Microsoft YaHei, sans-serif" font-size="24" font-weight="600" fill="#1F2937" dominant-baseline="middle">API易</text>
+  
+  <!-- 文档文字 -->
+  <text x="134" y="24" font-family="PingFang SC, Microsoft YaHei, sans-serif" font-size="16" font-weight="400" fill="#6B7280" dominant-baseline="middle">文档</text>
+</svg>

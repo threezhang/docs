@@ -1,0 +1,980 @@
+---
+title: Flux 图像编辑 API
+description: 使用 Flux Kontext Max 模型编辑现有图片，支持精确蒙版控制和多种宽高比输出
+icon: "pencil"
+---
+
+# Flux 图像编辑 API
+
+Flux 图像编辑功能基于先进的 Flux Kontext Max 模型，可以根据文字描述对现有图片进行智能编辑。支持精确的蒙版控制、本地文件和在线图片输入，以及灵活的宽高比输出设置。
+
+<Note>
+**🎯 精确编辑**  
+使用蒙版可以精确控制编辑区域，白色区域会被编辑，黑色区域保持不变。无蒙版时 AI 会自动决定编辑区域。
+</Note>
+
+## 🌟 核心特性
+
+- **🎭 智能编辑**：基于文字描述智能修改图片内容
+- **🖼️ 蒙版支持**：精确控制编辑区域，保护重要内容
+- **📁 灵活输入**：支持本地文件和在线图片 URL
+- **📐 多比例输出**：支持 7 种宽高比，满足不同需求
+- **💰 高性价比**：比官方价格节省 12.5%，质量不减
+
+## 📋 技术规格
+
+| 特性 | Flux Kontext Max | 说明 |
+|------|----------------|------|
+| **API易 价格** | $0.07/次 | 比官方节省 12.5% |
+| **官方价格** | $0.08/张 | 原始定价 |
+| **输入格式** | PNG, JPEG, WebP, GIF | 支持常见图片格式 |
+| **文件大小** | 最大 20MB 或 20MP | 单张图片限制 |
+| **宽高比范围** | 3:7 到 7:3 | 从超窄竖版到超宽横版 |
+| **调用方式** | OpenAI 兼容 | 标准 Images Edit API |
+| **结果 URL** | 10 分钟有效期 | 需及时下载保存 |
+
+<Tip>
+💡 **节省成本**：通过 API易 调用 Flux 图像编辑，结合汇率优势和充值加赠，比官方价格节省超过 12.5%！
+</Tip>
+
+## 🚀 快速开始
+
+### 基础示例 - 本地图片编辑
+
+```python
+from openai import OpenAI
+
+# 初始化客户端
+client = OpenAI(
+    api_key="YOUR_API_KEY",
+    base_url="https://api.apiyi.com/v1"
+)
+
+def edit_local_image(image_path, prompt, aspect_ratio="1:1", mask_path=None, 
+                    seed=None, safety_tolerance=1, output_format="png"):
+    """编辑本地图片"""
+    try:
+        # 准备基础参数
+        edit_params = {
+            "model": "flux-kontext-max",
+            "image": open(image_path, "rb"),
+            "prompt": prompt,
+            "extra_body": {
+                "aspect_ratio": aspect_ratio,
+                "safety_tolerance": safety_tolerance,
+                "output_format": output_format
+            }
+        }
+        
+        # 可选参数
+        if seed is not None:
+            edit_params["extra_body"]["seed"] = seed
+        
+        # 如果有蒙版，添加到参数中
+        if mask_path:
+            edit_params["mask"] = open(mask_path, "rb")
+        
+        # 调用编辑 API
+        response = client.images.edit(**edit_params)
+        
+        # 返回编辑后的图片 URL（注意：URL 有效期 10 分钟）
+        return response.data[0].url
+    
+    except Exception as e:
+        print(f"编辑失败: {e}")
+        return None
+    
+    finally:
+        # 确保文件句柄关闭
+        if 'edit_params' in locals():
+            if 'image' in edit_params:
+                edit_params['image'].close()
+            if 'mask' in edit_params:
+                edit_params['mask'].close()
+
+# 使用示例
+edited_url = edit_local_image(
+    image_path="portrait.jpg",
+    prompt="Change the background to a beautiful sunset sky",
+    aspect_ratio="2:3",
+    seed=42,  # 可重现的结果
+    safety_tolerance=1,  # 安全级别 (0-2)
+    output_format="jpeg"  # 或 "png"
+)
+
+if edited_url:
+    print(f"编辑完成: {edited_url}")
+    print("注意：URL 将在 10 分钟后失效，请及时下载！")
+```
+
+## 📝 参数详解
+
+### 核心参数
+
+| 参数 | 类型 | 必填 | 说明 | 默认值 |
+|------|------|------|------|--------|
+| `model` | string | 是 | 模型名称：`flux-kontext-max` | - |
+| `image` | file | 是 | 原始图片文件（最大 20MB 或 20MP） | - |
+| `prompt` | string | 是 | 编辑指令，描述期望的修改 | - |
+| `mask` | file | 否 | 蒙版图片，指定编辑区域 | - |
+
+### 通过 extra_body 传递的参数
+
+| 参数 | 类型 | 范围 | 说明 | 默认值 |
+|------|------|------|------|--------|
+| `aspect_ratio` | string | - | 输出宽高比，如 "1:1", "16:9" 等 | "1:1" |
+| `seed` | integer | 0-2147483647 | 随机种子，用于结果重现 | 随机 |
+| `safety_tolerance` | integer | 0-2 | 内容安全级别，0=严格，2=宽松 | 1 |
+| `output_format` | string | "png", "jpeg" | 输出图片格式 | "png" |
+
+<Tip>
+**🔄 结果可重现性**：使用相同的 `seed` 值和其他完全相同的参数，可获得一致的编辑结果。这对于调试和客户满意度测试很有帮助。
+</Tip>
+
+### 高级示例 - 在线图片编辑
+
+```python
+import requests
+import tempfile
+import os
+from urllib.parse import urlparse
+
+def download_image_from_url(url):
+    """从 URL 下载图片到临时文件"""
+    try:
+        response = requests.get(url, timeout=30)
+        response.raise_for_status()
+        
+        # 获取文件扩展名
+        parsed_url = urlparse(url)
+        extension = parsed_url.path.split('.')[-1] if '.' in parsed_url.path else 'jpg'
+        
+        # 创建临时文件
+        temp_file = tempfile.NamedTemporaryFile(delete=False, suffix=f'.{extension}')
+        temp_file.write(response.content)
+        temp_file.close()
+        
+        return temp_file.name
+    
+    except Exception as e:
+        print(f"下载图片失败: {e}")
+        return None
+
+def edit_online_image(image_url, prompt, aspect_ratio="1:1", mask_url=None):
+    """编辑在线图片"""
+    image_path = None
+    mask_path = None
+    
+    try:
+        # 下载原图
+        image_path = download_image_from_url(image_url)
+        if not image_path:
+            return None
+        
+        # 下载蒙版（如果有）
+        if mask_url:
+            mask_path = download_image_from_url(mask_url)
+        
+        # 编辑图片
+        result = edit_local_image(image_path, prompt, aspect_ratio, mask_path)
+        
+        return result
+    
+    finally:
+        # 清理临时文件
+        for path in [image_path, mask_path]:
+            if path and os.path.exists(path):
+                os.unlink(path)
+
+# 使用示例
+edited_url = edit_online_image(
+    image_url="https://example.com/photo.jpg",
+    prompt="Remove the person in the background, keep the foreground intact",
+    aspect_ratio="16:9"
+)
+```
+
+### 批量编辑示例
+
+```python
+def batch_edit_images(edit_tasks):
+    """批量编辑图片"""
+    results = []
+    
+    for task in edit_tasks:
+        try:
+            print(f"正在编辑: {task['image_path']}")
+            print(f"编辑指令: {task['prompt']}")
+            
+            edited_url = edit_local_image(
+                image_path=task['image_path'],
+                prompt=task['prompt'],
+                aspect_ratio=task.get('aspect_ratio', '1:1'),
+                mask_path=task.get('mask_path')
+            )
+            
+            if edited_url:
+                # 下载编辑后的图片
+                filename = save_edited_image(edited_url, task['image_path'])
+                
+                results.append({
+                    'original': task['image_path'],
+                    'prompt': task['prompt'],
+                    'edited_url': edited_url,
+                    'saved_file': filename,
+                    'success': True
+                })
+            else:
+                results.append({
+                    'original': task['image_path'],
+                    'prompt': task['prompt'],
+                    'success': False,
+                    'error': 'API 调用失败'
+                })
+        
+        except Exception as e:
+            results.append({
+                'original': task['image_path'],
+                'prompt': task['prompt'],
+                'success': False,
+                'error': str(e)
+            })
+    
+    return results
+
+def save_edited_image(url, original_path):
+    """保存编辑后的图片"""
+    import time
+    
+    response = requests.get(url)
+    if response.status_code == 200:
+        # 生成新文件名
+        base_name = os.path.splitext(os.path.basename(original_path))[0]
+        timestamp = int(time.time())
+        filename = f"{base_name}_edited_{timestamp}.png"
+        
+        with open(filename, 'wb') as f:
+            f.write(response.content)
+        
+        print(f"已保存: {filename}")
+        return filename
+    
+    return None
+
+# 批量编辑示例
+edit_tasks = [
+    {
+        'image_path': 'photo1.jpg',
+        'prompt': 'Change the sky to a dramatic stormy sky',
+        'aspect_ratio': '3:2'
+    },
+    {
+        'image_path': 'photo2.jpg', 
+        'prompt': 'Remove all people from the image',
+        'aspect_ratio': '16:9',
+        'mask_path': 'mask2.png'
+    },
+    {
+        'image_path': 'photo3.jpg',
+        'prompt': 'Make the image look like a vintage photograph',
+        'aspect_ratio': '1:1'
+    }
+]
+
+results = batch_edit_images(edit_tasks)
+
+# 输出结果
+for result in results:
+    if result['success']:
+        print(f"✅ {result['original']} -> {result['saved_file']}")
+    else:
+        print(f"❌ {result['original']} -> {result['error']}")
+```
+
+## 🎯 专业编辑技巧
+
+### 1. 文字编辑和添加
+
+Flux Kontext 在处理图像中的文字方面表现出色：
+
+```python
+# 添加文字到图像
+add_text = edit_local_image(
+    image_path="poster.jpg",
+    prompt='Add the text "SALE 50% OFF" in bold red letters at the top center',
+    aspect_ratio="3:2"
+)
+
+# 修改现有文字
+modify_text = edit_local_image(
+    image_path="sign.jpg", 
+    prompt='Change the text from "Open" to "Closed"',
+    aspect_ratio="1:1"
+)
+
+# 使用引号确保文字准确性
+precise_text = edit_local_image(
+    image_path="banner.jpg",
+    prompt='Replace the existing text with exactly "Welcome to Our Store"',
+    aspect_ratio="7:3"
+)
+```
+
+### 2. 智能上下文保持
+
+Flux 能够理解图像上下文，进行自然的编辑：
+
+```python
+# 保持光照一致性
+lighting_edit = edit_local_image(
+    image_path="interior.jpg",
+    prompt="Add a lamp in the corner, matching the existing warm lighting",
+    aspect_ratio="16:9"
+)
+
+# 保持透视和比例
+perspective_edit = edit_local_image(
+    image_path="street.jpg", 
+    prompt="Add a bicycle parked next to the building, matching the street perspective",
+    aspect_ratio="3:2"
+)
+```
+
+### 3. 角色一致性维护
+
+```python
+# 维持角色特征
+character_edit = edit_local_image(
+    image_path="person.jpg",
+    prompt="Change the person's shirt to blue while keeping all facial features identical",
+    aspect_ratio="2:3",
+    seed=42  # 使用固定种子确保一致性
+)
+```
+
+## 🎯 编辑场景示例
+
+### 1. 背景替换
+
+```python
+# 更换背景
+background_edit = edit_local_image(
+    image_path="portrait.jpg",
+    prompt="Replace the background with a modern office environment",
+    aspect_ratio="2:3"
+)
+
+# 去除背景
+remove_bg = edit_local_image(
+    image_path="product.jpg", 
+    prompt="Remove the background, make it transparent",
+    aspect_ratio="1:1"
+)
+```
+
+### 2. 物体编辑
+
+```python
+# 添加元素
+add_element = edit_local_image(
+    image_path="room.jpg",
+    prompt="Add a beautiful plant in the corner of the room",
+    aspect_ratio="16:9"
+)
+
+# 删除物体
+remove_object = edit_local_image(
+    image_path="street.jpg",
+    prompt="Remove the car from the street, replace with empty road",
+    aspect_ratio="3:2"
+)
+
+# 替换物体
+replace_object = edit_local_image(
+    image_path="table.jpg",
+    prompt="Replace the apple on the table with an orange", 
+    aspect_ratio="1:1"
+)
+```
+
+### 3. 风格转换
+
+```python
+# 艺术风格
+artistic_style = edit_local_image(
+    image_path="landscape.jpg",
+    prompt="Transform into an impressionist painting style",
+    aspect_ratio="3:2"
+)
+
+# 季节变换
+season_change = edit_local_image(
+    image_path="park.jpg",
+    prompt="Change from summer to autumn, add colorful fall leaves",
+    aspect_ratio="16:9"
+)
+```
+
+### 4. 精确蒙版编辑
+
+```python
+# 使用蒙版精确编辑特定区域
+masked_edit = edit_local_image(
+    image_path="group_photo.jpg",
+    prompt="Blur the faces of the people in the masked area",
+    aspect_ratio="3:2",
+    mask_path="face_mask.png"  # 白色区域会被编辑
+)
+```
+
+## 🎨 蒙版制作指南
+
+### 1. 蒙版原理
+
+- **白色区域**：会被 AI 编辑修改
+- **黑色区域**：保持原样不变
+- **灰色区域**：部分编辑，按灰度程度决定
+
+### 2. 蒙版制作工具
+
+```python
+from PIL import Image, ImageDraw
+
+def create_circular_mask(image_path, center, radius):
+    """创建圆形蒙版"""
+    # 打开原图获取尺寸
+    with Image.open(image_path) as img:
+        width, height = img.size
+    
+    # 创建黑色背景蒙版
+    mask = Image.new('L', (width, height), 0)
+    draw = ImageDraw.Draw(mask)
+    
+    # 画白色圆形（编辑区域）
+    left = center[0] - radius
+    top = center[1] - radius
+    right = center[0] + radius
+    bottom = center[1] + radius
+    
+    draw.ellipse([left, top, right, bottom], fill=255)
+    
+    # 保存蒙版
+    mask_path = f"circular_mask_{int(time.time())}.png"
+    mask.save(mask_path)
+    return mask_path
+
+def create_rectangular_mask(image_path, bbox):
+    """创建矩形蒙版"""
+    with Image.open(image_path) as img:
+        width, height = img.size
+    
+    mask = Image.new('L', (width, height), 0)
+    draw = ImageDraw.Draw(mask)
+    
+    # 画白色矩形（编辑区域）
+    draw.rectangle(bbox, fill=255)
+    
+    mask_path = f"rect_mask_{int(time.time())}.png"
+    mask.save(mask_path)
+    return mask_path
+
+# 使用示例
+mask_path = create_circular_mask("photo.jpg", center=(500, 300), radius=100)
+edited = edit_local_image("photo.jpg", "Add sunglasses", mask_path=mask_path)
+```
+
+## 💡 最佳实践
+
+### 1. 提示词编写技巧
+
+基于官方文档的专业建议：
+
+```python
+# ❌ 模糊描述
+prompt = "make it better"
+
+# ✅ 具体且详细的指令
+prompt = """
+Remove the person standing in the background on the left side,
+fill the area with matching landscape elements,
+maintain the original lighting and perspective
+"""
+
+# ✅ 文字编辑使用引号
+text_prompt = 'Change the store sign text to "OPEN 24/7" in red letters'
+
+# ✅ 保持一致性的指令
+consistency_prompt = """
+Add a red sports car parked in the driveway,
+matching the existing lighting conditions and perspective,
+ensure it fits naturally with the house architecture
+"""
+
+# ✅ 精确的局部编辑
+precise_prompt = """
+Change only the woman's dress color from blue to emerald green,
+keep all other elements including lighting, background, and pose unchanged
+"""
+```
+
+### 2. 高级提示词模式
+
+```python
+def create_professional_prompt(action, target, context_preservation):
+    """创建专业级编辑提示词"""
+    return f"""
+    {action} {target}.
+    Maintain the original {context_preservation}.
+    Ensure the edit looks natural and seamlessly integrated.
+    """
+
+# 示例使用
+prompt = create_professional_prompt(
+    action="Replace",
+    target="the cloudy sky with a clear sunset sky",
+    context_preservation="lighting, shadows, and overall atmosphere"
+)
+```
+
+### 2. 宽高比选择策略
+
+```python
+def recommend_aspect_ratio(edit_type, original_ratio=None):
+    """根据编辑类型推荐宽高比"""
+    recommendations = {
+        "portrait_edit": "2:3",
+        "landscape_edit": "3:2", 
+        "social_media": "1:1",
+        "banner_creation": "7:3",
+        "mobile_content": "9:16",
+        "desktop_wallpaper": "16:9"
+    }
+    
+    # 如果有原图比例，优先保持
+    if original_ratio:
+        return original_ratio
+    
+    return recommendations.get(edit_type, "1:1")
+```
+
+### 3. 错误处理和重试
+
+```python
+import time
+
+def edit_with_retry(image_path, prompt, max_retries=3, **kwargs):
+    """带重试机制的图片编辑"""
+    for attempt in range(max_retries):
+        try:
+            result = edit_local_image(image_path, prompt, **kwargs)
+            if result:
+                return result
+        except Exception as e:
+            if attempt < max_retries - 1:
+                wait_time = 2 ** attempt  # 指数退避
+                print(f"编辑失败，{wait_time}秒后重试... (尝试 {attempt + 1}/{max_retries})")
+                time.sleep(wait_time)
+            else:
+                print(f"编辑最终失败: {e}")
+                raise e
+    
+    return None
+```
+
+### 4. 结果 URL 和下载管理
+
+由于 Flux 返回的图片 URL 仅有 10 分钟有效期，需要特别注意下载时机：
+
+```python
+import time
+import requests
+from concurrent.futures import ThreadPoolExecutor
+
+def download_with_urgency(url, filename, max_attempts=3):
+    """紧急下载，考虑 10 分钟失效期"""
+    start_time = time.time()
+    
+    for attempt in range(max_attempts):
+        try:
+            response = requests.get(url, timeout=30)
+            response.raise_for_status()
+            
+            with open(filename, 'wb') as f:
+                f.write(response.content)
+            
+            elapsed = time.time() - start_time
+            print(f"✅ 下载成功: {filename} (用时 {elapsed:.1f}s)")
+            return True
+            
+        except Exception as e:
+            elapsed = time.time() - start_time
+            if elapsed > 540:  # 9 分钟，留 1 分钟缓冲
+                print(f"⚠️ 警告：接近 URL 失效时间！")
+            
+            if attempt < max_attempts - 1:
+                print(f"下载失败，重试... (尝试 {attempt + 1}/{max_attempts})")
+                time.sleep(1)
+            else:
+                print(f"❌ 下载最终失败: {e}")
+                return False
+    
+    return False
+
+def batch_edit_with_immediate_download(tasks):
+    """批量编辑并立即下载"""
+    def edit_and_download(task):
+        # 编辑
+        edited_url = edit_local_image(**task['edit_params'])
+        if not edited_url:
+            return {'success': False, 'error': 'Edit failed'}
+        
+        # 立即下载
+        filename = f"{task['name']}_edited_{int(time.time())}.png"
+        success = download_with_urgency(edited_url, filename)
+        
+        return {
+            'success': success,
+            'filename': filename if success else None,
+            'url': edited_url,
+            'task_name': task['name']
+        }
+    
+    # 并行处理以节省时间
+    with ThreadPoolExecutor(max_workers=3) as executor:
+        results = list(executor.map(edit_and_download, tasks))
+    
+    return results
+```
+
+### 5. 质量控制
+
+```python
+def validate_edit_result(original_path, edited_url, prompt):
+    """验证编辑结果质量"""
+    try:
+        # 下载编辑后的图片进行分析
+        response = requests.get(edited_url)
+        edited_image = Image.open(BytesIO(response.content))
+        original_image = Image.open(original_path)
+        
+        # 基础检查
+        checks = {
+            "size_reasonable": edited_image.size[0] * edited_image.size[1] > 50000,
+            "format_valid": edited_image.format in ['PNG', 'JPEG', 'WEBP'],
+            "not_corrupted": edited_image.mode in ['RGB', 'RGBA', 'L']
+        }
+        
+        return all(checks.values()), checks
+    
+    except Exception as e:
+        return False, {"error": str(e)}
+```
+
+## 📊 使用统计和优化
+
+```python
+class FluxEditTracker:
+    """Flux 编辑使用统计"""
+    
+    def __init__(self):
+        self.edit_history = []
+        self.total_cost = 0
+    
+    def track_edit(self, image_path, prompt, aspect_ratio, success, cost=0.07):
+        """记录编辑操作"""
+        record = {
+            "timestamp": time.time(),
+            "image_path": image_path,
+            "prompt": prompt,
+            "aspect_ratio": aspect_ratio,
+            "success": success,
+            "cost": cost if success else 0
+        }
+        
+        self.edit_history.append(record)
+        if success:
+            self.total_cost += cost
+    
+    def get_stats(self):
+        """获取使用统计"""
+        if not self.edit_history:
+            return {}
+        
+        total_edits = len(self.edit_history)
+        successful_edits = sum(1 for r in self.edit_history if r["success"])
+        success_rate = successful_edits / total_edits * 100
+        
+        # 最常用的宽高比
+        ratios = [r["aspect_ratio"] for r in self.edit_history]
+        most_common_ratio = max(set(ratios), key=ratios.count)
+        
+        return {
+            "total_edits": total_edits,
+            "successful_edits": successful_edits,
+            "success_rate": f"{success_rate:.1f}%",
+            "total_cost": f"${self.total_cost:.2f}",
+            "avg_cost_per_edit": f"${self.total_cost/successful_edits:.3f}" if successful_edits > 0 else "$0",
+            "most_common_ratio": most_common_ratio
+        }
+
+# 使用示例
+tracker = FluxEditTracker()
+
+# 编辑时记录
+result = edit_local_image("photo.jpg", "Add rainbow in sky", "16:9")
+tracker.track_edit("photo.jpg", "Add rainbow in sky", "16:9", bool(result))
+
+# 查看统计
+print(tracker.get_stats())
+```
+
+## ⚠️ 重要注意事项
+
+1. **文件限制**：
+   - 格式：支持 PNG、JPEG、WebP、非动画 GIF
+   - 大小：最大 20MB 或 20 兆像素
+   - 宽高比：仅支持 3:7 到 7:3 范围内
+
+2. **URL 失效机制**：
+   - 编辑结果 URL 仅有 **10 分钟** 有效期
+   - 必须在 URL 失效前完成下载
+   - 建议编辑完成后立即下载保存
+
+3. **蒙版要求**：
+   - 蒙版图片尺寸必须与原图完全一致
+   - 白色区域 (255) = 编辑区域
+   - 黑色区域 (0) = 保护区域
+   - 灰色区域 = 部分编辑
+
+4. **参数传递**：
+   - Flux 特有参数必须通过 `extra_body` 传递
+   - 不能直接在顶层参数中使用 Flux 专有参数
+
+5. **安全和合规**：
+   - `safety_tolerance` 控制内容审核严格程度
+   - 所有编辑内容需符合平台使用政策
+   - 建议生产环境使用默认安全级别 (1)
+
+6. **性能优化**：
+   - 批量编辑时控制并发数，避免超出 API 限制
+   - 使用 `seed` 参数确保结果可重现
+   - 选择合适的 `output_format` 平衡质量和文件大小
+
+## 🔍 常见问题
+
+### Q: 为什么编辑结果 URL 会失效？
+A: Flux 官方设计的安全机制，所有结果 URL 在生成后 10 分钟内必须下载。这是为了保护用户隐私和减少服务器存储压力。
+
+### Q: 如何制作精确的蒙版？
+A: 可以使用 Photoshop、GIMP 等工具，或通过代码生成。关键点：白色区域 (255) 会被编辑，黑色区域 (0) 保持不变，灰色区域会部分编辑。
+
+### Q: 如何确保编辑结果的一致性？
+A: 使用相同的 `seed` 值和完全相同的其他参数。这对于 A/B 测试和客户反馈迭代很有帮助。
+
+### Q: 文字编辑有什么技巧？
+A: 基于官方建议：在提示词中使用引号包围具体文字，如 `'Change the sign to "OPEN 24/7"'`，这样能获得更准确的文字结果。
+
+### Q: safety_tolerance 参数如何选择？
+A: 
+- 0 = 最严格，适合企业/商业环境
+- 1 = 平衡模式，推荐用于大多数场景  
+- 2 = 最宽松，适合创意/艺术项目
+
+### Q: 支持多大的图片？
+A: 最大支持 20MB 或 20 兆像素的图片。建议预处理大图片以确保最佳性能。
+
+### Q: 如何处理复杂的多步骤编辑？
+A: 可以通过多次 API 调用实现，每次编辑的结果作为下次的输入。记住每次都要在 10 分钟内下载中间结果。
+
+### Q: 编辑失败常见原因？
+A: 
+1. 图片超过大小限制 (20MB/20MP)
+2. 宽高比超出支持范围 (3:7 到 7:3)
+3. 蒙版尺寸与原图不匹配
+4. 提示词包含违规内容
+
+## 🎯 多图编辑解决方案
+
+虽然 Flux API 原生只支持单张图片编辑，但我们提供了**双图片合成编辑**解决方案，特别适合图案转移和风格融合场景。
+
+### 核心优势
+
+<CardGroup cols={2}>
+  <Card title="图案转移" icon="paintbrush">
+    将设计图案精确转移到目标图片上，保持自然融合效果
+  </Card>
+  <Card title="风格融合" icon="palette">
+    结合两张图片的特色元素，创造独特的视觉效果
+  </Card>
+  <Card title="批量处理" icon="layers">
+    支持多对图片的自动化处理，提高工作效率
+  </Card>
+  <Card title="智能合并" icon="merge">
+    自动处理图片尺寸和拼接，确保最佳处理效果
+  </Card>
+</CardGroup>
+
+### 实现原理
+
+1. **图片预处理**：自动下载并统一两张图片的高度
+2. **智能合并**：将参考图和基础图左右拼接成单张图片
+3. **AI 编辑**：使用 Flux Kontext Max 对合并图进行智能处理
+4. **结果输出**：生成融合了两图特征的最终结果
+
+### 快速使用
+
+<CodeGroup>
+
+```bash 下载并运行脚本
+# 下载多图处理脚本
+curl -O https://raw.githubusercontent.com/apiyi-api/ai-api-code-samples/main/flux-Image-API/flux-simple-batch.sh
+chmod +x flux-simple-batch.sh
+
+# 查看使用说明
+./flux-simple-batch.sh --help
+
+# 编辑配置并运行
+# 1. 设置 API_KEY
+# 2. 配置 IMAGE_PAIRS 数组
+# 3. 自定义 BATCH_PROMPT
+./flux-simple-batch.sh
+```
+
+```python Python实现
+import requests
+from PIL import Image
+import io
+import time
+
+def dual_image_edit(reference_url, base_url, prompt, api_key):
+    """双图片编辑：合并后通过Flux进行智能处理"""
+    
+    try:
+        # 1. 下载图片
+        ref_response = requests.get(reference_url)
+        base_response = requests.get(base_url)
+        
+        ref_img = Image.open(io.BytesIO(ref_response.content))
+        base_img = Image.open(io.BytesIO(base_response.content))
+        
+        # 2. 统一高度，保持宽高比
+        target_height = min(ref_img.height, base_img.height)
+        
+        ref_width = int(ref_img.width * target_height / ref_img.height)
+        base_width = int(base_img.width * target_height / base_img.height)
+        
+        ref_resized = ref_img.resize((ref_width, target_height), Image.LANCZOS)
+        base_resized = base_img.resize((base_width, target_height), Image.LANCZOS)
+        
+        # 3. 左右合并
+        total_width = ref_width + base_width
+        merged_img = Image.new('RGB', (total_width, target_height))
+        merged_img.paste(ref_resized, (0, 0))
+        merged_img.paste(base_resized, (ref_width, 0))
+        
+        # 4. 保存临时文件
+        temp_path = f"temp_merged_{int(time.time())}.jpg"
+        merged_img.save(temp_path, quality=95)
+        
+        # 5. 调用 Flux API
+        with open(temp_path, 'rb') as f:
+            response = requests.post(
+                'https://api.apiyi.com/v1/images/edits',
+                headers={'Authorization': f'Bearer {api_key}'},
+                files={'image': f},
+                data={
+                    'model': 'flux-kontext-max',
+                    'prompt': prompt,
+                    'n': 1,
+                    'size': '1024x1024'
+                }
+            )
+        
+        # 6. 获取结果
+        if response.status_code == 200:
+            result_url = response.json()['data'][0]['url']
+            
+            # 立即下载结果（避免10分钟失效）
+            result_response = requests.get(result_url)
+            output_path = f"result_{int(time.time())}.png"
+            with open(output_path, 'wb') as f:
+                f.write(result_response.content)
+            
+            # 清理临时文件
+            import os
+            os.remove(temp_path)
+            
+            return {
+                'success': True,
+                'output_file': output_path,
+                'result_url': result_url
+            }
+        else:
+            return {'success': False, 'error': response.text}
+            
+    except Exception as e:
+        return {'success': False, 'error': str(e)}
+
+# 使用示例
+result = dual_image_edit(
+    reference_url="https://example.com/pattern.jpg",
+    base_url="https://example.com/model.jpg", 
+    prompt="Transfer the pattern from left image to the clothes in right image, make it natural and well-integrated",
+    api_key="your-api-key"
+)
+
+if result['success']:
+    print(f"编辑成功！结果保存为: {result['output_file']}")
+else:
+    print(f"编辑失败: {result['error']}")
+```
+
+</CodeGroup>
+
+### 应用案例
+
+<AccordionGroup>
+  <Accordion icon="shirt" title="服装设计">
+    将图案设计转移到服装模特上，自动调整大小和位置，实现自然的穿着效果
+    
+    ```bash
+    BATCH_PROMPT="Transfer the pattern/design from the left image to the clothes of the model in the right image, with the size being 2/3 of the width of the chest, located in the middle. Make it look natural and well-integrated."
+    ```
+  </Accordion>
+  
+  <Accordion icon="palette" title="艺术创作">
+    结合不同艺术风格的图片，创造独特的混合效果
+    
+    ```bash
+    BATCH_PROMPT="Combine the artistic style from the left image with the subject matter from the right image, creating a harmonious artistic fusion."
+    ```
+  </Accordion>
+  
+  <Accordion icon="building" title="建筑设计">
+    将装饰元素应用到建筑图片上，预览装修效果
+    
+    ```bash
+    BATCH_PROMPT="Apply the decorative elements from the left image to the building in the right image, maintaining architectural harmony."
+    ```
+  </Accordion>
+</AccordionGroup>
+
+<Tip>
+**批量处理提示**：脚本支持一次性处理多对图片，适合批量设计工作。所有结果和中间文件都会自动保存，便于后续使用。
+</Tip>
+
+<Warning>
+**依赖要求**：脚本需要安装 `jq`（JSON处理）、`Python3 + PIL`（图片处理）和可选的 `ImageMagick`。详细安装说明请参考脚本内置帮助。
+</Warning>
+
+## 🔗 相关资源
+
+- [完整示例代码](https://github.com/apiyi-api/ai-api-code-samples/tree/main/flux-Image-API)
+- [多图处理脚本](https://github.com/apiyi-api/ai-api-code-samples/blob/main/flux-Image-API/flux-simple-batch.sh)
+- [Flux 图像生成 API](/api-capabilities/flux-image-generation) - 文生图功能
+- [蒙版制作教程](https://docs.apiyi.com/tutorials/mask-creation) - 详细制作指南
+- [在线蒙版工具](https://mask.apiyi.com) - 在线制作蒙版
+
+<Note>
+🎨 **专业建议**：对于复杂编辑任务，建议先用较低成本的模型测试效果，确认满意后再使用 Flux Kontext Max 进行最终编辑。
+</Note>

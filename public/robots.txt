@@ -1,0 +1,29 @@
+User-agent: *
+Allow: /
+
+# 主要页面
+Allow: /
+Allow: /getting-started
+Allow: /api-manual
+Allow: /gpt-image-1
+Allow: /image-edit
+Allow: /resources
+
+# API 能力页面
+Allow: /api-capabilities/
+Allow: /api-reference/
+
+# 使用场景页面
+Allow: /scenarios/
+
+# 禁止爬取临时或内部文件
+Disallow: /test-anchors
+Disallow: /_next/
+Disallow: /api/_internal/
+Disallow: *.json
+
+# Sitemap
+Sitemap: https://docs.apiyi.com/sitemap.xml
+
+# 爬取延迟（可选）
+Crawl-delay: 1

@@ -1,0 +1,964 @@
+---
+title: 'Gemini模型使用指南'
+description: 'Google Gemini系列模型的详细使用指南'
+---
+
+# Gemini模型使用指南
+
+Google Gemini是谷歌开发的先进多模态AI模型，具有强大的文本理解、代码生成、图像分析和推理能力。在API易平台上，你可以使用Gemini的最新模型版本。
+
+## 🚀 模型概览
+
+<CardGroup cols={2}>
+  <Card
+    title="Gemini 1.5 Pro"
+    icon="google"
+    href="#gemini-1-5-pro"
+  >
+    最新旗舰模型，支持超长上下文和多模态
+  </Card>
+  <Card
+    title="Gemini 1.5 Flash"
+    icon="zap"
+    href="#gemini-1-5-flash"
+  >
+    轻量快速版本，高性价比选择
+  </Card>
+  <Card
+    title="Gemini 1.0 Pro"
+    icon="star"
+    href="#gemini-1-0-pro"
+  >
+    经典版本，稳定可靠
+  </Card>
+  <Card
+    title="Gemini Vision"
+    icon="eye"
+    href="#gemini-vision"
+  >
+    专门优化的视觉理解模型
+  </Card>
+</CardGroup>
+
+## Gemini 1.5 Pro (推荐)
+
+Gemini 1.5 Pro是Google最新的旗舰模型，支持长达200万token的上下文长度。
+
+### 🎯 核心特性
+
+**模型ID：** `gemini-1.5-pro-latest`
+
+**特点：**
+- 🧠 强大的推理和分析能力
+- 📚 超长上下文支持（2M tokens）
+- 🖼️ 多模态能力：文本、图像、视频、音频
+- 🔍 优秀的文档理解能力
+- 💻 卓越的代码生成能力
+- 🌍 优秀的多语言支持
+
+**价格：** 输入 $3.5/1M tokens，输出 $10.5/1M tokens
+
+<CodeGroup>
+
+```python Python
+from openai import OpenAI
+
+client = OpenAI(
+    api_key="YOUR_API_KEY",
+    base_url="https://api.apiyi.com/v1"
+)
+
+# 基础对话
+response = client.chat.completions.create(
+    model="gemini-1.5-pro-latest",
+    messages=[
+        {
+            "role": "system",
+            "content": "你是一个专业的AI助手，擅长分析和解决复杂问题"
+        },
+        {
+            "role": "user",
+            "content": "请分析一下人工智能在教育领域的应用前景"
+        }
+    ],
+    max_tokens=1000,
+    temperature=0.7
+)
+
+print(response.choices[0].message.content)
+```
+
+```javascript Node.js
+import OpenAI from 'openai';
+
+const openai = new OpenAI({
+  apiKey: 'YOUR_API_KEY',
+  baseURL: 'https://api.apiyi.com/v1'
+});
+
+const completion = await openai.chat.completions.create({
+  model: 'gemini-1.5-pro-latest',
+  messages: [
+    {
+      role: 'system',
+      content: '你是一个专业的AI助手，擅长分析和解决复杂问题'
+    },
+    {
+      role: 'user',
+      content: '请分析一下人工智能在教育领域的应用前景'
+    }
+  ],
+  max_tokens: 1000,
+  temperature: 0.7
+});
+
+console.log(completion.choices[0].message.content);
+```
+
+```bash cURL
+curl -X POST "https://api.apiyi.com/v1/chat/completions" \
+  -H "Content-Type: application/json" \
+  -H "Authorization: Bearer YOUR_API_KEY" \
+  -d '{
+    "model": "gemini-1.5-pro-latest",
+    "messages": [
+      {
+        "role": "system",
+        "content": "你是一个专业的AI助手，擅长分析和解决复杂问题"
+      },
+      {
+        "role": "user",
+        "content": "请分析一下人工智能在教育领域的应用前景"
+      }
+    ],
+    "max_tokens": 1000,
+    "temperature": 0.7
+  }'
+```
+
+</CodeGroup>
+
+### 📚 超长文档分析
+
+Gemini 1.5 Pro的超长上下文特别适合处理大型文档：
+
+```python
+# 处理超长文档
+long_document = """
+[这里是一个非常长的文档，可能包含数十万字的内容，
+比如完整的学术论文、技术文档、小说等...]
+"""
+
+response = client.chat.completions.create(
+    model="gemini-1.5-pro-latest",
+    messages=[
+        {
+            "role": "system",
+            "content": "你是一个专业的文档分析专家，擅长提取关键信息和深入分析"
+        },
+        {
+            "role": "user",
+            "content": f"""
+            请对以下文档进行全面分析：
+            
+            {long_document}
+            
+            请提供：
+            1. 文档摘要（500字以内）
+            2. 关键观点和论证
+            3. 数据和统计信息
+            4. 结论和建议
+            5. 潜在问题和改进方向
+            """
+        }
+    ],
+    max_tokens=3000,
+    temperature=0.3
+)
+```
+
+### 🖼️ 多模态能力
+
+Gemini 1.5 Pro支持图像、视频和音频分析：
+
+```python
+# 图像分析
+response = client.chat.completions.create(
+    model="gemini-1.5-pro-latest",
+    messages=[
+        {
+            "role": "user",
+            "content": [
+                {
+                    "type": "text",
+                    "text": "请详细分析这张图片中的设计元素、色彩搭配和视觉效果"
+                },
+                {
+                    "type": "image_url",
+                    "image_url": {
+                        "url": "https://example.com/image.jpg",
+                        "detail": "high"
+                    }
+                }
+            ]
+        }
+    ],
+    max_tokens=800
+)
+
+print(response.choices[0].message.content)
+```
+
+### 💻 代码生成和审查
+
+```python
+# 复杂代码生成任务
+code_request = """
+请创建一个完整的Python类，实现以下功能：
+
+1. 一个分布式缓存系统的客户端
+2. 支持Redis和Memcached后端
+3. 实现自动故障转移
+4. 包含连接池管理
+5. 支持异步操作
+6. 提供完整的错误处理
+7. 包含详细的文档和类型提示
+8. 提供完整的单元测试
+
+请确保代码符合Python最佳实践，包含详细注释。
+"""
+
+response = client.chat.completions.create(
+    model="gemini-1.5-pro-latest",
+    messages=[
+        {
+            "role": "system",
+            "content": "你是一个资深的Python开发专家，擅长设计高质量的系统架构"
+        },
+        {
+            "role": "user",
+            "content": code_request
+        }
+    ],
+    max_tokens=4000,
+    temperature=0.2
+)
+```
+
+## Gemini 1.5 Flash (高性价比)
+
+Gemini 1.5 Flash是轻量级版本，提供快速响应和优异的性价比。
+
+### ⚡ 核心特性
+
+**模型ID：** `gemini-1.5-flash-latest`
+
+**特点：**
+- 🚀 超快响应速度
+- 💰 极高性价比
+- 🎯 保持核心能力
+- 📱 移动端友好
+- 🔄 适合高频调用
+
+**价格：** 输入 $0.075/1M tokens，输出 $0.3/1M tokens
+
+### 🎮 使用场景
+
+<AccordionGroup>
+  <Accordion icon="chat" title="实时对话">
+    ```python
+    # 实时聊天场景
+    def real_time_chat(user_message, conversation_history):
+        messages = conversation_history + [
+            {"role": "user", "content": user_message}
+        ]
+        
+        response = client.chat.completions.create(
+            model="gemini-1.5-flash-latest",
+            messages=messages,
+            max_tokens=500,
+            temperature=0.7,
+            stream=True  # 流式响应
+        )
+        
+        for chunk in response:
+            if chunk.choices[0].delta.content:
+                yield chunk.choices[0].delta.content
+    ```
+  </Accordion>
+
+  <Accordion icon="language" title="快速翻译">
+    ```python
+    # 批量翻译任务
+    def batch_translate(texts, target_lang="中文"):
+        batch_text = "\n".join([f"{i+1}. {text}" for i, text in enumerate(texts)])
+        
+        response = client.chat.completions.create(
+            model="gemini-1.5-flash-latest",
+            messages=[
+                {
+                    "role": "system",
+                    "content": f"你是一个专业的翻译专家，请将以下文本翻译成{target_lang}"
+                },
+                {
+                    "role": "user",
+                    "content": batch_text
+                }
+            ],
+            max_tokens=2000,
+            temperature=0.2
+        )
+        
+        return response.choices[0].message.content
+    ```
+  </Accordion>
+
+  <Accordion icon="code" title="代码辅助">
+    ```python
+    # 代码补全和优化
+    def code_assistant(code, task="优化"):
+        response = client.chat.completions.create(
+            model="gemini-1.5-flash-latest",
+            messages=[
+                {
+                    "role": "system",
+                    "content": f"你是一个编程助手，擅长{task}代码"
+                },
+                {
+                    "role": "user",
+                    "content": f"请{task}以下代码：\n\n{code}"
+                }
+            ],
+            max_tokens=1000,
+            temperature=0.3
+        )
+        
+        return response.choices[0].message.content
+    ```
+  </Accordion>
+</AccordionGroup>
+
+### 📱 移动应用集成
+
+```python
+# 移动端优化配置
+mobile_config = {
+    "model": "gemini-1.5-flash-latest",
+    "max_tokens": 300,  # 控制响应长度
+    "temperature": 0.7,
+    "timeout": 10,      # 快速超时
+    "stream": True      # 流式响应提升体验
+}
+
+def mobile_chat(user_input):
+    """移动端聊天功能"""
+    response = client.chat.completions.create(
+        **mobile_config,
+        messages=[
+            {
+                "role": "system",
+                "content": "你是一个友好的移动助手，回答简洁明了"
+            },
+            {
+                "role": "user",
+                "content": user_input
+            }
+        ]
+    )
+    
+    return response.choices[0].message.content
+```
+
+## Gemini 1.0 Pro (经典版)
+
+稳定可靠的经典版本，适合生产环境。
+
+### 🏛️ 核心特性
+
+**模型ID：** `gemini-1.0-pro`
+
+**特点：**
+- 🎯 稳定可靠的性能
+- 💼 适合生产环境
+- 📊 良好的商业应用表现
+- 🔄 长期支持
+
+**价格：** 输入 $0.5/1M tokens，输出 $1.5/1M tokens
+
+### 💼 商业应用
+
+```python
+# 商业分析和报告
+business_analysis = """
+请分析以下公司的季度财务数据：
+
+营收：$125M (同比增长15%)
+利润：$32M (同比增长8%)
+用户数：2.3M (同比增长25%)
+员工数：450人 (同比增长12%)
+
+主要业务：
+- SaaS产品 (70%营收)
+- 咨询服务 (20%营收)
+- 培训业务 (10%营收)
+
+竞争对手：
+- 公司A：市场份额35%
+- 公司B：市场份额28%
+- 我们：市场份额12%
+
+请提供详细的业务分析和发展建议。
+"""
+
+response = client.chat.completions.create(
+    model="gemini-1.0-pro",
+    messages=[
+        {
+            "role": "system",
+            "content": "你是一个资深的商业分析师，擅长财务分析和战略规划"
+        },
+        {
+            "role": "user",
+            "content": business_analysis
+        }
+    ],
+    max_tokens=2000,
+    temperature=0.3
+)
+```
+
+## Gemini Vision (视觉专家)
+
+专门针对视觉任务优化的模型。
+
+### 👁️ 核心特性
+
+**模型ID：** `gemini-pro-vision`
+
+**特点：**
+- 🖼️ 专业的图像理解能力
+- 🎨 设计元素分析
+- 📊 图表和数据可视化解读
+- 🏗️ 建筑和空间分析
+- 🎭 艺术作品鉴赏
+
+**价格：** 输入 $0.25/1M tokens，输出 $0.5/1M tokens
+
+### 🎨 图像分析应用
+
+<CodeGroup>
+
+```python 设计分析
+# 设计元素分析
+def analyze_design(image_url):
+    response = client.chat.completions.create(
+        model="gemini-pro-vision",
+        messages=[
+            {
+                "role": "user",
+                "content": [
+                    {
+                        "type": "text",
+                        "text": """
+                        请从专业设计师的角度分析这张图片：
+                        
+                        1. 色彩搭配和色彩心理学
+                        2. 构图和视觉平衡
+                        3. 字体和版式设计
+                        4. 品牌识别和一致性
+                        5. 用户体验和可用性
+                        6. 改进建议
+                        """
+                    },
+                    {
+                        "type": "image_url",
+                        "image_url": {"url": image_url}
+                    }
+                ]
+            }
+        ],
+        max_tokens=1000
+    )
+    
+    return response.choices[0].message.content
+```
+
+```python 数据图表解读
+# 图表数据分析
+def analyze_chart(chart_image_url):
+    response = client.chat.completions.create(
+        model="gemini-pro-vision",
+        messages=[
+            {
+                "role": "user",
+                "content": [
+                    {
+                        "type": "text",
+                        "text": """
+                        请分析这个图表：
+                        
+                        1. 图表类型和数据结构
+                        2. 关键数据点和趋势
+                        3. 数据的含义和洞察
+                        4. 可能的问题和异常
+                        5. 建议的后续行动
+                        """
+                    },
+                    {
+                        "type": "image_url",
+                        "image_url": {"url": chart_image_url}
+                    }
+                ]
+            }
+        ],
+        max_tokens=800
+    )
+    
+    return response.choices[0].message.content
+```
+
+</CodeGroup>
+
+### 🏗️ 建筑和空间分析
+
+```python
+# 建筑设计分析
+def analyze_architecture(image_url):
+    response = client.chat.completions.create(
+        model="gemini-pro-vision",
+        messages=[
+            {
+                "role": "user",
+                "content": [
+                    {
+                        "type": "text",
+                        "text": """
+                        请从建筑师的角度分析这张建筑图片：
+                        
+                        1. 建筑风格和设计理念
+                        2. 空间布局和功能分区
+                        3. 材料选择和构造技术
+                        4. 环境适应性和可持续性
+                        5. 美学价值和文化意义
+                        6. 改进和优化建议
+                        """
+                    },
+                    {
+                        "type": "image_url",
+                        "image_url": {"url": image_url}
+                    }
+                ]
+            }
+        ],
+        max_tokens=1200
+    )
+    
+    return response.choices[0].message.content
+```
+
+## Gemini的独特优势
+
+### 1. 🧠 强大的推理能力
+
+Gemini在逻辑推理和问题解决方面表现出色：
+
+```python
+# 复杂逻辑推理
+logical_problem = """
+有一个岛屿，住着两种人：
+1. 诚实的人，总是说真话
+2. 撒谎的人，总是说假话
+
+你遇到了三个人A、B、C，他们说：
+- A说："我们三个人中至少有一个是诚实的"
+- B说："A是撒谎的人"
+- C说："B和我都是撒谎的人"
+
+请问A、B、C分别是什么人？请详细说明推理过程。
+"""
+
+response = client.chat.completions.create(
+    model="gemini-1.5-pro-latest",
+    messages=[
+        {
+            "role": "system",
+            "content": "你是一个逻辑推理专家，擅长解决复杂的逻辑问题"
+        },
+        {
+            "role": "user",
+            "content": logical_problem
+        }
+    ],
+    max_tokens=1000,
+    temperature=0.2
+)
+```
+
+### 2. 📚 超长上下文处理
+
+Gemini 1.5 Pro支持高达200万token的上下文：
+
+```python
+# 处理超长内容
+def process_long_content(content_list):
+    """处理多个长文档"""
+    combined_content = "\n\n".join([
+        f"文档{i+1}:\n{content}" 
+        for i, content in enumerate(content_list)
+    ])
+    
+    response = client.chat.completions.create(
+        model="gemini-1.5-pro-latest",
+        messages=[
+            {
+                "role": "system",
+                "content": "你是一个文档分析专家，擅长处理大量信息"
+            },
+            {
+                "role": "user",
+                "content": f"""
+                请分析以下多个文档，并提供：
+                1. 文档间的关联性分析
+                2. 共同主题和差异点
+                3. 综合结论和建议
+                
+                {combined_content}
+                """
+            }
+        ],
+        max_tokens=3000,
+        temperature=0.3
+    )
+    
+    return response.choices[0].message.content
+```
+
+### 3. 🎯 精准的多模态理解
+
+Gemini在多模态任务中表现优异：
+
+```python
+# 多模态分析
+def multimodal_analysis(image_urls, text_context):
+    content = [
+        {
+            "type": "text",
+            "text": f"背景信息：{text_context}\n\n请结合图片分析以下内容："
+        }
+    ]
+    
+    # 添加多张图片
+    for i, url in enumerate(image_urls):
+        content.append({
+            "type": "image_url",
+            "image_url": {"url": url}
+        })
+    
+    response = client.chat.completions.create(
+        model="gemini-1.5-pro-latest",
+        messages=[
+            {
+                "role": "user",
+                "content": content
+            }
+        ],
+        max_tokens=1500
+    )
+    
+    return response.choices[0].message.content
+```
+
+## 使用技巧和最佳实践
+
+### 1. 模型选择策略
+
+<AccordionGroup>
+  <Accordion icon="brain" title="复杂分析任务">
+    **推荐：** Gemini 1.5 Pro
+    
+    - 学术研究分析
+    - 长文档处理
+    - 多模态任务
+    - 复杂推理问题
+    
+    ```python
+    # 复杂任务配置
+    complex_config = {
+        "model": "gemini-1.5-pro-latest",
+        "temperature": 0.3,
+        "max_tokens": 3000
+    }
+    ```
+  </Accordion>
+
+  <Accordion icon="zap" title="快速响应场景">
+    **推荐：** Gemini 1.5 Flash
+    
+    - 实时对话
+    - 快速翻译
+    - 代码补全
+    - 移动应用
+    
+    ```python
+    # 快速响应配置
+    fast_config = {
+        "model": "gemini-1.5-flash-latest",
+        "temperature": 0.7,
+        "max_tokens": 500
+    }
+    ```
+  </Accordion>
+
+  <Accordion icon="image" title="视觉任务">
+    **推荐：** Gemini Pro Vision
+    
+    - 图像分析
+    - 设计审查
+    - 图表解读
+    - 艺术鉴赏
+    
+    ```python
+    # 视觉任务配置
+    vision_config = {
+        "model": "gemini-pro-vision",
+        "temperature": 0.4,
+        "max_tokens": 1000
+    }
+    ```
+  </Accordion>
+
+  <Accordion icon="dollar-sign" title="成本敏感场景">
+    **推荐：** Gemini 1.0 Pro
+    
+    - 生产环境
+    - 批量处理
+    - 基础对话
+    - 内容生成
+    
+    ```python
+    # 成本优化配置
+    cost_config = {
+        "model": "gemini-1.0-pro",
+        "temperature": 0.5,
+        "max_tokens": 1000
+    }
+    ```
+  </Accordion>
+</AccordionGroup>
+
+### 2. 性能优化
+
+<CardGroup cols={2}>
+  <Card
+    title="上下文管理"
+    icon="memory"
+  >
+    充分利用Gemini的长上下文能力
+    
+    ```python
+    def manage_context(conversation_history, max_context=1000000):
+        # 智能截断上下文
+        total_tokens = sum(len(msg["content"]) for msg in conversation_history)
+        
+        if total_tokens > max_context:
+            # 保留最重要的消息
+            important_messages = conversation_history[-20:]  # 最近20条
+            system_message = conversation_history[0]  # 系统消息
+            conversation_history = [system_message] + important_messages
+        
+        return conversation_history
+    ```
+  </Card>
+
+  <Card
+    title="并行处理"
+    icon="parallel"
+  >
+    并行处理多个任务提高效率
+    
+    ```python
+    import asyncio
+    
+    async def parallel_analysis(tasks):
+        async def process_task(task):
+            response = await client.chat.completions.create(
+                model="gemini-1.5-flash-latest",
+                messages=[{"role": "user", "content": task}],
+                max_tokens=500
+            )
+            return response.choices[0].message.content
+        
+        results = await asyncio.gather(*[process_task(task) for task in tasks])
+        return results
+    ```
+  </Card>
+
+  <Card
+    title="缓存策略"
+    icon="database"
+  >
+    缓存常用结果减少API调用
+    
+    ```python
+    from functools import lru_cache
+    import hashlib
+    
+    @lru_cache(maxsize=1000)
+    def cached_gemini_call(prompt_hash, model):
+        # 实际的API调用
+        return call_gemini_api(prompt_hash, model)
+    
+    def get_cached_response(prompt, model):
+        prompt_hash = hashlib.md5(prompt.encode()).hexdigest()
+        return cached_gemini_call(prompt_hash, model)
+    ```
+  </Card>
+
+  <Card
+    title="流式响应"
+    icon="stream"
+  >
+    使用流式响应提升用户体验
+    
+    ```python
+    def stream_response(prompt, model="gemini-1.5-flash-latest"):
+        response = client.chat.completions.create(
+            model=model,
+            messages=[{"role": "user", "content": prompt}],
+            stream=True,
+            max_tokens=1000
+        )
+        
+        for chunk in response:
+            if chunk.choices[0].delta.content:
+                yield chunk.choices[0].delta.content
+    ```
+  </Card>
+</CardGroup>
+
+### 3. 错误处理和监控
+
+```python
+import time
+import logging
+from typing import Optional
+
+class GeminiClient:
+    def __init__(self, api_key: str, max_retries: int = 3):
+        self.client = OpenAI(
+            api_key=api_key,
+            base_url="https://api.apiyi.com/v1"
+        )
+        self.max_retries = max_retries
+        self.logger = logging.getLogger(__name__)
+    
+    def robust_completion(self, **kwargs) -> Optional[str]:
+        """带重试和错误处理的完成请求"""
+        for attempt in range(self.max_retries):
+            try:
+                response = self.client.chat.completions.create(**kwargs)
+                
+                # 记录使用情况
+                self.log_usage(kwargs.get('model'), response.usage)
+                
+                return response.choices[0].message.content
+                
+            except Exception as e:
+                self.logger.error(f"Attempt {attempt + 1} failed: {e}")
+                
+                if attempt == self.max_retries - 1:
+                    raise e
+                
+                # 指数退避
+                time.sleep(2 ** attempt)
+        
+        return None
+    
+    def log_usage(self, model: str, usage):
+        """记录使用情况"""
+        self.logger.info(f"Model: {model}, "
+                        f"Input tokens: {usage.prompt_tokens}, "
+                        f"Output tokens: {usage.completion_tokens}, "
+                        f"Total: {usage.total_tokens}")
+
+# 使用示例
+gemini_client = GeminiClient("YOUR_API_KEY")
+result = gemini_client.robust_completion(
+    model="gemini-1.5-pro-latest",
+    messages=[{"role": "user", "content": "Hello, Gemini!"}]
+)
+```
+
+## 与其他模型的对比
+
+### Gemini vs GPT-4
+
+<AccordionGroup>
+  <Accordion icon="file-text" title="长文本处理">
+    **Gemini优势：**
+    - 支持高达200万token的上下文
+    - 更好的长文档理解能力
+    - 优秀的信息提取和总结
+    
+    **适用场景：** 长文档分析、大数据处理、复杂研究
+  </Accordion>
+
+  <Accordion icon="eye" title="多模态能力">
+    **Gemini优势：**
+    - 原生多模态设计
+    - 更强的图像理解能力
+    - 支持视频和音频分析
+    
+    **适用场景：** 视觉分析、媒体处理、设计审查
+  </Accordion>
+
+  <Accordion icon="dollar-sign" title="成本效益">
+    **Gemini优势：**
+    - 更具竞争力的价格
+    - 高性价比的Flash版本
+    - 长上下文的性价比优势
+    
+    **适用场景：** 成本敏感的应用、大规模部署
+  </Accordion>
+</AccordionGroup>
+
+### Gemini vs Claude
+
+<AccordionGroup>
+  <Accordion icon="brain" title="推理能力">
+    **Gemini优势：**
+    - 强大的数学推理能力
+    - 优秀的逻辑分析能力
+    - 更好的代码生成能力
+    
+    **适用场景：** 数学问题、逻辑推理、编程任务
+  </Accordion>
+
+  <Accordion icon="globe" title="多语言支持">
+    **Gemini优势：**
+    - 更广泛的语言支持
+    - 更好的跨语言理解能力
+    - 优秀的本地化能力
+    
+    **适用场景：** 国际化应用、多语言内容处理
+  </Accordion>
+</AccordionGroup>
+
+---
+
+<CardGroup cols={2}>
+  <Card
+    title="探索国产大模型"
+    icon="flag"
+    href="/api-reference/chinese-models"
+  >
+    了解通义千问、文心一言、智谱ChatGLM等国产大模型
+  </Card>
+  <Card
+    title="查看完整API参考"
+    icon="code"
+    href="/api-reference/chat-completions"
+  >
+    查看详细的API调用参数和示例
+  </Card>
+</CardGroup> 

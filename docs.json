@@ -1,0 +1,396 @@
+{
+  "$schema": "https://mintlify.com/docs.json",
+  "theme": "mint",
+  "name": "API易文档中心",
+  "description": "企业级专业稳定的AI大模型API中转站，一个令牌、无限模型。支持OpenAI、Claude、Gemini、DeepSeek、Qwen等200+热门AI模型。",
+  "url": "https://docs.apiyi.com",
+  "colors": {
+    "primary": "#2563eb",
+    "light": "#3b82f6",
+    "dark": "#1d4ed8"
+  },
+  "favicon": "/logo/logo.webp",
+  "modeToggle": {
+    "default": "light",
+    "isHidden": false
+  },
+  "icons": {
+    "library": "lucide"
+  },
+  "seo": {
+    "indexHiddenPages": false
+  },
+  "navigation": {
+    "tabs": [
+      {
+        "tab": "首页",
+        "groups": [
+          {
+            "group": "产品基础",
+            "pages": [
+              "index",
+              "getting-started", 
+              "api-manual",
+              "pricing",
+              "changelog"
+            ]
+          },
+          {
+            "group": "API 能力",
+            "pages": [
+              "api-capabilities/model-info",
+              "api-capabilities/openai-sdk",
+              "api-capabilities/openai-responses",
+              "api-capabilities/vision-understanding",
+              "api-capabilities/flux-image-generation",
+              "api-capabilities/flux-image-edit",
+              "api-capabilities/sora-image-generation",
+              "api-capabilities/sora-image-edit",
+              "api-capabilities/gpt-image-1",
+              "api-capabilities/image-edit",
+              {
+                "group": "VEO 视频生成",
+                "icon": "video",
+                "pages": [
+                  "api-capabilities/veo/overview",
+                  "api-capabilities/veo/quick-start",
+                  "api-capabilities/veo/api-reference",
+                  "api-capabilities/veo/models-pricing",
+                  "api-capabilities/veo/examples",
+                  "api-capabilities/veo/best-practices",
+                  "api-capabilities/veo/troubleshooting"
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "tab": "使用场景",
+        "groups": [
+          {
+            "group": "概览",
+            "pages": [
+              "scenarios"
+            ]
+          },
+          {
+            "group": "对话型 AI",
+            "pages": [
+              "scenarios/chat/cherry-studio",
+              "scenarios/chat/chatbox",
+              "scenarios/chat/open-webui",
+              "scenarios/chat/chatgpt-next-web"
+            ]
+          },
+          {
+            "group": "编程开发",
+            "pages": [
+              "scenarios/programming/cursor",
+              "scenarios/programming/cline"
+            ]
+          },
+          {
+            "group": "技术工程",
+            "pages": [
+              "scenarios/engineering/langchain",
+              "scenarios/engineering/dify"
+            ]
+          },
+          {
+            "group": "翻译场景",
+            "pages": [
+              "scenarios/translation/bob",
+              "scenarios/translation/immersive"
+            ]
+          }
+        ]
+      },
+      {
+        "tab": "资源导航",
+        "groups": [
+          {
+            "group": "官方 API 文档",
+            "pages": [
+              "resources"
+            ]
+          }
+        ]
+      },
+      {
+        "tab": "常见问题",
+        "groups": [
+          {
+            "group": "使用指南",
+            "pages": [
+              "faq/token-management",
+              "faq/call-logs",
+              "faq/model-availability",
+              "faq/balance-insufficient",
+              "faq/payment-methods",
+              "faq/content-safety",
+              "faq/data-security"
+            ]
+          }
+        ]
+      },
+      {
+        "tab": "大模型百科",
+        "groups": [
+          {
+            "group": "基础概念",
+            "icon": "book-open",
+            "pages": [
+              "wiki/basics/llm",
+              "wiki/basics/token",
+              "wiki/basics/prompt",
+              "wiki/basics/context-window",
+              "wiki/basics/temperature",
+              "wiki/basics/top-p",
+              "wiki/basics/embedding",
+              "wiki/basics/vector-database",
+              "wiki/basics/attention-mechanism",
+              "wiki/basics/perplexity"
+            ]
+          },
+          {
+            "group": "学习范式",
+            "icon": "graduation-cap",
+            "pages": [
+              "wiki/paradigms/zero-shot",
+              "wiki/paradigms/one-shot",
+              "wiki/paradigms/few-shot",
+              "wiki/paradigms/supervised-learning",
+              "wiki/paradigms/unsupervised-learning",
+              "wiki/paradigms/self-supervised-learning",
+              "wiki/paradigms/reinforcement-learning",
+              "wiki/paradigms/transfer-learning"
+            ]
+          },
+          {
+            "group": "推理与能力",
+            "icon": "brain",
+            "pages": [
+              "wiki/techniques/chain-of-thought",
+              "wiki/techniques/self-consistency",
+              "wiki/techniques/tree-of-thoughts",
+              "wiki/techniques/react",
+              "wiki/techniques/emergent-abilities",
+              "wiki/techniques/in-context-learning",
+              "wiki/techniques/inference-time-compute"
+            ]
+          },
+          {
+            "group": "基础架构",
+            "icon": "building-blocks",
+            "pages": [
+              "wiki/architectures/transformer",
+              "wiki/architectures/encoder",
+              "wiki/architectures/decoder",
+              "wiki/architectures/self-attention",
+              "wiki/architectures/multi-head-attention",
+              "wiki/architectures/positional-encoding"
+            ]
+          },
+          {
+            "group": "主流模型",
+            "icon": "cpu",
+            "pages": [
+              "wiki/models/gpt-series",
+              "wiki/models/claude-series",
+              "wiki/models/gemini-series",
+              "wiki/models/llama-series",
+              "wiki/models/mistral-series",
+              "wiki/models/deepseek-model",
+              "wiki/models/glm-zhipu",
+              "wiki/models/wenxin-yiyan",
+              "wiki/models/tongyi-qianwen",
+              "wiki/models/bert-model",
+              "wiki/models/grok-model"
+            ]
+          },
+          {
+            "group": "特殊架构",
+            "icon": "network",
+            "pages": [
+              "wiki/architectures/mixture-of-experts",
+              "wiki/architectures/vision-transformer",
+              "wiki/architectures/multimodal-model",
+              "wiki/architectures/diffusion-model"
+            ]
+          },
+          {
+            "group": "训练技术",
+            "icon": "settings",
+            "pages": [
+              "wiki/training/pretraining",
+              "wiki/training/fine-tuning",
+              "wiki/training/instruction-tuning",
+              "wiki/training/rlhf",
+              "wiki/training/dpo",
+              "wiki/training/lora",
+              "wiki/training/qlora",
+              "wiki/training/peft",
+              "wiki/training/distillation",
+              "wiki/training/quantization",
+              "wiki/training/pruning",
+              "wiki/training/gradient-accumulation",
+              "wiki/training/mixed-precision",
+              "wiki/training/flash-attention",
+              "wiki/training/gradient-checkpointing",
+              "wiki/training/data-parallelism",
+              "wiki/training/model-parallelism",
+              "wiki/training/pipeline-parallelism",
+              "wiki/training/zero-optimization",
+              "wiki/training/deepspeed"
+            ]
+          },
+          {
+            "group": "应用实践",
+            "icon": "rocket",
+            "pages": [
+              "wiki/applications/rag",
+              "wiki/applications/ai-agent",
+              "wiki/applications/multi-turn-dialogue",
+              "wiki/applications/role-playing",
+              "wiki/applications/code-generation",
+              "wiki/applications/content-moderation",
+              "wiki/applications/real-time-translation",
+              "wiki/applications/knowledge-qa",
+              "wiki/applications/api-basics",
+              "wiki/applications/streaming-output",
+              "wiki/applications/function-calling",
+              "wiki/applications/batch-processing",
+              "wiki/applications/error-handling",
+              "wiki/applications/cost-optimization"
+            ]
+          },
+          {
+            "group": "最佳实践",
+            "icon": "lightbulb",
+            "pages": [
+              "wiki/practices/prompt-optimization",
+              "wiki/practices/long-text-processing",
+              "wiki/practices/multimodal-interaction",
+              "wiki/practices/security-protection",
+              "wiki/practices/performance-tuning",
+              "wiki/practices/monitoring-logging"
+            ]
+          },
+          {
+            "group": "开发框架",
+            "icon": "code",
+            "pages": [
+              "wiki/tools/langchain",
+              "wiki/tools/llamaindex",
+              "wiki/tools/hugging-face",
+              "wiki/tools/openai-sdk",
+              "wiki/tools/anthropic-sdk",
+              "wiki/tools/fastapi",
+              "wiki/tools/gradio"
+            ]
+          },
+          {
+            "group": "评估工具",
+            "icon": "chart-bar",
+            "pages": [
+              "wiki/tools/mmlu",
+              "wiki/tools/human-eval",
+              "wiki/tools/truthfulqa",
+              "wiki/tools/big-bench"
+            ]
+          },
+          {
+            "group": "基础设施",
+            "icon": "server",
+            "pages": [
+              "wiki/infrastructure/gpu-selection",
+              "wiki/infrastructure/containerization-deployment",
+              "wiki/infrastructure/vector-database-selection",
+              "wiki/infrastructure/monitoring-solution"
+            ]
+          },
+          {
+            "group": "百科专题",
+            "icon": "star",
+            "pages": [
+              "wiki/llm-api-basics",
+              "wiki/encyclopedia/llm-error-handling",
+              "wiki/encyclopedia/llm-streaming"
+            ]
+          }
+        ]
+      }
+    ],
+    "global": {
+      "anchors": []
+    }
+  },
+  "logo": {
+    "light": "/logo/light.svg",
+    "dark": "/logo/dark.svg"
+  },
+  "navbar": {
+    "links": [
+      {
+        "label": "首页",
+        "href": "https://api.apiyi.com"
+      },
+      {
+        "label": "AI出图",
+        "href": "https://imagen.apiyi.com"
+      }
+    ],
+    "primary": {
+      "type": "button",
+      "label": "控制台",
+      "href": "https://api.apiyi.com/account/profile"
+    }
+  },
+  "footer": {
+    "socials": {
+      "website": "https://api.apiyi.com"
+    }
+  },
+  "topbarLinks": [
+    {
+      "name": "控制台",
+      "url": "https://api.apiyi.com/account/profile"
+    }
+  ],
+  "anchors": [
+    {
+      "name": "API Key",
+      "icon": "key",
+      "url": "https://api.apiyi.com"
+    }
+  ],
+  "tabs": [],
+  "primaryTab": {
+    "name": "Documentation"
+  },
+  "feedback": {
+    "thumbsRating": true
+  },
+  "topAnchorOffset": 100,
+  "sidebarConfig": {
+    "collapsed": false
+  },
+  "metadata": {
+    "og:type": "website",
+    "og:title": "API易文档中心 - 企业级AI大模型API中转站",
+    "og:description": "支持200+热门AI模型，一个令牌调用OpenAI、Claude、Gemini、DeepSeek、Qwen等所有主流大模型。企业级专业稳定的AI API服务。",
+    "og:image": "/logo/logo.webp",
+    "og:url": "https://docs.apiyi.com",
+    "twitter:card": "summary_large_image",
+    "twitter:title": "API易文档中心 - 企业级AI大模型API中转站",
+    "twitter:description": "支持200+热门AI模型，一个令牌调用OpenAI、Claude、Gemini、DeepSeek、Qwen等所有主流大模型。",
+    "twitter:image": "/logo/logo.webp"
+  },
+  "redirects": [
+    {
+      "source": "/introduction",
+      "destination": "/"
+    }
+  ]
+}

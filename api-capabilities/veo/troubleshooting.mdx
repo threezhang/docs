@@ -1,0 +1,361 @@
+---
+title: "错误处理"
+description: "VEO API 的错误处理、限制说明和常见问题解决"
+icon: "badge-question-mark"
+---
+
+## 限制说明
+
+<Warning>
+  了解 API 限制有助于更好地规划您的应用
+</Warning>
+
+### API 限制
+
+| 限制项 | 限制值 | 说明 |
+|--------|--------|------|
+| 提示词长度 | 2000 字符 | 建议控制在 1000 字符以内获得最佳效果 |
+| 参考图片数量 | 最多 5 张 | 每张图片不超过 10MB |
+| 并发任务数 | 10 个 | 超出将返回 429 错误 |
+| 任务超时时间 | 30 分钟 | 超时任务将自动取消 |
+| 视频时长 | 10-15 秒 | 根据模型不同有所差异 |
+| 请求频率 | 100 次/分钟 | 超出限制将被限流 |
+
+### 图片格式要求
+
+<Tabs>
+  <Tab title="支持的格式">
+    - **JPEG** (.jpg, .jpeg)
+    - **PNG** (.png)
+    - **WebP** (.webp)
+  </Tab>
+  
+  <Tab title="图片规格">
+    - **文件大小：** 单张不超过 10MB
+    - **推荐分辨率：** 1024x1024 或更高
+    - **颜色模式：** RGB
+    - **URL 要求：** 必须是可公开访问的 HTTPS 链接
+  </Tab>
+</Tabs>
+
+## HTTP 错误码
+
+### 4xx 客户端错误
+
+<Accordion>
+  <AccordionItem title="400 Bad Request">
+    **原因：** 请求参数错误或格式不正确
+    
+    **常见场景：**
+    - 缺少必填参数
+    - 参数类型错误
+    - JSON 格式错误
+    
+    **解决方案：**
+    ```python
+    # 检查请求参数
+    if not prompt or len(prompt.strip()) == 0:
+        raise ValueError("Prompt cannot be empty")
+    
+    if len(prompt) > 2000:
+        raise ValueError("Prompt exceeds maximum length")
+    ```
+  </AccordionItem>
+  
+  <AccordionItem title="401 Unauthorized">
+    **原因：** 认证失败
+    
+    **常见场景：**
+    - API 密钥错误
+    - 密钥已过期
+    - 缺少认证头
+    
+    **解决方案：**
+    ```python
+    headers = {
+        'Authorization': f'Bearer {api_key}',
+        'Content-Type': 'application/json'
+    }
+    ```
+  </AccordionItem>
+  
+  <AccordionItem title="403 Forbidden">
+    **原因：** 权限不足
+    
+    **常见场景：**
+    - 账户被禁用
+    - 访问受限资源
+    
+    **解决方案：** 联系客服确认账户状态
+  </AccordionItem>
+  
+  <AccordionItem title="404 Not Found">
+    **原因：** 资源不存在
+    
+    **常见场景：**
+    - 任务 ID 错误
+    - API 路径错误
+    
+    **解决方案：**
+    ```python
+    # 确保使用正确的任务 ID
+    task_id = response['data']['taskId']
+    # 不要手动构造 task_id
+    ```
+  </AccordionItem>
+  
+  <AccordionItem title="429 Too Many Requests">
+    **原因：** 请求频率过高
+    
+    **常见场景：**
+    - 超过并发限制
+    - 请求频率过快
+    
+    **解决方案：**
+    ```python
+    # 实现速率限制
+    from time import sleep
+    
+    def rate_limited_request(func, *args, **kwargs):
+        max_retries = 3
+        for i in range(max_retries):
+            try:
+                return func(*args, **kwargs)
+            except RateLimitError:
+                if i < max_retries - 1:
+                    sleep(2 ** i)  # 指数退避
+                else:
+                    raise
+    ```
+  </AccordionItem>
+</Accordion>
+
+### 5xx 服务器错误
+
+<Accordion>
+  <AccordionItem title="500 Internal Server Error">
+    **原因：** 服务器内部错误
+    
+    **解决方案：**
+    - 稍后重试
+    - 如持续出现，联系技术支持
+  </AccordionItem>
+  
+  <AccordionItem title="502 Bad Gateway">
+    **原因：** 网关错误
+    
+    **解决方案：**
+    - 等待几分钟后重试
+    - 检查网络连接
+  </AccordionItem>
+  
+  <AccordionItem title="503 Service Unavailable">
+    **原因：** 服务暂时不可用
+    
+    **解决方案：**
+    - 系统维护中，请稍后重试
+    - 关注官方公告
+  </AccordionItem>
+</Accordion>
+
+## API 错误码
+
+### 常见错误码列表
+
+| 错误码 | 说明 | 解决方案 |
+|--------|------|----------|
+| `INVALID_PROMPT` | 提示词无效 | 检查提示词长度和内容 |
+| `INVALID_MODEL` | 模型不存在 | 使用支持的模型名称 |
+| `QUOTA_EXCEEDED` | 配额超限 | 联系增加配额 |
+| `TASK_NOT_FOUND` | 任务不存在 | 检查任务 ID |
+| `INVALID_IMAGE_URL` | 图片 URL 无效 | 确保图片可访问 |
+| `IMAGE_TOO_LARGE` | 图片过大 | 压缩图片至 10MB 以下 |
+| `TASK_TIMEOUT` | 任务超时 | 重新提交任务 |
+| `INSUFFICIENT_BALANCE` | 余额不足 | 充值账户 |
+
+### 错误响应格式
+
+```json
+{
+  "success": false,
+  "message": "错误描述信息",
+  "error_code": "ERROR_CODE",
+  "details": {
+    "field": "具体错误字段",
+    "reason": "错误原因",
+    "suggestion": "解决建议"
+  }
+}
+```
+
+## 故障排查指南
+
+### 任务一直处于 processing 状态
+
+<Steps>
+  <Step title="检查任务时长">
+    确认是否超过正常处理时间（见模型说明）
+  </Step>
+  
+  <Step title="验证任务 ID">
+    确保使用正确的任务 ID 进行查询
+  </Step>
+  
+  <Step title="检查 API 状态">
+    访问状态页面或联系支持确认服务状态
+  </Step>
+  
+  <Step title="重试提交">
+    如果超过 30 分钟，任务可能已超时，请重新提交
+  </Step>
+</Steps>
+
+### 生成质量不理想
+
+<Tabs>
+  <Tab title="提示词优化">
+    ```python
+    # 优化前
+    prompt = "猫"
+    
+    # 优化后
+    prompt = """
+    一只橘色的英短猫在阳光明媚的客厅里，
+    慵懒地躺在柔软的沙发上，
+    午后的阳光透过窗户洒在它身上，
+    4K画质，温暖色调
+    """
+    ```
+  </Tab>
+  
+  <Tab title="使用参考图片">
+    ```python
+    # 添加高质量参考图片
+    images = [
+        "https://example.com/cat-reference-1.jpg",
+        "https://example.com/cat-reference-2.jpg"
+    ]
+    ```
+  </Tab>
+  
+  <Tab title="开启增强">
+    ```python
+    # 启用提示词增强
+    enhance_prompt = True
+    ```
+  </Tab>
+  
+  <Tab title="选择合适模型">
+    ```python
+    # 高质量需求选择 Pro 版本
+    model = "veo3-pro"
+    ```
+  </Tab>
+</Tabs>
+
+### 网络错误处理
+
+```python
+import requests
+from requests.adapters import HTTPAdapter
+from requests.packages.urllib3.util.retry import Retry
+
+def create_session():
+    session = requests.Session()
+    retry = Retry(
+        total=3,
+        read=3,
+        connect=3,
+        backoff_factor=0.3,
+        status_forcelist=(500, 502, 504)
+    )
+    adapter = HTTPAdapter(max_retries=retry)
+    session.mount('http://', adapter)
+    session.mount('https://', adapter)
+    return session
+
+# 使用带重试的会话
+session = create_session()
+response = session.post(url, json=data, headers=headers)
+```
+
+## 常见问题 FAQ
+
+<Accordion>
+  <AccordionItem title="为什么我的任务失败了？">
+    **可能原因：**
+    - 提示词包含不当内容
+    - 参考图片无法访问
+    - 系统临时故障
+    
+    **解决方法：**
+    1. 检查提示词内容
+    2. 验证图片 URL 可访问性
+    3. 查看具体错误信息
+    4. 重新提交任务
+  </AccordionItem>
+  
+  <AccordionItem title="如何处理超时任务？">
+    超过 30 分钟的任务会自动取消，不会收费。请重新提交任务。
+  </AccordionItem>
+  
+  <AccordionItem title="为什么收到 429 错误？">
+    您的请求频率过高或并发任务数超限。请实现请求限流或减少并发数。
+  </AccordionItem>
+  
+  <AccordionItem title="图片上传失败怎么办？">
+    1. 确保图片格式正确（JPG/PNG/WebP）
+    2. 检查图片大小（< 10MB）
+    3. 使用 HTTPS URL
+    4. 确保 URL 可公开访问
+  </AccordionItem>
+  
+  <AccordionItem title="如何获取更多配额？">
+    请联系 feedback@apiyi.com 或微信 8765058 申请提升配额。
+  </AccordionItem>
+</Accordion>
+
+## 技术支持
+
+<Card title="遇到问题？" icon="life-ring">
+  如果您遇到文档中未涵盖的问题，请通过以下方式联系我们：
+  
+  - **邮箱：** feedback@apiyi.com
+  - **微信：** 8765058
+  - **响应时间：** 工作日 24 小时内
+  
+  联系时请提供：
+  - 任务 ID
+  - 错误信息
+  - 请求参数（隐藏敏感信息）
+  - 问题描述
+</Card>
+
+## 状态监控
+
+<Note>
+  建议实现以下监控措施以及时发现和处理问题：
+</Note>
+
+```python
+class VEOMonitor:
+    def __init__(self):
+        self.success_count = 0
+        self.failure_count = 0
+        self.total_duration = 0
+        
+    def record_success(self, duration):
+        self.success_count += 1
+        self.total_duration += duration
+        
+    def record_failure(self, error_code):
+        self.failure_count += 1
+        # 记录错误类型用于分析
+        
+    def get_success_rate(self):
+        total = self.success_count + self.failure_count
+        return self.success_count / total if total > 0 else 0
+        
+    def get_average_duration(self):
+        return self.total_duration / self.success_count if self.success_count > 0 else 0
+```

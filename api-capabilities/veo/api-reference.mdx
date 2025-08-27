@@ -1,0 +1,279 @@
+---
+title: "API 参考"
+description: "VEO 视频生成 API 的详细接口文档"
+icon: "book"
+---
+
+## 提交视频任务
+
+<ParamField method="POST" path="/veo/v1/api/video/submit">
+  提交视频生成任务
+</ParamField>
+
+### 请求参数
+
+<ParamField body="prompt" type="string" required>
+  视频生成的文本描述
+</ParamField>
+
+<ParamField body="model" type="string" default="veo3">
+  模型名称。可选值：
+  - `veo3` - 标准版
+  - `veo3-fast` - 快速版
+  - `veo3-pro` - 专业版
+  - `veo3-pro-frames` - 专业版+帧控制
+</ParamField>
+
+<ParamField body="images" type="array">
+  参考图片 URL 数组，最多 5 张
+</ParamField>
+
+<ParamField body="enhance_prompt" type="boolean" default={false}>
+  是否增强提示词
+</ParamField>
+
+### 请求示例
+
+<CodeGroup>
+```bash cURL
+curl -X POST "https://api.apiyi.com/veo/v1/api/video/submit" \
+  -H "Content-Type: application/json" \
+  -H "Authorization: Bearer your-api-key" \
+  -d '{
+    "prompt": "一只猫咪在雨夜散步，准备抓一只老鼠",
+    "model": "veo3",
+    "images": ["https://example.com/cat.png"],
+    "enhance_prompt": true
+  }'
+```
+
+```python Python
+import requests
+
+url = "https://api.apiyi.com/veo/v1/api/video/submit"
+headers = {
+    "Content-Type": "application/json",
+    "Authorization": "Bearer your-api-key"
+}
+data = {
+    "prompt": "一只猫咪在雨夜散步，准备抓一只老鼠",
+    "model": "veo3",
+    "images": ["https://example.com/cat.png"],
+    "enhance_prompt": True
+}
+
+response = requests.post(url, json=data, headers=headers)
+print(response.json())
+```
+
+```javascript JavaScript
+const response = await fetch('https://api.apiyi.com/veo/v1/api/video/submit', {
+  method: 'POST',
+  headers: {
+    'Content-Type': 'application/json',
+    'Authorization': 'Bearer your-api-key'
+  },
+  body: JSON.stringify({
+    prompt: '一只猫咪在雨夜散步，准备抓一只老鼠',
+    model: 'veo3',
+    images: ['https://example.com/cat.png'],
+    enhance_prompt: true
+  })
+});
+
+const data = await response.json();
+console.log(data);
+```
+</CodeGroup>
+
+### 响应示例
+
+<ResponseExample>
+```json 成功响应
+{
+  "success": true,
+  "data": {
+    "taskId": "veo3:b873872e-7358-4c2f-8d55-bd23f000e14e",
+    "pollingUrl": "https://asyncdata.net/source/veo3:b873872e-7358-4c2f-8d55-bd23f000e14e",
+    "status": "processing",
+    "message": "Task submitted successfully"
+  }
+}
+```
+</ResponseExample>
+
+## 查询任务状态
+
+<ParamField method="GET" path="/veo/v1/api/video/status/{taskId}">
+  查询视频生成状态
+</ParamField>
+
+### 路径参数
+
+<ParamField path="taskId" type="string" required>
+  任务 ID（从提交接口返回）
+</ParamField>
+
+### 请求示例
+
+<CodeGroup>
+```bash cURL
+curl -X GET "https://api.apiyi.com/veo/v1/api/video/status/veo3:b873872e-7358-4c2f-8d55-bd23f000e14e" \
+  -H "Authorization: Bearer your-api-key"
+```
+
+```python Python
+import requests
+
+task_id = "veo3:b873872e-7358-4c2f-8d55-bd23f000e14e"
+url = f"https://api.apiyi.com/veo/v1/api/video/status/{task_id}"
+headers = {
+    "Authorization": "Bearer your-api-key"
+}
+
+response = requests.get(url, headers=headers)
+print(response.json())
+```
+
+```javascript JavaScript
+const taskId = 'veo3:b873872e-7358-4c2f-8d55-bd23f000e14e';
+const response = await fetch(`https://api.apiyi.com/veo/v1/api/video/status/${taskId}`, {
+  headers: {
+    'Authorization': 'Bearer your-api-key'
+  }
+});
+
+const data = await response.json();
+console.log(data);
+```
+</CodeGroup>
+
+### 响应状态
+
+<Tabs>
+  <Tab title="任务提交">
+    ```json
+    {
+      "success": true,
+      "data": {
+        "taskId": "veo3:b873872e-7358-4c2f-8d55-bd23f000e14e",
+        "pollingUrl": "https://asyncdata.net/source/veo3:b873872e-7358-4c2f-8d55-bd23f000e14e",
+        "status": "processing",
+        "message": "Task submitted successfully"
+      }
+    }
+    ```
+  </Tab>
+  
+  <Tab title="图片下载中">
+    ```json
+    {
+      "success": true,
+      "data": {
+        "taskId": "veo3:b873872e-7358-4c2f-8d55-bd23f000e14e",
+        "pollingUrl": "https://asyncdata.net/source/veo3:b873872e-7358-4c2f-8d55-bd23f000e14e",
+        "upstreamData": {
+          "created_at": 1751704074528,
+          "enhanced_prompt": "A cat is walking on a rainy night, preparing to catch a mouse",
+          "id": "veo3:b873872e-7358-4c2f-8d55-bd23f000e14e",
+          "images": [
+            {
+              "status": "downloading",
+              "url": "https://tokensceshi.oss-ap-southeast-1.aliyuncs.com/sora/81ecb724-9e01-4f0e-a2ac-0c85802b8841.png"
+            }
+          ],
+          "status": "image_downloading"
+        },
+        "status": "processing",
+        "progress": {
+          "upstreamStatus": "image_downloading",
+          "retryCount": 0,
+          "maxRetries": 3
+        }
+      }
+    }
+    ```
+  </Tab>
+  
+  <Tab title="视频生成中">
+    ```json
+    {
+      "success": true,
+      "data": {
+        "taskId": "veo3:b873872e-7358-4c2f-8d55-bd23f000e14e",
+        "upstreamData": {
+          "status": "video_generating",
+          "video_generation_id": "f48aea86a9c27d4c8b15612b6c65d08e",
+          "video_generation_status": "MEDIA_GENERATION_STATUS_ACTIVE"
+        },
+        "status": "processing"
+      }
+    }
+    ```
+  </Tab>
+  
+  <Tab title="生成完成">
+    ```json
+    {
+      "success": true,
+      "data": {
+        "taskId": "veo3:b873872e-7358-4c2f-8d55-bd23f000e14e",
+        "status": "completed",
+        "result": {
+          "video_url": "https://filesystem.site/cdn/20250705/BFvep0SngrqIrN3yDSFChIXAz2mU0M.mp4",
+          "video_media_id": "CAUSJGRlNzE5MzRhLTljMDgtNDE1Mi05NWVlLThjOTlhMTZlODUyYxokY2U4ZjNiYmUtNGFmZS00NTExLWI4ZDEtMGM1MTFkM2ZlNGIxIgNDQUUqJDJlNTY3OWUyLWQ2YmQtNGVlZS05ZTUwLWMyMWE0MWU3ZDYzNw"
+        }
+      }
+    }
+    ```
+  </Tab>
+</Tabs>
+
+### 状态说明
+
+| 状态 | 说明 | 下一步操作 |
+|------|------|------------|
+| `processing` | 任务处理中 | 继续轮询状态 |
+| `completed` | 生成完成 | 获取视频 URL |
+| `failed` | 生成失败 | 检查错误信息 |
+
+## HTTP 状态码
+
+<ResponseField name="200" type="成功">
+  请求成功
+</ResponseField>
+
+<ResponseField name="400" type="客户端错误">
+  请求参数错误，检查参数格式和必填项
+</ResponseField>
+
+<ResponseField name="401" type="认证错误">
+  认证失败，检查 API 密钥是否正确
+</ResponseField>
+
+<ResponseField name="500" type="服务器错误">
+  服务器内部错误，请稍后重试或联系支持
+</ResponseField>
+
+## 错误响应格式
+
+```json
+{
+  "success": false,
+  "message": "错误描述信息",
+  "error_code": "ERROR_CODE",
+  "details": {
+    "field": "具体错误字段",
+    "reason": "错误原因"
+  }
+}
+```
+
+## 常见错误码
+
+| 错误码 | 说明 | 解决方案 |
+|--------|------|----------|
+| `INVALID_PROMPT` | 提示词无效 | 检查提示词长度和内容 |
+| `INVALID_MODEL` | 模型不存在 | 使用支持的模型名称 |
+| `QUOTA_EXCEEDED` | 配额超限 | 联系增加配额 |
+| `TASK_NOT_FOUND` | 任务不存在 | 检查任务 ID |

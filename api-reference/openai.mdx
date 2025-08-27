@@ -1,0 +1,738 @@
+---
+title: 'OpenAI模型使用指南'
+description: 'GPT-4o、GPT-4、O1系列模型的详细使用指南'
+---
+
+# OpenAI模型使用指南
+
+OpenAI是全球领先的AI公司，其GPT系列模型在API易平台上完全可用。本指南将详细介绍如何使用GPT-4o、GPT-4、O1等系列模型，帮助你充分发挥这些顶级AI模型的能力。
+
+## 🚀 模型概览
+
+<CardGroup cols={2}>
+  <Card
+    title="GPT-4o系列"
+    icon="openai"
+    href="#gpt-4o-series"
+  >
+    最新多模态模型，支持文本、图像、音频
+  </Card>
+  <Card
+    title="GPT-4系列"
+    icon="brain"
+    href="#gpt-4-series"
+  >
+    经典强大模型，优秀的推理和创作能力
+  </Card>
+  <Card
+    title="O1系列"
+    icon="calculator"
+    href="#o1-series"
+  >
+    专为复杂推理设计的模型
+  </Card>
+  <Card
+    title="GPT-3.5系列"
+    icon="zap"
+    href="#gpt-3-5-series"
+  >
+    高性价比选择，适合大规模应用
+  </Card>
+</CardGroup>
+
+## GPT-4o 系列
+
+GPT-4o是OpenAI最新的旗舰模型，"o"代表"omni"（全能），支持文本、图像、音频等多种模态。
+
+### 🔥 GPT-4o (推荐)
+
+**模型ID：** `gpt-4o`
+
+**特点：**
+- 🎯 最新旗舰模型，性能最强
+- 🖼️ 支持图像理解和生成
+- 🔊 支持音频输入输出
+- 🌍 优秀的多语言能力
+- ⚡ 响应速度快
+
+**价格：** 输入 $5/1M tokens，输出 $15/1M tokens
+
+<CodeGroup>
+
+```python Python
+from openai import OpenAI
+
+client = OpenAI(
+    api_key="YOUR_API_KEY",
+    base_url="https://api.apiyi.com/v1"
+)
+
+# 基础文本对话
+response = client.chat.completions.create(
+    model="gpt-4o",
+    messages=[
+        {"role": "system", "content": "你是一个专业的AI助手"},
+        {"role": "user", "content": "请解释什么是量子计算"}
+    ],
+    temperature=0.7
+)
+
+print(response.choices[0].message.content)
+```
+
+```javascript Node.js
+import OpenAI from 'openai';
+
+const openai = new OpenAI({
+  apiKey: 'YOUR_API_KEY',
+  baseURL: 'https://api.apiyi.com/v1'
+});
+
+const completion = await openai.chat.completions.create({
+  model: 'gpt-4o',
+  messages: [
+    {role: 'system', content: '你是一个专业的AI助手'},
+    {role: 'user', content: '请解释什么是量子计算'}
+  ],
+  temperature: 0.7
+});
+
+console.log(completion.choices[0].message.content);
+```
+
+</CodeGroup>
+
+### 🎯 GPT-4o 图像理解
+
+GPT-4o可以理解和分析图像内容：
+
+<CodeGroup>
+
+```python Python
+response = client.chat.completions.create(
+    model="gpt-4o",
+    messages=[
+        {
+            "role": "user",
+            "content": [
+                {
+                    "type": "text",
+                    "text": "请详细描述这张图片的内容，并分析其中的设计元素"
+                },
+                {
+                    "type": "image_url",
+                    "image_url": {
+                        "url": "https://example.com/image.jpg",
+                        "detail": "high"  # high/low/auto
+                    }
+                }
+            ]
+        }
+    ],
+    max_tokens=500
+)
+
+print(response.choices[0].message.content)
+```
+
+```javascript Node.js
+const completion = await openai.chat.completions.create({
+  model: 'gpt-4o',
+  messages: [
+    {
+      role: 'user',
+      content: [
+        {
+          type: 'text',
+          text: '请详细描述这张图片的内容，并分析其中的设计元素'
+        },
+        {
+          type: 'image_url',
+          image_url: {
+            url: 'https://example.com/image.jpg',
+            detail: 'high'
+          }
+        }
+      ]
+    }
+  ],
+  max_tokens: 500
+});
+```
+
+</CodeGroup>
+
+### ⚡ GPT-4o Mini (性价比之王)
+
+**模型ID：** `gpt-4o-mini`
+
+**特点：**
+- 💰 极高性价比：输入仅 $0.15/1M tokens
+- 🚀 响应速度更快
+- 🎯 保持GPT-4o的核心能力
+- 💡 适合大规模应用
+
+**价格：** 输入 $0.15/1M tokens，输出 $0.6/1M tokens
+
+```python
+# GPT-4o Mini 特别适合日常对话和批量处理
+response = client.chat.completions.create(
+    model="gpt-4o-mini",
+    messages=[
+        {"role": "system", "content": "你是一个友好的客服助手"},
+        {"role": "user", "content": "我想了解你们的服务"}
+    ],
+    temperature=0.3
+)
+```
+
+### 📅 GPT-4o 特定版本
+
+**模型ID：** `gpt-4o-2024-11-20`
+
+使用特定日期版本确保结果的一致性：
+
+```python
+response = client.chat.completions.create(
+    model="gpt-4o-2024-11-20",
+    messages=[
+        {"role": "user", "content": "请写一篇关于AI发展的文章"}
+    ],
+    temperature=0.5  # 较低温度确保一致性
+)
+```
+
+## GPT-4 系列
+
+经典的GPT-4系列模型，提供强大的文本理解和生成能力。
+
+### 🧠 GPT-4 Turbo
+
+**模型ID：** `gpt-4-turbo`
+
+**特点：**
+- 🚀 更快的响应速度
+- 📚 支持128K上下文长度
+- 💡 优秀的推理能力
+- 🔧 适合复杂任务
+
+**价格：** 输入 $10/1M tokens，输出 $30/1M tokens
+
+```python
+# 处理长文档分析
+long_document = """
+[这里是一篇很长的文档内容...]
+"""
+
+response = client.chat.completions.create(
+    model="gpt-4-turbo",
+    messages=[
+        {
+            "role": "system", 
+            "content": "你是一个专业的文档分析师，请仔细分析文档内容并提供深入见解"
+        },
+        {
+            "role": "user", 
+            "content": f"请分析以下文档的核心观点和结论：\n\n{long_document}"
+        }
+    ],
+    temperature=0.3
+)
+```
+
+### 🏛️ GPT-4 经典版
+
+**模型ID：** `gpt-4`
+
+经典的GPT-4模型，在创意写作和复杂推理方面表现优异：
+
+```python
+# 创意写作任务
+response = client.chat.completions.create(
+    model="gpt-4",
+    messages=[
+        {
+            "role": "system", 
+            "content": "你是一个富有创意的作家，擅长创作引人入胜的故事"
+        },
+        {
+            "role": "user", 
+            "content": "请写一个关于时间旅行的科幻短故事，要求有意想不到的结局"
+        }
+    ],
+    temperature=0.9,  # 高温度增加创意性
+    max_tokens=1000
+)
+```
+
+### 📖 GPT-4 32K
+
+**模型ID：** `gpt-4-32k`
+
+支持更长上下文的版本，适合处理超长文档：
+
+```python
+# 处理超长代码审查
+large_codebase = """
+[这里是大量的代码内容...]
+"""
+
+response = client.chat.completions.create(
+    model="gpt-4-32k",
+    messages=[
+        {
+            "role": "system", 
+            "content": "你是一个资深的代码审查专家"
+        },
+        {
+            "role": "user", 
+            "content": f"请审查以下代码，指出潜在问题和改进建议：\n\n{large_codebase}"
+        }
+    ],
+    temperature=0.2
+)
+```
+
+## O1 系列 (推理专家)
+
+O1系列是OpenAI专为复杂推理任务设计的模型，在数学、编程、科学等领域表现卓越。
+
+### 🎓 O1 Preview
+
+**模型ID：** `o1-preview`
+
+**特点：**
+- 🧮 强大的数学推理能力
+- 🔬 科学问题解决能力
+- 💻 复杂编程任务
+- 🎯 多步骤逻辑推理
+
+**价格：** 输入 $15/1M tokens，输出 $60/1M tokens
+
+<Warning>
+  O1系列模型有特殊限制：
+  - 不支持 `temperature`、`top_p` 等参数
+  - 不支持 `system` 角色消息
+  - 不支持流式输出
+  - 不支持函数调用
+</Warning>
+
+<CodeGroup>
+
+```python Python
+# 复杂数学问题
+response = client.chat.completions.create(
+    model="o1-preview",
+    messages=[
+        {
+            "role": "user",
+            "content": """
+            解决这个数学问题：
+            
+            一个正整数n，满足以下条件：
+            1. n是4位数
+            2. n的各位数字之和等于20
+            3. n是质数
+            4. n的各位数字都不相同
+            
+            请找出所有满足条件的n，并说明解题思路。
+            """
+        }
+    ]
+)
+
+print(response.choices[0].message.content)
+```
+
+```javascript Node.js
+// 复杂编程问题
+const completion = await openai.chat.completions.create({
+  model: 'o1-preview',
+  messages: [
+    {
+      role: 'user',
+      content: `
+        请设计一个高效的算法来解决以下问题：
+        
+        给定一个整数数组，找出其中和为目标值的三个数的所有组合，
+        要求时间复杂度尽可能低，并提供完整的代码实现和复杂度分析。
+      `
+    }
+  ]
+});
+```
+
+</CodeGroup>
+
+### 🚀 O1 Mini
+
+**模型ID：** `o1-mini`
+
+轻量版的推理模型，成本更低：
+
+**价格：** 输入 $3/1M tokens，输出 $12/1M tokens
+
+```python
+# 中等复杂度的逻辑推理
+response = client.chat.completions.create(
+    model="o1-mini",
+    messages=[
+        {
+            "role": "user",
+            "content": """
+            有A、B、C、D四个人，其中有一个人说谎，其他人说真话。
+            
+            A说：B是说谎者
+            B说：C是说谎者  
+            C说：D是说谎者
+            D说：A是说谎者
+            
+            请推理出谁是说谎者，并说明推理过程。
+            """
+        }
+    ]
+)
+```
+
+### 🔬 O3 (最新推理模型)
+
+**模型ID：** `o3`
+
+最新的推理模型，能力更强：
+
+**价格：** 输入 $20/1M tokens，输出 $80/1M tokens
+
+```python
+# 超复杂科学问题
+response = client.chat.completions.create(
+    model="o3",
+    messages=[
+        {
+            "role": "user",
+            "content": """
+            请分析以下化学反应的机理，并预测在不同条件下的产物：
+            
+            在催化剂存在下，化合物A (C₈H₁₀O₂) 与化合物B (C₄H₆O₃) 
+            在180°C和2大气压下反应。已知A含有苯环和酯基，B含有烯烃双键。
+            
+            请提供：
+            1. 详细的反应机理
+            2. 主要产物的结构
+            3. 副反应的可能性
+            4. 反应条件对产物的影响
+            """
+        }
+    ]
+)
+```
+
+## GPT-3.5 系列
+
+虽然不是最新的模型，但GPT-3.5系列仍然是高性价比的优秀选择。
+
+### ⚡ GPT-3.5 Turbo
+
+**模型ID：** `gpt-3.5-turbo`
+
+**特点：**
+- 💰 极高性价比
+- 🚀 响应速度快
+- 📱 适合移动应用
+- 🔄 适合高频调用
+
+**价格：** 输入 $0.5/1M tokens，输出 $1.5/1M tokens
+
+```python
+# 高频简单任务，如翻译、摘要等
+response = client.chat.completions.create(
+    model="gpt-3.5-turbo",
+    messages=[
+        {
+            "role": "system", 
+            "content": "你是一个专业的翻译专家"
+        },
+        {
+            "role": "user", 
+            "content": "请将以下英文翻译成中文：'The future of artificial intelligence looks promising.'"
+        }
+    ],
+    temperature=0.3
+)
+```
+
+## 使用技巧和最佳实践
+
+### 1. 选择合适的模型
+
+<AccordionGroup>
+  <Accordion icon="lightbulb" title="日常对话聊天">
+    **推荐：** GPT-4o Mini, GPT-3.5 Turbo
+    
+    ```python
+    # 简单对话用更便宜的模型
+    model = "gpt-4o-mini"  # 性价比最佳
+    temperature = 0.7      # 自然对话
+    ```
+  </Accordion>
+
+  <Accordion icon="code" title="代码编程任务">
+    **推荐：** GPT-4o, GPT-4 Turbo
+    
+    ```python
+    # 代码生成和调试
+    model = "gpt-4o"       # 最新代码能力
+    temperature = 0.2      # 精确性优先
+    max_tokens = 2000      # 足够长的代码
+    ```
+  </Accordion>
+
+  <Accordion icon="brain" title="复杂推理分析">
+    **推荐：** O1 Preview, O1 Mini
+    
+    ```python
+    # 数学、逻辑、科学问题
+    model = "o1-preview"   # 最强推理能力
+    # 注意：O1系列不支持temperature等参数
+    ```
+  </Accordion>
+
+  <Accordion icon="image" title="图像理解任务">
+    **推荐：** GPT-4o, GPT-4o Mini
+    
+    ```python
+    # 图像分析和理解
+    model = "gpt-4o"       # 最佳视觉能力
+    detail = "high"        # 高清晰度分析
+    ```
+  </Accordion>
+</AccordionGroup>
+
+### 2. 优化提示词
+
+<CodeGroup>
+
+```python 系统消息设计
+# 好的系统消息示例
+system_prompt = """
+你是一个专业的Python编程专家，具有以下特点：
+1. 代码风格遵循PEP8规范
+2. 注重代码可读性和性能
+3. 提供详细的注释和说明
+4. 给出多种解决方案对比
+
+请用简洁明了的语言回答，并提供可执行的代码示例。
+"""
+```
+
+```python 结构化提示
+# 结构化任务提示
+user_prompt = """
+请帮我分析以下代码的性能瓶颈：
+
+## 代码：
+[代码内容]
+
+## 分析要求：
+1. 识别性能瓶颈点
+2. 提供优化建议
+3. 给出优化后的代码
+4. 比较优化前后的时间复杂度
+
+请按照上述结构回答。
+"""
+```
+
+</CodeGroup>
+
+### 3. 参数调优
+
+<AccordionGroup>
+  <Accordion icon="thermometer" title="Temperature 设置">
+    - **0.0-0.3**: 需要精确、一致的输出（代码、数据分析）
+    - **0.4-0.7**: 平衡创造性和准确性（日常对话）
+    - **0.8-1.0**: 需要创造性和多样性（创意写作）
+    
+    ```python
+    # 不同任务的温度设置
+    code_generation = {"temperature": 0.2}
+    casual_chat = {"temperature": 0.7}
+    creative_writing = {"temperature": 0.9}
+    ```
+  </Accordion>
+
+  <Accordion icon="scissors" title="Max Tokens 控制">
+    根据任务类型设置合适的输出长度：
+    
+    ```python
+    token_limits = {
+        "简短回答": 100,
+        "详细解释": 500,
+        "代码生成": 2000,
+        "长文档": 4000
+    }
+    ```
+  </Accordion>
+
+  <Accordion icon="stop-circle" title="Stop 序列">
+    使用停止序列控制输出格式：
+    
+    ```python
+    # 生成列表时的停止序列
+    response = client.chat.completions.create(
+        model="gpt-4o",
+        messages=[...],
+        stop=["6.", "\n\n", "总结："]
+    )
+    ```
+  </Accordion>
+</AccordionGroup>
+
+### 4. 成本优化策略
+
+<CardGroup cols={2}>
+  <Card
+    title="渐进式模型选择"
+    icon="arrow-up"
+  >
+    先用便宜模型测试，再用高级模型优化
+    
+    ```python
+    # 先用GPT-4o Mini测试
+    # 再用GPT-4o完善
+    ```
+  </Card>
+
+  <Card
+    title="智能缓存"
+    icon="database"
+  >
+    对重复请求进行缓存，避免重复计费
+    
+    ```python
+    import hashlib
+    cache = {}
+    
+    def cached_completion(prompt):
+        key = hashlib.md5(prompt.encode()).hexdigest()
+        if key in cache:
+            return cache[key]
+        # 调用API...
+    ```
+  </Card>
+
+  <Card
+    title="批量处理"
+    icon="layer-group"
+  >
+    将多个简单任务合并为一个请求
+    
+    ```python
+    # 合并多个翻译任务
+    batch_prompt = """
+    请翻译以下句子：
+    1. Hello world
+    2. Good morning
+    3. Thank you
+    """
+    ```
+  </Card>
+
+  <Card
+    title="精确控制长度"
+    icon="ruler"
+  >
+    设置合适的max_tokens避免浪费
+    
+    ```python
+    # 根据任务设置精确的token限制
+    max_tokens = estimate_needed_tokens(task_type)
+    ```
+  </Card>
+</CardGroup>
+
+## 错误处理和重试
+
+```python
+import time
+import random
+from openai import OpenAI
+
+def robust_completion(client, **kwargs):
+    """带重试机制的API调用"""
+    max_retries = 3
+    base_delay = 1
+    
+    for attempt in range(max_retries):
+        try:
+            response = client.chat.completions.create(**kwargs)
+            return response
+        
+        except Exception as e:
+            if attempt == max_retries - 1:
+                raise e
+                
+            # 指数退避重试
+            delay = base_delay * (2 ** attempt) + random.uniform(0, 1)
+            print(f"重试 {attempt + 1}/{max_retries}，等待 {delay:.2f} 秒...")
+            time.sleep(delay)
+
+# 使用示例
+try:
+    response = robust_completion(
+        client,
+        model="gpt-4o",
+        messages=[{"role": "user", "content": "Hello!"}]
+    )
+except Exception as e:
+    print(f"API调用失败: {e}")
+```
+
+## 流式响应处理
+
+对于长文本生成，建议使用流式响应提升用户体验：
+
+```python
+def stream_completion(client, **kwargs):
+    """流式响应处理"""
+    kwargs['stream'] = True
+    
+    try:
+        stream = client.chat.completions.create(**kwargs)
+        
+        for chunk in stream:
+            if chunk.choices[0].delta.content is not None:
+                content = chunk.choices[0].delta.content
+                print(content, end='', flush=True)
+                yield content
+                
+    except Exception as e:
+        print(f"流式响应错误: {e}")
+
+# 使用示例
+for chunk in stream_completion(
+    client,
+    model="gpt-4o",
+    messages=[{"role": "user", "content": "写一篇关于AI的文章"}]
+):
+    # 实时处理每个文本块
+    pass
+```
+
+---
+
+<CardGroup cols={2}>
+  <Card
+    title="探索Claude模型"
+    icon="anthropic"
+    href="/api-reference/claude"
+  >
+    了解Claude系列模型的独特优势和使用方法
+  </Card>
+  <Card
+    title="查看完整模型列表"
+    icon="list"
+    href="/models"
+  >
+    浏览API易支持的所有200+AI模型
+  </Card>
+</CardGroup> 

@@ -1,0 +1,106 @@
+# API易文档中心
+
+> API易是企业级专业稳定的AI大模型API中转站，基于统一的OpenAI API标准，支持200+热门AI模型。一个令牌，即可轻松调用OpenAI、Claude、Gemini、DeepSeek、Qwen等所有主流大模型。
+
+## 核心产品信息
+
+API易（apiyi.com）是由APIYI, LLC（美国）运营的AI大模型API聚合服务平台，与微软Azure、AWS、Google Cloud等官方合作，为企业和开发者提供统一的AI模型访问接口。
+
+**主要特色：**
+- 支持200+顶级AI模型，包括最新的O3、Claude 4、Gemini 2.5、DeepSeek R1等
+- 完全兼容OpenAI API格式，无需修改现有代码即可接入
+- 比官方定价更优惠，结合汇率优势和充值加赠最高节省25%+
+- 不限速、不封号、不过期，企业级稳定性保障
+- 支持图像生成编辑、文本理解、多模态等全方位AI能力
+
+## 快速入门
+
+### 基础接入
+- [快速开始](/getting-started): 三步完成接入，立即开始使用AI模型
+- [API手册](/api-manual): 完整的接口文档和开发者指南
+- [网站公告](/changelog): 最新模型上线、价格调整等重要更新
+
+### 核心API文档
+- [对话补全API](/api-reference/chat-completions): Chat Completions - 创建多轮对话和文本生成
+- [图像生成API](/api-reference/images): Images API - 文生图、图像编辑、多图融合
+- [模型列表API](/api-reference/models): Models API - 获取所有可用模型信息
+- [嵌入向量API](/api-reference/embeddings): Embeddings API - 文本向量化和语义搜索
+
+## 主要AI能力
+
+### 文本对话模型
+- [模型信息](/api-capabilities/model-info): 查看支持的200+AI模型详细信息
+- [OpenAI SDK使用](/api-capabilities/openai-sdk): 使用官方SDK无缝接入API易
+- [OpenAI兼容响应](/api-capabilities/openai-responses): 兼容OpenAI响应格式的标准接口
+
+### 图像处理能力
+- [Flux图像生成](/api-capabilities/flux-image-generation): 专业级图像生成，支持多种宽高比，比官方便宜12.5%
+- [Flux图像编辑](/api-capabilities/flux-image-edit): 智能图像编辑，支持蒙版控制和精确修改
+- [Sora Image生图](/api-capabilities/sora-image-generation): 逆向技术生图，按次计费仅$0.01/张
+- [Sora Image编辑](/api-capabilities/sora-image-edit): 智能图片编辑，支持风格转换、多图融合
+- [GPT-Image-1生成](/api-capabilities/gpt-image-1): OpenAI官方直转，稳定可靠的出图模型
+- [图像理解API](/api-capabilities/vision-understanding): 智能图像分析，支持对象识别、场景描述、OCR等
+
+## 应用场景
+
+### 对话型AI集成
+- [Cherry Studio](/scenarios/chat/cherry-studio): 功能强大的AI对话客户端
+- [Open WebUI](/scenarios/chat/open-webui): 自托管的Web对话界面
+- [ChatGPT Next Web](/scenarios/chat/chatgpt-next-web): 一键部署的网页版ChatGPT
+
+### 编程开发工具
+- [Cursor](/scenarios/programming/cursor): AI驱动的代码编辑器
+- [Cline(VS Code)](/scenarios/programming/cline): VS Code中的AI编程助手
+
+### 技术工程平台
+- [LangChain](/scenarios/engineering/langchain): 构建AI应用的开发框架
+- [Dify](/scenarios/engineering/dify): 可视化AI应用开发平台
+
+### 翻译应用
+- [Bob翻译](/scenarios/translation/bob): macOS上的专业翻译工具
+- [沉浸式翻译](/scenarios/translation/immersive): 浏览器双语对照阅读扩展
+
+## 技术规格
+
+**接入端点：**
+- 主端点：https://api.apiyi.com/v1
+- 备用端点：https://vip.apiyi.com/v1
+
+**认证方式：**
+- Bearer Token认证
+- API Key管理，支持多密钥和权限控制
+
+**兼容标准：**
+- 完全兼容OpenAI API v1格式
+- 支持流式响应(Server-Sent Events)
+- 支持多模态输入(文本+图像)
+
+**定价模式：**
+- 按Token/次数计费，透明定价
+- 比官方定价更优惠
+- 首次充值赠送，余额永不过期
+
+## 企业服务
+
+**服务保障：**
+- 24/7技术支持
+- 高可用架构，多节点部署
+- 智能路由和自动降级
+- 实时监控和告警
+
+**商务合作：**
+- 支持对公支付和发票开具
+- 企业级定制服务
+- 批量采购优惠
+- 技术顾问服务
+
+## 联系方式
+
+- 官方网站：https://api.apiyi.com
+- 技术支持：support@apiyi.com
+- 在线客服：通过官网联系
+- 微信：8765058
+
+---
+
+API易致力于为全球开发者和企业提供最优质、最具性价比的AI模型API服务，让AI技术的应用更加简单和高效。

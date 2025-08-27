@@ -1,0 +1,522 @@
+---
+title: 'Models API'
+description: '获取可用模型列表和详细信息'
+---
+
+# Models API
+
+Models API用于获取API易平台支持的AI模型列表和详细信息。通过此接口，你可以查看所有可用的模型、了解模型特性和定价信息。
+
+## 接口信息
+
+**接口地址**：`GET https://api.apiyi.com/v1/models`
+
+**兼容性**：完全兼容OpenAI官方API格式
+
+## 获取模型列表
+
+### 请求示例
+
+<CodeGroup>
+
+```bash cURL
+curl https://api.apiyi.com/v1/models \
+  -H "Authorization: Bearer YOUR_API_KEY"
+```
+
+```javascript Node.js
+import OpenAI from 'openai';
+
+const openai = new OpenAI({
+  apiKey: 'YOUR_API_KEY',
+  baseURL: 'https://api.apiyi.com/v1'
+});
+
+async function getModels() {
+  const models = await openai.models.list();
+  console.log(models);
+}
+
+getModels();
+```
+
+```python Python
+from openai import OpenAI
+
+client = OpenAI(
+    api_key="YOUR_API_KEY",
+    base_url="https://api.apiyi.com/v1"
+)
+
+models = client.models.list()
+print(models)
+```
+
+```go Go
+package main
+
+import (
+    "context"
+    "fmt"
+    "github.com/sashabaranov/go-openai"
+)
+
+func main() {
+    config := openai.DefaultConfig("YOUR_API_KEY")
+    config.BaseURL = "https://api.apiyi.com/v1"
+    
+    client := openai.NewClientWithConfig(config)
+    
+    models, err := client.ListModels(context.Background())
+    if err != nil {
+        fmt.Printf("Error: %v\n", err)
+        return
+    }
+    
+    for _, model := range models.Models {
+        fmt.Printf("Model: %s\n", model.ID)
+    }
+}
+```
+
+</CodeGroup>
+
+### 响应格式
+
+```json
+{
+  "object": "list",
+  "data": [
+    {
+      "id": "gpt-4o",
+      "object": "model",
+      "created": 1687882411,
+      "owned_by": "openai",
+      "permission": [
+        {
+          "id": "modelperm-xxx",
+          "object": "model_permission",
+          "created": 1687882411,
+          "allow_create_engine": false,
+          "allow_sampling": true,
+          "allow_logprobs": true,
+          "allow_search_indices": false,
+          "allow_view": true,
+          "allow_fine_tuning": false,
+          "organization": "*",
+          "group": null,
+          "is_blocking": false
+        }
+      ],
+      "root": "gpt-4o",
+      "parent": null
+    },
+    {
+      "id": "gpt-4o-mini",
+      "object": "model",
+      "created": 1687882411,
+      "owned_by": "openai",
+      "permission": [...],
+      "root": "gpt-4o-mini",
+      "parent": null
+    }
+  ]
+}
+```
+
+## 获取特定模型信息
+
+### 请求示例
+
+<CodeGroup>
+
+```bash cURL
+curl https://api.apiyi.com/v1/models/gpt-4o \
+  -H "Authorization: Bearer YOUR_API_KEY"
+```
+
+```javascript Node.js
+const model = await openai.models.retrieve('gpt-4o');
+console.log(model);
+```
+
+```python Python
+model = client.models.retrieve('gpt-4o')
+print(model)
+```
+
+```go Go
+model, err := client.GetModel(context.Background(), "gpt-4o")
+if err != nil {
+    fmt.Printf("Error: %v\n", err)
+    return
+}
+fmt.Printf("Model: %+v\n", model)
+```
+
+</CodeGroup>
+
+### 响应格式
+
+```json
+{
+  "id": "gpt-4o",
+  "object": "model",
+  "created": 1687882411,
+  "owned_by": "openai",
+  "permission": [
+    {
+      "id": "modelperm-xxx",
+      "object": "model_permission",
+      "created": 1687882411,
+      "allow_create_engine": false,
+      "allow_sampling": true,
+      "allow_logprobs": true,
+      "allow_search_indices": false,
+      "allow_view": true,
+      "allow_fine_tuning": false,
+      "organization": "*",
+      "group": null,
+      "is_blocking": false
+    }
+  ],
+  "root": "gpt-4o",
+  "parent": null
+}
+```
+
+## 响应字段说明
+
+| 字段 | 类型 | 说明 |
+|------|------|------|
+| `id` | string | 模型的唯一标识符 |
+| `object` | string | 对象类型，固定为 "model" |
+| `created` | integer | 模型创建时间戳 |
+| `owned_by` | string | 模型所有者 |
+| `permission` | array | 模型权限列表 |
+| `root` | string | 根模型名称 |
+| `parent` | string | 父模型名称（如果有） |
+
+## 主要模型分类
+
+### OpenAI 系列
+
+<AccordionGroup>
+  <Accordion icon="openai" title="GPT-4o 系列">
+    最新的多模态模型，支持文本、图像和音频处理
+    
+    **可用模型：**
+    - `gpt-4o` - 最新旗舰模型
+    - `gpt-4o-mini` - 轻量高效版本
+    - `gpt-4o-2024-11-20` - 特定日期版本
+    
+    **特点：**
+    - 支持图像理解和生成
+    - 优秀的多语言能力
+    - 强大的推理能力
+  </Accordion>
+  
+  <Accordion icon="openai" title="GPT-4 系列">
+    经典的GPT-4模型系列，提供强大的文本生成能力
+    
+    **可用模型：**
+    - `gpt-4` - 标准GPT-4模型
+    - `gpt-4-turbo` - 更快的版本
+    - `gpt-4-32k` - 支持32K上下文
+    
+    **特点：**
+    - 优秀的文本生成质量
+    - 强大的逻辑推理能力
+    - 良好的代码理解能力
+  </Accordion>
+  
+  <Accordion icon="openai" title="O1 系列">
+    专为复杂推理任务设计的模型
+    
+    **可用模型：**
+    - `o1-preview` - 推理能力预览版
+    - `o1-mini` - 轻量推理模型
+    - `o3` - 最新推理模型
+    
+    **特点：**
+    - 强大的数学推理能力
+    - 适合复杂逻辑问题
+    - 不支持流式输出
+  </Accordion>
+</AccordionGroup>
+
+### Claude 系列
+
+<AccordionGroup>
+  <Accordion icon="anthropic" title="Claude 3.5 系列">
+    Anthropic最新的高性能模型
+    
+    **可用模型：**
+    - `claude-3-5-sonnet-20241022` - 最强版本
+    - `claude-3-5-haiku-20241022` - 快速版本
+    
+    **特点：**
+    - 优秀的代码生成能力
+    - 强大的文本理解能力
+    - 支持长文本处理
+  </Accordion>
+  
+  <Accordion icon="anthropic" title="Claude 3 系列">
+    经典的Claude 3模型系列
+    
+    **可用模型：**
+    - `claude-3-opus-20240229` - 最强推理能力
+    - `claude-3-sonnet-20240229` - 平衡版本
+    - `claude-3-haiku-20240307` - 快速版本
+    
+    **特点：**
+    - 安全性高
+    - 推理能力强
+    - 支持多种任务类型
+  </Accordion>
+</AccordionGroup>
+
+### Google Gemini 系列
+
+<AccordionGroup>
+  <Accordion icon="google" title="Gemini 1.5 系列">
+    Google最新的多模态模型
+    
+    **可用模型：**
+    - `gemini-1.5-pro` - 高性能版本
+    - `gemini-1.5-flash` - 快速版本
+    
+    **特点：**
+    - 超长上下文支持（最高200万tokens）
+    - 多模态能力强
+    - 处理速度快
+  </Accordion>
+  
+  <Accordion icon="google" title="Gemini Pro 系列">
+    经典的Gemini Pro模型
+    
+    **可用模型：**
+    - `gemini-pro` - 标准版本
+    - `gemini-pro-vision` - 支持图像理解
+    
+    **特点：**
+    - 良好的多语言支持
+    - 强大的分析能力
+    - 适合企业应用
+  </Accordion>
+</AccordionGroup>
+
+### 国产大模型
+
+<AccordionGroup>
+  <Accordion icon="language" title="阿里通义系列">
+    阿里巴巴开发的大语言模型
+    
+    **可用模型：**
+    - `qwen-turbo` - 快速版本
+    - `qwen-plus` - 高性能版本
+    - `qwen-max` - 最强版本
+    
+    **特点：**
+    - 中文能力出众
+    - 多领域知识丰富
+    - 性价比高
+  </Accordion>
+  
+  <Accordion icon="code" title="DeepSeek 系列">
+    专注于代码和推理的模型
+    
+    **可用模型：**
+    - `deepseek-chat` - 对话模型
+    - `deepseek-coder` - 代码专用
+    - `deepseek-v2.5` - 最新版本
+    
+    **特点：**
+    - 代码能力突出
+    - 推理能力强
+    - 开源友好
+  </Accordion>
+  
+  <Accordion icon="brain" title="智谱GLM系列">
+    清华大学研发的大模型
+    
+    **可用模型：**
+    - `glm-4` - 第四代模型
+    - `glm-4v` - 多模态版本
+    - `glm-3-turbo` - 快速版本
+    
+    **特点：**
+    - 学术能力强
+    - 中英文双语优秀
+    - 适合研究应用
+  </Accordion>
+</AccordionGroup>
+
+## 图像生成模型
+
+### 文本到图像
+
+| 模型ID | 厂商 | 特点 | 价格 |
+|--------|------|------|------|
+| `dall-e-3` | OpenAI | 高质量图像生成 | $0.04/张 |
+| `dall-e-2` | OpenAI | 经典图像生成 | $0.02/张 |
+| `gpt-4o-image` | API易优化 | 超高性价比 | $0.01/张 |
+| `flux-pro` | Flux | 专业级质量 | $0.05/张 |
+| `flux-dev` | Flux | 开发版本 | $0.03/张 |
+| `midjourney-v6` | Midjourney | 艺术性强 | $0.08/张 |
+| `stable-diffusion-xl` | Stability AI | 开源高质量 | $0.02/张 |
+
+### 图像理解
+
+| 模型ID | 厂商 | 特点 | 价格 |
+|--------|------|------|------|
+| `gpt-4o` | OpenAI | 图像理解能力强 | $5/1M tokens |
+| `gpt-4o-mini` | OpenAI | 轻量图像理解 | $0.15/1M tokens |
+| `gemini-pro-vision` | Google | 多模态理解 | $0.25/1M tokens |
+| `claude-3-5-sonnet` | Anthropic | 文档图像理解 | $3/1M tokens |
+
+## 语音模型
+
+### 文本转语音 (TTS)
+
+| 模型ID | 厂商 | 特点 | 价格 |
+|--------|------|------|------|
+| `tts-1` | OpenAI | 标准语音合成 | $15/1M字符 |
+| `tts-1-hd` | OpenAI | 高清语音合成 | $30/1M字符 |
+
+### 语音转文本 (STT)
+
+| 模型ID | 厂商 | 特点 | 价格 |
+|--------|------|------|------|
+| `whisper-1` | OpenAI | 多语言语音识别 | $0.006/分钟 |
+
+## 使用建议
+
+### 根据场景选择模型
+
+<CardGroup cols={2}>
+  <Card
+    title="日常对话"
+    icon="comments"
+    href="/api-reference/chat-completions"
+  >
+    推荐：GPT-4o Mini、Claude 3.5 Haiku
+    特点：响应快、成本低、质量好
+  </Card>
+  
+  <Card
+    title="代码生成"
+    icon="code"
+    href="/api-reference/openai"
+  >
+    推荐：GPT-4o、Claude 3.5 Sonnet、DeepSeek Coder
+    特点：代码理解能力强、生成质量高
+  </Card>
+  
+  <Card
+    title="复杂推理"
+    icon="brain"
+    href="/models"
+  >
+    推荐：O1 Preview、Claude 3 Opus
+    特点：逻辑推理能力强、适合数学问题
+  </Card>
+  
+  <Card
+    title="中文处理"
+    icon="language"
+    href="/api-reference/chinese-models"
+  >
+    推荐：通义千问、GLM-4、文心一言
+    特点：中文理解和生成能力优秀
+  </Card>
+</CardGroup>
+
+### 性价比选择
+
+<AccordionGroup>
+  <Accordion icon="dollar-sign" title="预算优先">
+    **推荐模型：**
+    - GPT-4o Mini: $0.15/1M tokens (输入)
+    - Claude 3.5 Haiku: $1/1M tokens (输入)
+    - 通义千问 Turbo: $0.3/1M tokens (输入)
+    - DeepSeek Chat: $0.14/1M tokens (输入)
+    
+    **适用场景：**
+    - 大量文本处理
+    - 批量数据分析
+    - 开发测试阶段
+  </Accordion>
+  
+  <Accordion icon="zap" title="性能优先">
+    **推荐模型：**
+    - GPT-4o: $5/1M tokens (输入)
+    - Claude 3.5 Sonnet: $3/1M tokens (输入)
+    - O1 Preview: $15/1M tokens (输入)
+    
+    **适用场景：**
+    - 关键业务应用
+    - 复杂推理任务
+    - 高质量内容生成
+  </Accordion>
+  
+  <Accordion icon="balance-scale" title="平衡选择">
+    **推荐模型：**
+    - GPT-4 Turbo: $10/1M tokens (输入)
+    - Claude 3 Sonnet: $3/1M tokens (输入)
+    - Gemini 1.5 Pro: $1.25/1M tokens (输入)
+    
+    **适用场景：**
+    - 日常业务应用
+    - 中等复杂度任务
+    - 长期稳定使用
+  </Accordion>
+</AccordionGroup>
+
+## 实时获取模型信息
+
+你可以通过API实时获取最新的模型列表和价格信息：
+
+```python
+import requests
+
+# 获取模型列表
+response = requests.get(
+    "https://api.apiyi.com/v1/models",
+    headers={"Authorization": "Bearer YOUR_API_KEY"}
+)
+
+models = response.json()
+for model in models['data']:
+    print(f"模型: {model['id']}, 所有者: {model['owned_by']}")
+```
+
+## 错误处理
+
+| 错误码 | 说明 | 解决方案 |
+|--------|------|----------|
+| 401 | API Key无效 | 检查API Key是否正确 |
+| 403 | 权限不足 | 确认API Key有访问权限 |
+| 404 | 模型不存在 | 检查模型ID是否正确 |
+| 429 | 请求过于频繁 | 降低请求频率 |
+| 500 | 服务器错误 | 稍后重试或联系支持 |
+
+---
+
+<CardGroup cols={2}>
+  <Card
+    title="查看完整模型列表"
+    icon="list"
+    href="/models"
+  >
+    查看所有200+AI模型的详细信息和价格
+  </Card>
+  
+  <Card
+    title="开始使用Chat API"
+    icon="comments"
+    href="/api-reference/chat-completions"
+  >
+    了解如何使用Chat Completions API调用模型
+  </Card>
+</CardGroup> 

@@ -1,0 +1,1099 @@
+---
+title: 'Claude模型使用指南'
+description: 'Anthropic Claude系列模型的详细使用指南'
+---
+
+# Claude模型使用指南
+
+Claude是由Anthropic开发的先进AI助手，以其出色的推理能力、安全性和有用性而闻名。在API易平台上，你可以使用Claude的最新模型，包括Claude 3.5 Sonnet、Claude 3 Opus等。
+
+## 🚀 模型概览
+
+<CardGroup cols={2}>
+  <Card
+    title="Claude 3.5 Sonnet"
+    icon="anthropic"
+    href="#claude-3-5-sonnet"
+  >
+    最新旗舰模型，智能与速度的完美平衡
+  </Card>
+  <Card
+    title="Claude 3 Opus"
+    icon="crown"
+    href="#claude-3-opus"
+  >
+    最强大的模型，适合复杂任务
+  </Card>
+  <Card
+    title="Claude 3 Sonnet"
+    icon="balance-scale"
+    href="#claude-3-sonnet"
+  >
+    平衡性能与成本的经典选择
+  </Card>
+  <Card
+    title="Claude 3 Haiku"
+    icon="feather"
+    href="#claude-3-haiku"
+  >
+    轻量快速，适合简单任务
+  </Card>
+</CardGroup>
+
+## Claude 3.5 Sonnet (推荐)
+
+Claude 3.5 Sonnet是Anthropic的最新旗舰模型，在保持高性能的同时显著提升了处理速度。
+
+### 🎯 核心特性
+
+**模型ID：** `claude-3-5-sonnet-20241022`
+
+**特点：**
+- 🧠 卓越的推理和分析能力
+- 📝 优秀的长文本处理能力
+- 🔍 精准的信息提取和总结
+- 🎨 强大的创意写作能力
+- 🌍 优秀的中文理解和生成
+- 🔒 内置安全机制，拒绝有害内容
+
+**价格：** 输入 $3/1M tokens，输出 $15/1M tokens
+
+<CodeGroup>
+
+```python Python
+from openai import OpenAI
+
+client = OpenAI(
+    api_key="YOUR_API_KEY",
+    base_url="https://api.apiyi.com/v1"
+)
+
+# 基础对话
+response = client.chat.completions.create(
+    model="claude-3-5-sonnet-20241022",
+    messages=[
+        {
+            "role": "system", 
+            "content": "你是一个专业的AI助手，擅长分析和解决复杂问题"
+        },
+        {
+            "role": "user", 
+            "content": "请分析一下当前人工智能发展的主要趋势和挑战"
+        }
+    ],
+    max_tokens=1000,
+    temperature=0.7
+)
+
+print(response.choices[0].message.content)
+```
+
+```javascript Node.js
+import OpenAI from 'openai';
+
+const openai = new OpenAI({
+  apiKey: 'YOUR_API_KEY',
+  baseURL: 'https://api.apiyi.com/v1'
+});
+
+const completion = await openai.chat.completions.create({
+  model: 'claude-3-5-sonnet-20241022',
+  messages: [
+    {
+      role: 'system',
+      content: '你是一个专业的AI助手，擅长分析和解决复杂问题'
+    },
+    {
+      role: 'user',
+      content: '请分析一下当前人工智能发展的主要趋势和挑战'
+    }
+  ],
+  max_tokens: 1000,
+  temperature: 0.7
+});
+
+console.log(completion.choices[0].message.content);
+```
+
+```go Go
+package main
+
+import (
+    "context"
+    "fmt"
+    "log"
+    
+    "github.com/sashabaranov/go-openai"
+)
+
+func main() {
+    config := openai.DefaultConfig("YOUR_API_KEY")
+    config.BaseURL = "https://api.apiyi.com/v1"
+    client := openai.NewClientWithConfig(config)
+    
+    resp, err := client.CreateChatCompletion(
+        context.Background(),
+        openai.ChatCompletionRequest{
+            Model: "claude-3-5-sonnet-20241022",
+            Messages: []openai.ChatCompletionMessage{
+                {
+                    Role:    openai.ChatMessageRoleSystem,
+                    Content: "你是一个专业的AI助手，擅长分析和解决复杂问题",
+                },
+                {
+                    Role:    openai.ChatMessageRoleUser,
+                    Content: "请分析一下当前人工智能发展的主要趋势和挑战",
+                },
+            },
+            MaxTokens:   1000,
+            Temperature: 0.7,
+        },
+    )
+    
+    if err != nil {
+        log.Fatal(err)
+    }
+    
+    fmt.Println(resp.Choices[0].Message.Content)
+}
+```
+
+```bash cURL
+curl -X POST "https://api.apiyi.com/v1/chat/completions" \
+  -H "Content-Type: application/json" \
+  -H "Authorization: Bearer YOUR_API_KEY" \
+  -d '{
+    "model": "claude-3-5-sonnet-20241022",
+    "messages": [
+      {
+        "role": "system",
+        "content": "你是一个专业的AI助手，擅长分析和解决复杂问题"
+      },
+      {
+        "role": "user",
+        "content": "请分析一下当前人工智能发展的主要趋势和挑战"
+      }
+    ],
+    "max_tokens": 1000,
+    "temperature": 0.7
+  }'
+```
+
+</CodeGroup>
+
+### 🎨 创意写作示例
+
+Claude 3.5 Sonnet在创意写作方面表现出色：
+
+```python
+# 创意写作任务
+response = client.chat.completions.create(
+    model="claude-3-5-sonnet-20241022",
+    messages=[
+        {
+            "role": "system", 
+            "content": "你是一个才华横溢的作家，擅长创作引人入胜的故事"
+        },
+        {
+            "role": "user", 
+            "content": """
+            请写一个关于"时间旅行者的困境"的短故事，要求：
+            1. 故事长度约800字
+            2. 包含意想不到的转折
+            3. 探讨时间旅行的哲学问题
+            4. 结尾要有深刻的启示
+            """
+        }
+    ],
+    max_tokens=1500,
+    temperature=0.8  # 较高温度增加创造性
+)
+
+print(response.choices[0].message.content)
+```
+
+### 📊 数据分析示例
+
+```python
+# 复杂数据分析任务
+data_analysis_prompt = """
+以下是某电商网站的用户行为数据摘要：
+- 日均访问量：50,000
+- 页面跳出率：35%
+- 平均停留时间：3.2分钟
+- 转化率：2.8%
+- 移动端占比：65%
+- 主要流量来源：搜索引擎(45%)、社交媒体(25%)、直接访问(20%)、其他(10%)
+
+请进行深入分析，提供：
+1. 现状评估
+2. 主要问题识别
+3. 优化建议
+4. 预期改善效果
+"""
+
+response = client.chat.completions.create(
+    model="claude-3-5-sonnet-20241022",
+    messages=[
+        {
+            "role": "system", 
+            "content": "你是一个资深的数据分析师和增长专家，擅长电商数据分析"
+        },
+        {
+            "role": "user", 
+            "content": data_analysis_prompt
+        }
+    ],
+    max_tokens=2000,
+    temperature=0.3  # 低温度保证分析的准确性
+)
+```
+
+## Claude 3 Opus (最强大)
+
+Claude 3 Opus是Anthropic最强大的模型，在复杂推理、创意任务和长文本处理方面表现卓越。
+
+### 👑 核心特性
+
+**模型ID：** `claude-3-opus-20240229`
+
+**特点：**
+- 🏆 最强的推理和分析能力
+- 📚 卓越的长文档处理能力
+- 🎯 精准的复杂任务执行
+- 🔬 深度的科学和技术分析
+- 💡 优秀的创意和想象力
+
+**价格：** 输入 $15/1M tokens，输出 $75/1M tokens
+
+### 🔬 科学分析示例
+
+```python
+# 复杂科学问题分析
+scientific_query = """
+请分析CRISPR-Cas9基因编辑技术的最新发展，包括：
+
+1. 技术原理和机制
+2. 最新的改进和变种（如Prime Editing、Base Editing）
+3. 在医学治疗中的应用现状
+4. 伦理和安全性问题
+5. 未来发展趋势和挑战
+
+请提供详细的科学分析，包括具体的研究案例和数据。
+"""
+
+response = client.chat.completions.create(
+    model="claude-3-opus-20240229",
+    messages=[
+        {
+            "role": "system", 
+            "content": "你是一个顶尖的生物技术专家，具有深厚的分子生物学和基因工程背景"
+        },
+        {
+            "role": "user", 
+            "content": scientific_query
+        }
+    ],
+    max_tokens=3000,
+    temperature=0.2
+)
+```
+
+### 📖 长文档处理示例
+
+```python
+# 长文档总结和分析
+long_document = """
+[这里是一份很长的技术文档或学术论文...]
+"""
+
+response = client.chat.completions.create(
+    model="claude-3-opus-20240229",
+    messages=[
+        {
+            "role": "system", 
+            "content": "你是一个专业的文档分析师，擅长提取关键信息和深入分析"
+        },
+        {
+            "role": "user", 
+            "content": f"""
+            请对以下文档进行深入分析：
+            
+            {long_document}
+            
+            请提供：
+            1. 执行摘要（300字以内）
+            2. 关键发现和结论
+            3. 方法论评估
+            4. 潜在应用价值
+            5. 未来研究方向建议
+            """
+        }
+    ],
+    max_tokens=2500,
+    temperature=0.3
+)
+```
+
+## Claude 3 Sonnet (平衡选择)
+
+Claude 3 Sonnet在性能和成本之间提供了最佳平衡，适合大多数应用场景。
+
+### ⚖️ 核心特性
+
+**模型ID：** `claude-3-sonnet-20240229`
+
+**特点：**
+- 🎯 平衡的性能和成本
+- 🚀 较快的响应速度
+- 📝 良好的文本生成质量
+- 💼 适合商业应用
+
+**价格：** 输入 $3/1M tokens，输出 $15/1M tokens
+
+### 💼 商业应用示例
+
+```python
+# 商业分析任务
+business_analysis = """
+某科技公司计划进入AI聊天机器人市场，面临的情况：
+- 市场现状：已有OpenAI、Google、Microsoft等巨头
+- 公司优势：在垂直领域有深厚技术积累
+- 资源限制：研发预算有限，团队规模中等
+- 目标市场：企业级客户
+
+请提供详细的市场进入策略分析。
+"""
+
+response = client.chat.completions.create(
+    model="claude-3-sonnet-20240229",
+    messages=[
+        {
+            "role": "system", 
+            "content": "你是一个经验丰富的商业策略顾问，擅长科技行业分析"
+        },
+        {
+            "role": "user", 
+            "content": business_analysis
+        }
+    ],
+    max_tokens=2000,
+    temperature=0.4
+)
+```
+
+### 📚 教育内容生成
+
+```python
+# 教育内容创作
+response = client.chat.completions.create(
+    model="claude-3-sonnet-20240229",
+    messages=[
+        {
+            "role": "system", 
+            "content": "你是一个优秀的教育内容创作者，擅长设计引人入胜的学习材料"
+        },
+        {
+            "role": "user", 
+            "content": """
+            请为高中生设计一个关于"量子计算基础"的教学模块，包括：
+            1. 学习目标
+            2. 核心概念解释（用通俗易懂的语言）
+            3. 实际应用例子
+            4. 互动练习题
+            5. 拓展阅读建议
+            """
+        }
+    ],
+    max_tokens=2000,
+    temperature=0.6
+)
+```
+
+## Claude 3 Haiku (轻量快速)
+
+Claude 3 Haiku是Claude系列中最轻量的模型，提供快速响应和极高的性价比。
+
+### 🪶 核心特性
+
+**模型ID：** `claude-3-haiku-20240307`
+
+**特点：**
+- ⚡ 极快的响应速度
+- 💰 超高性价比
+- 🎯 适合简单任务
+- 📱 移动应用友好
+
+**价格：** 输入 $0.25/1M tokens，输出 $1.25/1M tokens
+
+### 🚀 快速任务示例
+
+```python
+# 快速文本处理任务
+tasks = [
+    "将以下文本翻译成英文：人工智能正在改变世界",
+    "总结这段话的要点：[一段文本]",
+    "生成5个关于环保的标语",
+    "检查这句话的语法：Me and my friend goes to school"
+]
+
+for task in tasks:
+    response = client.chat.completions.create(
+        model="claude-3-haiku-20240307",
+        messages=[
+            {
+                "role": "user", 
+                "content": task
+            }
+        ],
+        max_tokens=200,
+        temperature=0.5
+    )
+    print(f"任务: {task}")
+    print(f"结果: {response.choices[0].message.content}\n")
+```
+
+### 📱 移动应用集成
+
+```python
+# 适合移动应用的轻量级对话
+def mobile_chat_handler(user_message):
+    """移动应用中的快速对话处理"""
+    response = client.chat.completions.create(
+        model="claude-3-haiku-20240307",
+        messages=[
+            {
+                "role": "system", 
+                "content": "你是一个友好的移动助手，回答要简洁明了"
+            },
+            {
+                "role": "user", 
+                "content": user_message
+            }
+        ],
+        max_tokens=150,  # 限制输出长度
+        temperature=0.7
+    )
+    
+    return response.choices[0].message.content
+
+# 示例使用
+user_inputs = [
+    "今天天气怎么样？",
+    "推荐一个好的餐厅",
+    "帮我设个5分钟的提醒"
+]
+
+for input_text in user_inputs:
+    response = mobile_chat_handler(input_text)
+    print(f"用户: {input_text}")
+    print(f"助手: {response}\n")
+```
+
+## Claude模型的独特优势
+
+### 1. 🔒 内置安全机制
+
+Claude模型具有强大的内置安全机制，会主动拒绝有害、违法或不当的请求：
+
+```python
+# Claude会自动拒绝有害内容
+response = client.chat.completions.create(
+    model="claude-3-5-sonnet-20241022",
+    messages=[
+        {
+            "role": "user", 
+            "content": "请教我如何制作危险物品"
+        }
+    ],
+    max_tokens=500
+)
+
+# Claude会礼貌地拒绝并提供替代建议
+print(response.choices[0].message.content)
+```
+
+### 2. 🎯 精准的指令遵循
+
+Claude在遵循复杂指令方面表现出色，能够严格按照用户的要求执行任务：
+
+```python
+# 复杂的格式化要求
+structured_task = """
+请分析以下产品数据，并严格按照以下格式输出：
+
+格式要求：
+1. 使用JSON格式
+2. 包含产品名称、价格、评分、推荐理由
+3. 推荐理由不超过50字
+4. 按评分从高到低排序
+
+产品数据：
+- iPhone 15: $999, 评分4.5
+- Samsung Galaxy S24: $899, 评分4.3
+- Google Pixel 8: $699, 评分4.4
+
+请严格按照要求输出，不要添加任何其他内容。
+"""
+
+response = client.chat.completions.create(
+    model="claude-3-5-sonnet-20241022",
+    messages=[
+        {
+            "role": "user", 
+            "content": structured_task
+        }
+    ],
+    max_tokens=500,
+    temperature=0.1  # 低温度确保精确遵循格式
+)
+```
+
+### 3. 🧠 深度推理能力
+
+Claude在逻辑推理和批判性思考方面表现卓越：
+
+```python
+# 复杂逻辑推理
+logical_puzzle = """
+有一个逻辑谜题：
+
+小镇上有三个人：A、B、C
+- A总是说真话
+- B总是说假话  
+- C有时说真话，有时说假话
+
+现在你遇到了其中一个人，他说："我不是B"
+
+请问：
+1. 这个人可能是谁？
+2. 请详细说明你的推理过程
+3. 这个信息是否足够确定这个人的身份？
+"""
+
+response = client.chat.completions.create(
+    model="claude-3-5-sonnet-20241022",
+    messages=[
+        {
+            "role": "system", 
+            "content": "你是一个逻辑推理专家，请仔细分析问题并提供详细的推理过程"
+        },
+        {
+            "role": "user", 
+            "content": logical_puzzle
+        }
+    ],
+    max_tokens=1000,
+    temperature=0.2
+)
+```
+
+### 4. 🌍 优秀的多语言能力
+
+Claude对中文的理解和生成能力特别出色：
+
+```python
+# 中文古诗创作
+chinese_poetry = """
+请创作一首七言绝句，要求：
+1. 主题：春天的江南水乡
+2. 情感：表达对故乡的思念
+3. 风格：清新淡雅，意境深远
+4. 格律：严格遵循平仄规律
+5. 语言：文字优美，富有诗意
+
+请同时提供创作说明，解释诗句的意境和用词选择。
+"""
+
+response = client.chat.completions.create(
+    model="claude-3-5-sonnet-20241022",
+    messages=[
+        {
+            "role": "system", 
+            "content": "你是一个精通中国古典诗词的文学家，对格律和意境都有深刻理解"
+        },
+        {
+            "role": "user", 
+            "content": chinese_poetry
+        }
+    ],
+    max_tokens=800,
+    temperature=0.8
+)
+```
+
+## 使用技巧和最佳实践
+
+### 1. 选择合适的Claude模型
+
+<AccordionGroup>
+  <Accordion icon="star" title="复杂分析任务">
+    **推荐：** Claude 3 Opus, Claude 3.5 Sonnet
+    
+    - 科学研究分析
+    - 复杂文档处理
+    - 深度推理任务
+    - 创意写作
+    
+    ```python
+    # 复杂任务建议配置
+    model = "claude-3-opus-20240229"
+    temperature = 0.3
+    max_tokens = 3000
+    ```
+  </Accordion>
+
+  <Accordion icon="balance-scale" title="日常商业应用">
+    **推荐：** Claude 3.5 Sonnet, Claude 3 Sonnet
+    
+    - 商业分析
+    - 内容创作
+    - 客户服务
+    - 教育培训
+    
+    ```python
+    # 商业应用建议配置
+    model = "claude-3-5-sonnet-20241022"
+    temperature = 0.5
+    max_tokens = 2000
+    ```
+  </Accordion>
+
+  <Accordion icon="zap" title="快速响应场景">
+    **推荐：** Claude 3 Haiku
+    
+    - 移动应用
+    - 实时对话
+    - 简单翻译
+    - 快速问答
+    
+    ```python
+    # 快速响应建议配置
+    model = "claude-3-haiku-20240307"
+    temperature = 0.7
+    max_tokens = 300
+    ```
+  </Accordion>
+</AccordionGroup>
+
+### 2. 优化提示词技巧
+
+<CardGroup cols={2}>
+  <Card
+    title="结构化提示"
+    icon="list-ol"
+  >
+    使用清晰的结构化提示获得更好的结果
+    
+    ```python
+    prompt = """
+    请按照以下结构分析：
+    
+    ## 问题：
+    [描述问题]
+    
+    ## 分析要求：
+    1. 现状分析
+    2. 问题识别
+    3. 解决方案
+    4. 预期效果
+    
+    ## 输出格式：
+    请按照上述结构输出
+    """
+    ```
+  </Card>
+
+  <Card
+    title="角色设定"
+    icon="user-tie"
+  >
+    通过角色设定获得专业的回答
+    
+    ```python
+    system_prompt = """
+    你是一个资深的[专业领域]专家，具有以下特点：
+    - 10年以上相关经验
+    - 擅长[具体技能]
+    - 注重[特定方面]
+    
+    请用专业但通俗的语言回答问题。
+    """
+    ```
+  </Card>
+
+  <Card
+    title="示例驱动"
+    icon="lightbulb"
+  >
+    提供具体示例帮助Claude理解需求
+    
+    ```python
+    prompt = """
+    请按照以下示例的格式回答：
+    
+    示例：
+    问题：[示例问题]
+    回答：[示例回答格式]
+    
+    现在请回答：[实际问题]
+    """
+    ```
+  </Card>
+
+  <Card
+    title="分步骤思考"
+    icon="stairs"
+  >
+    引导Claude进行分步骤思考
+    
+    ```python
+    prompt = """
+    请按照以下步骤思考这个问题：
+    
+    步骤1：理解问题核心
+    步骤2：收集相关信息
+    步骤3：分析可能方案
+    步骤4：评估最佳选择
+    步骤5：提供最终建议
+    
+    问题：[具体问题]
+    """
+    ```
+  </Card>
+</CardGroup>
+
+### 3. 参数调优指南
+
+<Tabs>
+  <Tab title="Temperature设置">
+    ```python
+    # 不同任务的温度设置建议
+    temperature_guide = {
+        "事实性问答": 0.1,      # 需要准确信息
+        "数据分析": 0.2,        # 需要逻辑严密
+        "商业建议": 0.4,        # 平衡准确性和创新性
+        "内容创作": 0.7,        # 需要一定创造性
+        "创意写作": 0.9,        # 需要高度创造性
+        "头脑风暴": 1.0         # 需要最大创造性
+    }
+    ```
+  </Tab>
+
+  <Tab title="Max Tokens控制">
+    ```python
+    # 根据任务类型设置合适的输出长度
+    max_tokens_guide = {
+        "简短回答": 100,
+        "详细解释": 500,
+        "深度分析": 1500,
+        "长篇文档": 3000,
+        "创意写作": 2000
+    }
+    ```
+  </Tab>
+
+  <Tab title="系统消息优化">
+    ```python
+    # 高质量系统消息模板
+    system_templates = {
+        "分析师": "你是一个资深的{领域}分析师，擅长{技能}，以{特点}著称。",
+        "创作者": "你是一个才华横溢的{类型}创作者，具有{风格}的写作风格。",
+        "顾问": "你是一个经验丰富的{领域}顾问，专注于{专业}，提供{特色}建议。",
+        "专家": "你是一个{领域}专家，具有{资历}，擅长{技能}。"
+    }
+    ```
+  </Tab>
+</Tabs>
+
+### 4. 错误处理和重试机制
+
+```python
+import time
+import random
+from typing import Dict, Any, Optional
+
+class ClaudeAPIHandler:
+    """Claude API调用处理器，包含重试和错误处理"""
+    
+    def __init__(self, client, max_retries=3):
+        self.client = client
+        self.max_retries = max_retries
+    
+    def safe_completion(self, **kwargs) -> Optional[str]:
+        """安全的API调用，包含重试机制"""
+        
+        for attempt in range(self.max_retries):
+            try:
+                response = self.client.chat.completions.create(**kwargs)
+                return response.choices[0].message.content
+                
+            except Exception as e:
+                error_type = type(e).__name__
+                
+                if attempt == self.max_retries - 1:
+                    print(f"API调用最终失败: {error_type}: {e}")
+                    return None
+                
+                # 根据错误类型调整重试策略
+                if "rate_limit" in str(e).lower():
+                    delay = 2 ** attempt + random.uniform(0, 1)
+                    print(f"遇到速率限制，等待 {delay:.2f} 秒后重试...")
+                    time.sleep(delay)
+                elif "timeout" in str(e).lower():
+                    delay = 1 + attempt * 0.5
+                    print(f"请求超时，等待 {delay:.2f} 秒后重试...")
+                    time.sleep(delay)
+                else:
+                    print(f"遇到错误 {error_type}，立即重试...")
+                    time.sleep(0.1)
+        
+        return None
+    
+    def batch_completion(self, prompts: list, **kwargs) -> list:
+        """批量处理多个提示"""
+        results = []
+        
+        for i, prompt in enumerate(prompts):
+            print(f"处理第 {i+1}/{len(prompts)} 个请求...")
+            
+            kwargs_copy = kwargs.copy()
+            kwargs_copy['messages'] = [{"role": "user", "content": prompt}]
+            
+            result = self.safe_completion(**kwargs_copy)
+            results.append(result)
+            
+            # 避免过快请求
+            if i < len(prompts) - 1:
+                time.sleep(1)
+        
+        return results
+
+# 使用示例
+handler = ClaudeAPIHandler(client)
+
+# 单个请求
+result = handler.safe_completion(
+    model="claude-3-5-sonnet-20241022",
+    messages=[{"role": "user", "content": "Hello!"}],
+    max_tokens=500
+)
+
+# 批量请求
+prompts = [
+    "翻译：Hello world",
+    "总结：人工智能的发展历程",
+    "分析：电商发展趋势"
+]
+
+results = handler.batch_completion(
+    prompts,
+    model="claude-3-haiku-20240307",
+    max_tokens=300
+)
+```
+
+### 5. 成本优化策略
+
+<CardGroup cols={2}>
+  <Card
+    title="模型选择策略"
+    icon="arrows-alt"
+  >
+    根据任务复杂度选择合适模型
+    
+    ```python
+    def choose_model(task_complexity):
+        if task_complexity == "simple":
+            return "claude-3-haiku-20240307"
+        elif task_complexity == "medium":
+            return "claude-3-sonnet-20240229"
+        elif task_complexity == "complex":
+            return "claude-3-5-sonnet-20241022"
+        else:  # very_complex
+            return "claude-3-opus-20240229"
+    ```
+  </Card>
+
+  <Card
+    title="智能缓存"
+    icon="database"
+  >
+    缓存常见查询结果
+    
+    ```python
+    import hashlib
+    import json
+    
+    class ResponseCache:
+        def __init__(self):
+            self.cache = {}
+        
+        def get_cache_key(self, messages, model, **kwargs):
+            content = json.dumps({
+                "messages": messages,
+                "model": model,
+                **kwargs
+            }, sort_keys=True)
+            return hashlib.md5(content.encode()).hexdigest()
+        
+        def get_cached_response(self, key):
+            return self.cache.get(key)
+        
+        def cache_response(self, key, response):
+            self.cache[key] = response
+    ```
+  </Card>
+
+  <Card
+    title="批量处理"
+    icon="layer-group"
+  >
+    合并多个简单任务
+    
+    ```python
+    # 合并多个简单任务
+    batch_prompt = """
+    请完成以下任务：
+    
+    1. 翻译：Hello world
+    2. 总结：[文本内容]
+    3. 分析：[数据内容]
+    
+    请按序号分别回答。
+    """
+    ```
+  </Card>
+
+  <Card
+    title="精确控制输出"
+    icon="ruler"
+  >
+    设置精确的max_tokens
+    
+    ```python
+    # 根据任务预估所需token数
+    def estimate_tokens(task_type):
+        estimates = {
+            "translation": 100,
+            "summary": 300,
+            "analysis": 800,
+            "creative": 1200
+        }
+        return estimates.get(task_type, 500)
+    ```
+  </Card>
+</CardGroup>
+
+## 与其他模型的对比
+
+### Claude vs GPT-4
+
+<AccordionGroup>
+  <Accordion icon="shield" title="安全性">
+    **Claude优势：**
+    - 内置更强的安全机制
+    - 主动拒绝有害内容
+    - 更好的伦理判断
+    
+    **使用场景：** 教育、企业级应用、内容审核
+  </Accordion>
+
+  <Accordion icon="brain" title="推理能力">
+    **Claude优势：**
+    - 更强的逻辑推理
+    - 更好的批判性思维
+    - 更准确的因果分析
+    
+    **使用场景：** 学术研究、商业分析、法律咨询
+  </Accordion>
+
+  <Accordion icon="language" title="语言理解">
+    **Claude优势：**
+    - 更好的上下文理解
+    - 更准确的语义把握
+    - 更自然的对话流畅度
+    
+    **使用场景：** 文本分析、翻译、创意写作
+  </Accordion>
+
+  <Accordion icon="follow-user" title="指令遵循">
+    **Claude优势：**
+    - 更精准的指令执行
+    - 更好的格式控制
+    - 更一致的输出质量
+    
+    **使用场景：** 结构化任务、数据处理、自动化流程
+  </Accordion>
+</AccordionGroup>
+
+### 应用场景建议
+
+<Tabs>
+  <Tab title="学术研究">
+    ```python
+    # 学术研究场景推荐配置
+    academic_config = {
+        "model": "claude-3-opus-20240229",
+        "temperature": 0.2,
+        "max_tokens": 3000,
+        "system_prompt": "你是一个严谨的学者，注重事实准确性和逻辑严密性"
+    }
+    ```
+  </Tab>
+
+  <Tab title="商业应用">
+    ```python
+    # 商业应用场景推荐配置
+    business_config = {
+        "model": "claude-3-5-sonnet-20241022",
+        "temperature": 0.4,
+        "max_tokens": 2000,
+        "system_prompt": "你是一个专业的商业顾问，提供实用的建议"
+    }
+    ```
+  </Tab>
+
+  <Tab title="创意写作">
+    ```python
+    # 创意写作场景推荐配置
+    creative_config = {
+        "model": "claude-3-5-sonnet-20241022",
+        "temperature": 0.8,
+        "max_tokens": 2500,
+        "system_prompt": "你是一个富有创意的作家，擅长创作引人入胜的内容"
+    }
+    ```
+  </Tab>
+
+  <Tab title="技术支持">
+    ```python
+    # 技术支持场景推荐配置
+    support_config = {
+        "model": "claude-3-sonnet-20240229",
+        "temperature": 0.3,
+        "max_tokens": 1500,
+        "system_prompt": "你是一个耐心的技术支持专家，提供清晰的解决方案"
+    }
+    ```
+  </Tab>
+</Tabs>
+
+---
+
+<CardGroup cols={2}>
+  <Card
+    title="探索第三方应用集成"
+    icon="plug"
+    href="/api-reference/applications"
+  >
+    了解如何将Claude集成到Cursor、沉浸式翻译等应用中
+  </Card>
+  <Card
+    title="查看完整API参考"
+    icon="code"
+    href="/api-reference/chat-completions"
+  >
+    查看详细的API调用参数和示例
+  </Card>
+</CardGroup> 

@@ -1,0 +1,87 @@
+---
+title: "VEO 视频生成 API"
+description: "基于 VEO3 系列模型的 AI 视频生成服务，支持文本到视频、图片参考等功能"
+icon: "video"
+---
+
+<Info>
+  **基础 URL:** `https://api.apiyi.com`  
+  **API 版本:** `v1`  
+  **服务状态:** 运行中
+</Info>
+
+## 概述
+
+VEO API 提供强大的 AI 视频生成能力，支持 VEO3 系列的 4 种不同模型。服务采用异步处理模式，确保高效处理视频生成请求。
+
+## 核心特性
+
+<CardGroup cols={2}>
+  <Card title="异步处理" icon="clock">
+    提交任务后立即返回，通过轮询获取结果
+  </Card>
+  <Card title="多模型支持" icon="layer-group">
+    4 种 VEO3 模型满足不同需求
+  </Card>
+  <Card title="图片参考" icon="image">
+    支持多张参考图片辅助生成
+  </Card>
+  <Card title="提示词增强" icon="sparkles">
+    AI 优化提示词以获得更好效果
+  </Card>
+  <Card title="按成功计费" icon="badge-dollar">
+    仅对成功生成的视频收费
+  </Card>
+  <Card title="高质量输出" icon="star">
+    支持高清视频生成，时长 10-15 秒
+  </Card>
+</CardGroup>
+
+## 工作流程
+
+<Steps>
+  <Step title="提交任务">
+    调用提交接口，发送文本描述和参数
+  </Step>
+  <Step title="获取任务 ID">
+    系统返回唯一的任务 ID
+  </Step>
+  <Step title="轮询状态">
+    使用任务 ID 查询处理进度
+  </Step>
+  <Step title="获取结果">
+    任务完成后获取视频 URL
+  </Step>
+</Steps>
+
+## 支持的模型
+
+| 模型 | 价格 | 特点 | 生成时间 |
+|------|------|------|----------|
+| `veo3` | $2.00 | 标准版，综合性能优秀 | 3-8分钟 |
+| `veo3-fast` | $2.00 | 快速版，支持音频 | 1-3分钟 |
+| `veo3-pro` | $10.00 | 专业版，卓越品质 | 5-15分钟 |
+| `veo3-pro-frames` | $10.00 | 专业版+帧控制 | 5-15分钟 |
+
+## 开始使用
+
+<Card title="获取 API 密钥" icon="key" href="mailto:feedback@apiyi.com">
+  联系 **feedback@apiyi.com** 或微信 **8765058** 获取 API 密钥
+</Card>
+
+## 相关链接
+
+<CardGroup cols={2}>
+  <Card title="快速开始" icon="rocket" href="/api-capabilities/veo/quick-start">
+    查看如何快速开始使用 API
+  </Card>
+  <Card title="API 参考" icon="book" href="/api-capabilities/veo/api-reference">
+    查看详细的 API 文档
+  </Card>
+  <Card title="代码示例" icon="code" href="/api-capabilities/veo/examples">
+    查看各种编程语言的示例
+  </Card>
+  <Card title="最佳实践" icon="lightbulb" href="/api-capabilities/veo/best-practices">
+    了解如何获得最佳生成效果
+  </Card>
+</CardGroup>

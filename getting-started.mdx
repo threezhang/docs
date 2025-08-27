@@ -1,0 +1,187 @@
+---
+title: 快速开始
+description: 只需简单三步，即可开始使用 API易 访问各种 AI 模型。
+icon: "rocket"
+---
+
+## 第一步：账户准备
+
+### 1.1 注册账号
+
+访问 [API易官网](https://api.apiyi.com) 注册账号：
+
+- 使用邮箱注册（推荐高校、企业邮箱注册）
+- 验证邮箱地址
+- 登录控制台
+
+### 1.2 账户充值
+
+在控制台进行充值：
+
+1. 点击"充值"菜单
+2. 选择充值金额（最低 5 美金起，100 美金可加赠 15%）
+3. 完成支付（支持支付宝、微信）
+
+<Note>
+新用户首次充值可获得额外赠送，充值后余额立即到账，首充加赠额度需要加工作人员微信后为你人工加赠（微信：8765058）。
+</Note>
+
+## 第二步：创建 API 密钥
+
+### 2.1 生成密钥
+
+1. 在后台导航点击"令牌"栏目，https://api.apiyi.com/token
+2. 可以复制【默认令牌】直接使用（右侧有个 复制 图标）
+2. 或者新创建令牌：点击右上侧"新增"按钮，为密钥命名（如：test-key），点击确认创建，即拥有新的令牌。
+
+## 第三步：开始调用
+
+### 3.1 获取接入信息
+
+- **API 地址（所谓的 Base_Url）**：`https://api.apiyi.com`
+- **API 密钥**：您刚创建的密钥
+- **请求格式**：完全兼容 OpenAI API，兼容 OpenAI 格式调用。
+
+### 3.2 测试调用
+
+使用 curl 快速测试：
+
+```bash
+curl https://api.apiyi.com/v1/chat/completions \
+  -H "Content-Type: application/json" \
+  -H "Authorization: Bearer YOUR_API_KEY" \
+  -d '{
+    "model": "gpt-4.1-mini",
+    "messages": [{"role": "user", "content": "Hello!"}]
+  }'
+```
+
+### 3.3 代码示例
+
+<Tabs>
+  <Tab title="Python">
+    ```python
+    from openai import OpenAI
+    
+    client = OpenAI(
+        api_key="YOUR_API_KEY",
+        base_url="https://api.apiyi.com/v1"
+    )
+    
+    response = client.chat.completions.create(
+        model="gpt-4.1-mini",
+        messages=[
+            {"role": "user", "content": "Hello!"}
+        ]
+    )
+    
+    print(response.choices[0].message.content)
+    ```
+  </Tab>
+  
+  <Tab title="Node.js">
+    ```javascript
+    import OpenAI from 'openai';
+    
+    const openai = new OpenAI({
+      apiKey: 'YOUR_API_KEY',
+      baseURL: 'https://api.apiyi.com/v1'
+    });
+    
+    const response = await openai.chat.completions.create({
+      model: 'gpt-4.1-mini',
+      messages: [{ role: 'user', content: 'Hello!' }]
+    });
+    
+    console.log(response.choices[0].message.content);
+    ```
+  </Tab>
+  
+  <Tab title="Java">
+    ```java
+    // 使用官方 OpenAI Java 库
+    OpenAiService service = new OpenAiService(
+        "YOUR_API_KEY", 
+        Duration.ofSeconds(60), 
+        "https://api.apiyi.com/v1"
+    );
+    
+    ChatCompletionRequest request = ChatCompletionRequest.builder()
+        .model("gpt-4.1-mini")
+        .messages(List.of(
+            new ChatMessage(ChatMessageRole.USER, "Hello!")
+        ))
+        .build();
+    
+    ChatCompletionResult result = service.createChatCompletion(request);
+    System.out.println(result.getChoices().get(0).getMessage().getContent());
+    ```
+  </Tab>
+</Tabs>
+
+## 下一步
+
+恭喜！您已经成功完成了 API易 的接入。接下来您可以：
+
+<CardGroup cols={2}>
+  <Card title="查看 API 文档" icon="book" href="/api-reference/introduction">
+    了解完整的 API 接口说明
+  </Card>
+  
+  <Card title="探索模型列表" icon="robot" href="/models">
+    查看所有支持的 AI 模型
+  </Card>
+  
+  <Card title="集成到应用" icon="plug" href="/api-reference/integrations/langchain">
+    将 API易 集成到各种工具
+  </Card>
+  
+  <Card title="查看使用统计" icon="chart-line" href="https://api.apiyi.com/log">
+    在控制台监控使用情况
+  </Card>
+</CardGroup>
+
+## 常见问题
+
+### 如何切换模型？
+
+只需修改请求中的 `model` 参数：
+
+```json
+{
+  "model": "gpt-4.1",           // 使用 GPT-4.1
+  "model": "claude-sonnet-4-20250514",   // 使用 Claude 4 Sonnet
+  "model": "gemini-2.5-pro"       // 使用 Gemini 2.5 Pro
+}
+```
+
+### 支持哪些编程语言？
+
+API易 兼容 OpenAI API 标准，支持所有 OpenAI SDK 支持的语言：
+
+- Python
+- JavaScript/TypeScript
+- Java
+- C#/.NET
+- Go
+- Ruby
+- PHP
+- 更多...
+
+### 如何查看余额？
+
+登录 [控制台](https://api.apiyi.com/account/profile) 即可查看：
+- 账户余额
+- 使用记录
+- 消费统计
+
+### 遇到问题怎么办？
+
+1. 查看 [API 文档](/api-reference/introduction)
+2. 检查 [常见错误](/api-reference/errors)
+3. 联系客服：support@apiyi.com
+
+<Info>
+提示：保存好您的 API 密钥，并定期在控制台查看使用日志，每笔请求都有消息历史，合理优化成本。
+祝使用愉快~
+</Info>

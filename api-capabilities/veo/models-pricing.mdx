@@ -1,0 +1,161 @@
+---
+title: "模型与定价"
+description: "VEO API 支持的模型列表和价格说明"
+icon: "badge-dollar-sign"
+---
+
+## 支持的模型
+
+<CardGroup cols={2}>
+  <Card title="VEO3" icon="sparkles">
+    <div style={{ marginBottom: '8px' }}>
+      <code style={{ fontSize: '14px', padding: '4px 8px', borderRadius: '4px', backgroundColor: '#f3f4f6' }}>veo3</code>
+    </div>
+    
+    **价格：** $2.00 / 视频
+    
+    **特点：**
+    - 第三代标准版
+    - 综合性能优秀
+    - 生成时间：3-8分钟
+    - 推荐指数：⭐⭐⭐⭐⭐
+    
+    **适用场景：** 日常使用，通用场景
+  </Card>
+
+  <Card title="VEO3 Fast" icon="bolt">
+    <div style={{ marginBottom: '8px' }}>
+      <code style={{ fontSize: '14px', padding: '4px 8px', borderRadius: '4px', backgroundColor: '#f3f4f6' }}>veo3-fast</code>
+    </div>
+    
+    **价格：** $2.00 / 视频
+    
+    **特点：**
+    - 快速生成版本
+    - 支持音频生成
+    - 生成时间：1-3分钟
+    - 画质更高
+    
+    **适用场景：** 快速测试，需要音频
+  </Card>
+
+  <Card title="VEO3 Pro" icon="crown">
+    <div style={{ marginBottom: '8px' }}>
+      <code style={{ fontSize: '14px', padding: '4px 8px', borderRadius: '4px', backgroundColor: '#f3f4f6' }}>veo3-pro</code>
+    </div>
+    
+    **价格：** $10.00 / 视频
+    
+    **特点：**
+    - 专业版模型
+    - 卓越视频质量
+    - 生成时间：5-15分钟
+    - 适合专业制作
+    
+    **适用场景：** 专业制作，商业用途
+  </Card>
+
+  <Card title="VEO3 Pro Frames" icon="film">
+    <div style={{ marginBottom: '8px' }}>
+      <code style={{ fontSize: '14px', padding: '4px 8px', borderRadius: '4px', backgroundColor: '#f3f4f6' }}>veo3-pro-frames</code>
+    </div>
+    
+    **价格：** $10.00 / 视频
+    
+    **特点：**
+    - 专业版+帧控制
+    - 极致画质
+    - 生成时间：5-15分钟
+    - 适合顶级制作
+    
+    **适用场景：** 精确控制，顶级制作
+  </Card>
+</CardGroup>
+
+## 价格对比
+
+| 模型 | 单价 | 生成时间 | 视频质量 | 特殊功能 | 推荐用途 |
+|------|------|----------|----------|----------|----------|
+| `veo3` | $2.00 | 3-8分钟 | ⭐⭐⭐⭐ | 标准功能 | 日常使用 |
+| `veo3-fast` | $2.00 | 1-3分钟 | ⭐⭐⭐⭐ | 支持音频 | 快速测试 |
+| `veo3-pro` | $10.00 | 5-15分钟 | ⭐⭐⭐⭐⭐ | 高级质量 | 专业制作 |
+| `veo3-pro-frames` | $10.00 | 5-15分钟 | ⭐⭐⭐⭐⭐ | 帧级控制 | 精确控制 |
+
+## 计费说明
+
+<Info>
+  **按成功计费：** 仅对成功生成的视频收费，生成失败自动退还费用
+</Info>
+
+### 计费流程
+
+<Steps>
+  <Step title="预扣费用">
+    提交任务时根据选择的模型预扣相应费用
+  </Step>
+  <Step title="任务处理">
+    系统处理视频生成任务
+  </Step>
+  <Step title="结果确认">
+    - **成功：** 扣除费用，返回视频
+    - **失败：** 自动退还预扣费用
+  </Step>
+</Steps>
+
+### 费用说明
+
+<Accordion>
+  <AccordionItem title="什么情况下会收费？">
+    只有当视频成功生成并返回视频 URL 时才会正式收费。任务处理过程中的失败、超时或其他错误都不会产生费用。
+  </AccordionItem>
+  
+  <AccordionItem title="如何选择合适的模型？">
+    - **日常使用：** 选择 `veo3`，性价比最高
+    - **需要快速结果：** 选择 `veo3-fast`
+    - **专业制作需求：** 选择 `veo3-pro`
+    - **需要精确控制：** 选择 `veo3-pro-frames`
+  </AccordionItem>
+  
+  <AccordionItem title="是否有批量优惠？">
+    请联系 feedback@apiyi.com 咨询批量采购优惠
+  </AccordionItem>
+</Accordion>
+
+## 模型选择建议
+
+### 场景推荐
+
+<Tabs>
+  <Tab title="个人创作">
+    **推荐模型：** `veo3` 或 `veo3-fast`
+    
+    适合个人创作者、社交媒体内容创作等场景。标准版本能够满足大部分需求，快速版本适合需要快速迭代的场景。
+  </Tab>
+  
+  <Tab title="商业制作">
+    **推荐模型：** `veo3-pro`
+    
+    适合商业广告、产品展示、企业宣传等专业场景。提供更高的视频质量和更好的细节表现。
+  </Tab>
+  
+  <Tab title="影视制作">
+    **推荐模型：** `veo3-pro-frames`
+    
+    适合影视后期、特效制作等需要精确控制的场景。支持帧级别的控制，确保最高质量输出。
+  </Tab>
+</Tabs>
+
+### 性能对比
+
+<Note>
+  所有模型生成的视频时长为 **10-15 秒**，分辨率和帧率根据模型不同有所差异。
+</Note>
+
+## 配额与限制
+
+| 限制项 | 限制值 | 说明 |
+|--------|--------|------|
+| 并发任务数 | 10 个 | 同时处理的最大任务数 |
+| 单日限额 | 根据账户等级 | 可联系客服调整 |
+| 视频时长 | 10-15 秒 | 所有模型统一 |
+| 参考图片 | 最多 5 张 | 每张不超过 10MB |

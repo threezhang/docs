@@ -1,0 +1,143 @@
+---
+title: "快速开始"
+description: "快速上手使用 VEO 视频生成 API"
+icon: "rocket"
+---
+
+<Warning>
+  开始前，请注册 API易，获取 API 密钥 https://api.apiyi.com/token  (复制令牌)
+</Warning>
+
+## 三步快速生成视频
+
+<Steps>
+  <Step title="提交视频生成任务">
+    使用 API 密钥调用提交接口
+    
+    ```bash
+    curl -X POST "https://api.apiyi.com/veo/v1/api/video/submit" \
+      -H "Content-Type: application/json" \
+      -H "Authorization: Bearer your-api-key" \
+      -d '{
+        "prompt": "一只橘色的小猫在阳光明媚的花园里慢慢走动",
+        "model": "veo3"
+      }'
+    ```
+  </Step>
+  
+  <Step title="记录返回的任务 ID">
+    系统会返回任务信息
+    
+    ```json
+    {
+      "success": true,
+      "data": {
+        "taskId": "veo3:b873872e-7358-4c2f-8d55-bd23f000e14e",
+        "pollingUrl": "https://asyncdata.net/source/veo3:b873872e-7358-4c2f-8d55-bd23f000e14e",
+        "status": "processing",
+        "message": "Task submitted successfully"
+      }
+    }
+    ```
+  </Step>
+  
+  <Step title="查询生成结果">
+    使用任务 ID 查询状态
+    
+    ```bash
+    curl -X GET "https://api.apiyi.com/veo/v1/api/video/status/veo3:b873872e-7358-4c2f-8d55-bd23f000e14e" \
+      -H "Authorization: Bearer your-api-key"
+    ```
+  </Step>
+</Steps>
+
+## 认证方式
+
+所有 API 请求都需要在请求头中包含有效的 Bearer Token：
+
+```bash
+Authorization: Bearer your-api-key
+```
+
+<Tip>
+  **安全提醒：** 请勿在客户端代码中暴露 API 密钥。建议在服务端环境变量中存储。
+</Tip>
+
+## 基本请求示例
+
+### 简单文本生成
+
+```bash
+curl -X POST "https://api.apiyi.com/veo/v1/api/video/submit" \
+  -H "Content-Type: application/json" \
+  -H "Authorization: Bearer your-api-key" \
+  -d '{
+    "prompt": "一只猫咪在雨夜散步"
+  }'
+```
+
+### 带参考图片的生成
+
+```bash
+curl -X POST "https://api.apiyi.com/veo/v1/api/video/submit" \
+  -H "Content-Type: application/json" \
+  -H "Authorization: Bearer your-api-key" \
+  -d '{
+    "prompt": "一只猫咪在雨夜散步，准备抓一只老鼠",
+    "model": "veo3",
+    "images": ["https://example.com/cat.png"],
+    "enhance_prompt": true
+  }'
+```
+
+## 处理响应
+
+### 任务提交成功
+
+```json
+{
+  "success": true,
+  "data": {
+    "taskId": "veo3:b873872e-7358-4c2f-8d55-bd23f000e14e",
+    "pollingUrl": "https://asyncdata.net/source/veo3:b873872e-7358-4c2f-8d55-bd23f000e14e",
+    "status": "processing",
+    "message": "Task submitted successfully"
+  }
+}
+```
+
+### 视频生成完成
+
+```json
+{
+  "success": true,
+  "data": {
+    "taskId": "veo3:b873872e-7358-4c2f-8d55-bd23f000e14e",
+    "status": "completed",
+    "result": {
+      "video_url": "https://filesystem.site/cdn/20250705/BFvep0SngrqIrN3yDSFChIXAz2mU0M.mp4",
+      "video_media_id": "CAUSJGRlNzE5MzRhLTljMDgtNDE1Mi05NWVlLThjOTlhMTZlODUyYxokY2U4ZjNiYmUtNGFmZS00NTExLWI4ZDEtMGM1MTFkM2ZlNGIxIgNDQUUqJDJlNTY3OWUyLWQ2YmQtNGVlZS05ZTUwLWMyMWE0MWU3ZDYzNw"
+    }
+  }
+}
+```
+
+## 轮询建议
+
+<Note>
+  **推荐轮询策略：**
+  - 轮询间隔：10-15 秒
+  - 最大等待时间：30 分钟
+  - 建议实现指数退避策略
+</Note>
+
+## 下一步
+
+<CardGroup cols={2}>
+  <Card title="API 参考" icon="book" href="/api-capabilities/veo/api-reference">
+    查看完整的 API 文档
+  </Card>
+  <Card title="代码示例" icon="code" href="/api-capabilities/veo/examples">
+    查看更多编程语言示例
+  </Card>
+</CardGroup>

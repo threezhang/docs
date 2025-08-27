@@ -1,0 +1,729 @@
+---
+title: Flux 图像生成 API
+description: 使用 Flux Kontext Pro/Max 模型生成高质量图像，支持多种宽高比，性价比超越官方定价
+icon: "sparkles"
+---
+
+# Flux 图像生成 API
+
+Flux 是业界领先的图像生成模型，通过 API易 的 OpenAI 兼容接口，您可以轻松调用 Flux Kontext Pro 和 Max 模型生成高质量图像。我们提供了比官方更优惠的价格，结合汇率优势和充值加赠，为您节省更多成本。
+
+<Note>
+**🎯 高质量生成**  
+Flux 模型以其出色的图像质量和细节表现著称，支持从 3:7 到 7:3 的灵活宽高比设置。
+</Note>
+
+## 🌟 核心特性
+
+- **📐 灵活比例**：支持从 3:7 到 7:3 的连续宽高比范围
+- **🎨 高质量输出**：1 兆像素图像，细节丰富，艺术表现力强
+- **💰 价格优势**：比官方定价更优惠，节省成本
+- **🔧 OpenAI 兼容**：使用标准 Images API 格式，易于集成
+- **⏱️ URL 有效期**：生成结果 URL 有效期 10 分钟，需及时下载
+- **🔄 可重现性**：支持 seed 参数，确保结果一致性
+
+## 📋 模型对比
+
+| 模型 | 模型 ID | API易 价格 | 官方价格 | 节省比例 | 特点 |
+|------|---------|-----------|----------|----------|------|
+| **Flux Kontext Pro** | `flux-kontext-pro` | $0.035/次 | $0.040/张 | 12.5% | 高性价比，适合批量使用 |
+| **Flux Kontext Max** | `flux-kontext-max` | $0.07/次 | $0.08/张 | 12.5% | 最高质量，适合专业用途 |
+
+<Tip>
+💡 **价格优势**：通过 API易 平台调用 Flux 模型，结合汇率优势（1:7）和充值加赠政策（单次充值 100 美金加赠 15%，比官方定价节省超过 25%！
+</Tip>
+
+## 📐 支持的宽高比
+
+Flux 模型支持从 **3:7 到 7:3** 的连续宽高比范围，总像素保持约 1 兆像素。以下是一些常用比例示例：
+
+| 比例标识 | 类型 | 近似尺寸 | 适用场景 |
+|---------|------|----------|----------|
+| `1:1` | 正方形 | 1024×1024 | 通用场景、社交媒体头像 |
+| `2:3` | 竖版 | ~832×1248 | 手机壁纸、肖像照片 |
+| `3:2` | 横版 | ~1248×832 | 电脑壁纸、风景照片 |
+| `4:3` | 标准横版 | ~1182×886 | 传统显示器、演示文稿 |
+| `16:9` | 宽屏 | ~1408×792 | 现代显示器、视频缩略图 |
+| `9:16` | 竖屏 | ~792×1408 | 手机视频、竖版海报 |
+| `21:9` | 超宽屏 | ~1680×720 | 电影海报、超宽显示器 |
+| `3:7` | 最窄竖版 | ~662×1544 | 书签、竖版长图 |
+| `7:3` | 最宽横版 | ~1544×662 | 网站横幅、全景图 |
+
+<Note>
+**📏 自定义比例**：除了上述示例，您可以使用任何在 3:7 到 7:3 范围内的比例，如 `5:4`、`4:5`、`16:10` 等。系统会自动调整尺寸以保持约 1 兆像素的总面积。
+</Note>
+
+## 🚀 快速开始
+
+### 基础示例
+
+```python
+from openai import OpenAI
+
+# 初始化客户端
+client = OpenAI(
+    api_key="YOUR_API_KEY",
+    base_url="https://api.apiyi.com/v1"
+)
+
+# 生成图像（完整参数版）
+def generate_flux_image(prompt, aspect_ratio="1:1", model="flux-kontext-pro",
+                       seed=None, safety_tolerance=2, output_format="jpeg",
+                       prompt_upsampling=False):
+    """
+    生成 Flux 图像
+    
+    参数：
+    - prompt: 图像描述文本
+    - aspect_ratio: 宽高比 (3:7 到 7:3)
+    - model: 模型选择
+    - seed: 随机种子，用于结果重现
+    - safety_tolerance: 内容安全级别 (0-6)
+    - output_format: 输出格式 "jpeg" 或 "png"
+    - prompt_upsampling: 是否增强提示词
+    """
+    try:
+        # 构建 extra_body 参数
+        extra_params = {
+            "aspect_ratio": aspect_ratio,
+            "safety_tolerance": safety_tolerance,
+            "output_format": output_format,
+            "prompt_upsampling": prompt_upsampling
+        }
+        
+        # 可选参数
+        if seed is not None:
+            extra_params["seed"] = seed
+        
+        response = client.images.generate(
+            model=model,
+            prompt=prompt,
+            extra_body=extra_params
+        )
+        
+        # 获取图像 URL（注意：10分钟后失效）
+        image_url = response.data[0].url
+        return image_url
+    
+    except Exception as e:
+        print(f"生成失败: {e}")
+        return None
+
+# 使用示例
+image_url = generate_flux_image(
+    prompt="A futuristic city with flying cars and neon lights",
+    aspect_ratio="16:9",
+    model="flux-kontext-pro",
+    seed=42,  # 固定种子，确保可重现
+    safety_tolerance=2,  # 默认安全级别
+    output_format="png",  # 高质量 PNG 格式
+    prompt_upsampling=True  # 增强提示词效果
+)
+
+if image_url:
+    print(f"生成的图像: {image_url}")
+    print("⚠️ 注意：URL 将在 10 分钟后失效，请及时下载！")
+```
+
+## 📝 参数详解
+
+### 通过 extra_body 传递的参数
+
+| 参数 | 类型 | 范围/选项 | 说明 | 默认值 |
+|------|------|-----------|------|--------|
+| `aspect_ratio` | string | 3:7 到 7:3 | 输出图像宽高比 | "1:1" |
+| `seed` | integer | 任意整数 | 随机种子，用于结果重现 | 随机 |
+| `safety_tolerance` | integer | 0-6 | 内容安全控制，0=最严格，6=最宽松 | 2 |
+| `output_format` | string | "jpeg", "png" | 输出图像格式 | "jpeg" |
+| `prompt_upsampling` | boolean | true/false | 是否自动增强提示词 | false |
+
+<Tip>
+**💡 提示词增强**：启用 `prompt_upsampling` 可以让 AI 自动优化和扩展您的提示词，但可能会改变原始意图。建议先测试效果。
+</Tip>
+
+### 高级示例 - 批量生成不同比例
+
+```python
+import requests
+import time
+from PIL import Image
+from io import BytesIO
+
+def batch_generate_flux(prompts_with_ratios, model="flux-kontext-pro"):
+    """批量生成不同比例的图像"""
+    results = []
+    
+    for prompt, ratio in prompts_with_ratios:
+        try:
+            print(f"正在生成 {ratio} 比例的图像...")
+            
+            response = client.images.generate(
+                model=model,
+                prompt=prompt,
+                extra_body={"aspect_ratio": ratio}
+            )
+            
+            image_url = response.data[0].url
+            
+            # 下载并保存图像
+            filename = save_image_from_url(image_url, prompt, ratio)
+            
+            results.append({
+                "prompt": prompt,
+                "ratio": ratio,
+                "url": image_url,
+                "filename": filename,
+                "success": True
+            })
+            
+        except Exception as e:
+            results.append({
+                "prompt": prompt,
+                "ratio": ratio,
+                "error": str(e),
+                "success": False
+            })
+    
+    return results
+
+def save_image_from_url(url, prompt, ratio):
+    """从 URL 下载并保存图像（考虑 10 分钟失效）"""
+    try:
+        # 立即下载，避免 URL 失效
+        response = requests.get(url, timeout=30)
+        response.raise_for_status()
+        
+        # 生成文件名
+        timestamp = int(time.time())
+        safe_prompt = prompt[:30].replace(" ", "_").replace("/", "_")
+        filename = f"flux_{safe_prompt}_{ratio.replace(':', 'x')}_{timestamp}.png"
+        
+        with open(filename, 'wb') as f:
+            f.write(response.content)
+        
+        print(f"✅ 已保存: {filename}")
+        return filename
+        
+    except requests.exceptions.RequestException as e:
+        print(f"❌ 下载失败: {e}")
+        print("提示：Flux URL 仅 10 分钟有效，请确保及时下载！")
+        return None
+
+# 批量生成示例
+prompts_and_ratios = [
+    ("A beautiful sunset over mountains", "3:2"),
+    ("Portrait of a wise old wizard", "2:3"),
+    ("Cyberpunk street scene", "16:9"),
+    ("Minimalist app icon design", "1:1")
+]
+
+results = batch_generate_flux(prompts_and_ratios, "flux-kontext-max")
+
+# 打印结果
+for result in results:
+    if result["success"]:
+        print(f"✅ {result['prompt']} ({result['ratio']}) -> {result['filename']}")
+    else:
+        print(f"❌ {result['prompt']} ({result['ratio']}) -> {result['error']}")
+```
+
+### Node.js 示例
+
+```javascript
+const OpenAI = require('openai');
+const fs = require('fs');
+const https = require('https');
+
+// 初始化客户端
+const openai = new OpenAI({
+  apiKey: 'YOUR_API_KEY',
+  baseURL: 'https://api.apiyi.com/v1'
+});
+
+// 生成 Flux 图像
+async function generateFluxImage(prompt, aspectRatio = '1:1', model = 'flux-kontext-pro') {
+  try {
+    const response = await openai.images.generate({
+      model: model,
+      prompt: prompt,
+      extra_body: {
+        aspect_ratio: aspectRatio
+      }
+    });
+    
+    return response.data[0].url;
+  } catch (error) {
+    console.error('生成失败:', error);
+    return null;
+  }
+}
+
+// 下载图像
+function downloadImage(url, filename) {
+  return new Promise((resolve, reject) => {
+    const file = fs.createWriteStream(filename);
+    https.get(url, (response) => {
+      response.pipe(file);
+      file.on('finish', () => {
+        file.close();
+        resolve(filename);
+      });
+    }).on('error', (err) => {
+      fs.unlink(filename, () => {}); // 删除失败的文件
+      reject(err);
+    });
+  });
+}
+
+// 使用示例
+async function main() {
+  const scenarios = [
+    {
+      prompt: "A serene Japanese garden with cherry blossoms",
+      ratio: "3:2",
+      model: "flux-kontext-pro"
+    },
+    {
+      prompt: "Abstract geometric pattern in vibrant colors",
+      ratio: "1:1", 
+      model: "flux-kontext-max"
+    }
+  ];
+  
+  for (const scenario of scenarios) {
+    console.log(`生成图像: ${scenario.prompt}`);
+    
+    const imageUrl = await generateFluxImage(
+      scenario.prompt,
+      scenario.ratio,
+      scenario.model
+    );
+    
+    if (imageUrl) {
+      const filename = `flux_${Date.now()}.png`;
+      await downloadImage(imageUrl, filename);
+      console.log(`已保存: ${filename}`);
+    }
+  }
+}
+
+main().catch(console.error);
+```
+
+## 🎯 使用场景
+
+### 1. Web 设计素材
+
+```python
+# 网站横幅
+banner = generate_flux_image(
+    "Modern website banner with clean design and tech elements",
+    aspect_ratio="7:3",
+    model="flux-kontext-max"
+)
+
+# 产品展示图
+product = generate_flux_image(
+    "Elegant product photography of a smartphone on white background",
+    aspect_ratio="1:1",
+    model="flux-kontext-pro"
+)
+```
+
+### 2. 社交媒体内容
+
+```python
+# Instagram 帖子
+instagram_post = generate_flux_image(
+    "Inspirational quote design with aesthetic background",
+    aspect_ratio="1:1",
+    model="flux-kontext-pro"
+)
+
+# 手机壁纸
+mobile_wallpaper = generate_flux_image(
+    "Abstract cosmic art with stars and nebula",
+    aspect_ratio="9:16",
+    model="flux-kontext-max"
+)
+```
+
+### 3. 专业设计
+
+```python
+# 海报设计
+poster = generate_flux_image(
+    "Concert poster design with bold typography and music elements",
+    aspect_ratio="2:3",
+    model="flux-kontext-max"
+)
+
+# 网站背景
+background = generate_flux_image(
+    "Subtle geometric pattern for website background",
+    aspect_ratio="16:9",
+    model="flux-kontext-pro"
+)
+```
+
+## 💡 最佳实践
+
+### 1. URL 管理和下载策略
+
+由于 Flux 生成的图片 URL **仅有 10 分钟有效期**，正确的下载策略至关重要：
+
+```python
+import time
+from concurrent.futures import ThreadPoolExecutor
+import requests
+
+class FluxImageManager:
+    """Flux 图像生成和下载管理器"""
+    
+    def __init__(self, api_key, base_url="https://api.apiyi.com/v1"):
+        self.client = OpenAI(api_key=api_key, base_url=base_url)
+        
+    def generate_and_save(self, prompt, **kwargs):
+        """生成图像并立即保存"""
+        start_time = time.time()
+        
+        # 生成图像
+        image_url = generate_flux_image(prompt, **kwargs)
+        if not image_url:
+            return None
+            
+        # 立即下载（避免超时）
+        elapsed = time.time() - start_time
+        if elapsed > 540:  # 超过 9 分钟
+            print("⚠️ 警告：接近 URL 失效时间！")
+        
+        # 下载并保存
+        filename = f"flux_{int(time.time())}.png"
+        try:
+            response = requests.get(image_url, timeout=30)
+            response.raise_for_status()
+            
+            with open(filename, 'wb') as f:
+                f.write(response.content)
+                
+            print(f"✅ 已保存: {filename} (耗时: {elapsed:.1f}s)")
+            return filename
+            
+        except Exception as e:
+            print(f"❌ 下载失败: {e}")
+            return None
+```
+
+### 2. 模型选择建议
+
+**Flux Kontext Pro**：
+- ✅ 日常设计需求
+- ✅ 批量内容生成
+- ✅ 成本敏感项目
+- ✅ 快速原型设计
+
+**Flux Kontext Max**：
+- ✅ 专业设计作品
+- ✅ 商业用途图片
+- ✅ 高质量要求
+- ✅ 打印输出需求
+
+### 3. 提示词优化
+
+基于官方文档的建议，详细且描述性的提示词能获得更好的效果：
+
+```python
+# ❌ 过于简单
+prompt = "cat"
+
+# ✅ 详细描述
+prompt = """
+A majestic orange tabby cat sitting by a window,
+golden hour lighting, soft focus background,
+professional pet photography style,
+warm and cozy atmosphere
+"""
+
+# ✅ 利用 prompt_upsampling 增强简单提示词
+enhanced_result = generate_flux_image(
+    prompt="cat by window",
+    prompt_upsampling=True  # AI 会自动扩展和优化提示词
+)
+
+# ✅ 艺术风格提示词
+artistic_prompt = """
+A surreal landscape painting in the style of Salvador Dali,
+melting clocks draped over twisted trees,
+vibrant sunset colors bleeding into a starry night sky,
+hyper-detailed, dreamlike atmosphere
+"""
+```
+
+### 4. 宽高比选择策略
+
+```python
+def choose_aspect_ratio(use_case):
+    """根据用途选择最佳宽高比"""
+    ratios = {
+        "social_media_post": "1:1",
+        "mobile_wallpaper": "9:16", 
+        "desktop_wallpaper": "16:9",
+        "portrait_photo": "2:3",
+        "landscape_photo": "3:2",
+        "website_banner": "7:3",
+        "bookmark_design": "3:7"
+    }
+    return ratios.get(use_case, "1:1")
+
+# 使用示例
+ratio = choose_aspect_ratio("mobile_wallpaper")
+wallpaper = generate_flux_image("Peaceful forest scene", ratio)
+```
+
+### 5. 批量处理优化
+
+考虑到 10 分钟 URL 失效限制，批量处理需要特别注意：
+
+```python
+import asyncio
+import aiohttp
+
+async def generate_async(session, prompt, ratio, model):
+    """异步生成图像"""
+    payload = {
+        "model": model,
+        "prompt": prompt,
+        "extra_body": {"aspect_ratio": ratio}
+    }
+    
+    headers = {
+        "Authorization": f"Bearer {API_KEY}",
+        "Content-Type": "application/json"
+    }
+    
+    async with session.post(
+        "https://api.apiyi.com/v1/images/generations",
+        json=payload,
+        headers=headers
+    ) as response:
+        result = await response.json()
+        return result["data"][0]["url"]
+
+async def batch_generate_async(tasks):
+    """异步批量生成"""
+    async with aiohttp.ClientSession() as session:
+        results = await asyncio.gather(*[
+            generate_async(session, prompt, ratio, model)
+            for prompt, ratio, model in tasks
+        ])
+    return results
+```
+
+## 📊 成本对比分析
+
+```python
+def calculate_flux_costs(num_images, model_type="pro"):
+    """计算 Flux 生成成本"""
+    prices = {
+        "pro": {"apiyi": 0.035, "official": 0.040},
+        "max": {"apiyi": 0.07, "official": 0.08}
+    }
+    
+    apiyi_cost = num_images * prices[model_type]["apiyi"]
+    official_cost = num_images * prices[model_type]["official"]
+    savings = official_cost - apiyi_cost
+    
+    print(f"Flux Kontext {model_type.upper()} 成本分析:")
+    print(f"生成数量: {num_images} 张")
+    print(f"API易价格: ${apiyi_cost:.2f}")
+    print(f"官方价格: ${official_cost:.2f}")
+    print(f"节省金额: ${savings:.2f}")
+    print(f"节省比例: {(savings/official_cost*100):.1f}%")
+
+# 成本计算示例
+calculate_flux_costs(100, "pro")   # 100张 Pro 版本
+calculate_flux_costs(50, "max")    # 50张 Max 版本
+```
+
+## ⚠️ 重要注意事项
+
+1. **URL 有效期**：
+   - 生成的图片 URL **仅 10 分钟有效**
+   - 必须在失效前完成下载
+   - 建议生成后立即下载保存
+
+2. **参数传递**：
+   - 所有 Flux 特有参数必须通过 `extra_body` 传递
+   - 不能在顶层参数中直接使用 Flux 专有参数
+
+3. **宽高比范围**：
+   - 支持 3:7 到 7:3 的连续范围
+   - 不限于固定比例，可使用任意符合范围的比例
+   - 系统自动调整尺寸以保持约 1 兆像素
+
+4. **内容安全**：
+   - `safety_tolerance` 参数控制审核严格度 (0-6)
+   - 0 = 最严格，6 = 最宽松
+   - 默认值 2 适合大多数场景
+
+5. **输出格式**：
+   - 默认 JPEG 格式，文件较小
+   - PNG 格式质量更高但文件更大
+   - 根据用途选择合适格式
+
+6. **提示词处理**：
+   - `prompt_upsampling` 会自动优化提示词
+   - 可能会改变原始意图，建议先测试
+   - 对简单提示词效果明显
+
+## 🔍 常见问题
+
+### Q: 为什么图片 URL 会失效？
+A: 这是 Flux 官方的安全设计，所有生成的图片 URL 在 10 分钟后自动失效。请确保及时下载保存。
+
+### Q: Flux 与其他模型有什么区别？
+A: Flux 模型专注于高质量图像生成，支持灵活的宽高比（3:7 到 7:3），特别适合需要特定尺寸的专业设计。
+
+### Q: 如何选择 Pro 和 Max 版本？
+A: 
+- **Pro**：性价比高，$0.035/张，适合日常使用和批量生成
+- **Max**：最高质量，$0.07/张，适合商业作品和专业需求
+
+### Q: 可以使用任意宽高比吗？
+A: 可以使用 3:7 到 7:3 范围内的任意比例，如 `5:4`、`16:10`、`21:9` 等。系统会自动调整以保持约 1 兆像素。
+
+### Q: safety_tolerance 如何设置？
+A: 
+- 0-1：企业/商业环境，最严格
+- 2-3：一般创作，平衡模式（推荐）
+- 4-6：艺术创作，较宽松
+
+### Q: prompt_upsampling 有什么作用？
+A: 启用后 AI 会自动扩展和优化您的提示词，特别适合简短提示词。但可能会改变原意，建议先测试效果。
+
+### Q: 如何确保结果可重现？
+A: 使用相同的 `seed` 值和完全相同的其他参数，可以生成一致的结果。这对迭代设计很有帮助。
+
+### Q: 批量生成如何避免 URL 失效？
+A: 
+1. 生成后立即下载
+2. 使用并发控制，避免处理时间过长
+3. 考虑使用异步处理提高效率
+
+## 🎯 多图处理解决方案
+
+Flux API 原生只支持单张图片输入，但通过我们提供的批量处理脚本，可以实现**双图片合成处理**。
+
+### 应用场景
+
+- **图案转移**：将设计图案转移到服装模特上
+- **风格融合**：结合两张图的特色元素
+- **对比展示**：同时展示原图和目标效果
+
+### 技术原理
+
+<AccordionGroup>
+  <Accordion icon="merge" title="图片合并策略">
+    1. **自动下载**：从 URL 获取两张输入图片
+    2. **智能合并**：使用 Python PIL 将图片左右拼接
+    3. **API 调用**：将合并后的图片作为单一输入
+    4. **结果处理**：AI 基于合并图进行智能处理
+  </Accordion>
+  
+  <Accordion icon="code" title="批量处理能力">
+    - 支持多对图片的自动化处理
+    - 统一的提示词控制处理效果
+    - 自动结果下载和文件管理
+    - 完整的错误处理和日志记录
+  </Accordion>
+</AccordionGroup>
+
+### 快速开始
+
+<CodeGroup>
+
+```bash Shell脚本
+# 下载批量处理脚本
+wget https://raw.githubusercontent.com/apiyi-api/ai-api-code-samples/main/flux-Image-API/flux-simple-batch.sh
+chmod +x flux-simple-batch.sh
+
+# 修改配置
+# 1. 设置您的 API_KEY
+# 2. 配置图片对数组
+# 3. 自定义处理提示词
+
+# 运行批量处理
+./flux-simple-batch.sh
+```
+
+```python Python实现
+import requests
+from PIL import Image
+import io
+
+def merge_and_process(ref_url, base_url, prompt):
+    """合并两张图片并调用Flux处理"""
+    
+    # 下载图片
+    ref_img = Image.open(io.BytesIO(requests.get(ref_url).content))
+    base_img = Image.open(io.BytesIO(requests.get(base_url).content))
+    
+    # 统一高度并左右合并
+    height = min(ref_img.height, base_img.height)
+    ref_resized = ref_img.resize((int(ref_img.width * height / ref_img.height), height))
+    base_resized = base_img.resize((int(base_img.width * height / base_img.height), height))
+    
+    merged = Image.new('RGB', (ref_resized.width + base_resized.width, height))
+    merged.paste(ref_resized, (0, 0))
+    merged.paste(base_resized, (ref_resized.width, 0))
+    
+    # 保存为临时文件
+    merged.save('temp_merged.jpg')
+    
+    # 调用Flux API
+    with open('temp_merged.jpg', 'rb') as f:
+        response = requests.post(
+            'https://api.apiyi.com/v1/images/edits',
+            headers={'Authorization': f'Bearer {API_KEY}'},
+            files={'image': f},
+            data={
+                'model': 'flux-kontext-max',
+                'prompt': prompt,
+                'n': 1,
+                'size': '1024x1024'
+            }
+        )
+    
+    return response.json()['data'][0]['url']
+```
+
+</CodeGroup>
+
+### 配置示例
+
+```bash
+# 提示词配置
+BATCH_PROMPT="Look at the left image and right image. Transfer the pattern/design from the left image to the clothes of the model in the right image, with the size being 2/3 of the width of the chest, located in the middle. Make it look natural and well-integrated."
+
+# 图片对数组
+IMAGE_PAIRS=(
+    "https://example.com/pattern1.jpg|https://example.com/model1.jpg"
+    "https://example.com/design2.jpg|https://example.com/shirt2.jpg"
+)
+```
+
+<Warning>
+**依赖要求**：脚本需要 `jq`、`Python3 + PIL` 和可选的 `ImageMagick`。详细安装说明请参考脚本帮助。
+</Warning>
+
+## 🔗 相关资源
+
+- [完整示例代码](https://github.com/apiyi-api/ai-api-code-samples/tree/main/flux-Image-API)
+- [多图处理脚本](https://github.com/apiyi-api/ai-api-code-samples/blob/main/flux-Image-API/flux-simple-batch.sh)
+- [Flux 图像编辑 API](/api-capabilities/flux-image-edit) - 编辑现有图片
+- [价格对比计算器](https://api.apiyi.com/account/pricing) - 实时价格查询
+- [在线体验 Demo](https://imagen.apiyi.com) - 测试 Flux 效果
+
+<Note>
+🎨 **专业提示**：结合不同宽高比和模型版本，可以满足从社交媒体到专业设计的各种需求！
+</Note>
