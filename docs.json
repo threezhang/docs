@@ -48,6 +48,8 @@
               "api-capabilities/sora-image-edit",
               "api-capabilities/gpt-image-1",
               "api-capabilities/image-edit",
+              "api-capabilities/nano-banana-image",
+              "api-capabilities/nano-banana-image-edit",
               {
                 "group": "VEO 视频生成",
                 "icon": "video",

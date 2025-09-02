@@ -1,0 +1,552 @@
+---
+title: Nano Banana 图像生成
+sidebarTitle: Nano Banana 生图
+description: Google最新最强的图像生成模型 gemini-2.5-flash-image-preview，10秒极速生成，按次计费仅需 $0.025/张
+icon: "sparkles"
+---
+
+## 模型简介
+
+Nano Banana 是 Google 推出的最新最强图像生成模型 `gemini-2.5-flash-image-preview` 的俗称。通过对话补全接口实现文生图功能，完全兼容 `gpt-4o-image` 和 `sora_image` 的调用方式，只需替换模型名即可无缝切换。
+
+<Note>
+**🚀 极速生成**  
+平均仅需 10 秒即可生成高质量图片，比 OpenAI 系列更快！返回 base64 格式数据，方便直接使用。
+</Note>
+
+## 🌟 核心特性
+
+- **⚡ 极速响应**：平均 10 秒生成，显著快于 OpenAI 系列
+- **💰 超值价格**：$0.025/张，比官方价格（$0.04/张）便宜 37.5%
+- **🔄 完美兼容**：与 `gpt-4o-image` 和 `sora_image` 调用方式完全一致
+- **📦 Base64 输出**：直接返回 base64 编码图片数据，无需二次下载
+- **🎨 Google 技术**：基于 Google 最新图像生成技术，质量出众
+
+## 📋 模型对比
+
+| 模型 | 模型 ID | 计费方式 | 老张API价格 | 官方价格 | 节省比例 | 速度 |
+|------|---------|----------|-----------|----------|----------|------|
+| **Nano Banana** | `gemini-2.5-flash-image-preview` | 按次计费 | $0.025/张 | $0.04/张 | 37.5% | ~10秒 |
+| **GPT-Image-1** | `gpt-image-1` | 按Token | $10输入/$40输出 per M | - | - | 中等 |
+| **Flux Kontext Pro** | `flux-kontext-pro` | 按次计费 | $0.035/张 | $0.04/张 | 12.5% | 快速 |
+| **Sora Image** | `sora_image` | 按次计费 | $0.01/张 | - | - | 较慢 |
+
+<Tip>
+💡 **价格优势**  
+- 比官方价格便宜 37.5%
+- 充值 100 美金 +10% 赠送，叠加汇率优势，总体是官网 7.3 折
+- 价格透明可预测，无需担心 Token 消耗
+</Tip>
+
+## ⚠️ 重要提示
+
+<Warning>
+**调用端点注意**  
+- ✅ 正确：`/v1/chat/completions`（对话补全端点）
+- ❌ 错误：`/v1/images/generations`（传统图像生成端点）
+
+本模型使用对话补全接口，与 `gpt-4o-image` 和 `sora_image` 调用方式一致！
+</Warning>
+
+<Note>
+**返回格式差异**  
+- `gemini-2.5-flash-image-preview`：返回 **base64 编码**
+- `sora_image`：返回图片 URL
+- 调用方式完全相同，只是返回格式不同
+</Note>
+
+## 🚀 快速开始
+
+### 准备工作
+
+1. **创建令牌**：登录 [老张API](https://api.laozhang.ai/token) 创建**按次计费**类型的令牌
+2. **选择域名**：如果 `https://api.laozhang.ai` 较慢，可使用 `https://api-cf.laozhang.ai`
+
+### 基础示例 - Curl
+
+```bash
+curl -X POST "https://api.laozhang.ai/v1/chat/completions" \
+     -H "Authorization: Bearer $API_KEY" \
+     -H "Content-Type: application/json" \
+     -d '{
+    "model": "gemini-2.5-flash-image-preview",
+    "stream": false,
+    "messages": [
+        {
+            "role": "user",
+            "content": "a beautiful sunset over mountains"
+        }
+    ]
+}'
+```
+
+### 完整示例 - Python
+
+```python
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+
+"""
+Nano Banana (Gemini) 图片生成 - Python版本
+支持非流式输出和自动保存base64图片到本地
+"""
+
+import requests
+import json
+import base64
+import re
+import os
+import datetime
+from typing import Optional, Tuple
+
+class GeminiImageGenerator:
+    def __init__(self, api_key: str, api_url: str = "https://api.laozhang.ai/v1/chat/completions"):
+        """
+        初始化Gemini图片生成器
+        
+        Args:
+            api_key: API密钥（按次计费类型）
+            api_url: API地址
+        """
+        self.api_key = api_key
+        self.api_url = api_url
+        self.headers = {
+            "Content-Type": "application/json",
+            "Authorization": f"Bearer {api_key}"
+        }
+    
+    def generate_image(self, prompt: str, model: str = "gemini-2.5-flash-image-preview", 
+                      output_dir: str = ".") -> Tuple[bool, str]:
+        """
+        生成图片并保存到本地
+        
+        Args:
+            prompt: 图片描述提示词
+            model: 使用的模型
+            output_dir: 输出目录
+            
+        Returns:
+            Tuple[是否成功, 结果消息]
+        """
+        print("🚀 开始生成图片...")
+        print(f"提示词: {prompt}")
+        print(f"模型: {model}")
+        
+        # 生成文件名
+        timestamp = datetime.datetime.now().strftime("%Y%m%d_%H%M%S")
+        output_file = os.path.join(output_dir, f"gemini_generated_{timestamp}.png")
+        
+        try:
+            # 准备请求数据
+            payload = {
+                "model": model,
+                "stream": False,
+                "messages": [
+                    {
+                        "role": "user",
+                        "content": prompt
+                    }
+                ]
+            }
+            
+            print("📡 发送API请求...")
+            
+            # 发送非流式请求
+            response = requests.post(
+                self.api_url,
+                headers=self.headers,
+                json=payload,
+                timeout=300
+            )
+            
+            if response.status_code != 200:
+                error_msg = f"API请求失败，状态码: {response.status_code}"
+                try:
+                    error_detail = response.json()
+                    error_msg += f", 错误详情: {error_detail}"
+                except:
+                    error_msg += f", 响应内容: {response.text[:500]}"
+                return False, error_msg
+            
+            print("✅ API请求成功，正在解析响应...")
+            
+            # 解析JSON响应
+            try:
+                result = response.json()
+                print("✅ 成功解析JSON响应")
+            except json.JSONDecodeError as e:
+                return False, f"JSON解析失败: {str(e)}"
+            
+            # 提取消息内容
+            full_content = ""
+            if "choices" in result and len(result["choices"]) > 0:
+                choice = result["choices"][0]
+                if "message" in choice and "content" in choice["message"]:
+                    full_content = choice["message"]["content"]
+            
+            if not full_content:
+                return False, "未找到消息内容"
+            
+            print(f"📝 获取到消息内容，长度: {len(full_content)} 字符")
+            print("🔍 正在解析图片数据...")
+            
+            # 提取并保存图片
+            success, message = self._extract_and_save_images(full_content, output_file)
+            
+            if success:
+                return True, message
+            else:
+                return False, f"图片保存失败: {message}"
+                
+        except requests.exceptions.Timeout:
+            return False, "请求超时（300秒）"
+        except requests.exceptions.ConnectionError as e:
+            return False, f"连接错误: {str(e)}"
+        except Exception as e:
+            return False, f"未知错误: {str(e)}"
+    
+    def _extract_and_save_images(self, content: str, base_output_file: str) -> Tuple[bool, str]:
+        """
+        高效提取并保存base64图片数据
+        
+        Args:
+            content: 包含图片数据的内容
+            base_output_file: 基础输出文件路径
+            
+        Returns:
+            Tuple[是否成功, 结果消息]
+        """
+        try:
+            print(f"📄 内容预览（前200字符）: {content[:200]}")
+            
+            # 使用精确的正则表达式提取base64图片数据
+            base64_pattern = r'data:image/([^;]+);base64,([A-Za-z0-9+/=]+)'
+            match = re.search(base64_pattern, content)
+            
+            if not match:
+                print('⚠️  未找到base64图片数据')
+                return False, "响应中未包含base64图片数据"
+            
+            image_format = match.group(1)  # png, jpg, etc.
+            b64_data = match.group(2)
+            
+            print(f'🎨 图像格式: {image_format}')
+            print(f'📏 Base64数据长度: {len(b64_data)} 字符')
+            
+            # 解码并保存图片
+            image_data = base64.b64decode(b64_data)
+            
+            if len(image_data) < 100:
+                return False, "解码后的图片数据太小，可能无效"
+            
+            # 根据检测到的格式设置文件扩展名
+            output_file = base_output_file.replace('.png', f'.{image_format}')
+            os.makedirs(os.path.dirname(output_file) if os.path.dirname(output_file) else ".", exist_ok=True)
+            
+            with open(output_file, 'wb') as f:
+                f.write(image_data)
+            
+            print(f'🖼️  图片保存成功: {output_file}')
+            print(f'📊 文件大小: {len(image_data)} 字节')
+            
+            return True, f"图片保存成功: {output_file}"
+                
+        except Exception as e:
+            return False, f"处理图片时发生错误: {str(e)}"
+
+def main():
+    """
+    主函数示例
+    """
+    # 配置参数
+    API_KEY = "sk-YOUR_API_KEY"  # 请替换为你的实际API密钥（按次计费类型）
+    PROMPT = "一只可爱的猫咪在花园里玩耍，阳光明媚，花朵盛开"
+    
+    print("="*60)
+    print("Nano Banana (Gemini) 图片生成器")
+    print("="*60)
+    print(f"开始时间: {datetime.datetime.now()}")
+    
+    # 创建生成器实例
+    generator = GeminiImageGenerator(API_KEY)
+    
+    # 生成图片
+    success, message = generator.generate_image(PROMPT)
+    
+    print("\n" + "="*60)
+    if success:
+        print("🎉 执行成功！")
+        print(f"✅ {message}")
+    else:
+        print("❌ 执行失败！")
+        print(f"💥 {message}")
+    
+    print(f"结束时间: {datetime.datetime.now()}")
+    print("="*60)
+
+if __name__ == "__main__":
+    main()
+```
+
+### Bash 脚本 - 自动保存
+
+```bash
+#!/bin/bash
+
+# Nano Banana (Gemini) 图片生成 - Bash版本
+# 支持非流式输出和自动保存base64图片到本地
+
+API_KEY="sk-YOUR_API_KEY"  # 请替换为你的实际API密钥【按次计费】类型
+API_URL="https://api.laozhang.ai/v1/chat/completions"
+PROMPT="a handsome dog under the tree"
+OUTPUT_DIR="."
+
+# 生成时间戳文件名
+TIMESTAMP=$(date +"%Y%m%d_%H%M%S")
+OUTPUT_FILE="gemini_generated_${TIMESTAMP}.png"
+TEMP_FILE="temp_response_${TIMESTAMP}.json"
+
+echo "🚀 开始生成图片..."
+echo "提示词: ${PROMPT}"
+echo "输出文件: ${OUTPUT_FILE}"
+
+# 发送API请求并保存响应
+curl -s https://api.laozhang.ai/v1/chat/completions \
+  -H "Content-Type: application/json" \
+  -H "Authorization: Bearer ${API_KEY}" \
+  -d "{
+    \"model\": \"gemini-2.5-flash-image-preview\",
+    \"stream\": false,
+    \"messages\": [
+        {
+            \"role\": \"user\",
+            \"content\": \"${PROMPT}\"
+        }
+    ]
+}" > "${TEMP_FILE}"
+
+# 检查请求是否成功
+if [ $? -eq 0 ]; then
+    echo "✅ API请求成功"
+    echo "📄 响应已保存到: ${TEMP_FILE}"
+else
+    echo "❌ API请求失败"
+    exit 1
+fi
+
+# 高效提取并保存base64图片
+echo "🔍 正在解析响应数据..."
+
+# 使用Python脚本提取并保存图片
+python3 -c "
+import json
+import base64
+import re
+import sys
+
+# 读取API响应文件
+try:
+    with open('${TEMP_FILE}', 'r') as f:
+        data = json.load(f)
+    print('✅ 成功解析JSON响应')
+except Exception as e:
+    print(f'❌ JSON解析失败: {e}')
+    sys.exit(1)
+
+# 提取消息内容
+content = ''
+if 'choices' in data and len(data['choices']) > 0:
+    choice = data['choices'][0]
+    if 'message' in choice and 'content' in choice['message']:
+        content = choice['message']['content']
+
+if not content:
+    print('❌ 未找到消息内容')
+    sys.exit(1)
+
+print(f'📝 获取到消息内容，长度: {len(content)} 字符')
+
+# 高效提取base64图片数据 - 支持多种格式
+base64_pattern = r'data:image/([^;]+);base64,([A-Za-z0-9+/=]+)'
+match = re.search(base64_pattern, content)
+
+if match:
+    image_format = match.group(1)  # png, jpg, etc.
+    b64_data = match.group(2)
+    
+    print(f'🎨 图像格式: {image_format}')
+    print(f'📏 Base64数据长度: {len(b64_data)} 字符')
+    
+    try:
+        # 解码并保存图片
+        image_data = base64.b64decode(b64_data)
+        
+        # 根据检测到的格式设置文件扩展名
+        output_file = '${OUTPUT_FILE}'.replace('.png', f'.{image_format}')
+        
+        with open(output_file, 'wb') as f:
+            f.write(image_data)
+        
+        print(f'🖼️  图片保存成功: {output_file}')
+        print(f'📊 文件大小: {len(image_data)} 字节')
+        
+        # 输出成功标志
+        print('SUCCESS:' + output_file)
+        
+    except Exception as e:
+        print(f'❌ 图片处理错误: {e}')
+        sys.exit(1)
+else:
+    print('⚠️  未找到base64图片数据')
+    print(f'📄 内容预览: {content[:300]}...')
+    sys.exit(1)
+"
+
+# 获取Python脚本的执行结果
+PYTHON_EXIT_CODE=$?
+if [ $PYTHON_EXIT_CODE -eq 0 ]; then
+    echo "✅ 图片提取和保存完成"
+else
+    echo "❌ 图片处理失败"
+    echo "🔍 保留临时文件用于调试: ${TEMP_FILE}"
+    exit 1
+fi
+
+# 检查生成的图片文件
+GENERATED_FILES=$(find . -name "gemini_generated_${TIMESTAMP}.*" -type f)
+
+if [ ! -z "$GENERATED_FILES" ]; then
+    echo "🎉 图片生成完成！"
+    for file in $GENERATED_FILES; do
+        echo "📁 保存位置: $(pwd)/${file}"
+        echo "📊 文件信息:"
+        ls -lh "${file}"
+    done
+    
+    # 清理临时文件
+    rm -f "${TEMP_FILE}"
+    echo "🧹 临时文件已清理"
+else
+    echo "❌ 图片文件未生成"
+    echo "🔍 保留临时文件用于调试: ${TEMP_FILE}"
+fi
+
+echo "✨ 脚本执行完成"
+```
+
+## 🎯 使用场景
+
+### 1. 快速原型设计
+
+```python
+# 生成产品概念图
+concept = generator.generate_image(
+    "现代简约风格的智能手表设计，白色背景，专业产品摄影"
+)
+
+# 生成UI界面
+ui_design = generator.generate_image(
+    "移动应用的登录界面设计，深色主题，现代扁平化风格"
+)
+```
+
+### 2. 内容创作
+
+```python
+# 生成插图
+illustration = generator.generate_image(
+    "儿童绘本风格的森林场景，有可爱的动物在玩耍"
+)
+
+# 生成社交媒体配图
+social_media = generator.generate_image(
+    "励志名言配图，温暖的日出背景，极简主义设计"
+)
+```
+
+
+
+## 💡 最佳实践
+
+### 1. 提示词优化
+
+```python
+# ❌ 过于简单
+prompt = "cat"
+
+# ✅ 详细描述
+prompt = """
+一只橘色虎斑猫坐在窗边，
+金色的夕阳洒在它身上，
+背景是温馨的家居环境，
+专业宠物摄影风格，
+温暖柔和的氛围
+"""
+```
+
+### 2. Base64 处理
+
+```python
+def save_base64_image(base64_str, output_path):
+    """安全保存base64图片"""
+    try:
+        # 移除数据URL前缀（如果存在）
+        if "base64," in base64_str:
+            base64_str = base64_str.split("base64,")[1]
+        
+        # 解码并保存
+        image_data = base64.b64decode(base64_str)
+        
+        with open(output_path, 'wb') as f:
+            f.write(image_data)
+        
+        return True
+    except Exception as e:
+        print(f"保存失败: {e}")
+        return False
+```
+
+
+
+## 📊 性能对比
+
+| 指标 | Nano Banana | GPT-4o Image | Sora Image |
+|------|-------------|--------------|------------|
+| 生成速度 | ~10秒 | ~20-30秒 | ~10-15秒 |
+| 价格 | $0.025/张 | Token计费 | $0.01/张 |
+| 返回格式 | Base64 | Base64 | URL |
+| 质量 | 高 | 高 | 中高 |
+| 兼容性 | 完全兼容 | - | 完全兼容 |
+
+## ⚠️ 注意事项
+
+1. **令牌类型**：必须使用**按次计费**类型的令牌
+2. **调用端点**：使用 `/v1/chat/completions`，不是 `/v1/images/generations`
+3. **返回格式**：返回 base64 编码，需要自行解码保存
+4. **模型名称**：`gemini-2.5-flash-image-preview`（区分大小写）
+5. **请求格式**：使用对话格式，将提示词放在 user 消息的 content 中
+
+## 🔍 常见问题
+
+
+### Q: base64 格式相比 URL 有什么优势？
+A: base64 直接返回图片数据，无需二次下载，避免了 URL 失效的问题，特别适合需要立即处理图片的场景。
+
+### Q: 如何从 sora_image 切换到 Nano Banana？
+A: 只需将模型名从 `sora_image` 改为 `gemini-2.5-flash-image-preview`，并修改结果处理逻辑（从 URL 改为 base64）。
+
+### Q: 批量生成有限制吗？
+A: 没有并发限制，但建议控制并发数以获得最佳性能。
+
+
+
+## 🔗 相关资源
+
+- [Nano Banana 图像编辑](/api-capabilities/nano-banana-image-edit) - 编辑现有图片
+- [价格计算器](https://api.laozhang.ai/account/pricing) - 实时价格查询
+- [API 密钥管理](https://api.laozhang.ai/token) - 创建和管理令牌
+- [Sora 生图文档](/api-capabilities/sora-image-generation) - 了解兼容模型
+
+<Note>
+🎨 **专业提示**：Nano Banana 模型特别擅长理解复杂的场景描述和艺术风格，充分利用详细的提示词可以获得更好的效果！
+</Note>
