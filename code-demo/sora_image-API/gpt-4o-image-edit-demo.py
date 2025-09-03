@@ -12,7 +12,7 @@ from typing import Dict, Any, List
 
 def generate_image_from_image(api_key: str, prompt: str, image_urls: List[str], model: str = "gpt-4o-image") -> Dict[str, Any]:
     """调用图生图 API 生成图片"""
-    url = "https://vip.laozhang.ai/v1/chat/completions"
+    url = "https://api.laozhang.ai/v1/chat/completions"
     headers = {"Authorization": f"Bearer {api_key}", "Content-Type": "application/json"}
     
     # 构建content - 图生图使用数组格式

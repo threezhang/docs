@@ -51,7 +51,7 @@ from urllib.parse import urlparse
 # 使用中转站的 API
 client = OpenAI(
     api_key="sk-ntX75405TTgNPIi43e4aAd1094E54cB1B7D2A252E1Ad19B4",  # 中转站 API KEY（按次计费类型）- 请替换为您的真实 API Key
-    base_url="https://vip.laozhang.ai/v1"  # 中转站的 base URL
+    base_url="https://api.laozhang.ai/v1"  # 中转站的 base URL
 )
 
 def download_image_from_url(url, save_dir=None):
