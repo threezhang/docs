@@ -1,0 +1,597 @@
+---
+title: "API 参考"
+description: "Sora 2 视频生成 API 完整技术文档"
+icon: "book"
+---
+
+## 基础信息
+
+<Info>
+**端点：** `https://api.laozhang.ai/v1/chat/completions`
+
+**方法：** `POST`
+
+**认证：** Bearer Token（API Key）
+
+**内容类型：** `application/json`
+</Info>
+
+## 认证
+
+在请求头中包含您的 API 密钥：
+
+```bash
+Authorization: Bearer YOUR_API_KEY
+```
+
+## 请求格式
+
+### 基础结构
+
+```json
+{
+  "model": "sora_video2",
+  "messages": [
+    {
+      "role": "user",
+      "content": [...]
+    }
+  ],
+  "stream": false
+}
+```
+
+### 请求参数
+
+| 参数 | 类型 | 必需 | 说明 |
+|------|------|------|------|
+| `model` | string | ✓ | 模型名称，见 [支持的模型](#支持的模型) |
+| `messages` | array | ✓ | 消息数组 |
+| `stream` | boolean | ✗ | 是否启用流式输出，默认 `false` |
+
+### Messages 数组
+
+每个 message 对象包含：
+
+| 字段 | 类型 | 必需 | 说明 |
+|------|------|------|------|
+| `role` | string | ✓ | 固定为 `"user"` |
+| `content` | array | ✓ | 内容数组，包含文本或图片 |
+
+### Content 数组
+
+支持两种类型的内容：
+
+#### 文本内容
+
+```json
+{
+  "type": "text",
+  "text": "视频描述文字"
+}
+```
+
+| 字段 | 类型 | 必需 | 说明 |
+|------|------|------|------|
+| `type` | string | ✓ | 固定为 `"text"` |
+| `text` | string | ✓ | 视频生成提示词 |
+
+#### 图片内容（可选）
+
+```json
+{
+  "type": "image_url",
+  "image_url": {
+    "url": "https://example.com/image.png"
+  }
+}
+```
+
+| 字段 | 类型 | 必需 | 说明 |
+|------|------|------|------|
+| `type` | string | ✓ | 固定为 `"image_url"` |
+| `image_url.url` | string | ✓ | 图片 URL 或 Base64 |
+
+<Note>
+**图片限制**
+- 最多 1 张图片
+- 支持 URL 或 Base64 格式
+- 推荐分辨率不超过 2048×2048
+- 不支持真人照片
+</Note>
+
+## 支持的模型
+
+### 竖屏模型
+
+| 模型名 | 分辨率 | 时长 | 价格 |
+|--------|--------|------|------|
+| `sora_video2` | 704×1280 | 10s | $0.15 |
+| `sora_video2-15s` | 704×1280 | 15s | $0.2 |
+| `sora_video2-hd` | 1024×1792 | 10s | $0.15 |
+| `sora_video2-hd-15s` | 1024×1792 | 15s | $0.2 |
+
+**别名：**
+- `sora2_video` = `sora_video2`
+- `sora_video2-portrait` = `sora_video2`
+- `sora_video2-portrait-hd` = `sora_video2-hd`
+
+### 横屏模型
+
+| 模型名 | 分辨率 | 时长 | 价格 |
+|--------|--------|------|------|
+| `sora_video2-landscape` | 1280×704 | 10s | $0.15 |
+| `sora_video2-landscape-15s` | 1280×704 | 15s | $0.2 |
+| `sora_video2-landscape-hd` | 1792×1024 | 10s | $0.15 |
+| `sora_video2-landscape-hd-15s` | 1792×1024 | 15s | $0.2 |
+
+## 响应格式
+
+### 非流式响应
+
+```json
+{
+  "id": "foaicmpl-xxx",
+  "object": "chat.completion",
+  "created": 1759759480,
+  "model": "sora_video2",
+  "choices": [
+    {
+      "index": 0,
+      "message": {
+        "role": "assistant",
+        "content": "```json\n{\n    \"prompt\": \"...\",\n    \"mode\": \"竖屏模式\"\n}\n```\n\n> ✅ 视频生成成功，[点击这里](https://sora.gptkey.asia/assets/sora/xxx.mp4) 查看视频~~~\n\n"
+      },
+      "finish_reason": "stop"
+    }
+  ],
+  "usage": {
+    "prompt_tokens": 17,
+    "completion_tokens": 244,
+    "total_tokens": 261
+  }
+}
+```
+
+### 响应字段说明
+
+| 字段 | 类型 | 说明 |
+|------|------|------|
+| `id` | string | 请求唯一标识 |
+| `object` | string | 对象类型 |
+| `created` | integer | 创建时间戳 |
+| `model` | string | 使用的模型 |
+| `choices[].message.content` | string | 包含视频链接的内容 |
+| `choices[].finish_reason` | string | 完成原因，`"stop"` 表示成功 |
+| `usage` | object | Token 使用统计 |
+
+### 流式响应（SSE）
+
+启用 `"stream": true` 时，返回 Server-Sent Events 格式：
+
+```
+data: {"id":"foaicmpl-xxx","object":"chat.completion.chunk","created":1759759480,"model":"sora_video2","choices":[{"index":0,"delta":{"role":"assistant"},"finish_reason":null}]}
+
+data: {"id":"foaicmpl-xxx","object":"chat.completion.chunk","created":1759759480,"model":"sora_video2","choices":[{"index":0,"delta":{"content":"```json\n{\n    \"prompt\": \"...\"\n}\n```\n\n"},"finish_reason":null}]}
+
+data: {"id":"foaicmpl-xxx","object":"chat.completion.chunk","created":1759759480,"model":"sora_video2","choices":[{"index":0,"delta":{"content":"> ⌛️ 任务正在队列中，请耐心等待...\n\n"},"finish_reason":null}]}
+
+data: {"id":"foaicmpl-xxx","object":"chat.completion.chunk","created":1759759480,"model":"sora_video2","choices":[{"index":0,"delta":{"content":"> 🏃 进度：36.0%\n\n"},"finish_reason":null}]}
+
+data: {"id":"foaicmpl-xxx","object":"chat.completion.chunk","created":1759759480,"model":"sora_video2","choices":[{"index":0,"delta":{"content":"> ✅ 视频生成成功，[点击这里](https://sora.gptkey.asia/assets/sora/xxx.mp4) 查看视频~~~\n\n"},"finish_reason":null}]}
+
+data: {"id":"foaicmpl-xxx","object":"chat.completion.chunk","created":1759759480,"model":"sora_video2","choices":[{"index":0,"delta":{},"finish_reason":"stop"}],"usage":{"prompt_tokens":17,"completion_tokens":244,"total_tokens":261}}
+
+data: [DONE]
+```
+
+### 流式响应字段
+
+| 字段 | 类型 | 说明 |
+|------|------|------|
+| `choices[].delta.role` | string | 角色，仅第一条消息包含 |
+| `choices[].delta.content` | string | 增量内容（进度或视频链接） |
+| `choices[].finish_reason` | string | 为 `"stop"` 时表示完成 |
+| `usage` | object | 最后一条消息包含使用统计 |
+
+## 完整示例
+
+### 文生视频
+
+<CodeGroup>
+
+```bash cURL
+curl -X POST "https://api.laozhang.ai/v1/chat/completions" \
+  -H "Authorization: Bearer YOUR_API_KEY" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "model": "sora_video2",
+    "messages": [
+      {
+        "role": "user",
+        "content": [
+          {
+            "type": "text",
+            "text": "一只可爱的猫咪在阳光明媚的花园里玩球"
+          }
+        ]
+      }
+    ]
+  }'
+```
+
+```python Python
+import openai
+
+client = openai.OpenAI(
+    api_key="YOUR_API_KEY",
+    base_url="https://api.laozhang.ai/v1"
+)
+
+response = client.chat.completions.create(
+    model="sora_video2",
+    messages=[
+        {
+            "role": "user",
+            "content": [
+                {
+                    "type": "text",
+                    "text": "一只可爱的猫咪在阳光明媚的花园里玩球"
+                }
+            ]
+        }
+    ]
+)
+
+print(response.choices[0].message.content)
+```
+
+```javascript JavaScript
+const OpenAI = require('openai');
+
+const client = new OpenAI({
+  apiKey: 'YOUR_API_KEY',
+  baseURL: 'https://api.laozhang.ai/v1'
+});
+
+const response = await client.chat.completions.create({
+  model: 'sora_video2',
+  messages: [
+    {
+      role: 'user',
+      content: [
+        {
+          type: 'text',
+          text: '一只可爱的猫咪在阳光明媚的花园里玩球'
+        }
+      ]
+    }
+  ]
+});
+
+console.log(response.choices[0].message.content);
+```
+
+</CodeGroup>
+
+### 图生视频（URL）
+
+<CodeGroup>
+
+```bash cURL
+curl -X POST "https://api.laozhang.ai/v1/chat/completions" \
+  -H "Authorization: Bearer YOUR_API_KEY" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "model": "sora_video2",
+    "messages": [
+      {
+        "role": "user",
+        "content": [
+          {
+            "type": "text",
+            "text": "生成视频：让这个手办形象从桌子上跳出来，变成活人的一个场景~"
+          },
+          {
+            "type": "image_url",
+            "image_url": {
+              "url": "https://filesystem.site/cdn/download/20250407/OhFd8JofOAJCsNOCsM1Y794qnkNO3L.png"
+            }
+          }
+        ]
+      }
+    ]
+  }'
+```
+
+```python Python
+import openai
+
+client = openai.OpenAI(
+    api_key="YOUR_API_KEY",
+    base_url="https://api.laozhang.ai/v1"
+)
+
+response = client.chat.completions.create(
+    model="sora_video2",
+    messages=[
+        {
+            "role": "user",
+            "content": [
+                {
+                    "type": "text",
+                    "text": "生成视频：让这个手办形象从桌子上跳出来，变成活人的一个场景~"
+                },
+                {
+                    "type": "image_url",
+                    "image_url": {
+                        "url": "https://filesystem.site/cdn/download/20250407/OhFd8JofOAJCsNOCsM1Y794qnkNO3L.png"
+                    }
+                }
+            ]
+        }
+    ]
+)
+
+print(response.choices[0].message.content)
+```
+
+</CodeGroup>
+
+### 图生视频（Base64）
+
+<CodeGroup>
+
+```python Python
+import openai
+import base64
+
+client = openai.OpenAI(
+    api_key="YOUR_API_KEY",
+    base_url="https://api.laozhang.ai/v1"
+)
+
+# 读取本地图片
+def encode_image(image_path):
+    with open(image_path, "rb") as image_file:
+        return base64.b64encode(image_file.read()).decode('utf-8')
+
+base64_image = encode_image("/path/to/image.png")
+
+response = client.chat.completions.create(
+    model="sora_video2",
+    messages=[
+        {
+            "role": "user",
+            "content": [
+                {
+                    "type": "text",
+                    "text": "让这个场景动起来"
+                },
+                {
+                    "type": "image_url",
+                    "image_url": {
+                        "url": f"data:image/png;base64,{base64_image}"
+                    }
+                }
+            ]
+        }
+    ]
+)
+
+print(response.choices[0].message.content)
+```
+
+</CodeGroup>
+
+### 流式输出
+
+<CodeGroup>
+
+```python Python
+import openai
+
+client = openai.OpenAI(
+    api_key="YOUR_API_KEY",
+    base_url="https://api.laozhang.ai/v1"
+)
+
+stream = client.chat.completions.create(
+    model="sora_video2",
+    messages=[
+        {
+            "role": "user",
+            "content": [
+                {
+                    "type": "text",
+                    "text": "一只可爱的猫咪在阳光明媚的花园里玩球"
+                }
+            ]
+        }
+    ],
+    stream=True
+)
+
+for chunk in stream:
+    if chunk.choices[0].delta.content:
+        print(chunk.choices[0].delta.content, end='', flush=True)
+```
+
+```javascript JavaScript
+const OpenAI = require('openai');
+
+const client = new OpenAI({
+  apiKey: 'YOUR_API_KEY',
+  baseURL: 'https://api.laozhang.ai/v1'
+});
+
+const stream = await client.chat.completions.create({
+  model: 'sora_video2',
+  messages: [
+    {
+      role: 'user',
+      content: [
+        {
+          type: 'text',
+          text: '一只可爱的猫咪在阳光明媚的花园里玩球'
+        }
+      ]
+    }
+  ],
+  stream: true
+});
+
+for await (const chunk of stream) {
+  if (chunk.choices[0]?.delta?.content) {
+    process.stdout.write(chunk.choices[0].delta.content);
+  }
+}
+```
+
+</CodeGroup>
+
+## 错误码
+
+| HTTP 状态码 | 错误类型 | 说明 |
+|------------|---------|------|
+| 400 | Bad Request | 请求参数错误 |
+| 401 | Unauthorized | API Key 无效或未提供 |
+| 402 | Payment Required | 余额不足 |
+| 429 | Too Many Requests | 请求过于频繁 |
+| 500 | Internal Server Error | 服务器内部错误 |
+| 503 | Service Unavailable | 服务暂时不可用 |
+
+### 错误响应格式
+
+```json
+{
+  "error": {
+    "message": "错误描述",
+    "type": "invalid_request_error",
+    "code": "invalid_api_key"
+  }
+}
+```
+
+## 速率限制
+
+<Info>
+目前暂无严格的速率限制，但建议：
+- 批量生成时控制并发数（建议 2-3 个）
+- 避免在短时间内大量请求
+- 合理设置重试间隔
+</Info>
+
+## 最佳实践
+
+<AccordionGroup>
+  <Accordion title="超时设置" icon="clock">
+    视频生成需要 2-4 分钟，建议设置超时时间为 **5-10 分钟**。
+
+    ```python
+    import httpx
+    import openai
+
+    client = openai.OpenAI(
+        api_key="YOUR_API_KEY",
+        base_url="https://api.laozhang.ai/v1",
+        http_client=httpx.Client(timeout=300.0)  # 5分钟
+    )
+    ```
+  </Accordion>
+
+  <Accordion title="错误处理" icon="shield-check">
+    添加重试逻辑处理临时错误：
+
+    ```python
+    import time
+
+    max_retries = 3
+    for i in range(max_retries):
+        try:
+            response = client.chat.completions.create(...)
+            break
+        except Exception as e:
+            if i < max_retries - 1:
+                print(f"错误，{30}秒后重试...")
+                time.sleep(30)
+            else:
+                raise
+    ```
+  </Accordion>
+
+  <Accordion title="视频下载" icon="download">
+    生成后立即下载（有效期 1 天）：
+
+    ```python
+    import requests
+    import re
+
+    # 提取链接
+    video_url = re.search(r'https://[^\s\)]+\.mp4', content).group(0)
+
+    # 下载
+    response = requests.get(video_url, stream=True)
+    with open('video.mp4', 'wb') as f:
+        for chunk in response.iter_content(chunk_size=8192):
+            f.write(chunk)
+    ```
+  </Accordion>
+
+  <Accordion title="流式输出监控" icon="stream">
+    使用流式输出实时查看进度：
+
+    ```python
+    stream = client.chat.completions.create(
+        model="sora_video2",
+        messages=[...],
+        stream=True
+    )
+
+    for chunk in stream:
+        if chunk.choices[0].delta.content:
+            content = chunk.choices[0].delta.content
+            print(content, end='', flush=True)
+    ```
+  </Accordion>
+</AccordionGroup>
+
+## SDK 支持
+
+### 官方 SDK
+
+- **Python：** `openai` >= 1.0.0
+- **Node.js：** `openai` >= 4.0.0
+
+### 第三方 SDK
+
+任何兼容 OpenAI API 格式的 SDK 都可以使用，只需修改 `base_url`。
+
+## 技术规格
+
+| 规格 | 值 |
+|------|-----|
+| **视频编码** | H.264 |
+| **音频编码** | AAC |
+| **帧率** | 24 fps |
+| **格式** | MP4 |
+| **水印** | 无 |
+| **音频** | 支持 |
+| **最大文件大小** | ~50MB（视时长和清晰度而定） |
+
+## 下一步
+
+<CardGroup cols={2}>
+  <Card title="快速开始" icon="rocket" href="/api-capabilities/sora2/quick-start">
+    查看快速开始指南
+  </Card>
+  <Card title="使用示例" icon="code" href="/api-capabilities/sora2/examples">
+    查看更多代码示例
+  </Card>
+  <Card title="模型定价" icon="tag" href="/api-capabilities/sora2/models-pricing">
+    了解模型对比和价格
+  </Card>
+  <Card title="常见问题" icon="circle-question" href="/api-capabilities/sora2/troubleshooting">
+    查看常见问题解答
+  </Card>
+</CardGroup>

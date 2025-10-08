@@ -1,0 +1,249 @@
+---
+title: "模型与定价"
+description: "Sora 2 模型详细对比和价格说明"
+icon: "tag"
+---
+
+## 模型概览
+
+Sora 2 提供多种模型以满足不同的使用场景，主要通过**模型名**来区分横竖屏和清晰度。
+
+<Note>
+**特别说明**
+
+与传统 API 不同，Sora 2 通过**模型名**（而非参数）来控制：
+- 视频方向（横屏/竖屏）
+- 清晰度（标准/高清）
+- 时长（10秒/15秒）
+</Note>
+
+## 标准版模型（10秒）
+
+### 竖屏模型
+
+<CardGroup cols={2}>
+  <Card title="sora_video2" icon="mobile">
+    **标准竖屏**（推荐）
+
+    - 分辨率：704 × 1280
+    - 价格：$0.15/次
+    - 稳定性：⭐⭐⭐⭐⭐ 高
+    - 别名：`sora2_video`, `sora_video2-portrait`
+  </Card>
+
+  <Card title="sora_video2-hd" icon="mobile-screen">
+    **高清竖屏**
+
+    - 分辨率：1024 × 1792
+    - 价格：$0.15/次
+    - 稳定性：⭐⭐⭐⭐ 较高
+    - 别名：`sora_video2-portrait-hd`
+  </Card>
+</CardGroup>
+
+### 横屏模型
+
+<CardGroup cols={2}>
+  <Card title="sora_video2-landscape" icon="tv">
+    **标准横屏**
+
+    - 分辨率：1280 × 704
+    - 价格：$0.15/次
+    - 稳定性：⭐⭐⭐ 一般（需重试）
+  </Card>
+
+  <Card title="sora_video2-landscape-hd" icon="display">
+    **高清横屏**
+
+    - 分辨率：1792 × 1024
+    - 价格：$0.15/次
+    - 稳定性：⭐⭐⭐ 一般（需重试）
+  </Card>
+</CardGroup>
+
+## 15秒视频模型
+
+在任意标准模型名后加 `-15s` 后缀即可生成 15 秒视频：
+
+| 模型名 | 基础模型 | 分辨率 | 价格 |
+|--------|---------|--------|------|
+| `sora_video2-15s` | sora_video2 | 704×1280 | $0.2/次 |
+| `sora_video2-hd-15s` | sora_video2-hd | 1024×1792 | $0.2/次 |
+| `sora_video2-landscape-15s` | sora_video2-landscape | 1280×704 | $0.2/次 |
+| `sora_video2-landscape-hd-15s` | sora_video2-landscape-hd | 1792×1024 | $0.2/次 |
+
+<Info>
+**上线时间：** 2025年10月6日
+</Info>
+
+## 模型对比表
+
+| 特性 | 标准竖屏 | 高清竖屏 | 标准横屏 | 高清横屏 |
+|------|---------|---------|---------|---------|
+| **模型名** | `sora_video2` | `sora_video2-hd` | `sora_video2-landscape` | `sora_video2-landscape-hd` |
+| **分辨率** | 704×1280 | 1024×1792 | 1280×704 | 1792×1024 |
+| **方向** | 竖屏 | 竖屏 | 横屏 | 横屏 |
+| **清晰度** | 720P | 高清 | 720P | 高清 |
+| **价格（10s）** | $0.15 | $0.15 | $0.15 | $0.15 |
+| **价格（15s）** | $0.2 | $0.2 | $0.2 | $0.2 |
+| **稳定性** | ⭐⭐⭐⭐⭐ | ⭐⭐⭐⭐ | ⭐⭐⭐ | ⭐⭐⭐ |
+| **生成时间** | 2-3分钟 | 2-3分钟 | 2-4分钟 | 2-4分钟 |
+| **推荐场景** | 手机短视频 | 高质量竖屏 | 宽屏展示 | 专业横屏 |
+
+## 定价详情
+
+### 计费方式
+
+<Info>
+**按次计费**
+
+仅在视频**成功生成**时收费，失败不计费。
+</Info>
+
+### 价格对比
+
+| 时长 | 单价 | 充值100$优惠价 | 官方价格 |
+|------|------|---------------|---------|
+| 10秒 | $0.15/次 | ≈ ¥1.0/次 | - |
+| 15秒 | $0.2/次 | ≈ ¥1.35/次 | - |
+
+<Note>
+**官方对比**
+
+OpenAI 官方已推出 `sora-2` 和 `sora-2-pro` 模型，但：
+- 价格高昂
+- 有速率限制
+- 需要邀请码
+- 生成视频有水印
+
+选择 laozhang.ai 的优势显而易见！
+</Note>
+
+## 成本优化建议
+
+<AccordionGroup>
+  <Accordion title="优先使用标准竖屏" icon="mobile">
+    `sora_video2` 稳定性最高，成功率最好，适合大多数场景。
+  </Accordion>
+
+  <Accordion title="根据需求选择时长" icon="clock">
+    - 10秒视频：适合短视频片段、素材
+    - 15秒视频：适合完整叙事、作品展示
+  </Accordion>
+
+  <Accordion title="横屏模型需重试" icon="rotate">
+    横屏模型稳定性一般，如遇失败建议：
+    1. 优化提示词
+    2. 重试 2-3 次
+    3. 或改用竖屏模型
+  </Accordion>
+
+  <Accordion title="批量生成优化" icon="list">
+    - 使用稳定性高的模型减少重试
+    - 合理设置超时时间（建议 5 分钟）
+    - 及时下载视频避免过期
+  </Accordion>
+</AccordionGroup>
+
+## 视频规格
+
+### 技术参数
+
+| 参数 | 值 |
+|------|-----|
+| **视频编码** | H.264 |
+| **音频编码** | AAC |
+| **帧率** | 24 fps |
+| **码率** | 自适应 |
+| **格式** | MP4 |
+| **水印** | 无 |
+
+### 存储说明
+
+<Warning>
+**重要提示**
+
+- 视频存储在国内 CDN
+- 存储时效：**仅 1 天**
+- 请在生成后**立即下载**保存到本地
+- 超过 1 天后链接将失效
+</Warning>
+
+## 模型选择建议
+
+<Steps>
+  <Step title="确定方向">
+    - 手机短视频、竖屏展示 → 选择竖屏模型
+    - 横向展示、宽屏内容 → 选择横屏模型
+  </Step>
+
+  <Step title="确定清晰度">
+    - 日常使用、快速生成 → 标准版
+    - 高质量输出、专业用途 → 高清版
+  </Step>
+
+  <Step title="确定时长">
+    - 短片段、素材 → 10秒版（$0.15）
+    - 完整内容、作品 → 15秒版（$0.2）
+  </Step>
+
+  <Step title="稳定性考虑">
+    - 追求稳定 → 优先 `sora_video2`
+    - 可接受重试 → 可选横屏或高清版
+  </Step>
+</Steps>
+
+## 使用示例
+
+### 根据场景选择模型
+
+```python
+# 手机短视频 - 使用标准竖屏
+model = "sora_video2"
+
+# 高质量竖屏内容
+model = "sora_video2-hd"
+
+# 横屏展示
+model = "sora_video2-landscape"
+
+# 15秒竖屏视频
+model = "sora_video2-15s"
+
+# 15秒高清横屏
+model = "sora_video2-landscape-hd-15s"
+```
+
+## 常见问题
+
+<AccordionGroup>
+  <Accordion title="为什么横屏模型稳定性较低？" icon="circle-question">
+    横屏模型是新增功能，目前还在优化中。遇到失败时可以：
+    - 重试 2-3 次
+    - 优化提示词描述
+    - 或改用竖屏模型
+  </Accordion>
+
+  <Accordion title="如何充值获得优惠价？" icon="wallet">
+    单次充值 $100 可享受优惠价格：
+    - 10秒视频约 ¥1.0/次
+    - 15秒视频约 ¥1.35/次
+
+    详见 [充值页面](https://api.laozhang.ai)
+  </Accordion>
+
+  <Accordion title="失败了会扣费吗？" icon="ban">
+    不会。按次计费模式下，仅在视频**成功生成**时收费。
+  </Accordion>
+</AccordionGroup>
+
+## 下一步
+
+<CardGroup cols={2}>
+  <Card title="快速开始" icon="rocket" href="/api-capabilities/sora2/quick-start">
+    查看示例代码和使用方法
+  </Card>
+  <Card title="更多示例" icon="code" href="/api-capabilities/sora2/examples">
+    查看各种场景的应用示例
+  </Card>
+</CardGroup>

@@ -51,6 +51,18 @@
               "api-capabilities/gpt-image-1",
               "api-capabilities/image-edit",
               {
+                "group": "Sora 2 视频生成",
+                "icon": "clapperboard",
+                "pages": [
+                  "api-capabilities/sora2/overview",
+                  "api-capabilities/sora2/quick-start",
+                  "api-capabilities/sora2/api-reference",
+                  "api-capabilities/sora2/models-pricing",
+                  "api-capabilities/sora2/examples",
+                  "api-capabilities/sora2/troubleshooting"
+                ]
+              },
+              {
                 "group": "VEO 视频生成",
                 "icon": "video",
                 "pages": [

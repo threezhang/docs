@@ -1,0 +1,478 @@
+---
+title: "常见问题"
+description: "Sora 2 API 使用中的常见问题解答"
+icon: "circle-question"
+---
+
+## 视频生成相关
+
+<AccordionGroup>
+  <Accordion title="如何控制视频的横屏还是竖屏？" icon="mobile-screen">
+    **通过模型名控制**，而不是参数。
+
+    - **竖屏：** `sora_video2`, `sora_video2-hd`
+    - **横屏：** `sora_video2-landscape`, `sora_video2-landscape-hd`
+
+    示例：
+    ```python
+    # 竖屏视频
+    model = "sora_video2"
+
+    # 横屏视频
+    model = "sora_video2-landscape"
+    ```
+
+    详见 [模型与定价](/api-capabilities/sora2/models-pricing) 页面。
+  </Accordion>
+
+  <Accordion title="如何生成 15 秒视频？" icon="clock">
+    在模型名后加 `-15s` 后缀：
+
+    ```python
+    # 10秒竖屏（标准）
+    model = "sora_video2"
+
+    # 15秒竖屏
+    model = "sora_video2-15s"
+
+    # 15秒横屏高清
+    model = "sora_video2-landscape-hd-15s"
+    ```
+
+    **价格：** $0.2/次（15秒），$0.15/次（10秒）
+  </Accordion>
+
+  <Accordion title="生成的视频有水印吗？" icon="droplet">
+    **没有水印！**
+
+    本站提供的 Sora 2 API 生成的视频**无水印**，而官网生成的视频仍然带有 Sora 水印。
+
+    <Note>
+    原先的无水印方案因 OpenAI 升级已失效，现已更新为新的无水印方案。
+    </Note>
+  </Accordion>
+
+  <Accordion title="为什么生成人物视频失败？" icon="user-xmark">
+    **限制原因：**
+
+    1. **真实人脸参考图会被拒绝** - 不支持上传真人照片
+    2. **仅支持授权真人** - 通过 `@ID` 方式使用
+
+    **可用的授权真人：**
+    - `@sama` - OpenAI CEO Sam Altman
+
+    **正确示例：**
+    ```python
+    prompt = "@sama 在长城上开心地说话"  # ✓ 可以
+    ```
+
+    **错误示例：**
+    ```python
+    # ✗ 不可以 - 上传真人照片会被拒绝
+    # 上传了一张真人照片 + 提示词
+    ```
+  </Accordion>
+
+  <Accordion title="生成时间太长怎么办？" icon="hourglass">
+    **正常生成时间：**
+    - 排队：视高峰期而定
+    - 生成：2-3 分钟
+    - 总计：2.5-4 分钟
+
+    **优化建议：**
+
+    1. **设置合理超时：** 建议 5 分钟（300秒）
+    ```python
+    import httpx
+
+    client = openai.OpenAI(
+        api_key="YOUR_API_KEY",
+        base_url="https://api.laozhang.ai/v1",
+        http_client=httpx.Client(timeout=300.0)
+    )
+    ```
+
+    2. **使用流式输出：** 实时查看进度
+    ```python
+    response = client.chat.completions.create(
+        model="sora_video2",
+        messages=[...],
+        stream=True  # 启用流式输出
+    )
+    ```
+
+    3. **避开高峰期：** 选择使用人数较少的时段
+  </Accordion>
+
+  <Accordion title="横屏模型为什么经常失败？" icon="tv">
+    **稳定性说明：**
+
+    横屏模型（`sora_video2-landscape` 系列）是新增功能，目前稳定性一般，可能需要重试。
+
+    **稳定性对比：**
+    - 竖屏标准版 `sora_video2`：⭐⭐⭐⭐⭐ 高
+    - 竖屏高清版 `sora_video2-hd`：⭐⭐⭐⭐ 较高
+    - 横屏模型：⭐⭐⭐ 一般
+
+    **解决方案：**
+    1. 重试 2-3 次
+    2. 优化提示词，使描述更清晰
+    3. 或改用竖屏模型
+  </Accordion>
+
+  <Accordion title="报错：We're under heavy load, please try again later" icon="server">
+    **原因：** OpenAI 官方负载过高
+
+    **解决方案：**
+    1. 等待几分钟后重试
+    2. 添加重试逻辑
+    ```python
+    import time
+
+    max_retries = 3
+    for i in range(max_retries):
+        try:
+            response = client.chat.completions.create(...)
+            break
+        except Exception as e:
+            if "heavy load" in str(e) and i < max_retries - 1:
+                print(f"服务繁忙，{30}秒后重试...")
+                time.sleep(30)
+            else:
+                raise
+    ```
+  </Accordion>
+</AccordionGroup>
+
+## API 调用相关
+
+<AccordionGroup>
+  <Accordion title="需要什么计费模式？" icon="credit-card">
+    **必需设置：**
+
+    令牌需要设置为**按量优先**或**按次计费**模式。
+
+    **配置步骤：**
+    1. 登录 [laozhang.ai 控制台](https://api.laozhang.ai)
+    2. 进入 API 管理
+    3. 编辑令牌设置
+    4. 选择"按量优先"或"按次计费"
+
+    <img src="/images/sora2-token-setting.png" alt="令牌设置示例" />
+
+    <Warning>
+    如果未正确设置计费模式，调用会失败。
+    </Warning>
+  </Accordion>
+
+  <Accordion title="如何查看生成进度？" icon="spinner">
+    **使用流式输出：**
+
+    ```python
+    stream = client.chat.completions.create(
+        model="sora_video2",
+        messages=[...],
+        stream=True  # 启用流式输出
+    )
+
+    for chunk in stream:
+        if chunk.choices[0].delta.content:
+            print(chunk.choices[0].delta.content, end='', flush=True)
+    ```
+
+    **进度信息示例：**
+    ```
+    > ⌛️ 任务正在队列中，请耐心等待...
+
+    > 🏃 进度：36.0%
+
+    > 🏃 进度：68.5%
+
+    > ✅ 视频生成成功，[点击这里](https://xxx.mp4) 查看视频~~~
+    ```
+  </Accordion>
+
+  <Accordion title="如何处理超时错误？" icon="clock-rotate-left">
+    **增加超时时间：**
+
+    ```python
+    import httpx
+    import openai
+
+    # 设置 5 分钟超时
+    client = openai.OpenAI(
+        api_key="YOUR_API_KEY",
+        base_url="https://api.laozhang.ai/v1",
+        http_client=httpx.Client(timeout=300.0)
+    )
+    ```
+
+    **建议超时时间：**
+    - 最小：5 分钟（300秒）
+    - 推荐：10 分钟（600秒）
+  </Accordion>
+
+  <Accordion title="支持哪些图片格式？" icon="image">
+    **图生视频支持：**
+
+    1. **URL 图片**
+    ```python
+    {
+        "type": "image_url",
+        "image_url": {
+            "url": "https://example.com/image.png"
+        }
+    }
+    ```
+
+    2. **Base64 编码**
+    ```python
+    {
+        "type": "image_url",
+        "image_url": {
+            "url": "data:image/png;base64,iVBORw0KG..."
+        }
+    }
+    ```
+
+    **支持的格式：**
+    - PNG
+    - JPEG/JPG
+    - WebP
+    - GIF（会使用第一帧）
+
+    **限制：**
+    - 最多 1 张图片
+    - 建议分辨率不超过 2048×2048
+  </Accordion>
+</AccordionGroup>
+
+## 视频下载相关
+
+<AccordionGroup>
+  <Accordion title="视频链接有效期多久？" icon="link-slash">
+    **有效期：仅 1 天**
+
+    <Warning>
+    视频存储在国内 CDN，**存储时效仅 1 天**。请在生成后**立即下载**保存到本地！
+    </Warning>
+
+    **最佳实践：**
+    ```python
+    import requests
+
+    def download_video(url, save_path):
+        """下载视频到本地"""
+        response = requests.get(url, stream=True)
+        with open(save_path, 'wb') as f:
+            for chunk in response.iter_content(chunk_size=8192):
+                f.write(chunk)
+        print(f"已保存：{save_path}")
+
+    # 生成后立即下载
+    video_url = extract_video_url(result)
+    download_video(video_url, "my_video.mp4")
+    ```
+  </Accordion>
+
+  <Accordion title="如何提取视频链接？" icon="link">
+    **从响应中提取：**
+
+    ```python
+    import re
+
+    def extract_video_url(content):
+        """从响应内容中提取视频链接"""
+        match = re.search(r'https://[^\s\)]+\.mp4', content)
+        return match.group(0) if match else None
+
+    # 使用示例
+    response = client.chat.completions.create(...)
+    content = response.choices[0].message.content
+    video_url = extract_video_url(content)
+    ```
+
+    **链接格式示例：**
+    ```
+    https://sora.gptkey.asia/assets/sora/xxx.mp4
+    ```
+  </Accordion>
+
+  <Accordion title="下载速度慢怎么办？" icon="gauge-simple">
+    **优化建议：**
+
+    1. **使用国内网络** - 视频存储在国内 CDN，国内访问快
+    2. **流式下载** - 避免一次性加载到内存
+    ```python
+    import requests
+
+    response = requests.get(video_url, stream=True)
+    with open('video.mp4', 'wb') as f:
+        for chunk in response.iter_content(chunk_size=8192):
+            f.write(chunk)
+    ```
+    3. **断点续传** - 使用支持断点续传的下载工具
+  </Accordion>
+</AccordionGroup>
+
+## 计费相关
+
+<AccordionGroup>
+  <Accordion title="如何计费？失败会扣费吗？" icon="dollar-sign">
+    **计费方式：** 按次计费
+
+    **计费规则：**
+    - ✓ 仅在视频**成功生成**时收费
+    - ✗ 失败、超时、报错**不计费**
+
+    **价格：**
+    - 10秒视频：$0.15/次
+    - 15秒视频：$0.2/次
+
+    **充值优惠：**
+    - 单次充值 $100，约 ¥1.0/次（10秒）或 ¥1.35/次（15秒）
+  </Accordion>
+
+  <Accordion title="官方价格对比" icon="scale-balanced">
+    **laozhang.ai vs OpenAI 官方：**
+
+    | 项目 | laozhang.ai | OpenAI 官方 |
+    |------|------------|------------|
+    | 邀请码 | 不需要 | 需要 |
+    | 价格 | $0.15/次 | 高昂且限速 |
+    | 水印 | 无 | 有 |
+    | 访问 | 国内快速 | 需要代理 |
+    | 稳定性 | 高 | - |
+
+    <Note>
+    OpenAI 官方已推出 `sora-2` 和 `sora-2-pro` 模型，但价格高昂、有速率限制，且生成视频带水印。
+    </Note>
+  </Accordion>
+
+  <Accordion title="如何充值获得优惠？" icon="wallet">
+    **充值步骤：**
+    1. 登录 [laozhang.ai 控制台](https://api.laozhang.ai)
+    2. 进入充值页面
+    3. 单次充值 $100 或以上
+
+    **优惠价格：**
+    - 10秒视频：约 ¥1.0/次
+    - 15秒视频：约 ¥1.35/次
+
+    **支持支付方式：**
+    - 支付宝
+    - 微信支付
+  </Accordion>
+</AccordionGroup>
+
+## 客户端使用
+
+<AccordionGroup>
+  <Accordion title="Cherry Studio 如何配置？" icon="comments">
+    **配置步骤：**
+
+    1. 在 Cherry Studio 中添加 laozhang.ai API 配置
+       - 详见：[Cherry Studio 配置文档](https://docs.laozhang.ai/scenarios/chat/cherry-studio)
+
+    2. 启用视频功能
+       - 在模型设置中找到 `sora_video2`
+       - 打开视频生成开关
+
+    3. 使用
+       - 文生视频：直接输入提示词
+       - 图生视频：上传图片 + 提示词
+  </Accordion>
+
+  <Accordion title="支持哪些客户端？" icon="grid-2">
+    **已测试支持：**
+
+    - **Cherry Studio** ✓ - 完整支持，推荐使用
+    - **ChatBox** ✓ - 支持
+    - **OpenWebUI** ✓ - 支持
+    - **ChatGPT Next Web** ✓ - 支持
+
+    **任何兼容 OpenAI API 的客户端都可以使用**
+
+    配置方法：
+    - API 端点：`https://api.laozhang.ai/v1`
+    - 模型：选择 `sora_video2` 系列
+  </Accordion>
+</AccordionGroup>
+
+## 技术支持
+
+<AccordionGroup>
+  <Accordion title="如何获取技术支持？" icon="headset">
+    **联系方式：**
+
+    1. **邮箱：** feedback@laozhang.ai
+    2. **微信：** laozhangdaichong
+    3. **文档：** https://docs.laozhang.ai
+
+    **提交问题时请提供：**
+    - 错误信息截图
+    - 请求参数（隐藏 API Key）
+    - 问题发生时间
+    - 使用的模型名称
+  </Accordion>
+
+  <Accordion title="在哪里查看更新日志？" icon="clock-rotate-left">
+    **更新记录：**
+
+    - **10/07** 新增 Python 示例代码
+    - **10/06** 新增 15s 视频支持，模型名加 `-15s`
+    - **10/03** 新增横屏、竖屏模型，新增高清版
+    - **10/02** 更新常见问题
+    - **10/01** 上线 Sora 2 模型
+
+    查看完整更新：[概览页面](/api-capabilities/sora2/overview)
+  </Accordion>
+</AccordionGroup>
+
+## 最佳实践建议
+
+<Card title="提示词建议" icon="lightbulb">
+  - ✓ 描述具体的场景和动作
+  - ✓ 包含光线、氛围、情绪等细节
+  - ✓ 使用授权真人 ID（如 `@sama`）
+  - ✗ 避免描述真实人脸
+  - ✗ 避免过于简短的描述
+</Card>
+
+<Card title="模型选择建议" icon="layer-group">
+  - 首选：`sora_video2`（稳定性最高）
+  - 高清需求：`sora_video2-hd`
+  - 横屏需求：`sora_video2-landscape`（可能需重试）
+  - 15秒需求：在模型名后加 `-15s`
+</Card>
+
+<Card title="错误处理建议" icon="shield-check">
+  - 设置合理超时（建议 5 分钟）
+  - 添加重试逻辑（最多 2-3 次）
+  - 使用流式输出监控进度
+  - 记录错误日志
+</Card>
+
+<Card title="成本优化建议" icon="coins">
+  - 使用稳定性高的模型减少重试
+  - 根据需求选择 10s/15s
+  - 批量生成时控制并发数
+  - 失败不计费，可放心重试
+</Card>
+
+## 相关链接
+
+<CardGroup cols={2}>
+  <Card title="快速开始" icon="rocket" href="/api-capabilities/sora2/quick-start">
+    查看示例代码和使用方法
+  </Card>
+  <Card title="模型定价" icon="tag" href="/api-capabilities/sora2/models-pricing">
+    了解详细的模型对比和价格
+  </Card>
+  <Card title="使用示例" icon="code" href="/api-capabilities/sora2/examples">
+    查看各种场景的应用示例
+  </Card>
+  <Card title="API 参考" icon="book" href="/api-capabilities/sora2/api-reference">
+    查看完整的 API 文档
+  </Card>
+</CardGroup>
