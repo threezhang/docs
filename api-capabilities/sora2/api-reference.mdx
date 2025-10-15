@@ -102,28 +102,14 @@ Authorization: Bearer YOUR_API_KEY
 
 ## 支持的模型
 
-### 竖屏模型
-
 | 模型名 | 分辨率 | 时长 | 价格 |
 |--------|--------|------|------|
-| `sora_video2` | 704×1280 | 10s | $0.15 |
-| `sora_video2-15s` | 704×1280 | 15s | $0.2 |
-| `sora_video2-hd` | 1024×1792 | 10s | $0.15 |
-| `sora_video2-hd-15s` | 1024×1792 | 15s | $0.2 |
+| `sora_video2` | 704×1280（竖屏） | 10s | $0.15 |
+| `sora_video2-landscape` | 1280×704（横屏） | 10s | $0.15 |
 
-**别名：**
-- `sora2_video` = `sora_video2`
-- `sora_video2-portrait` = `sora_video2`
-- `sora_video2-portrait-hd` = `sora_video2-hd`
-
-### 横屏模型
-
-| 模型名 | 分辨率 | 时长 | 价格 |
-|--------|--------|------|------|
-| `sora_video2-landscape` | 1280×704 | 10s | $0.15 |
-| `sora_video2-landscape-15s` | 1280×704 | 15s | $0.2 |
-| `sora_video2-landscape-hd` | 1792×1024 | 10s | $0.15 |
-| `sora_video2-landscape-hd-15s` | 1792×1024 | 15s | $0.2 |
+<Note>
+由于官方 OpenAI 算力限制，-hd 和 -15s 版本暂时不开放。
+</Note>
 
 ## 响应格式
 
