@@ -1,0 +1,584 @@
+---
+title: "API Reference"
+description: "Complete technical documentation for Sora 2 video generation API"
+icon: "book"
+---
+
+## Basic Information
+
+<Info>
+**Endpoint:** `https://api.laozhang.ai/v1/chat/completions`
+
+**Method:** `POST`
+
+**Authentication:** Bearer Token (API Key)
+
+**Content Type:** `application/json`
+</Info>
+
+## Authentication
+
+Include your API key in the request header:
+
+```bash
+Authorization: Bearer YOUR_API_KEY
+```
+
+## Request Format
+
+### Basic Structure
+
+```json
+{
+  "model": "sora_video2",
+  "messages": [
+    {
+      "role": "user",
+      "content": [...]
+    }
+  ],
+  "stream": false
+}
+```
+
+### Request Parameters
+
+| Parameter | Type | Required | Description |
+|------|------|------|------|
+| `model` | string | ✓ | Model name, see [Supported Models](#supported-models) |
+| `messages` | array | ✓ | Message array |
+| `stream` | boolean | ✗ | Whether to enable streaming output, default `false` |
+
+### Messages Array
+
+Each message object contains:
+
+| Field | Type | Required | Description |
+|------|------|------|------|
+| `role` | string | ✓ | Fixed as `"user"` |
+| `content` | array | ✓ | Content array, containing text or images |
+
+### Content Array
+
+Supports two types of content:
+
+#### Text Content
+
+```json
+{
+  "type": "text",
+  "text": "Video description text"
+}
+```
+
+| Field | Type | Required | Description |
+|------|------|------|------|
+| `type` | string | ✓ | Fixed as `"text"` |
+| `text` | string | ✓ | Video generation prompt |
+
+#### Image Content (Optional)
+
+```json
+{
+  "type": "image_url",
+  "image_url": {
+    "url": "https://example.com/image.png"
+  }
+}
+```
+
+| Field | Type | Required | Description |
+|------|------|------|------|
+| `type` | string | ✓ | Fixed as `"image_url"` |
+| `image_url.url` | string | ✓ | Image URL or Base64 |
+
+<Note>
+**Image Restrictions**
+- Maximum 1 image
+- Supports URL or Base64 format
+- Recommended resolution not exceeding 2048×2048
+- Real person photos not supported
+</Note>
+
+## Supported Models
+
+| Model Name | Resolution | Duration | Price |
+|--------|--------|------|------|
+| `sora_video2` | 704×1280 (Portrait) | 10s | $0.15 |
+| `sora_video2-landscape` | 1280×704 (Landscape) | 10s | $0.15 |
+
+<Note>
+Due to official OpenAI computing power limitations, -hd and -15s versions are temporarily unavailable.
+</Note>
+
+## Response Format
+
+### Non-streaming Response
+
+```json
+{
+  "id": "foaicmpl-xxx",
+  "object": "chat.completion",
+  "created": 1759759480,
+  "model": "sora_video2",
+  "choices": [
+    {
+      "index": 0,
+      "message": {
+        "role": "assistant",
+        "content": "```json\n{\n    \"prompt\": \"...\",\n    \"mode\": \"Portrait Mode\"\n}\n```\n\n> ✅ Video generated successfully, [click here](https://sora.gptkey.asia/assets/sora/xxx.mp4) to view video~~~\n\n"
+      },
+      "finish_reason": "stop"
+    }
+  ],
+  "usage": {
+    "prompt_tokens": 17,
+    "completion_tokens": 244,
+    "total_tokens": 261
+  }
+}
+```
+
+### Response Field Description
+
+| Field | Type | Description |
+|------|------|------|
+| `id` | string | Request unique identifier |
+| `object` | string | Object type |
+| `created` | integer | Creation timestamp |
+| `model` | string | Model used |
+| `choices[].message.content` | string | Content containing video link |
+| `choices[].finish_reason` | string | Completion reason, `"stop"` indicates success |
+| `usage` | object | Token usage statistics |
+
+### Streaming Response (SSE)
+
+When `"stream": true` is enabled, returns Server-Sent Events format:
+
+```
+data: {"id":"foaicmpl-xxx","object":"chat.completion.chunk","created":1759759480,"model":"sora_video2","choices":[{"index":0,"delta":{"role":"assistant"},"finish_reason":null}]}
+
+data: {"id":"foaicmpl-xxx","object":"chat.completion.chunk","created":1759759480,"model":"sora_video2","choices":[{"index":0,"delta":{"content":"```json\n{\n    \"prompt\": \"...\"\n}\n```\n\n"},"finish_reason":null}]}
+
+data: {"id":"foaicmpl-xxx","object":"chat.completion.chunk","created":1759759480,"model":"sora_video2","choices":[{"index":0,"delta":{"content":"> ⌛️ Task is in queue, please wait patiently...\n\n"},"finish_reason":null}]}
+
+data: {"id":"foaicmpl-xxx","object":"chat.completion.chunk","created":1759759480,"model":"sora_video2","choices":[{"index":0,"delta":{"content":"> 🏃 Progress: 36.0%\n\n"},"finish_reason":null}]}
+
+data: {"id":"foaicmpl-xxx","object":"chat.completion.chunk","created":1759759480,"model":"sora_video2","choices":[{"index":0,"delta":{"content":"> ✅ Video generated successfully, [click here](https://sora.gptkey.asia/assets/sora/xxx.mp4) to view video~~~\n\n"},"finish_reason":null}]}
+
+data: {"id":"foaicmpl-xxx","object":"chat.completion.chunk","created":1759759480,"model":"sora_video2","choices":[{"index":0,"delta":{},"finish_reason":"stop"}],"usage":{"prompt_tokens":17,"completion_tokens":244,"total_tokens":261}}
+
+data: [DONE]
+```
+
+### Streaming Response Fields
+
+| Field | Type | Description |
+|------|------|------|
+| `choices[].delta.role` | string | Role, only included in first message |
+| `choices[].delta.content` | string | Incremental content (progress or video link) |
+| `choices[].finish_reason` | string | When `"stop"`, indicates completion |
+| `usage` | object | Last message contains usage statistics |
+
+## Complete Examples
+
+### Text-to-Video
+
+<CodeGroup>
+
+```bash cURL
+curl -X POST "https://api.laozhang.ai/v1/chat/completions" \
+  -H "Authorization: Bearer YOUR_API_KEY" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "model": "sora_video2",
+    "messages": [
+      {
+        "role": "user",
+        "content": [
+          {
+            "type": "text",
+            "text": "A cute cat playing with a ball in a sunny garden"
+          }
+        ]
+      }
+    ]
+  }'
+```
+
+```python Python
+import openai
+
+client = openai.OpenAI(
+    api_key="YOUR_API_KEY",
+    base_url="https://api.laozhang.ai/v1"
+)
+
+response = client.chat.completions.create(
+    model="sora_video2",
+    messages=[
+        {
+            "role": "user",
+            "content": [
+                {
+                    "type": "text",
+                    "text": "A cute cat playing with a ball in a sunny garden"
+                }
+            ]
+        }
+    ]
+)
+
+print(response.choices[0].message.content)
+```
+
+```javascript JavaScript
+const OpenAI = require('openai');
+
+const client = new OpenAI({
+  apiKey: 'YOUR_API_KEY',
+  baseURL: 'https://api.laozhang.ai/v1'
+});
+
+const response = await client.chat.completions.create({
+  model: 'sora_video2',
+  messages: [
+    {
+      role: 'user',
+      content: [
+        {
+          type: 'text',
+          text: 'A cute cat playing with a ball in a sunny garden'
+        }
+      ]
+    }
+  ]
+});
+
+console.log(response.choices[0].message.content);
+```
+
+</CodeGroup>
+
+### Image-to-Video (URL)
+
+<CodeGroup>
+
+```bash cURL
+curl -X POST "https://api.laozhang.ai/v1/chat/completions" \
+  -H "Authorization: Bearer YOUR_API_KEY" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "model": "sora_video2",
+    "messages": [
+      {
+        "role": "user",
+        "content": [
+          {
+            "type": "text",
+            "text": "Generate video: Make this figurine jump out from the desk and become a living person~"
+          },
+          {
+            "type": "image_url",
+            "image_url": {
+              "url": "https://filesystem.site/cdn/download/20250407/OhFd8JofOAJCsNOCsM1Y794qnkNO3L.png"
+            }
+          }
+        ]
+      }
+    ]
+  }'
+```
+
+```python Python
+import openai
+
+client = openai.OpenAI(
+    api_key="YOUR_API_KEY",
+    base_url="https://api.laozhang.ai/v1"
+)
+
+response = client.chat.completions.create(
+    model="sora_video2",
+    messages=[
+        {
+            "role": "user",
+            "content": [
+                {
+                    "type": "text",
+                    "text": "Generate video: Make this figurine jump out from the desk and become a living person~"
+                },
+                {
+                    "type": "image_url",
+                    "image_url": {
+                        "url": "https://filesystem.site/cdn/download/20250407/OhFd8JofOAJCsNOCsM1Y794qnkNO3L.png"
+                    }
+                }
+            ]
+        }
+    ]
+)
+
+print(response.choices[0].message.content)
+```
+
+</CodeGroup>
+
+### Image-to-Video (Base64)
+
+<CodeGroup>
+
+```python Python
+import openai
+import base64
+
+client = openai.OpenAI(
+    api_key="YOUR_API_KEY",
+    base_url="https://api.laozhang.ai/v1"
+)
+
+# Read local image
+def encode_image(image_path):
+    with open(image_path, "rb") as image_file:
+        return base64.b64encode(image_file.read()).decode('utf-8')
+
+base64_image = encode_image("/path/to/image.png")
+
+response = client.chat.completions.create(
+    model="sora_video2",
+    messages=[
+        {
+            "role": "user",
+            "content": [
+                {
+                    "type": "text",
+                    "text": "Make this scene come alive"
+                },
+                {
+                    "type": "image_url",
+                    "image_url": {
+                        "url": f"data:image/png;base64,{base64_image}"
+                    }
+                }
+            ]
+        }
+    ]
+)
+
+print(response.choices[0].message.content)
+```
+
+</CodeGroup>
+
+### Streaming Output
+
+<CodeGroup>
+
+```python Python
+import openai
+
+client = openai.OpenAI(
+    api_key="YOUR_API_KEY",
+    base_url="https://api.laozhang.ai/v1"
+)
+
+stream = client.chat.completions.create(
+    model="sora_video2",
+    messages=[
+        {
+            "role": "user",
+            "content": [
+                {
+                    "type": "text",
+                    "text": "A cute cat playing with a ball in a sunny garden"
+                }
+            ]
+        }
+    ],
+    stream=True
+)
+
+for chunk in stream:
+    if chunk.choices[0].delta.content:
+        print(chunk.choices[0].delta.content, end='', flush=True)
+```
+
+```javascript JavaScript
+const OpenAI = require('openai');
+
+const client = new OpenAI({
+  apiKey: 'YOUR_API_KEY',
+  baseURL: 'https://api.laozhang.ai/v1'
+});
+
+const stream = await client.chat.completions.create({
+  model: 'sora_video2',
+  messages: [
+    {
+      role: 'user',
+      content: [
+        {
+          type: 'text',
+          text: 'A cute cat playing with a ball in a sunny garden'
+        }
+      ]
+    }
+  ],
+  stream: true
+});
+
+for await (const chunk of stream) {
+  if (chunk.choices[0]?.delta?.content) {
+    process.stdout.write(chunk.choices[0].delta.content);
+  }
+}
+```
+
+</CodeGroup>
+
+## Error Codes
+
+| HTTP Status Code | Error Type | Description |
+|------------|---------|------|
+| 400 | Bad Request | Invalid request parameters |
+| 401 | Unauthorized | Invalid or missing API Key |
+| 402 | Payment Required | Insufficient balance |
+| 429 | Too Many Requests | Too many requests |
+| 500 | Internal Server Error | Internal server error |
+| 503 | Service Unavailable | Service temporarily unavailable |
+
+### Error Response Format
+
+```json
+{
+  "error": {
+    "message": "Error description",
+    "type": "invalid_request_error",
+    "code": "invalid_api_key"
+  }
+}
+```
+
+## Rate Limits
+
+<Info>
+Currently no strict rate limits, but recommended:
+- Control concurrency when batch generating (recommended 2-3)
+- Avoid large number of requests in short time
+- Set reasonable retry intervals
+</Info>
+
+## Best Practices
+
+<AccordionGroup>
+  <Accordion title="Timeout Settings" icon="clock">
+    Video generation takes 2-4 minutes, recommend setting timeout to **5-10 minutes**.
+
+    ```python
+    import httpx
+    import openai
+
+    client = openai.OpenAI(
+        api_key="YOUR_API_KEY",
+        base_url="https://api.laozhang.ai/v1",
+        http_client=httpx.Client(timeout=300.0)  # 5 minutes
+    )
+    ```
+  </Accordion>
+
+  <Accordion title="Error Handling" icon="shield-check">
+    Add retry logic to handle temporary errors:
+
+    ```python
+    import time
+
+    max_retries = 3
+    for i in range(max_retries):
+        try:
+            response = client.chat.completions.create(...)
+            break
+        except Exception as e:
+            if i < max_retries - 1:
+                print(f"Error, retrying in 30 seconds...")
+                time.sleep(30)
+            else:
+                raise
+    ```
+  </Accordion>
+
+  <Accordion title="Video Download" icon="download">
+    Download immediately after generation (valid for 1 day):
+
+    ```python
+    import requests
+    import re
+
+    # Extract link
+    video_url = re.search(r'https://[^\s\)]+\.mp4', content).group(0)
+
+    # Download
+    response = requests.get(video_url, stream=True)
+    with open('video.mp4', 'wb') as f:
+        for chunk in response.iter_content(chunk_size=8192):
+            f.write(chunk)
+    ```
+  </Accordion>
+
+  <Accordion title="Streaming Output Monitoring" icon="stream">
+    Use streaming output to view progress in real-time:
+
+    ```python
+    stream = client.chat.completions.create(
+        model="sora_video2",
+        messages=[...],
+        stream=True
+    )
+
+    for chunk in stream:
+        if chunk.choices[0].delta.content:
+            content = chunk.choices[0].delta.content
+            print(content, end='', flush=True)
+    ```
+  </Accordion>
+</AccordionGroup>
+
+## SDK Support
+
+### Official SDK
+
+- **Python:** `openai` >= 1.0.0
+- **Node.js:** `openai` >= 4.0.0
+
+### Third-party SDK
+
+Any SDK compatible with OpenAI API format can be used, just modify `base_url`.
+
+## Technical Specifications
+
+| Specification | Value |
+|------|-----|
+| **Video Encoding** | H.264 |
+| **Audio Encoding** | AAC |
+| **Frame Rate** | 24 fps |
+| **Format** | MP4 |
+| **Watermark** | None |
+| **Audio** | Supported |
+| **Max File Size** | ~50MB (depends on duration and quality) |
+
+## Next Steps
+
+<CardGroup cols={2}>
+  <Card title="Quick Start" icon="rocket" href="/api-capabilities/sora2/quick-start">
+    View quick start guide
+  </Card>
+  <Card title="Usage Examples" icon="code" href="/api-capabilities/sora2/examples">
+    View more code examples
+  </Card>
+  <Card title="Model Pricing" icon="tag" href="/api-capabilities/sora2/models-pricing">
+    Learn about model comparison and pricing
+  </Card>
+  <Card title="FAQ" icon="circle-question" href="/api-capabilities/sora2/troubleshooting">
+    View frequently asked questions
+  </Card>
+</CardGroup>
+

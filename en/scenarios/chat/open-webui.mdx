@@ -1,0 +1,295 @@
+---
+title: Open WebUI Domestic ChatGPT Deployment Configuration Guide
+description: Open WebUI platform domestic self-hosted AI platform configuration tutorial, supporting direct access to ChatGPT, Claude and other models in China without circumvention
+icon: "globe"
+---
+
+Open WebUI is a feature-rich self-hosted AI platform that supports completely offline operation. Through Laozhang API, you can integrate various mainstream large language models into Open WebUI.
+
+## Quick Deployment
+
+### Docker Quick Start
+
+```bash
+docker run -d -p 3000:8080 \
+  --add-host=host.docker.internal:host-gateway \
+  -v open-webui:/app/backend/data \
+  --name open-webui \
+  --restart always \
+  ghcr.io/open-webui/open-webui:main
+```
+
+### Docker Compose Deployment
+
+```yaml
+version: '3.6'
+
+services:
+  open-webui:
+    image: ghcr.io/open-webui/open-webui:main
+    container_name: open-webui
+    ports:
+      - "3000:8080"
+    volumes:
+      - open-webui:/app/backend/data
+    environment:
+      - OPENAI_API_BASE_URL=https://api.laozhang.ai
+      - OPENAI_API_KEY=Your Laozhang API key
+    restart: unless-stopped
+
+volumes:
+  open-webui:
+```
+
+## Configure Laozhang API
+
+### Method 1: Environment Variable Configuration
+
+Set environment variables during deployment:
+```bash
+docker run -d -p 3000:8080 \
+  -e OPENAI_API_BASE_URL=https://api.laozhang.ai \
+  -e OPENAI_API_KEY=Your Laozhang API key \
+  -v open-webui:/app/backend/data \
+  --name open-webui \
+  ghcr.io/open-webui/open-webui:main
+```
+
+### Method 2: Interface Configuration
+
+1. Access Open WebUI management interface
+2. Go to **Settings** > **Connections**
+3. Configure in **OpenAI API** section:
+   - **API Base URL**: `https://api.laozhang.ai/v1`
+   - **API Key**: Enter your Laozhang API key
+4. Click save configuration
+
+<Info>
+**Configuration Key Points**
+- API Base URL needs to include the `/v1` suffix
+- API Key can be obtained from [Laozhang API Console](https://api.laozhang.ai)
+- Using environment variables is recommended for easier management and updates
+</Info>
+
+## Supported Models
+
+Open WebUI supports the following model series through Laozhang API:
+
+### Recommended Models
+
+| Model Series | Model ID | Features |
+|---------|---------|------|
+| **GPT-4 Turbo** | `gpt-4-turbo-2024-04-09` | Latest GPT-4, balanced performance |
+| **Claude Sonnet** | `claude-sonnet-4-20250514` | Long text processing, creative writing |
+| **Gemini Pro** | `gemini-2.5-pro` | Multimodal capability, fast response |
+| **GPT-3.5 Turbo** | `gpt-3.5-turbo` | Economical and practical, daily conversation |
+
+### Featured Function Models
+
+| Function | Recommended Model | Description |
+|------|---------|------|
+| **Vision Understanding** | `gpt-4-vision-preview` | Image analysis and understanding |
+| **Code Generation** | `gpt-4-turbo` | Programming assistance and code optimization |
+| **Reasoning Thinking** | `claude-sonnet-4-20250514-thinking` | Shows thought process |
+
+## Core Features
+
+### RAG (Retrieval Augmented Generation)
+
+Open WebUI supports document upload and knowledge base features:
+
+1. **Document Upload**
+   - Supports PDF, Word, Markdown and other formats
+   - Automatic vectorization storage
+   - Supports multilingual documents
+
+2. **Knowledge Base Management**
+   - Create specialized knowledge bases
+   - Document classification and tagging
+   - Intelligent retrieval matching
+
+### OpenAI Compatible API
+
+Open WebUI provides a complete OpenAI-compatible API:
+
+```bash
+# Chat completion
+curl -X POST "http://localhost:3000/api/chat/completions" \
+  -H "Content-Type: application/json" \
+  -H "Authorization: Bearer Your Laozhang API key" \
+  -d '{
+    "model": "gpt-4-turbo",
+    "messages": [
+      {"role": "user", "content": "Hello, world!"}
+    ]
+  }'
+```
+
+### Tool Integration
+
+Supports external tools and plugins:
+- Web search
+- Code execution
+- Image generation
+- Document processing
+
+## Advanced Configuration
+
+### Multi-Model Configuration
+
+Configure multiple model sources in `docker-compose.yml`:
+
+```yaml
+environment:
+  - OPENAI_API_BASE_URL=https://api.laozhang.ai
+  - OPENAI_API_KEY=Your Laozhang API key
+  - ENABLE_OPENAI_API=true
+  - ENABLE_OLLAMA_API=false
+```
+
+### User Permission Management
+
+```yaml
+environment:
+  - ENABLE_SIGNUP=false
+  - DEFAULT_USER_ROLE=user
+  - WEBHOOK_URL=Your webhook address
+```
+
+### Data Persistence
+
+```yaml
+volumes:
+  - open-webui:/app/backend/data
+  - ./uploads:/app/backend/data/uploads
+  - ./vector_db:/app/backend/data/vector_db
+```
+
+## API Integration Examples
+
+### Python Integration
+
+```python
+import requests
+
+# Open WebUI API endpoint
+api_url = "http://localhost:3000/api/chat/completions"
+
+# Request configuration
+headers = {
+    "Content-Type": "application/json",
+    "Authorization": "Bearer Your Laozhang API key"
+}
+
+data = {
+    "model": "gpt-4-turbo",
+    "messages": [
+        {"role": "user", "content": "Explain the basic principles of quantum computing"}
+    ],
+    "stream": False
+}
+
+# Send request
+response = requests.post(api_url, headers=headers, json=data)
+result = response.json()
+print(result["choices"][0]["message"]["content"])
+```
+
+### JavaScript Integration
+
+```javascript
+const apiUrl = 'http://localhost:3000/api/chat/completions';
+
+const requestData = {
+  model: 'gpt-4-turbo',
+  messages: [
+    { role: 'user', content: 'Write a simple Python function' }
+  ]
+};
+
+fetch(apiUrl, {
+  method: 'POST',
+  headers: {
+    'Content-Type': 'application/json',
+    'Authorization': 'Bearer Your Laozhang API key'
+  },
+  body: JSON.stringify(requestData)
+})
+.then(response => response.json())
+.then(data => {
+  console.log(data.choices[0].message.content);
+});
+```
+
+## Troubleshooting
+
+### Common Issues
+
+**Connection Failed**
+- Check if API Base URL is correct: `https://api.laozhang.ai/v1`
+- Verify API Key validity
+- Confirm firewall settings
+
+**Model Unavailable**
+- Check account balance
+- Confirm model is in service scope
+- View Laozhang API service status
+
+**Upload Failed**
+- Check file format support
+- Confirm storage space is sufficient
+- Verify file size limits
+
+### Debug Logging
+
+Enable debug mode:
+```bash
+docker logs -f open-webui
+```
+
+View detailed logs:
+```yaml
+environment:
+  - LOG_LEVEL=DEBUG
+  - WEBUI_DEBUG=true
+```
+
+## Best Practices
+
+### Performance Optimization
+
+1. **Model Selection**
+   - Daily conversation uses GPT-3.5 Turbo
+   - Complex tasks use GPT-4 Turbo
+   - Long text processing uses Claude Sonnet
+
+2. **Caching Strategy**
+   - Enable conversation caching
+   - Set reasonable cache expiration time
+   - Regularly clean unused cache
+
+3. **Resource Management**
+   - Monitor memory usage
+   - Set reasonable concurrency limits
+   - Regularly backup user data
+
+### Security Configuration
+
+```yaml
+environment:
+  - ENABLE_ADMIN_EXPORT=false
+  - ENABLE_ADMIN_CHAT_ACCESS=false
+  - JWT_EXPIRES_IN=7d
+```
+
+### Monitoring and Alerts
+
+Integrate monitoring system:
+```yaml
+environment:
+  - ENABLE_WEBHOOKS=true
+  - WEBHOOK_URL=https://your-monitoring-url
+```
+
+Need more help? Please check [Open WebUI Official Documentation](https://docs.openwebui.com) or visit [Laozhang API Official Website](https://api.laozhang.ai).
+

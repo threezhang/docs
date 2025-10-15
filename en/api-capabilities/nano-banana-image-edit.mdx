@@ -1,0 +1,564 @@
+---
+title: Nano Banana Image Editing
+sidebarTitle: Nano Banana Editing
+description: Using Google's latest image editing technology, supports single and multi-image intelligent editing, pay-per-use at only $0.025/edit
+icon: "paintbrush"
+---
+
+## Model Overview
+
+Nano Banana image editing functionality is based on Google's `gemini-2.5-flash-image-preview` model, implementing intelligent editing and transformation of existing images through the chat completions interface. Supports single or multiple image inputs, enabling advanced editing functions such as image composition, element addition, and style transformation.
+
+<Note>
+**🎨 Intelligent Image Editing**  
+Upload image + text description = precise editing! Supports advanced features like multi-image composition, element modification, and style transformation.
+</Note>
+
+## 🌟 Core Features
+
+- **🔄 Flexible Editing**: Supports element addition/deletion, style transformation, image composition, etc.
+- **🎭 Multi-Image Processing**: Can process multiple images simultaneously for fusion, stitching effects
+- **💰 Great Value**: $0.025/edit, pay-per-use, transparent pricing
+- **🚀 Fast Processing**: Completes editing in ~10 seconds on average
+- **📦 Base64 Output**: Returns edited base64 image data directly
+
+## 📋 Feature Comparison
+
+| Feature | Nano Banana Edit | GPT-4o Edit | DALL·E 2 Edit | Flux Edit |
+|---------|------------------|-------------|---------------|-----------|
+| Price | $0.025/edit | Token-based | $0.018/image | $0.035/edit |
+| Multi-Image Input | ✅ Supported | ✅ Supported | ❌ Not supported | ❌ Not native |
+| Response Speed | ~10s | ~20s | Slower | Medium |
+| Return Format | Base64 | Base64 | URL | URL |
+| Chinese Support | ✅ Perfect | ✅ Perfect | ❌ Needs translation | ❌ Needs translation |
+
+## 🚀 Quick Start
+
+### Prerequisites
+
+<Steps>
+  <Step title="Create Token">
+    Login to [LaoZhang API Token Management](https://api.laozhang.ai/token) and create a **pay-per-use** type token
+    
+    ![Token Creation Interface](/images/token-create-per-request.png)
+  </Step>
+  <Step title="Select Billing Type">
+    **Important**: Must select "Pay-per-use" type, not "Pay-as-you-go"
+  </Step>
+  <Step title="Save Token">
+    Copy the generated token (format: `sk-xxxxxx`) and replace `YOUR_API_KEY` in the code
+  </Step>
+</Steps>
+
+<Tip>
+💰 **Exceptional Pricing Advantage**  
+- **LaoZhang API**: $0.025/edit (37.5% cheaper than official)
+- **Official Price**: $0.04/edit  
+- **Recharge Bonus**: Top up $100, get +10% bonus
+- **Exchange Rate Advantage**: Total ~**7.3 fold off** official price
+</Tip>
+
+### Basic Example - Single Image Edit
+
+```bash
+curl -X POST "https://api.laozhang.ai/v1/chat/completions" \
+     -H "Authorization: Bearer sk-YOUR_API_KEY" \
+     -H "Content-Type: application/json" \
+     -d '{
+    "model": "gemini-2.5-flash-image-preview",
+    "stream": false,
+    "messages": [
+        {
+            "role": "user",
+            "content": [
+                {
+                    "type": "text",
+                    "text": "add a dog to this image"
+                },
+                {
+                    "type": "image_url",
+                    "image_url": {
+                        "url": "https://github.com/dianping/cat/raw/master/cat-home/src/main/webapp/images/logo/cat_logo03.png"
+                    }
+                }
+            ]
+        }
+    ]
+}'
+```
+
+### Python Example - Multi-Image Composition
+
+```python
+#!/usr/bin/env python3
+import requests
+import json
+import base64
+import re
+from datetime import datetime
+import sys
+
+# Configuration
+API_KEY = "sk-YOUR_API_KEY"  # Replace with your actual key (pay-per-use type)
+API_URL = "https://api.laozhang.ai/v1/chat/completions"
+
+def edit_images_with_gemini():
+    """Multi-image composition editing example"""
+    
+    # Set request headers
+    headers = {
+        "Authorization": f"Bearer {API_KEY}",
+        "Content-Type": "application/json"
+    }
+    
+    # Request data - supports multiple image inputs
+    data = {
+        "model": "gemini-2.5-flash-image-preview",
+        "stream": False,
+        "messages": [
+            {
+                "role": "user",
+                "content": [
+                    {
+                        "type": "text",
+                        "text": "Combine these 2 images creatively and add a Corgi dog"
+                    },
+                    {
+                        "type": "image_url",
+                        "image_url": {
+                            "url": "https://github.com/dianping/cat/raw/master/cat-home/src/main/webapp/images/logo/cat_logo03.png"
+                        }
+                    },
+                    {
+                        "type": "image_url",
+                        "image_url": {
+                            "url": "https://raw.githubusercontent.com/leonindy/camel/master/camel-admin/src/main/webapp/assets/images/camel_logo_blue.png"
+                        }
+                    }
+                ]
+            }
+        ]
+    }
+    
+    print("Requesting API...")
+    
+    try:
+        # Send request
+        response = requests.post(API_URL, headers=headers, json=data)
+        response.raise_for_status()
+        
+        print("API request successful, processing response...")
+        
+        # Parse response
+        result = response.json()
+        
+        # Extract content
+        content = result['choices'][0]['message']['content']
+        print(f"Received content: {content[:200]}...")  # Show first 200 characters
+        
+        # Find Base64 image data
+        # Method 1: Find standard format data:image/type;base64,data
+        base64_match = re.search(r'data:image/[^;]+;base64,([A-Za-z0-9+/=]+)', content)
+        
+        if base64_match:
+            base64_data = base64_match.group(1)
+            print("Found standard format Base64 data")
+        else:
+            # Method 2: Find pure Base64 data (long string)
+            base64_match = re.search(r'([A-Za-z0-9+/=]{100,})', content)
+            if base64_match:
+                base64_data = base64_match.group(1)
+                print("Found pure Base64 data")
+            else:
+                print("Error: Cannot find Base64 image data")
+                print("Full response content:")
+                print(json.dumps(result, indent=2, ensure_ascii=False))
+                return False
+        
+        # Generate filename
+        timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
+        filename = f"edited_image_{timestamp}.png"
+        
+        print("Saving image...")
+        
+        # Decode and save image
+        try:
+            image_data = base64.b64decode(base64_data)
+            with open(filename, 'wb') as f:
+                f.write(image_data)
+            
+            print(f"Image saved successfully as: {filename}")
+            print(f"File size: {len(image_data)} bytes")
+            return True
+            
+        except Exception as e:
+            print(f"Error: Problem saving image: {e}")
+            return False
+            
+    except requests.exceptions.RequestException as e:
+        print(f"Error: API request failed: {e}")
+        return False
+    except KeyError as e:
+        print(f"Error: Response format incorrect, missing field: {e}")
+        print("Full response content:")
+        print(json.dumps(response.json(), indent=2, ensure_ascii=False))
+        return False
+    except Exception as e:
+        print(f"Error: Unknown error: {e}")
+        return False
+
+if __name__ == "__main__":
+    success = edit_images_with_gemini()
+    sys.exit(0 if success else 1)
+```
+
+### Bash Script - Batch Editing
+
+```bash
+#!/bin/bash
+
+# Nano Banana Image Editing - Bash Version
+# Supports single/multi-image editing, auto-saves base64 results
+
+# Set API key (replace with your actual【pay-per-use】key)
+API_KEY="sk-YOUR_API_KEY"
+
+# Set output filename
+OUTPUT_FILE="edited_image_$(date +%Y%m%d_%H%M%S).png"
+
+echo "Requesting API for image editing..."
+
+# Send curl request and save response to temp file
+RESPONSE=$(curl -s -X POST "https://api.laozhang.ai/v1/chat/completions" \
+     -H "Authorization: Bearer $API_KEY" \
+     -H "Content-Type: application/json" \
+     -d '{
+    "model": "gemini-2.5-flash-image-preview",
+    "stream": false,
+    "messages": [
+        {
+            "role": "user",
+            "content": [
+                {
+                    "type": "text",
+                    "text": "Combine 2 images and add a Corgi dog image"
+                },
+                {
+                    "type": "image_url",
+                    "image_url": {
+                        "url": "https://github.com/dianping/cat/raw/master/cat-home/src/main/webapp/images/logo/cat_logo03.png"
+                    }
+                },
+                {
+                    "type": "image_url",
+                    "image_url": {
+                        "url": "https://raw.githubusercontent.com/leonindy/camel/master/camel-admin/src/main/webapp/assets/images/camel_logo_blue.png"
+                    }
+                }
+            ]
+        }
+    ]
+}')
+
+# Check if request was successful
+if [ $? -ne 0 ]; then
+    echo "Error: API request failed"
+    exit 1
+fi
+
+echo "API request successful, processing response..."
+
+# Extract Base64 image data from response
+BASE64_DATA=$(echo "$RESPONSE" | python3 -c "
+import json
+import sys
+import re
+
+try:
+    data = json.load(sys.stdin)
+    content = data['choices'][0]['message']['content']
+    
+    # Find Base64 image data
+    base64_match = re.search(r'data:image/[^;]+;base64,([A-Za-z0-9+/=]+)', content)
+    if base64_match:
+        print(base64_match.group(1))
+    else:
+        # Try to find pure Base64 data
+        base64_match = re.search(r'([A-Za-z0-9+/=]{100,})', content)
+        if base64_match:
+            print(base64_match.group(1))
+        else:
+            print('ERROR: No Base64 data found')
+            sys.exit(1)
+except Exception as e:
+    print(f'ERROR: {e}')
+    sys.exit(1)
+")
+
+# Check if Base64 data was successfully extracted
+if [[ "$BASE64_DATA" == ERROR* ]]; then
+    echo "$BASE64_DATA"
+    echo "Full response content:"
+    echo "$RESPONSE"
+    exit 1
+fi
+
+if [ -z "$BASE64_DATA" ]; then
+    echo "Error: Cannot extract Base64 image data from response"
+    echo "Full response content:"
+    echo "$RESPONSE"
+    exit 1
+fi
+
+echo "Successfully extracted Base64 data, saving image..."
+
+# Decode Base64 data and save as image file
+echo "$BASE64_DATA" | base64 -d > "$OUTPUT_FILE"
+
+# Check if file was successfully created
+if [ -f "$OUTPUT_FILE" ] && [ -s "$OUTPUT_FILE" ]; then
+    echo "Image saved successfully as: $OUTPUT_FILE"
+    echo "File size: $(ls -lh "$OUTPUT_FILE" | awk '{print $5}')"
+else
+    echo "Error: Image save failed"
+    exit 1
+fi
+
+echo "✨ Edit complete!"
+```
+
+## 🎯 Editing Scenarios
+
+### 1. Single Image Edit - Add Elements
+
+```python
+def add_element_to_image(image_url, element_description):
+    """Add new element to image"""
+    headers = {
+        "Authorization": f"Bearer {API_KEY}",
+        "Content-Type": "application/json"
+    }
+    
+    data = {
+        "model": "gemini-2.5-flash-image-preview",
+        "stream": False,
+        "messages": [{
+            "role": "user",
+            "content": [
+                {"type": "text", "text": f"Add {element_description} to this image"},
+                {"type": "image_url", "image_url": {"url": image_url}}
+            ]
+        }]
+    }
+    
+    response = requests.post(API_URL, headers=headers, json=data)
+    return extract_base64_from_response(response.json())
+
+# Usage example
+result = add_element_to_image(
+    "https://example.com/landscape.jpg",
+    "a rainbow in the sky"
+)
+```
+
+### 2. Multi-Image Composition - Creative Fusion
+
+```python
+def creative_merge(image_urls, merge_instruction):
+    """Creatively merge multiple images"""
+    content = [{"type": "text", "text": merge_instruction}]
+    
+    # Add all images
+    for url in image_urls:
+        content.append({
+            "type": "image_url",
+            "image_url": {"url": url}
+        })
+    
+    headers = {
+        "Authorization": f"Bearer {API_KEY}",
+        "Content-Type": "application/json"
+    }
+    
+    data = {
+        "model": "gemini-2.5-flash-image-preview",
+        "stream": False,
+        "messages": [{
+            "role": "user",
+            "content": content
+        }]
+    }
+    
+    response = requests.post(API_URL, headers=headers, json=data)
+    return extract_base64_from_response(response.json())
+
+# Usage example
+images = [
+    "https://example.com/cat.jpg",
+    "https://example.com/background.jpg"
+]
+result = creative_merge(images, "Naturally blend the cat into the background")
+```
+
+### 3. Style Transfer
+
+```python
+def style_transfer(image_url, style_description):
+    """Image style transfer"""
+    headers = {
+        "Authorization": f"Bearer {API_KEY}",
+        "Content-Type": "application/json"
+    }
+    
+    data = {
+        "model": "gemini-2.5-flash-image-preview",
+        "stream": False,
+        "messages": [{
+            "role": "user",
+            "content": [
+                {"type": "text", "text": f"Transform this image into {style_description} style"},
+                {"type": "image_url", "image_url": {"url": image_url}}
+            ]
+        }]
+    }
+    
+    response = requests.post(API_URL, headers=headers, json=data)
+    return extract_base64_from_response(response.json())
+
+# Usage example
+result = style_transfer(
+    "https://example.com/photo.jpg",
+    "Van Gogh painting"
+)
+```
+
+## 💡 Best Practices
+
+### 1. Editing Instruction Optimization
+
+```python
+# ❌ Vague instruction
+instruction = "edit the image"
+
+# ✅ Clear and specific instruction
+instruction = """
+1. Add a bright moon in the upper right corner
+2. Adjust overall color tone to warm tones
+3. Add some firefly light effects
+4. Keep the main subject unchanged
+"""
+```
+
+### 2. Multi-Image Processing Strategy
+
+```python
+def smart_multi_image_edit(images, instruction):
+    """Smart multi-image editing, auto-handles different numbers of images"""
+    
+    if len(images) == 1:
+        # Single image edit
+        prompt = f"Edit this image: {instruction}"
+    elif len(images) == 2:
+        # Two-image composition
+        prompt = f"Combine these two images creatively: {instruction}"
+    else:
+        # Multi-image processing
+        prompt = f"Process these {len(images)} images together: {instruction}"
+    
+    # Build content
+    content = [{"type": "text", "text": prompt}]
+    for img in images:
+        content.append({
+            "type": "image_url",
+            "image_url": {"url": img}
+        })
+    
+    # Send request...
+    return send_edit_request(content)
+```
+
+### 3. Base64 Data Processing Tools
+
+```python
+import base64
+import io
+import re
+from datetime import datetime
+from PIL import Image
+
+class Base64ImageHandler:
+    """Base64 image processing utility class"""
+    
+    @staticmethod
+    def extract_from_response(response_content):
+        """Extract base64 data from API response"""
+        patterns = [
+            r'data:image/([^;]+);base64,([A-Za-z0-9+/=]+)',
+            r'([A-Za-z0-9+/=]{100,})'
+        ]
+        
+        for pattern in patterns:
+            match = re.search(pattern, response_content)
+            if match:
+                if len(match.groups()) == 2:
+                    return match.group(2), match.group(1)  # data, format
+                else:
+                    return match.group(1), 'png'  # default to png
+        
+        return None, None
+    
+    @staticmethod
+    def save_to_file(base64_data, filename=None):
+        """Save base64 data as file"""
+        if not filename:
+            filename = f"image_{datetime.now().strftime('%Y%m%d_%H%M%S')}.png"
+        
+        image_data = base64.b64decode(base64_data)
+        with open(filename, 'wb') as f:
+            f.write(image_data)
+        
+        return filename
+    
+    @staticmethod
+    def to_pil_image(base64_data):
+        """Convert to PIL Image object"""
+        image_data = base64.b64decode(base64_data)
+        return Image.open(io.BytesIO(image_data))
+    
+    @staticmethod
+    def from_pil_image(pil_image, format='PNG'):
+        """Convert from PIL Image to base64"""
+        buffer = io.BytesIO()
+        pil_image.save(buffer, format=format)
+        img_str = base64.b64encode(buffer.getvalue()).decode()
+        return f"data:image/{format.lower()};base64,{img_str}"
+```
+
+## ⚠️ Important Notes
+
+1. **Token Type**: Must use **pay-per-use** type token
+2. **API Endpoint**: Use `/v1/chat/completions`, not `/v1/images/edits`
+3. **Return Format**: Returns base64 encoded editing results
+
+## 🔍 FAQ
+
+### Q: How many images can be processed simultaneously?
+A: There's no hard limit theoretically, but it's recommended not to exceed 5 images per request for optimal performance.
+
+### Q: What's the resolution of edited images?
+A: The system intelligently maintains or optimizes resolution, usually outputs high-quality images, depending on input images and editing requirements.
+
+### Q: What advantages does it have compared to other editing APIs?
+A: Main advantages include: lower pricing, faster processing speed, native multi-image input support, excellent Chinese language understanding.
+
+## 🔗 Related Resources
+
+- [Nano Banana Image Generation](/api-capabilities/nano-banana-image) - Text-to-image functionality
+- [Pricing Calculator](https://api.laozhang.ai/account/pricing) - Real-time price query
+- [API Key Management](https://api.laozhang.ai/token) - Create and manage tokens
+- [GPT-4o Image Docs](/api-capabilities/gpt-4o-image) - Learn about compatible models
+
+<Note>
+🎨 **Pro Tip**: Nano Banana editing functionality excels at understanding complex editing instructions and creative requirements. Utilizing detailed descriptions can achieve more precise editing results!
+</Note>
+

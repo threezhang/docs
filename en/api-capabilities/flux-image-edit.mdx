@@ -1,0 +1,416 @@
+---
+title: Flux Image Editing
+sidebarTitle: Flux Editing
+description: Edit existing images using Flux Kontext Max model, supports precise mask control and multiple aspect ratio outputs
+icon: "pencil"
+---
+
+## Model Overview
+
+Flux image editing functionality is based on the advanced Flux Kontext Max model, capable of intelligent image editing based on text descriptions. Supports precise mask control, local file and online image inputs, and flexible aspect ratio output settings.
+
+<Note>
+**🎯 Precise Editing**  
+Using masks allows precise control of editing areas - white regions will be edited, black regions remain unchanged. Without masks, AI automatically decides editing areas.
+</Note>
+
+## 🌟 Core Features
+
+- **🎭 Smart Editing**: Intelligently modify image content based on text descriptions
+- **🖼️ Mask Support**: Precise control of editing areas, protect important content
+- **📁 Flexible Input**: Supports local files and online image URLs
+- **📐 Multi-Ratio Output**: Supports 7 aspect ratios for different needs
+- **💰 Cost-Effective**: Save 12.5% compared to official pricing, same quality
+
+## 📋 Technical Specifications
+
+| Feature | Flux Kontext Max | Description |
+|---------|------------------|-------------|
+| **LaoZhang API Price** | $0.07/edit | Save 12.5% vs official |
+| **Official Price** | $0.08/image | Original pricing |
+| **Input Formats** | PNG, JPEG, WebP, GIF | Common image formats |
+| **File Size** | Max 20MB or 20MP | Per image limit |
+| **Aspect Ratio Range** | 3:7 to 7:3 | From ultra-narrow vertical to ultra-wide horizontal |
+| **API Method** | OpenAI Compatible | Standard Images Edit API |
+| **Result URL** | 10-minute validity | Download promptly |
+
+<Tip>
+💡 **Cost Savings**: Call Flux image editing through LaoZhang API, combined with exchange rate advantage and recharge bonus, save over 12.5% compared to official pricing!
+</Tip>
+
+## 🚀 Quick Start
+
+### Basic Example - Local Image Editing
+
+```python
+from openai import OpenAI
+
+# Initialize client
+client = OpenAI(
+    api_key="YOUR_API_KEY",
+    base_url="https://api.laozhang.ai/v1"
+)
+
+def edit_local_image(image_path, prompt, aspect_ratio="1:1", mask_path=None, 
+                    seed=None, safety_tolerance=1, output_format="png"):
+    """Edit local image"""
+    try:
+        # Prepare base parameters
+        edit_params = {
+            "model": "flux-kontext-max",
+            "image": open(image_path, "rb"),
+            "prompt": prompt,
+            "extra_body": {
+                "aspect_ratio": aspect_ratio,
+                "safety_tolerance": safety_tolerance,
+                "output_format": output_format
+            }
+        }
+        
+        # Optional parameters
+        if seed is not None:
+            edit_params["extra_body"]["seed"] = seed
+        
+        # Add mask if provided
+        if mask_path:
+            edit_params["mask"] = open(mask_path, "rb")
+        
+        # Call edit API
+        response = client.images.edit(**edit_params)
+        
+        # Return edited image URL (note: valid for 10 minutes)
+        return response.data[0].url
+    
+    except Exception as e:
+        print(f"Edit failed: {e}")
+        return None
+    
+    finally:
+        # Ensure file handles are closed
+        if 'edit_params' in locals():
+            if 'image' in edit_params:
+                edit_params['image'].close()
+            if 'mask' in edit_params:
+                edit_params['mask'].close()
+
+# Usage example
+edited_url = edit_local_image(
+    image_path="portrait.jpg",
+    prompt="Change the background to a beautiful sunset sky",
+    aspect_ratio="2:3",
+    seed=42,  # Reproducible results
+    safety_tolerance=1,  # Safety level (0-2)
+    output_format="jpeg"  # or "png"
+)
+
+if edited_url:
+    print(f"Edit complete: {edited_url}")
+    print("Note: URL will expire after 10 minutes, download promptly!")
+```
+
+## 📝 Parameter Details
+
+### Core Parameters
+
+| Parameter | Type | Required | Description | Default |
+|-----------|------|----------|-------------|---------|
+| `model` | string | Yes | Model name: `flux-kontext-max` | - |
+| `image` | file | Yes | Original image file (max 20MB or 20MP) | - |
+| `prompt` | string | Yes | Edit instruction describing desired changes | - |
+| `mask` | file | No | Mask image specifying edit area | - |
+
+### Parameters Passed via extra_body
+
+| Parameter | Type | Range | Description | Default |
+|-----------|------|-------|-------------|---------|
+| `aspect_ratio` | string | - | Output aspect ratio like "1:1", "16:9" etc | "1:1" |
+| `seed` | integer | 0-2147483647 | Random seed for reproducibility | Random |
+| `safety_tolerance` | integer | 0-2 | Content safety level, 0=strict, 2=lenient | 1 |
+| `output_format` | string | "png", "jpeg" | Output image format | "png" |
+
+<Tip>
+**🔄 Reproducibility**: Using the same `seed` value and identical other parameters yields consistent editing results. This is helpful for debugging and customer satisfaction testing.
+</Tip>
+
+## 🎯 Professional Editing Techniques
+
+### 1. Text Editing and Addition
+
+Flux Kontext excels at handling text in images:
+
+```python
+# Add text to image
+add_text = edit_local_image(
+    image_path="poster.jpg",
+    prompt='Add the text "SALE 50% OFF" in bold red letters at the top center',
+    aspect_ratio="3:2"
+)
+
+# Modify existing text
+modify_text = edit_local_image(
+    image_path="sign.jpg", 
+    prompt='Change the text from "Open" to "Closed"',
+    aspect_ratio="1:1"
+)
+
+# Use quotes for text precision
+precise_text = edit_local_image(
+    image_path="banner.jpg",
+    prompt='Replace the existing text with exactly "Welcome to Our Store"',
+    aspect_ratio="7:3"
+)
+```
+
+### 2. Smart Context Preservation
+
+Flux understands image context for natural edits:
+
+```python
+# Maintain lighting consistency
+lighting_edit = edit_local_image(
+    image_path="interior.jpg",
+    prompt="Add a lamp in the corner, matching the existing warm lighting",
+    aspect_ratio="16:9"
+)
+
+# Maintain perspective and scale
+perspective_edit = edit_local_image(
+    image_path="street.jpg", 
+    prompt="Add a bicycle parked next to the building, matching the street perspective",
+    aspect_ratio="3:2"
+)
+```
+
+### 3. Character Consistency
+
+```python
+# Maintain character features
+character_edit = edit_local_image(
+    image_path="person.jpg",
+    prompt="Change the person's shirt to blue while keeping all facial features identical",
+    aspect_ratio="2:3",
+    seed=42  # Fixed seed for consistency
+)
+```
+
+## 🎯 Editing Scenarios
+
+### 1. Background Replacement
+
+```python
+# Replace background
+background_edit = edit_local_image(
+    image_path="portrait.jpg",
+    prompt="Replace the background with a modern office environment",
+    aspect_ratio="2:3"
+)
+
+# Remove background
+remove_bg = edit_local_image(
+    image_path="product.jpg", 
+    prompt="Remove the background, make it transparent",
+    aspect_ratio="1:1"
+)
+```
+
+### 2. Object Editing
+
+```python
+# Add elements
+add_element = edit_local_image(
+    image_path="room.jpg",
+    prompt="Add a beautiful plant in the corner of the room",
+    aspect_ratio="16:9"
+)
+
+# Remove objects
+remove_object = edit_local_image(
+    image_path="street.jpg",
+    prompt="Remove the car from the street, replace with empty road",
+    aspect_ratio="3:2"
+)
+
+# Replace objects
+replace_object = edit_local_image(
+    image_path="table.jpg",
+    prompt="Replace the apple on the table with an orange", 
+    aspect_ratio="1:1"
+)
+```
+
+### 3. Style Transformation
+
+```python
+# Apply artistic style
+artistic_edit = edit_local_image(
+    image_path="photo.jpg",
+    prompt="Transform this photo into a watercolor painting style",
+    aspect_ratio="3:2"
+)
+
+# Color adjustment
+color_edit = edit_local_image(
+    image_path="landscape.jpg",
+    prompt="Make the image more vibrant with saturated colors",
+    aspect_ratio="16:9"
+)
+```
+
+## 💡 Best Practices
+
+### 1. Mask Usage Guide
+
+Masks are PNG images where:
+- **White (255,255,255)**: Areas to be edited
+- **Black (0,0,0)**: Areas to preserve
+- **Gray**: Partial editing (blend between black and white)
+
+```python
+from PIL import Image, ImageDraw
+
+def create_circular_mask(image_path, center_x, center_y, radius):
+    """Create circular mask"""
+    # Open original image to get dimensions
+    img = Image.open(image_path)
+    width, height = img.size
+    
+    # Create black mask
+    mask = Image.new('RGB', (width, height), 'black')
+    draw = ImageDraw.Draw(mask)
+    
+    # Draw white circle
+    draw.ellipse(
+        [(center_x - radius, center_y - radius),
+         (center_x + radius, center_y + radius)],
+        fill='white'
+    )
+    
+    # Save mask
+    mask_path = 'mask_circular.png'
+    mask.save(mask_path)
+    return mask_path
+
+# Usage
+mask = create_circular_mask('photo.jpg', 512, 512, 200)
+edited = edit_local_image(
+    image_path='photo.jpg',
+    prompt='Change the center area to a starry night sky',
+    mask_path=mask
+)
+```
+
+### 2. Prompt Optimization
+
+```python
+# ❌ Vague prompt
+prompt = "make it better"
+
+# ✅ Specific and detailed
+prompt = """
+Replace the cloudy sky with a clear blue sky with some white clouds.
+Keep the foreground buildings exactly as they are.
+Maintain the natural lighting and shadows.
+"""
+
+# ✅ Technical precision
+prompt = """
+Change the car color from red to metallic blue.
+Preserve all reflections and highlights.
+Match the lighting of the original image.
+No other changes to composition.
+"""
+```
+
+### 3. URL Management
+
+```python
+import requests
+import time
+
+def download_and_save(url, filename):
+    """Download edited image immediately"""
+    try:
+        # Download immediately (URL expires in 10 minutes)
+        response = requests.get(url, timeout=30)
+        response.raise_for_status()
+        
+        with open(filename, 'wb') as f:
+            f.write(response.content)
+        
+        print(f"✅ Saved: {filename} ({len(response.content) // 1024}KB)")
+        return True
+    
+    except Exception as e:
+        print(f"❌ Download failed: {e}")
+        return False
+
+# Generate and save immediately
+edited_url = edit_local_image('photo.jpg', 'your prompt')
+if edited_url:
+    download_and_save(edited_url, f'edited_{int(time.time())}.png')
+```
+
+## ⚠️ Important Notes
+
+1. **URL Validity**:
+   - Edited image URLs are **only valid for 10 minutes**
+   - Download immediately after generation
+   - Implement retry logic for failed downloads
+
+2. **File Size Limits**:
+   - Maximum 20MB per file
+   - Or maximum 20 megapixels
+   - Compress large images before uploading
+
+3. **Aspect Ratio**:
+   - Supports 3:7 to 7:3 range
+   - Output may differ from input ratio
+   - System maintains ~1 megapixel total
+
+4. **Mask Requirements**:
+   - Same dimensions as original image
+   - RGB or grayscale format
+   - White = edit, Black = preserve
+
+5. **Safety Tolerance**:
+   - 0 = Strictest content moderation
+   - 1 = Balanced (recommended)
+   - 2 = Most lenient
+
+## 🔍 FAQ
+
+### Q: Why do edited image URLs expire?
+A: This is Flux official's security design. All generated URLs automatically expire after 10 minutes for security and storage optimization.
+
+### Q: Can I edit without a mask?
+A: Yes! Without a mask, Flux AI intelligently determines which areas to edit based on your prompt. Masks are optional but provide more control.
+
+### Q: What's the difference between Flux Edit and Flux Generate?
+A: 
+- **Edit**: Modifies existing images based on prompts
+- **Generate**: Creates new images from scratch
+
+### Q: How to create a mask?
+A: Use any image editing software (Photoshop, GIMP, Python PIL) to create a PNG where white areas mark regions to edit.
+
+### Q: Can I batch edit images?
+A: Yes, but be mindful of the 10-minute URL expiration. Process and download each result immediately.
+
+### Q: What's the best aspect ratio?
+A: Choose based on use case:
+- `1:1` for social media
+- `16:9` for presentations
+- `2:3` for portraits
+- `7:3` for banners
+
+## 🔗 Related Resources
+
+- [Flux Image Generation](/api-capabilities/flux-image-generation) - Create new images
+- [Complete Code Examples](https://github.com/laozhang-api/ai-api-code-samples/tree/main/flux-Image-API)
+- [Pricing Calculator](https://api.laozhang.ai/account/pricing) - Real-time pricing
+- [Online Demo](https://imagen.laozhang.ai) - Test Flux editing
+
+<Note>
+🎨 **Pro Tip**: Combine specific prompts with masks for maximum editing precision. Flux Kontext Max excels at understanding complex editing instructions!
+</Note>
+

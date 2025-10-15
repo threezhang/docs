@@ -1,0 +1,162 @@
+---
+title: "Models and Pricing"
+description: "Detailed comparison and pricing explanation for Sora 2 models"
+icon: "tag"
+---
+
+## Model Overview
+
+Sora 2 provides stable video generation models, distinguished by **model name** for portrait and landscape orientations.
+
+<Note>
+**Temporary Model Simplification Notice**
+
+Due to insufficient OpenAI official computing power and severe quota limitations, -hd (high definition) and -15s (15 seconds) versions are temporarily unavailable and will be relaunched when computing power becomes sufficient.
+</Note>
+
+## Available Models
+
+<CardGroup cols={2}>
+  <Card title="sora_video2" icon="mobile">
+    **Portrait Mode** (Recommended)
+
+    - Resolution: 704 × 1280
+    - Duration: 10 seconds
+    - Price: $0.15/call
+    - Stability: ⭐⭐⭐⭐⭐ Extremely High
+  </Card>
+
+  <Card title="sora_video2-landscape" icon="tv">
+    **Landscape Mode**
+
+    - Resolution: 1280 × 704
+    - Duration: 10 seconds
+    - Price: $0.15/call
+    - Stability: ⭐⭐⭐⭐⭐ Extremely High
+  </Card>
+</CardGroup>
+
+## Pricing Details
+
+### Billing Method
+
+<Info>
+**Per-call Billing**
+
+Charges only when video is **successfully generated**, no charge for failures.
+</Info>
+
+### Price Comparison
+
+| Model | Duration | Unit Price | Discounted Price with $100 Top-up |
+|------|------|------|---------------|
+| Portrait/Landscape | 10s | $0.15/call | ≈ ¥1.0/call |
+
+<Note>
+**Official Comparison**
+
+OpenAI official has launched `sora-2` and `sora-2-pro` models, but:
+- Expensive pricing
+- Rate limits
+- Requires invitation code
+- Generated videos have watermarks
+
+The advantages of choosing laozhang.ai are obvious!
+</Note>
+
+## Cost Optimization Recommendations
+
+<AccordionGroup>
+  <Accordion title="Both models have extremely high stability" icon="mobile">
+    Both portrait and landscape models have very good stability. You can freely choose based on display scenarios without worrying about retry issues.
+  </Accordion>
+
+  <Accordion title="Batch generation optimization" icon="list">
+    - Set reasonable timeout (recommended 5 minutes)
+    - Download videos promptly to avoid expiration (storage validity 1 day)
+    - No charge for failures, retry with confidence
+  </Accordion>
+</AccordionGroup>
+
+## Video Specifications
+
+### Technical Parameters
+
+| Parameter | Value |
+|------|-----|
+| **Video Encoding** | H.264 |
+| **Audio Encoding** | AAC |
+| **Frame Rate** | 24 fps |
+| **Bitrate** | Adaptive |
+| **Format** | MP4 |
+| **Watermark** | None |
+
+### Storage Information
+
+<Warning>
+**Important Notice**
+
+- Videos stored on domestic CDN
+- Storage validity: **Only 1 day**
+- Please **download immediately** after generation and save locally
+- Links will expire after 1 day
+</Warning>
+
+## Model Selection Recommendations
+
+<Steps>
+  <Step title="Determine Orientation">
+    Choose based on video display scenario:
+    - Mobile short videos, social media portrait display → Choose `sora_video2`
+    - Landscape display, widescreen content, computer playback → Choose `sora_video2-landscape`
+  </Step>
+
+  <Step title="Stability Guarantee">
+    Both models have extremely high stability, no need to worry about failure retry issues, feel free to choose any orientation.
+  </Step>
+</Steps>
+
+## Usage Examples
+
+### Choose Model Based on Scenario
+
+```python
+# Portrait video - mobile short videos, social media
+model = "sora_video2"
+
+# Landscape video - widescreen display, computer playback
+model = "sora_video2-landscape"
+```
+
+## FAQ
+
+<AccordionGroup>
+  <Accordion title="Why are there only two models temporarily?" icon="circle-question">
+    Due to insufficient OpenAI official computing power and severe quota limitations, -hd (high definition) and -15s (15 seconds) versions are temporarily unavailable and will be relaunched when computing power becomes sufficient.
+    
+    The two currently available models both have extremely high stability and can meet most use cases.
+  </Accordion>
+
+  <Accordion title="How to get discounted prices through top-up?" icon="wallet">
+    Single top-up of $100 can enjoy discounted prices:
+    - 10-second video approximately ¥1.0/call
+
+    See [Top-up Page](https://api.laozhang.ai)
+  </Accordion>
+
+  <Accordion title="Will I be charged for failures?" icon="ban">
+    No. Under per-call billing mode, charges only when video is **successfully generated**.
+  </Accordion>
+</AccordionGroup>
+
+## Next Steps
+
+<CardGroup cols={2}>
+  <Card title="Quick Start" icon="rocket" href="/api-capabilities/sora2/quick-start">
+    View example code and usage methods
+  </Card>
+  <Card title="More Examples" icon="code" href="/api-capabilities/sora2/examples">
+    View application examples for various scenarios
+  </Card>
+</CardGroup>
+

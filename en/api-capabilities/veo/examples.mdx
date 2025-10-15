@@ -1,0 +1,553 @@
+---
+title: "Code Examples"
+description: "VEO API usage examples in various programming languages"
+icon: "code"
+---
+
+## Complete Python Example
+
+### Install Dependencies
+
+```bash
+pip install requests
+```
+
+### Complete Client Implementation
+
+```python
+import requests
+import time
+import json
+
+class VEOVideoClient:
+    def __init__(self, base_url, api_key):
+        self.base_url = base_url
+        self.api_key = api_key
+        self.headers = {
+            'Content-Type': 'application/json',
+            'Authorization': f'Bearer {api_key}'
+        }
+
+    def submit_task(self, prompt, model='veo3', enhance_prompt=True, images=None):
+        """Submit video generation task"""
+        request_body = {
+            'prompt': prompt,
+            'model': model,
+            'enhance_prompt': enhance_prompt
+        }
+        
+        if images:
+            request_body['images'] = images
+
+        response = requests.post(
+            f'{self.base_url}/veo/v1/api/video/submit',
+            headers=self.headers,
+            json=request_body
+        )
+        
+        if response.status_code != 200:
+            raise Exception(f"Submission failed: {response.text}")
+            
+        return response.json()['data']
+
+    def get_status(self, task_id):
+        """Query task status"""
+        response = requests.get(
+            f'{self.base_url}/veo/v1/api/video/status/{task_id}',
+            headers={'Authorization': f'Bearer {self.api_key}'}
+        )
+        
+        if response.status_code != 200:
+            raise Exception(f"Query failed: {response.text}")
+            
+        return response.json()['data']
+
+    def wait_for_completion(self, task_id, max_wait=1800, poll_interval=10):
+        """Wait for task completion (max 30 minutes)"""
+        start_time = time.time()
+        
+        while time.time() - start_time < max_wait:
+            status_data = self.get_status(task_id)
+            status = status_data.get('status')
+            
+            if status == 'completed':
+                return status_data['result']
+            elif status == 'failed':
+                raise Exception(f"Generation failed: {status_data.get('error')}")
+            
+            print(f"Task in progress... Status: {status}")
+            time.sleep(poll_interval)
+        
+        raise Exception("Wait timeout")
+
+# Usage example
+if __name__ == "__main__":
+    client = VEOVideoClient('https://api.laozhang.ai', 'your-api-key')
+    
+    try:
+        # Submit task
+        task = client.submit_task(
+            prompt='A cat walking in the rainy night, preparing to catch a mouse',
+            model='veo3',
+            enhance_prompt=True
+        )
+        print(f'Task submitted, ID: {task["taskId"]}')
+        
+        # Wait for completion
+        result = client.wait_for_completion(task['taskId'])
+        print(f'Video generated successfully!')
+        print(f'Video URL: {result["video_url"]}')
+        
+    except Exception as e:
+        print(f'Error: {e}')
+```
+
+## Node.js Example
+
+### Install Dependencies
+
+```bash
+npm install axios
+```
+
+### Complete Client Implementation
+
+```javascript
+const axios = require('axios');
+
+class VEOVideoClient {
+    constructor(baseUrl, apiKey) {
+        this.baseUrl = baseUrl;
+        this.apiKey = apiKey;
+        this.headers = {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${apiKey}`
+        };
+    }
+
+    async submitTask(prompt, model = 'veo3', enhancePrompt = true, images = null) {
+        const requestBody = {
+            prompt,
+            model,
+            enhance_prompt: enhancePrompt
+        };
+
+        if (images) {
+            requestBody.images = images;
+        }
+
+        try {
+            const response = await axios.post(
+                `${this.baseUrl}/veo/v1/api/video/submit`,
+                requestBody,
+                { headers: this.headers }
+            );
+
+            return response.data.data;
+        } catch (error) {
+            throw new Error(`Submission failed: ${error.response?.data?.message || error.message}`);
+        }
+    }
+
+    async getStatus(taskId) {
+        try {
+            const response = await axios.get(
+                `${this.baseUrl}/veo/v1/api/video/status/${taskId}`,
+                { headers: { 'Authorization': `Bearer ${this.apiKey}` } }
+            );
+
+            return response.data.data;
+        } catch (error) {
+            throw new Error(`Query failed: ${error.response?.data?.message || error.message}`);
+        }
+    }
+
+    async waitForCompletion(taskId, maxWait = 1800, pollInterval = 10) {
+        const startTime = Date.now();
+
+        while ((Date.now() - startTime) / 1000 < maxWait) {
+            const statusData = await this.getStatus(taskId);
+            const status = statusData.status;
+
+            if (status === 'completed') {
+                return statusData.result;
+            } else if (status === 'failed') {
+                throw new Error(`Generation failed: ${statusData.error}`);
+            }
+
+            console.log(`Task in progress... Status: ${status}`);
+            await new Promise(resolve => setTimeout(resolve, pollInterval * 1000));
+        }
+
+        throw new Error('Wait timeout');
+    }
+}
+
+// Usage example
+async function main() {
+    const client = new VEOVideoClient('https://api.laozhang.ai', 'your-api-key');
+
+    try {
+        // Submit task
+        const task = await client.submitTask(
+            'A cat walking in the rainy night, preparing to catch a mouse',
+            'veo3',
+            true
+        );
+        console.log(`Task submitted, ID: ${task.taskId}`);
+
+        // Wait for completion
+        const result = await client.waitForCompletion(task.taskId);
+        console.log('Video generated successfully!');
+        console.log(`Video URL: ${result.video_url}`);
+
+    } catch (error) {
+        console.error('Error:', error.message);
+    }
+}
+
+main();
+```
+
+## Go Example
+
+```go
+package main
+
+import (
+    "bytes"
+    "encoding/json"
+    "fmt"
+    "io/ioutil"
+    "net/http"
+    "time"
+)
+
+type VEOClient struct {
+    BaseURL string
+    APIKey  string
+}
+
+type SubmitRequest struct {
+    Prompt        string   `json:"prompt"`
+    Model         string   `json:"model"`
+    EnhancePrompt bool     `json:"enhance_prompt"`
+    Images        []string `json:"images,omitempty"`
+}
+
+type Response struct {
+    Success bool `json:"success"`
+    Data    struct {
+        TaskID string `json:"taskId"`
+        Status string `json:"status"`
+        Result struct {
+            VideoURL string `json:"video_url"`
+        } `json:"result"`
+    } `json:"data"`
+}
+
+func (c *VEOClient) SubmitTask(prompt, model string, enhancePrompt bool) (string, error) {
+    reqBody := SubmitRequest{
+        Prompt:        prompt,
+        Model:         model,
+        EnhancePrompt: enhancePrompt,
+    }
+
+    jsonData, _ := json.Marshal(reqBody)
+    req, err := http.NewRequest("POST", c.BaseURL+"/veo/v1/api/video/submit", bytes.NewBuffer(jsonData))
+    if err != nil {
+        return "", err
+    }
+
+    req.Header.Set("Content-Type", "application/json")
+    req.Header.Set("Authorization", "Bearer "+c.APIKey)
+
+    client := &http.Client{}
+    resp, err := client.Do(req)
+    if err != nil {
+        return "", err
+    }
+    defer resp.Body.Close()
+
+    body, _ := ioutil.ReadAll(resp.Body)
+    var response Response
+    json.Unmarshal(body, &response)
+
+    if !response.Success {
+        return "", fmt.Errorf("Submission failed")
+    }
+
+    return response.Data.TaskID, nil
+}
+
+func (c *VEOClient) GetStatus(taskID string) (*Response, error) {
+    req, err := http.NewRequest("GET", c.BaseURL+"/veo/v1/api/video/status/"+taskID, nil)
+    if err != nil {
+        return nil, err
+    }
+
+    req.Header.Set("Authorization", "Bearer "+c.APIKey)
+
+    client := &http.Client{}
+    resp, err := client.Do(req)
+    if err != nil {
+        return nil, err
+    }
+    defer resp.Body.Close()
+
+    body, _ := ioutil.ReadAll(resp.Body)
+    var response Response
+    json.Unmarshal(body, &response)
+
+    return &response, nil
+}
+
+func main() {
+    client := VEOClient{
+        BaseURL: "https://api.laozhang.ai",
+        APIKey:  "your-api-key",
+    }
+
+    // Submit task
+    taskID, err := client.SubmitTask("A cat walking in the rainy night", "veo3", true)
+    if err != nil {
+        fmt.Printf("Error: %v\n", err)
+        return
+    }
+    fmt.Printf("Task submitted, ID: %s\n", taskID)
+
+    // Poll status
+    for {
+        time.Sleep(10 * time.Second)
+        status, err := client.GetStatus(taskID)
+        if err != nil {
+            fmt.Printf("Query error: %v\n", err)
+            continue
+        }
+
+        if status.Data.Status == "completed" {
+            fmt.Printf("Video generated successfully!\n")
+            fmt.Printf("Video URL: %s\n", status.Data.Result.VideoURL)
+            break
+        } else if status.Data.Status == "failed" {
+            fmt.Printf("Generation failed\n")
+            break
+        }
+
+        fmt.Printf("Task in progress... Status: %s\n", status.Data.Status)
+    }
+}
+```
+
+## Java Example
+
+```java
+import com.google.gson.Gson;
+import okhttp3.*;
+import java.io.IOException;
+import java.util.concurrent.TimeUnit;
+
+public class VEOVideoClient {
+    private final String baseUrl;
+    private final String apiKey;
+    private final OkHttpClient client;
+    private final Gson gson;
+
+    public VEOVideoClient(String baseUrl, String apiKey) {
+        this.baseUrl = baseUrl;
+        this.apiKey = apiKey;
+        this.client = new OkHttpClient.Builder()
+                .connectTimeout(30, TimeUnit.SECONDS)
+                .readTimeout(30, TimeUnit.SECONDS)
+                .build();
+        this.gson = new Gson();
+    }
+
+    public static class SubmitRequest {
+        String prompt;
+        String model;
+        boolean enhance_prompt;
+        String[] images;
+
+        public SubmitRequest(String prompt, String model, boolean enhancePrompt) {
+            this.prompt = prompt;
+            this.model = model;
+            this.enhance_prompt = enhancePrompt;
+        }
+    }
+
+    public static class ApiResponse {
+        boolean success;
+        Data data;
+
+        public static class Data {
+            String taskId;
+            String status;
+            Result result;
+
+            public static class Result {
+                String video_url;
+            }
+        }
+    }
+
+    public String submitTask(String prompt, String model, boolean enhancePrompt) throws IOException {
+        SubmitRequest request = new SubmitRequest(prompt, model, enhancePrompt);
+        String json = gson.toJson(request);
+
+        RequestBody body = RequestBody.create(
+                json, MediaType.parse("application/json"));
+
+        Request httpRequest = new Request.Builder()
+                .url(baseUrl + "/veo/v1/api/video/submit")
+                .post(body)
+                .addHeader("Authorization", "Bearer " + apiKey)
+                .addHeader("Content-Type", "application/json")
+                .build();
+
+        try (Response response = client.newCall(httpRequest).execute()) {
+            if (!response.isSuccessful()) {
+                throw new IOException("Submission failed: " + response);
+            }
+
+            ApiResponse apiResponse = gson.fromJson(
+                    response.body().string(), ApiResponse.class);
+            
+            return apiResponse.data.taskId;
+        }
+    }
+
+    public ApiResponse getStatus(String taskId) throws IOException {
+        Request request = new Request.Builder()
+                .url(baseUrl + "/veo/v1/api/video/status/" + taskId)
+                .addHeader("Authorization", "Bearer " + apiKey)
+                .build();
+
+        try (Response response = client.newCall(request).execute()) {
+            if (!response.isSuccessful()) {
+                throw new IOException("Query failed: " + response);
+            }
+
+            return gson.fromJson(
+                    response.body().string(), ApiResponse.class);
+        }
+    }
+
+    public static void main(String[] args) throws Exception {
+        VEOVideoClient client = new VEOVideoClient(
+                "https://api.laozhang.ai", "your-api-key");
+
+        // Submit task
+        String taskId = client.submitTask(
+                "A cat walking in the rainy night", "veo3", true);
+        System.out.println("Task submitted, ID: " + taskId);
+
+        // Poll status
+        while (true) {
+            Thread.sleep(10000); // Wait 10 seconds
+            
+            ApiResponse status = client.getStatus(taskId);
+            String currentStatus = status.data.status;
+            
+            if ("completed".equals(currentStatus)) {
+                System.out.println("Video generated successfully!");
+                System.out.println("Video URL: " + status.data.result.video_url);
+                break;
+            } else if ("failed".equals(currentStatus)) {
+                System.out.println("Generation failed");
+                break;
+            }
+            
+            System.out.println("Task in progress... Status: " + currentStatus);
+        }
+    }
+}
+```
+
+## cURL Command Examples
+
+### Basic Usage
+
+```bash
+# Submit task
+curl -X POST "https://api.laozhang.ai/veo/v1/api/video/submit" \
+  -H "Content-Type: application/json" \
+  -H "Authorization: Bearer your-api-key" \
+  -d '{
+    "prompt": "A cat walking in the rainy night",
+    "model": "veo3"
+  }'
+
+# Query status
+curl -X GET "https://api.laozhang.ai/veo/v1/api/video/status/YOUR_TASK_ID" \
+  -H "Authorization: Bearer your-api-key"
+```
+
+### Shell Script Example
+
+```bash
+#!/bin/bash
+
+API_KEY="your-api-key"
+BASE_URL="https://api.laozhang.ai"
+
+# Submit task
+submit_video() {
+    local prompt="$1"
+    local model="${2:-veo3}"
+    
+    response=$(curl -s -X POST "$BASE_URL/veo/v1/api/video/submit" \
+        -H "Content-Type: application/json" \
+        -H "Authorization: Bearer $API_KEY" \
+        -d "{
+            \"prompt\": \"$prompt\",
+            \"model\": \"$model\",
+            \"enhance_prompt\": true
+        }")
+    
+    echo "$response" | jq -r '.data.taskId'
+}
+
+# Query status
+check_status() {
+    local task_id="$1"
+    
+    curl -s -X GET "$BASE_URL/veo/v1/api/video/status/$task_id" \
+        -H "Authorization: Bearer $API_KEY" | jq
+}
+
+# Wait for completion
+wait_for_completion() {
+    local task_id="$1"
+    
+    while true; do
+        response=$(check_status "$task_id")
+        status=$(echo "$response" | jq -r '.data.status')
+        
+        case "$status" in
+            "completed")
+                video_url=$(echo "$response" | jq -r '.data.result.video_url')
+                echo "Video generated successfully!"
+                echo "Video URL: $video_url"
+                break
+                ;;
+            "failed")
+                echo "Generation failed"
+                break
+                ;;
+            *)
+                echo "Task in progress... Status: $status"
+                sleep 10
+                ;;
+        esac
+    done
+}
+
+# Usage example
+echo "Submitting video generation task..."
+task_id=$(submit_video "A cat walking in the rainy night")
+echo "Task ID: $task_id"
+
+wait_for_completion "$task_id"
+```
+

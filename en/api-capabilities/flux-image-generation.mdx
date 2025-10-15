@@ -1,0 +1,405 @@
+---
+title: Flux Image Generation API
+description: Generate high-quality images using Flux Kontext Pro/Max models, supports multiple aspect ratios with better value than official pricing
+icon: "sparkles"
+---
+
+# Flux Image Generation API
+
+Flux is an industry-leading image generation model. Through LaoZhang API's OpenAI-compatible interface, you can easily call Flux Kontext Pro and Max models to generate high-quality images. We offer better pricing than official rates, combined with exchange rate advantages and recharge bonuses to save you more costs.
+
+<Note>
+**🎯 High-Quality Generation**  
+Flux models are renowned for exceptional image quality and detail, supporting flexible aspect ratios from 3:7 to 7:3.
+</Note>
+
+## 🌟 Core Features
+
+- **📐 Flexible Ratios**: Supports continuous aspect ratio range from 3:7 to 7:3
+- **🎨 High-Quality Output**: 1 megapixel images with rich details and artistic expression
+- **💰 Price Advantage**: Better rates than official pricing, cost savings
+- **🔧 OpenAI Compatible**: Uses standard Images API format, easy integration
+- **⏱️ URL Validity**: Generated result URLs valid for 10 minutes, download promptly
+- **🔄 Reproducibility**: Supports seed parameter for consistent results
+
+## 📋 Model Comparison
+
+| Model | Model ID | LaoZhang API Price | Official Price | Savings | Features |
+|-------|----------|-------------------|----------------|---------|----------|
+| **Flux Kontext Pro** | `flux-kontext-pro` | $0.035/image | $0.040/image | 12.5% | Cost-effective, suitable for batch use |
+| **Flux Kontext Max** | `flux-kontext-max` | $0.07/image | $0.08/image | 12.5% | Highest quality, professional use |
+
+<Tip>
+💡 **Price Advantage**: Call Flux models through LaoZhang API platform, combined with exchange rate advantage (1:7) and recharge bonus policy (top up $100, get +10% bonus), save over 25% compared to official pricing!
+</Tip>
+
+## 📐 Supported Aspect Ratios
+
+Flux models support continuous aspect ratio range from **3:7 to 7:3**, maintaining approximately 1 megapixel total. Here are some common ratio examples:
+
+| Ratio | Type | Approximate Size | Use Case |
+|-------|------|-----------------|----------|
+| `1:1` | Square | 1024×1024 | General use, social media avatars |
+| `2:3` | Vertical | ~832×1248 | Phone wallpapers, portrait photos |
+| `3:2` | Horizontal | ~1248×832 | Desktop wallpapers, landscape photos |
+| `4:3` | Standard Horizontal | ~1182×886 | Traditional displays, presentations |
+| `16:9` | Widescreen | ~1408×792 | Modern displays, video thumbnails |
+| `9:16` | Vertical Screen | ~792×1408 | Mobile videos, vertical posters |
+| `21:9` | Ultra-wide | ~1680×720 | Movie posters, ultra-wide displays |
+| `3:7` | Narrowest Vertical | ~662×1544 | Bookmarks, vertical long images |
+| `7:3` | Widest Horizontal | ~1544×662 | Website banners, panoramic images |
+
+<Note>
+**📏 Custom Ratios**: Besides the examples above, you can use any ratio within the 3:7 to 7:3 range, such as `5:4`, `4:5`, `16:10`, etc. The system automatically adjusts size to maintain approximately 1 megapixel total area.
+</Note>
+
+## 🚀 Quick Start
+
+### Basic Example
+
+```python
+from openai import OpenAI
+
+# Initialize client
+client = OpenAI(
+    api_key="YOUR_API_KEY",
+    base_url="https://api.laozhang.ai/v1"
+)
+
+# Generate image (full parameters version)
+def generate_flux_image(prompt, aspect_ratio="1:1", model="flux-kontext-pro",
+                       seed=None, safety_tolerance=2, output_format="jpeg",
+                       prompt_upsampling=False):
+    """
+    Generate Flux image
+    
+    Parameters:
+    - prompt: Image description text
+    - aspect_ratio: Aspect ratio (3:7 to 7:3)
+    - model: Model selection
+    - seed: Random seed for reproducibility
+    - safety_tolerance: Content safety level (0-6)
+    - output_format: Output format "jpeg" or "png"
+    - prompt_upsampling: Whether to enhance prompt
+    """
+    try:
+        # Build extra_body parameters
+        extra_params = {
+            "aspect_ratio": aspect_ratio,
+            "safety_tolerance": safety_tolerance,
+            "output_format": output_format,
+            "prompt_upsampling": prompt_upsampling
+        }
+        
+        # Optional parameters
+        if seed is not None:
+            extra_params["seed"] = seed
+        
+        response = client.images.generate(
+            model=model,
+            prompt=prompt,
+            extra_body=extra_params
+        )
+        
+        # Get image URL (note: expires after 10 minutes)
+        image_url = response.data[0].url
+        return image_url
+    
+    except Exception as e:
+        print(f"Generation failed: {e}")
+        return None
+
+# Usage example
+image_url = generate_flux_image(
+    prompt="A futuristic city with flying cars and neon lights",
+    aspect_ratio="16:9",
+    model="flux-kontext-pro",
+    seed=42,  # Fixed seed for reproducibility
+    safety_tolerance=2,  # Default safety level
+    output_format="png",  # High-quality PNG format
+    prompt_upsampling=True  # Enhance prompt effect
+)
+
+if image_url:
+    print(f"Generated image: {image_url}")
+    print("⚠️ Note: URL will expire after 10 minutes, download promptly!")
+```
+
+## 📝 Parameter Details
+
+### Parameters Passed via extra_body
+
+| Parameter | Type | Range/Options | Description | Default |
+|-----------|------|---------------|-------------|---------|
+| `aspect_ratio` | string | 3:7 to 7:3 | Output image aspect ratio | "1:1" |
+| `seed` | integer | Any integer | Random seed for reproducibility | Random |
+| `safety_tolerance` | integer | 0-6 | Content safety control, 0=strictest, 6=most lenient | 2 |
+| `output_format` | string | "jpeg", "png" | Output image format | "jpeg" |
+| `prompt_upsampling` | boolean | true/false | Auto-enhance prompt | false |
+
+<Tip>
+**💡 Prompt Enhancement**: Enabling `prompt_upsampling` allows AI to automatically optimize and expand your prompt, but may change original intent. Recommended to test first.
+</Tip>
+
+## 💡 Best Practices
+
+### 1. URL Management and Download Strategy
+
+Since Flux generated image URLs are **only valid for 10 minutes**, proper download strategy is crucial:
+
+```python
+import time
+import requests
+
+class FluxImageManager:
+    """Flux image generation and download manager"""
+    
+    def __init__(self, api_key, base_url="https://api.laozhang.ai/v1"):
+        self.client = OpenAI(api_key=api_key, base_url=base_url)
+        
+    def generate_and_save(self, prompt, **kwargs):
+        """Generate image and save immediately"""
+        start_time = time.time()
+        
+        # Generate image
+        image_url = generate_flux_image(prompt, **kwargs)
+        if not image_url:
+            return None
+            
+        # Download immediately (avoid timeout)
+        elapsed = time.time() - start_time
+        if elapsed > 540:  # Over 9 minutes
+            print("⚠️ Warning: Approaching URL expiration time!")
+        
+        # Download and save
+        filename = f"flux_{int(time.time())}.png"
+        try:
+            response = requests.get(image_url, timeout=30)
+            response.raise_for_status()
+            
+            with open(filename, 'wb') as f:
+                f.write(response.content)
+                
+            print(f"✅ Saved: {filename} (elapsed: {elapsed:.1f}s)")
+            return filename
+            
+        except Exception as e:
+            print(f"❌ Download failed: {e}")
+            return None
+```
+
+### 2. Model Selection Guide
+
+**Flux Kontext Pro**:
+- ✅ Daily design needs
+- ✅ Batch content generation
+- ✅ Cost-sensitive projects
+- ✅ Rapid prototyping
+
+**Flux Kontext Max**:
+- ✅ Professional design works
+- ✅ Commercial use images
+- ✅ High-quality requirements
+- ✅ Print output needs
+
+### 3. Prompt Optimization
+
+Based on official documentation recommendations, detailed and descriptive prompts yield better results:
+
+```python
+# ❌ Too simple
+prompt = "cat"
+
+# ✅ Detailed description
+prompt = """
+A majestic orange tabby cat sitting by a window,
+golden hour lighting, soft focus background,
+professional pet photography style,
+warm and cozy atmosphere
+"""
+
+# ✅ Use prompt_upsampling to enhance simple prompts
+enhanced_result = generate_flux_image(
+    prompt="cat by window",
+    prompt_upsampling=True  # AI automatically expands and optimizes prompt
+)
+
+# ✅ Artistic style prompts
+artistic_prompt = """
+A surreal landscape painting in the style of Salvador Dali,
+melting clocks draped over twisted trees,
+vibrant sunset colors bleeding into a starry night sky,
+hyper-detailed, dreamlike atmosphere
+"""
+```
+
+## ⚠️ Important Notes
+
+1. **URL Validity**:
+   - Generated image URLs are **only valid for 10 minutes**
+   - Must download before expiration
+   - Recommended to download immediately after generation
+
+2. **Parameter Passing**:
+   - All Flux-specific parameters must be passed via `extra_body`
+   - Cannot use Flux proprietary parameters directly in top-level parameters
+
+3. **Aspect Ratio Range**:
+   - Supports continuous range from 3:7 to 7:3
+   - Not limited to fixed ratios, can use any ratio within range
+   - System auto-adjusts size to maintain ~1 megapixel
+
+4. **Content Safety**:
+   - `safety_tolerance` parameter controls moderation strictness (0-6)
+   - 0 = strictest, 6 = most lenient
+   - Default value 2 suitable for most scenarios
+
+5. **Output Format**:
+   - Default JPEG format, smaller files
+   - PNG format higher quality but larger files
+   - Choose appropriate format based on use case
+
+6. **Prompt Processing**:
+   - `prompt_upsampling` auto-optimizes prompts
+   - May change original intent, recommended to test first
+   - Significant effect on simple prompts
+
+## 🔍 FAQ
+
+### Q: Why do image URLs expire?
+A: This is Flux official's security design. All generated image URLs automatically expire after 10 minutes. Please download and save promptly.
+
+### Q: How is Flux different from other models?
+A: Flux models focus on high-quality image generation, supporting flexible aspect ratios (3:7 to 7:3), particularly suitable for professional designs requiring specific dimensions.
+
+### Q: How to choose between Pro and Max versions?
+A: 
+- **Pro**: Cost-effective, $0.035/image, suitable for daily use and batch generation
+- **Max**: Highest quality, $0.07/image, suitable for commercial works and professional needs
+
+### Q: Can I use any aspect ratio?
+A: You can use any ratio within the 3:7 to 7:3 range, such as `5:4`, `16:10`, `21:9`, etc. The system auto-adjusts to maintain ~1 megapixel.
+
+### Q: How to set safety_tolerance?
+A: 
+- 0-1: Corporate/commercial environment, strictest
+- 2-3: General creation, balanced mode (recommended)
+- 4-6: Artistic creation, more lenient
+
+### Q: What does prompt_upsampling do?
+A: When enabled, AI automatically expands and optimizes your prompt, especially suitable for brief prompts. But may change original meaning, recommended to test first.
+
+### Q: How to ensure reproducible results?
+A: Use the same `seed` value and identical other parameters to generate consistent results. This is helpful for iterative design.
+
+### Q: How to avoid URL expiration in batch generation?
+A: 
+1. Download immediately after generation
+2. Use concurrency control to avoid excessive processing time
+3. Consider using async processing for efficiency
+
+## 🎯 Multi-Image Processing Solution
+
+Flux API natively only supports single image input, but through our batch processing scripts, you can achieve **dual-image composition processing**.
+
+### Use Cases
+
+- **Pattern Transfer**: Transfer design patterns onto clothing models
+- **Style Fusion**: Combine characteristic elements from two images
+- **Comparison Display**: Show original and target effect simultaneously
+
+### Technical Approach
+
+<AccordionGroup>
+  <Accordion icon="merge" title="Image Merging Strategy">
+    1. **Auto Download**: Fetch two input images from URLs
+    2. **Smart Merge**: Use Python PIL to stitch images side by side
+    3. **API Call**: Use merged image as single input
+    4. **Result Processing**: AI performs intelligent processing based on merged image
+  </Accordion>
+  
+  <Accordion icon="code" title="Batch Processing Capability">
+    - Supports automated processing of multiple image pairs
+    - Unified prompt control for processing effects
+    - Automatic result download and file management
+    - Complete error handling and logging
+  </Accordion>
+</AccordionGroup>
+
+### Quick Start
+
+<CodeGroup>
+
+```bash Shell Script
+# Download batch processing script
+wget https://raw.githubusercontent.com/laozhang-api/ai-api-code-samples/main/flux-Image-API/flux-simple-batch.sh
+chmod +x flux-simple-batch.sh
+
+# Modify configuration
+# 1. Set your API_KEY
+# 2. Configure image pair array
+# 3. Customize processing prompt
+
+# Run batch processing
+./flux-simple-batch.sh
+```
+
+```python Python Implementation
+import requests
+from PIL import Image
+import io
+
+def merge_and_process(ref_url, base_url, prompt):
+    """Merge two images and call Flux for processing"""
+    
+    # Download images
+    ref_img = Image.open(io.BytesIO(requests.get(ref_url).content))
+    base_img = Image.open(io.BytesIO(requests.get(base_url).content))
+    
+    # Unify height and merge side by side
+    height = min(ref_img.height, base_img.height)
+    ref_resized = ref_img.resize((int(ref_img.width * height / ref_img.height), height))
+    base_resized = base_img.resize((int(base_img.width * height / base_img.height), height))
+    
+    merged = Image.new('RGB', (ref_resized.width + base_resized.width, height))
+    merged.paste(ref_resized, (0, 0))
+    merged.paste(base_resized, (ref_resized.width, 0))
+    
+    # Save as temp file
+    merged.save('temp_merged.jpg')
+    
+    # Call Flux API
+    with open('temp_merged.jpg', 'rb') as f:
+        response = requests.post(
+            'https://api.laozhang.ai/v1/images/edits',
+            headers={'Authorization': f'Bearer {API_KEY}'},
+            files={'image': f},
+            data={
+                'model': 'flux-kontext-max',
+                'prompt': prompt,
+                'n': 1,
+                'size': '1024x1024'
+            }
+        )
+    
+    return response.json()['data'][0]['url']
+```
+
+</CodeGroup>
+
+<Warning>
+**Dependency Requirements**: Script requires `jq`, `Python3 + PIL`, and optionally `ImageMagick`. See script help for detailed installation instructions.
+</Warning>
+
+## 🔗 Related Resources
+
+- [Complete Example Code](https://github.com/laozhang-api/ai-api-code-samples/tree/main/flux-Image-API)
+- [Multi-Image Processing Script](https://github.com/laozhang-api/ai-api-code-samples/blob/main/flux-Image-API/flux-simple-batch.sh)
+- [Flux Image Edit API](/api-capabilities/flux-image-edit) - Edit existing images
+- [Pricing Calculator](https://api.laozhang.ai/account/pricing) - Real-time price query
+- [Online Demo](https://imagen.laozhang.ai) - Test Flux effects
+
+<Note>
+🎨 **Pro Tip**: Combining different aspect ratios and model versions can meet various needs from social media to professional design!
+</Note>
+

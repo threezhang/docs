@@ -1,0 +1,362 @@
+---
+title: "Error Handling"
+description: "VEO API error handling, limitation explanations, and common issue resolution"
+icon: "badge-question-mark"
+---
+
+## API Limitations
+
+<Warning>
+  Understanding API limitations helps better plan your application
+</Warning>
+
+### API Limits
+
+| Limitation | Value | Description |
+|--------|--------|------|
+| Prompt length | 2000 characters | Recommend keeping under 1000 characters for best results |
+| Reference image count | Max 5 images | Each image under 10MB |
+| Concurrent tasks | 10 tasks | Exceeding will return 429 error |
+| Task timeout | 30 minutes | Timeout tasks will be automatically cancelled |
+| Video duration | 10-15 seconds | Varies by model |
+| Request frequency | 100 requests/min | Exceeding limit will be rate-limited |
+
+### Image Format Requirements
+
+<Tabs>
+  <Tab title="Supported Formats">
+    - **JPEG** (.jpg, .jpeg)
+    - **PNG** (.png)
+    - **WebP** (.webp)
+  </Tab>
+  
+  <Tab title="Image Specifications">
+    - **File size:** Max 10MB per image
+    - **Recommended resolution:** 1024x1024 or higher
+    - **Color mode:** RGB
+    - **URL requirement:** Must be publicly accessible HTTPS link
+  </Tab>
+</Tabs>
+
+## HTTP Error Codes
+
+### 4xx Client Errors
+
+<Accordion>
+  <AccordionItem title="400 Bad Request">
+    **Reason:** Request parameters are incorrect or improperly formatted
+    
+    **Common scenarios:**
+    - Missing required parameters
+    - Incorrect parameter types
+    - Invalid JSON format
+    
+    **Solution:**
+    ```python
+    # Check request parameters
+    if not prompt or len(prompt.strip()) == 0:
+        raise ValueError("Prompt cannot be empty")
+    
+    if len(prompt) > 2000:
+        raise ValueError("Prompt exceeds maximum length")
+    ```
+  </AccordionItem>
+  
+  <AccordionItem title="401 Unauthorized">
+    **Reason:** Authentication failed
+    
+    **Common scenarios:**
+    - Incorrect API key
+    - Expired key
+    - Missing authentication header
+    
+    **Solution:**
+    ```python
+    headers = {
+        'Authorization': f'Bearer {api_key}',
+        'Content-Type': 'application/json'
+    }
+    ```
+  </AccordionItem>
+  
+  <AccordionItem title="403 Forbidden">
+    **Reason:** Insufficient permissions
+    
+    **Common scenarios:**
+    - Account disabled
+    - Accessing restricted resources
+    
+    **Solution:** Contact customer service to verify account status
+  </AccordionItem>
+  
+  <AccordionItem title="404 Not Found">
+    **Reason:** Resource does not exist
+    
+    **Common scenarios:**
+    - Incorrect task ID
+    - Wrong API path
+    
+    **Solution:**
+    ```python
+    # Ensure using correct task ID
+    task_id = response['data']['taskId']
+    # Don't manually construct task_id
+    ```
+  </AccordionItem>
+  
+  <AccordionItem title="429 Too Many Requests">
+    **Reason:** Request frequency too high
+    
+    **Common scenarios:**
+    - Exceeding concurrency limit
+    - Request frequency too fast
+    
+    **Solution:**
+    ```python
+    # Implement rate limiting
+    from time import sleep
+    
+    def rate_limited_request(func, *args, **kwargs):
+        max_retries = 3
+        for i in range(max_retries):
+            try:
+                return func(*args, **kwargs)
+            except RateLimitError:
+                if i < max_retries - 1:
+                    sleep(2 ** i)  # Exponential backoff
+                else:
+                    raise
+    ```
+  </AccordionItem>
+</Accordion>
+
+### 5xx Server Errors
+
+<Accordion>
+  <AccordionItem title="500 Internal Server Error">
+    **Reason:** Internal server error
+    
+    **Solution:**
+    - Retry later
+    - If persistent, contact technical support
+  </AccordionItem>
+  
+  <AccordionItem title="502 Bad Gateway">
+    **Reason:** Gateway error
+    
+    **Solution:**
+    - Wait a few minutes and retry
+    - Check network connection
+  </AccordionItem>
+  
+  <AccordionItem title="503 Service Unavailable">
+    **Reason:** Service temporarily unavailable
+    
+    **Solution:**
+    - System maintenance in progress, please retry later
+    - Check official announcements
+  </AccordionItem>
+</Accordion>
+
+## API Error Codes
+
+### Common Error Code List
+
+| Error Code | Description | Solution |
+|--------|------|----------|
+| `INVALID_PROMPT` | Invalid prompt | Check prompt length and content |
+| `INVALID_MODEL` | Model does not exist | Use supported model names |
+| `QUOTA_EXCEEDED` | Quota exceeded | Contact to increase quota |
+| `TASK_NOT_FOUND` | Task does not exist | Check task ID |
+| `INVALID_IMAGE_URL` | Invalid image URL | Ensure image is accessible |
+| `IMAGE_TOO_LARGE` | Image too large | Compress image to under 10MB |
+| `TASK_TIMEOUT` | Task timeout | Resubmit task |
+| `INSUFFICIENT_BALANCE` | Insufficient balance | Top up account |
+
+### Error Response Format
+
+```json
+{
+  "success": false,
+  "message": "Error description",
+  "error_code": "ERROR_CODE",
+  "details": {
+    "field": "Specific error field",
+    "reason": "Error reason",
+    "suggestion": "Solution suggestion"
+  }
+}
+```
+
+## Troubleshooting Guide
+
+### Task Stuck in processing Status
+
+<Steps>
+  <Step title="Check Task Duration">
+    Confirm if exceeds normal processing time (see model documentation)
+  </Step>
+  
+  <Step title="Verify Task ID">
+    Ensure using correct task ID for query
+  </Step>
+  
+  <Step title="Check API Status">
+    Visit status page or contact support to confirm service status
+  </Step>
+  
+  <Step title="Retry Submission">
+    If exceeds 30 minutes, task may have timed out, please resubmit
+  </Step>
+</Steps>
+
+### Poor Generation Quality
+
+<Tabs>
+  <Tab title="Optimize Prompt">
+    ```python
+    # Before optimization
+    prompt = "cat"
+    
+    # After optimization
+    prompt = """
+    An orange British Shorthair cat in a sunny living room,
+    lazily lying on a soft sofa,
+    afternoon sunlight streaming through the window onto it,
+    4K quality, warm tones
+    """
+    ```
+  </Tab>
+  
+  <Tab title="Use Reference Images">
+    ```python
+    # Add high-quality reference images
+    images = [
+        "https://example.com/cat-reference-1.jpg",
+        "https://example.com/cat-reference-2.jpg"
+    ]
+    ```
+  </Tab>
+  
+  <Tab title="Enable Enhancement">
+    ```python
+    # Enable prompt enhancement
+    enhance_prompt = True
+    ```
+  </Tab>
+  
+  <Tab title="Choose Appropriate Model">
+    ```python
+    # For high-quality requirements, choose Pro version
+    model = "veo3-pro"
+    ```
+  </Tab>
+</Tabs>
+
+### Network Error Handling
+
+```python
+import requests
+from requests.adapters import HTTPAdapter
+from requests.packages.urllib3.util.retry import Retry
+
+def create_session():
+    session = requests.Session()
+    retry = Retry(
+        total=3,
+        read=3,
+        connect=3,
+        backoff_factor=0.3,
+        status_forcelist=(500, 502, 504)
+    )
+    adapter = HTTPAdapter(max_retries=retry)
+    session.mount('http://', adapter)
+    session.mount('https://', adapter)
+    return session
+
+# Use session with retry
+session = create_session()
+response = session.post(url, json=data, headers=headers)
+```
+
+## Common Questions FAQ
+
+<Accordion>
+  <AccordionItem title="Why did my task fail?">
+    **Possible reasons:**
+    - Prompt contains inappropriate content
+    - Reference images inaccessible
+    - Temporary system failure
+    
+    **Solutions:**
+    1. Check prompt content
+    2. Verify image URL accessibility
+    3. Review specific error message
+    4. Resubmit task
+  </AccordionItem>
+  
+  <AccordionItem title="How to handle timeout tasks?">
+    Tasks exceeding 30 minutes will be automatically cancelled without charge. Please resubmit the task.
+  </AccordionItem>
+  
+  <AccordionItem title="Why am I receiving 429 errors?">
+    Your request frequency is too high or concurrent task count exceeded. Please implement request throttling or reduce concurrency.
+  </AccordionItem>
+  
+  <AccordionItem title="What if image upload fails?">
+    1. Ensure correct image format (JPG/PNG/WebP)
+    2. Check image size (< 10MB)
+    3. Use HTTPS URL
+    4. Ensure URL is publicly accessible
+  </AccordionItem>
+  
+  <AccordionItem title="How to get more quota?">
+    Please contact feedback@laozhang.ai or WeChat laozhangdaichong to request quota increase.
+  </AccordionItem>
+</Accordion>
+
+## Technical Support
+
+<Card title="Encountering Issues?" icon="life-ring">
+  If you encounter issues not covered in the documentation, please contact us via:
+  
+  - **Email:** feedback@laozhang.ai
+  - **WeChat:** laozhangdaichong
+  - **Response time:** Within 24 hours on business days
+  
+  When contacting, please provide:
+  - Task ID
+  - Error message
+  - Request parameters (hide sensitive information)
+  - Problem description
+</Card>
+
+## Status Monitoring
+
+<Note>
+  Recommend implementing the following monitoring measures to promptly detect and handle issues:
+</Note>
+
+```python
+class VEOMonitor:
+    def __init__(self):
+        self.success_count = 0
+        self.failure_count = 0
+        self.total_duration = 0
+        
+    def record_success(self, duration):
+        self.success_count += 1
+        self.total_duration += duration
+        
+    def record_failure(self, error_code):
+        self.failure_count += 1
+        # Record error type for analysis
+        
+    def get_success_rate(self):
+        total = self.success_count + self.failure_count
+        return self.success_count / total if total > 0 else 0
+        
+    def get_average_duration(self):
+        return self.total_duration / self.success_count if self.success_count > 0 else 0
+```
+

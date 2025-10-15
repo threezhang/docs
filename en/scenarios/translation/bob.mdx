@@ -1,0 +1,356 @@
+---
+title: Bob Translation Plugin
+description: Bob translation software AI model integration guide
+icon: "language"
+---
+
+Bob is a powerful translation and OCR software for macOS and iOS. Through Laozhang API, you can integrate various advanced AI models into Bob for translation, polishing, summarizing and other functions.
+
+## Quick Integration
+
+### Step 1: Install Bob
+
+1. Visit [Bob Official Website](https://bobtranslate.com) to download and install
+2. Or install via Homebrew:
+   ```bash
+   brew install bob
+   ```
+
+### Step 2: Install OpenAI Plugin
+
+1. Open Bob application
+2. Click the menu bar icon, select "Preferences"
+3. Go to "Plugins" tab
+4. Search for "OpenAI Translate" plugin
+5. Click "Install" button
+
+### Step 3: Configure Laozhang API
+
+<Steps>
+  <Step title="Open Plugin Settings">
+    Find "OpenAI Translate" plugin in the plugin list, click the settings icon
+  </Step>
+  
+  <Step title="Fill In API Configuration">
+    Configure the following information:
+    - **API Base URL**: `https://api.laozhang.ai`
+    - **API Key**: Enter your Laozhang API key
+    - **Model**: Select the model you need (e.g., `gpt-4-turbo`)
+  </Step>
+  
+  <Step title="Test Configuration">
+    Click "Test" button to ensure connection is successful
+  </Step>
+  
+  <Step title="Save Settings">
+    Click "Save" button to complete configuration
+  </Step>
+</Steps>
+
+<Info>
+**Obtaining API Key**
+
+Visit [Laozhang API Console](https://api.laozhang.ai/token) to create and obtain your API key.
+</Info>
+
+## Recommended Model Selection
+
+Choose appropriate models based on different translation scenarios:
+
+| Translation Scenario | Recommended Model | Reason |
+|---------|---------|------|
+| **Daily Translation** | `gpt-3.5-turbo` | Fast response, economical |
+| **Professional Documents** | `gpt-4-turbo` | High accuracy, strong domain knowledge |
+| **Literary Works** | `claude-sonnet-4` | Strong literary flair |
+| **Technical Documents** | `gpt-4-turbo` | Precise technical terminology |
+| **Simultaneous Interpretation** | `gpt-3.5-turbo` | Ultra-fast response |
+
+<Tip>
+**Cost vs. Quality Trade-off**
+- **Daily use**: Recommend `gpt-3.5-turbo`, cost-effective
+- **Important documents**: Recommend `gpt-4-turbo` or `claude-sonnet-4`, higher quality
+- **Large batches**: Consider using `gpt-3.5-turbo` combined with manual proofreading
+</Tip>
+
+## Core Features
+
+### 1. Text Translation
+
+Select any text, use shortcuts to translate:
+- **Screenshot Translation**: `⌥ + A`
+- **Selection Translation**: `⌥ + D`
+- **Input Translation**: `⌥ + S`
+
+### 2. OCR Text Recognition
+
+Extract text from images:
+- Support multiple languages
+- High recognition accuracy
+- Direct translation of recognition results
+
+### 3. Text Polishing
+
+Optimize your text:
+- Grammar check
+- Expression optimization
+- Style adjustment
+- Tone conversion
+
+### 4. Text Summarization
+
+Quickly summarize long text:
+- Extract key points
+- Generate abstracts
+- Refine core ideas
+
+## Practical Examples
+
+### Scenario 1: Web Translation
+
+Browsing foreign language websites:
+1. Select the text you want to translate
+2. Use shortcut `⌥ + D`
+3. View translation result in popup
+
+### Scenario 2: Document Translation
+
+Translating professional documents:
+1. Copy document text
+2. Use shortcut `⌥ + S`
+3. Input or paste text
+4. Get high-quality translation
+
+### Scenario 3: Paper Reading
+
+Reading English papers:
+1. Screenshot paper paragraphs
+2. Use shortcut `⌥ + A`
+3. OCR extracts text
+4. Automatic translation display
+
+### Scenario 4: Email Writing
+
+Writing English emails:
+1. Write Chinese draft
+2. Use translation feature
+3. Get English version
+4. Use polishing feature for optimization
+
+## Advanced Configuration
+
+### Custom Prompts
+
+Customize prompts for translation:
+
+```
+You are a professional translator proficient in {source language} and {target language}.
+
+Task: Translate the following text to {target language}
+Requirements:
+1. Accurate and fluent translation
+2. Maintain original style and tone
+3. Handle proper nouns appropriately
+4. Preserve formatting
+
+Text to translate:
+{text}
+```
+
+### Multi-model Configuration
+
+Configure different models for different scenarios:
+
+| Scenario | Model | Temperature | Max Tokens |
+|------|-------|-------------|------------|
+| General Translation | gpt-3.5-turbo | 0.3 | 2000 |
+| Literary Translation | claude-sonnet-4 | 0.7 | 3000 |
+| Technical Translation | gpt-4-turbo | 0.2 | 2000 |
+| Text Polishing | gpt-4-turbo | 0.5 | 2000 |
+
+### Shortcut Customization
+
+Customize shortcuts as needed:
+
+| Function | Default Shortcut | Recommended Custom |
+|------|------------|-------------|
+| Screenshot Translation | ⌥ + A | Set to your preferred |
+| Selection Translation | ⌥ + D | Set to your preferred |
+| Input Translation | ⌥ + S | Set to your preferred |
+| Polishing Feature | None | ⌥ + P (recommended) |
+
+## Troubleshooting
+
+### Connection Failed
+
+**Problem**: Unable to connect to API
+
+**Solutions**:
+1. Check if API Base URL is correct: `https://api.laozhang.ai`
+2. Verify API Key validity
+3. Check network connection
+4. Confirm firewall settings
+
+### Translation Quality Poor
+
+**Problem**: Translation results don't meet expectations
+
+**Solutions**:
+1. Try using a more advanced model (e.g., switch from GPT-3.5 to GPT-4)
+2. Adjust temperature parameter (lower = more accurate, higher = more diverse)
+3. Optimize prompt template
+4. Provide more context information
+
+### Slow Response
+
+**Problem**: Translation speed is slow
+
+**Solutions**:
+1. Switch to a faster model (e.g., `gpt-3.5-turbo`)
+2. Reduce max_tokens setting
+3. Check network speed
+4. Try during off-peak hours
+
+### High Cost
+
+**Problem**: Usage costs are too high
+
+**Solutions**:
+1. Use `gpt-3.5-turbo` for daily translation
+2. Use advanced models only for important content
+3. Set reasonable max_tokens limits
+4. Regularly check usage
+
+## Best Practices
+
+### 1. Choose Models Wisely
+
+Choose appropriate models based on scenarios:
+
+```
+Daily communication → gpt-3.5-turbo (fast and economical)
+    ↓
+Professional documents → gpt-4-turbo (highly accurate)
+    ↓
+Literary works → claude-sonnet-4 (strong literary flair)
+```
+
+### 2. Optimize Prompts
+
+Provide clear translation requirements:
+
+```
+❌ Bad example: "Translate this text"
+
+✅ Good example: "Please translate the following technical documentation text from English to Chinese, pay attention to:
+1. Keep technical terminology professional
+2. Maintain original paragraph structure
+3. Preserve code blocks and formatted content
+4. Ensure text is fluent and natural"
+```
+
+### 3. Context Management
+
+Provide necessary context information:
+- Document type (paper, email, chat, etc.)
+- Domain background (technical, medical, legal, etc.)
+- Target audience (professional, general public, etc.)
+- Style requirements (formal, casual, etc.)
+
+### 4. Result Verification
+
+Check translation quality:
+- Verify terminology accuracy
+- Check logic coherence
+- Confirm style appropriateness
+- Proofread for typos
+
+## Usage Tips
+
+### Efficient Workflow
+
+```
+1. Selection/Screenshot
+   ↓
+2. Automatic Recognition/Translation
+   ↓
+3. Check Results
+   ↓
+4. (If needed) Secondary Polishing
+   ↓
+5. Copy and Use
+```
+
+### Batch Processing
+
+Handle large amounts of text:
+1. Split large text into appropriate blocks
+2. Process each block sequentially
+3. Merge results
+4. Perform overall proofreading
+
+### Quality Control
+
+Ensure translation quality:
+1. **Initial Translation**: Use GPT-3.5 for rough translation
+2. **Accuracy Check**: Important parts use GPT-4 for retranslation
+3. **Style Polishing**: Use Claude for style optimization
+4. **Final Review**: Manual review and adjustment
+
+## Plugin Extensions
+
+### Recommended Related Plugins
+
+| Plugin Name | Function | Use Case |
+|---------|------|----------|
+| **DeepL Translate** | Professional translation | Official translation alternative |
+| **Google Translate** | Quick translation | Daily translation supplement |
+| **Youdao Translate** | Chinese-English translation | Domestic user-friendly |
+| **OpenAI Polishing** | Text polishing | Content optimization |
+
+### Plugin Combination Strategies
+
+```
+Bob OpenAI Plugin (Primary)
+    ↓
+DeepL Plugin (Comparison)
+    ↓
+Manual Proofreading (Quality Assurance)
+```
+
+## Cost Optimization
+
+### Usage Strategy
+
+| Document Type | Strategy | Expected Cost |
+|---------|------|------------|
+| **Chat Messages** | GPT-3.5, no optimization | Very Low |
+| **General Documents** | GPT-3.5, batch processing | Low |
+| **Important Documents** | GPT-4, secondary proofreading | Medium |
+| **Contract/Legal** | GPT-4 + Manual Review | High |
+
+### Budget Control
+
+Set budget control:
+1. **Daily Cap**: Limit daily maximum usage
+2. **Priority Allocation**: Allocate quota by importance
+3. **Monitor Usage**: Regularly check usage
+4. **Optimize Model Selection**: Adjust model strategy based on actual needs
+
+## Further Learning
+
+### Official Resources
+- [Bob Official Documentation](https://bobtranslate.com/guide/)
+- [Bob Plugin Development Guide](https://github.com/bob-translator/bob-plugin)
+- [Bob Community Forum](https://github.com/bob-translator/bob-plugin/discussions)
+
+### Learning Resources
+- [Bob Quick Start Tutorial](https://bobtranslate.com/guide/quickstart)
+- [Bob Usage Tips](https://bobtranslate.com/guide/tips)
+- [Bob FAQ](https://bobtranslate.com/guide/faq)
+
+### Community Support
+- [Bob GitHub Issues](https://github.com/bob-translator/bob-plugin/issues)
+- [Bob User Community](https://github.com/bob-translator/bob-plugin/discussions)
+
+Need more help? Please visit [Laozhang API Official Website](https://api.laozhang.ai) or contact our support team.
+

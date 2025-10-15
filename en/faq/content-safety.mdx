@@ -1,0 +1,424 @@
+---
+title: "Content Safety"
+description: "Content safety policies, violation handling, and compliance guidelines"
+icon: "shield-check"
+---
+
+## Content Safety Policy
+
+Laozhang API follows strict content safety standards to ensure service compliance and security.
+
+### Prohibited Content
+
+The following types of content are strictly prohibited:
+
+<Warning>
+**Serious Violations**
+
+These behaviors will result in immediate account suspension:
+- Illegal content (fraud, money laundering, illegal transactions, etc.)
+- Child safety-related content (CSAM)
+- Violent extremism and terrorism
+- Malicious code and hacking activities
+</Warning>
+
+<Note>
+**Prohibited Content Types**
+
+| Category | Description | Examples |
+|------|------|------|
+| **Illegal Activities** | Violating laws and regulations | Fraud, drug trafficking, illegal weapon transactions |
+| **Harmful Content** | Endangering public safety | Creating viruses, hacking tutorials, explosive manufacturing |
+| **Violent Content** | Extreme violence, gore | Detailed descriptions of torture, murder guides |
+| **Hate Speech** | Discrimination and incitement | Racial discrimination, religious persecution incitement |
+| **Harassment** | Targeted attacks on individuals | Cyberbullying, privacy violation, doxxing |
+| **Adult Content** | Pornographic, sexual content | Explicit sexual descriptions, pornographic images |
+| **Misinformation** | Deliberately spread false information | Medical fraud, financial fraud, political rumors |
+| **Infringement** | Intellectual property violations | Piracy, plagiarism, unauthorized use |
+</Note>
+
+### Permitted Content
+
+The following content can be used normally within reasonable scope:
+
+<Tip>
+**Legitimate Use Cases**
+
+- Educational and research purposes (e.g., security research, medical research)
+- Creative works (novels, scripts, artwork)
+- News reporting and commentary
+- Technical discussions (programming, cybersecurity)
+- Customer service and consulting
+- Content translation and summarization
+</Tip>
+
+## Content Review Mechanism
+
+### Automated Review
+
+All API requests undergo automated content review:
+
+```
+User Request
+    ↓
+Automated Content Analysis
+    ↓
+Risk Assessment
+    ↓
+Decision: Pass / Warning / Block
+```
+
+**Review Dimensions:**
+- Content category classification
+- Sensitive word matching
+- Context semantic analysis
+- User behavior pattern
+- Historical violation records
+
+### Manual Review
+
+High-risk content is manually reviewed:
+- Flagged suspicious requests
+- User appeals
+- Repeated violations
+- Edge cases
+
+### Appeal Process
+
+<Steps>
+  <Step title="Submit Appeal">
+    If you believe content was misjudged, submit an appeal in console
+  </Step>
+  
+  <Step title="Provide Evidence">
+    Provide relevant evidence:
+    - Request ID
+    - Content description
+    - Usage context
+    - Compliance explanation
+  </Step>
+  
+  <Step title="Wait for Review">
+    Manual review team processes within 1-3 business days
+  </Step>
+  
+  <Step title="Get Results">
+    Receive review results via email:
+    - Pass: Resume service
+    - Reject: Maintain original decision
+  </Step>
+</Steps>
+
+## Violation Handling
+
+### Handling Measures
+
+Depending on violation severity, corresponding measures will be taken:
+
+| Violation Level | Handling Measures | Duration |
+|----------|----------|------|
+| **First Minor Violation** | Warning notice | - |
+| **Repeated Minor Violations** | Temporary suspension | 24 hours |
+| **Moderate Violation** | Service restriction | 7 days |
+| **Serious Violation** | Account suspension | Permanent |
+| **Extremely Serious** | Account termination + legal report | Permanent |
+
+### Violation Examples
+
+<AccordionGroup>
+  <Accordion title="Case 1: Fraud Content Generation">
+    **Violation Content:**
+    User requests generation of phishing emails, fraud scripts
+    
+    **Review Result:**
+    Immediately blocked, account suspended
+    
+    **Handling Measures:**
+    - Permanently terminate account
+    - Report to relevant authorities
+    - Freeze remaining balance
+  </Accordion>
+  
+  <Accordion title="Case 2: Adult Content Generation">
+    **Violation Content:**
+    Generate explicit pornographic text
+    
+    **Review Result:**
+    Content blocked, record violation
+    
+    **Handling Measures:**
+    - First offense: Warning
+    - Second offense: 7-day suspension
+    - Third offense: Permanent suspension
+  </Accordion>
+  
+  <Accordion title="Case 3: Medical Misinformation">
+    **Violation Content:**
+    Generate false medical advice, cure claims
+    
+    **Review Result:**
+    Content blocked, evaluate intent
+    
+    **Handling Measures:**
+    - Educational research purpose: Warning
+    - Malicious spread: Account suspension
+    - Serious consequences: Legal report
+  </Accordion>
+  
+  <Accordion title="Case 4: Technical Discussion (No Violation)">
+    **Request Content:**
+    Discuss web security vulnerabilities, SQL injection principles
+    
+    **Review Result:**
+    Within reasonable scope, permitted
+    
+    **Conditions:**
+    - Educational purpose
+    - No specific attack targets
+    - No malicious code
+    - No detailed exploitation tutorials
+  </Accordion>
+</AccordionGroup>
+
+## Compliance Guidelines
+
+### Development Best Practices
+
+Ensure application compliance:
+
+1. **Content Filtering**
+   ```python
+   def filter_user_input(text):
+       """Filter user input"""
+       # Check sensitive words
+       if contains_sensitive_words(text):
+           return "Input contains inappropriate content"
+       
+       # Validate content length
+       if len(text) > MAX_LENGTH:
+           return "Input too long"
+       
+       return text
+   ```
+
+2. **Logging and Auditing**
+   ```python
+   import logging
+   
+   def log_api_call(user_id, prompt, response):
+       """Log API calls for compliance audit"""
+       logging.info(f"User: {user_id}")
+       logging.info(f"Prompt hash: {hash(prompt)}")
+       logging.info(f"Response hash: {hash(response)}")
+   ```
+
+3. **User Consent**
+   ```python
+   def get_user_consent():
+       """Ensure user agrees to content policy"""
+       consent_text = """
+       By using this service, you agree to:
+       1. Not generate illegal content
+       2. Not use for fraudulent activities
+       3. Comply with local laws and regulations
+       4. Take responsibility for generated content
+       """
+       return user_accepts(consent_text)
+   ```
+
+### User-facing Applications
+
+If providing services to end users:
+
+<Steps>
+  <Step title="Clear Usage Terms">
+    Display user agreement and content policy in prominent location
+  </Step>
+  
+  <Step title="Input Validation">
+    Validate and filter user input
+  </Step>
+  
+  <Step title="Output Filtering">
+    Review and filter AI-generated content
+  </Step>
+  
+  <Step title="Reporting Mechanism">
+    Provide reporting channel for users to report violations
+  </Step>
+  
+  <Step title="Record Retention">
+    Retain necessary logs according to legal requirements
+  </Step>
+</Steps>
+
+### Special Scenarios
+
+#### Educational and Research
+
+If used for education or research:
+- Clearly indicate purpose
+- Limit scope of use
+- Implement access controls
+- Record research process
+
+#### Content Creation
+
+If used for creative work:
+- Mark as fictional content
+- Add appropriate content warnings
+- Follow publishing platform policies
+- Respect intellectual property
+
+#### Medical and Legal Consultation
+
+<Warning>
+AI-generated content cannot replace professional advice
+
+- Clearly indicate AI-generated
+- Recommend consulting professionals
+- Add disclaimer
+- Do not provide diagnostic advice
+</Warning>
+
+## Technical Implementation
+
+### Content Filtering SDK
+
+```python
+from laozhang_safety import ContentFilter
+
+# Initialize content filter
+filter = ContentFilter(api_key="your_api_key")
+
+def safe_completion(prompt):
+    """Safely call completion API"""
+    
+    # Pre-check input
+    input_check = filter.check_input(prompt)
+    if not input_check.is_safe:
+        return {
+            "error": "Input contains inappropriate content",
+            "details": input_check.violations
+        }
+    
+    # Call API
+    response = client.chat.completions.create(
+        model="gpt-4-turbo",
+        messages=[{"role": "user", "content": prompt}]
+    )
+    
+    # Post-check output
+    output_check = filter.check_output(response.choices[0].message.content)
+    if not output_check.is_safe:
+        return {
+            "error": "Generated content contains inappropriate material",
+            "details": output_check.violations
+        }
+    
+    return response
+```
+
+### Custom Safety Rules
+
+```python
+# Define custom safety rules
+custom_rules = {
+    "allowed_categories": [
+        "education",
+        "creative_writing",
+        "customer_service"
+    ],
+    "blocked_keywords": [
+        "your_custom_sensitive_words"
+    ],
+    "max_risk_score": 0.3  # Maximum acceptable risk score
+}
+
+filter = ContentFilter(
+    api_key="your_api_key",
+    custom_rules=custom_rules
+)
+```
+
+## Common Questions
+
+<AccordionGroup>
+  <Accordion title="What if false positives occur?">
+    **False Positive Handling:**
+    
+    1. **Immediate Action:**
+       - Check error message details
+       - Adjust request content
+       - Try alternative expressions
+    
+    2. **If Repeatedly False Positives:**
+       - Submit appeal request
+       - Provide usage context
+       - Explain legitimate purpose
+       - Wait for manual review
+    
+    3. **Prevention Suggestions:**
+       - Avoid sensitive words
+       - Provide clear context
+       - Use professional terminology
+       - Add usage intent description
+  </Accordion>
+  
+  <Accordion title="How to ensure application compliance?">
+    **Compliance Checklist:**
+    
+    - [ ] Read and understand content policy
+    - [ ] Implement input validation
+    - [ ] Add output filtering
+    - [ ] Display user agreement
+    - [ ] Implement logging
+    - [ ] Set up reporting mechanism
+    - [ ] Regular compliance audits
+    - [ ] Staff training
+  </Accordion>
+  
+  <Accordion title="Can appeal after violation handling?">
+    **Appeal Rights:**
+    
+    Yes, can appeal within 30 days of decision. Submit:
+    - Detailed explanation
+    - Improvement measures
+    - Compliance commitment
+    - Supporting evidence
+    
+    **Appeal Process:**
+    1. Submit appeal form in console
+    2. Provide necessary materials
+    3. Wait for review (5-7 business days)
+    4. Receive review results
+  </Accordion>
+  
+  <Accordion title="How are historical violations handled?">
+    **Violation Record:**
+    - Records retained for 1 year
+    - Considered in review
+    - Affect trust level
+    
+    **Record Elimination:**
+    - Minor violations: Eliminated after 6 months without new violations
+    - Moderate violations: Eliminated after 1 year without new violations
+    - Serious violations: Permanent record
+  </Accordion>
+</AccordionGroup>
+
+## Contact Us
+
+If questions about content safety:
+
+- **Email Support**: compliance@laozhang.ai
+- **Appeal Submission**: Submit in [Console](https://api.laozhang.ai/appeals)
+- **Reporting Violations**: report@laozhang.ai
+
+## Related Resources
+
+- [Terms of Service](https://api.laozhang.ai/terms) - View complete terms
+- [Privacy Policy](https://api.laozhang.ai/privacy) - Understand data protection policy
+- [Data Security](/faq/data-security) - Learn about data security measures
+- [API Reference](/api-reference) - View API documentation
+

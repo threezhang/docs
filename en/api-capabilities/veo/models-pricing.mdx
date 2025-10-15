@@ -1,0 +1,162 @@
+---
+title: "Models and Pricing"
+description: "List of models and pricing information supported by VEO API"
+icon: "badge-dollar-sign"
+---
+
+## Supported Models
+
+<CardGroup cols={2}>
+  <Card title="VEO3" icon="sparkles">
+    <div style={{ marginBottom: '8px' }}>
+      <code style={{ fontSize: '14px', padding: '4px 8px', borderRadius: '4px', backgroundColor: '#f3f4f6' }}>veo3</code>
+    </div>
+    
+    **Price:** $2.00 / video
+    
+    **Features:**
+    - 3rd generation standard version
+    - Excellent overall performance
+    - Generation time: 3-8 minutes
+    - Recommendation: ⭐⭐⭐⭐⭐
+    
+    **Use cases:** Daily use, general scenarios
+  </Card>
+
+  <Card title="VEO3 Fast" icon="bolt">
+    <div style={{ marginBottom: '8px' }}>
+      <code style={{ fontSize: '14px', padding: '4px 8px', borderRadius: '4px', backgroundColor: '#f3f4f6' }}>veo3-fast</code>
+    </div>
+    
+    **Price:** $2.00 / video
+    
+    **Features:**
+    - Fast generation version
+    - Supports audio generation
+    - Generation time: 1-3 minutes
+    - Higher image quality
+    
+    **Use cases:** Quick testing, audio required
+  </Card>
+
+  <Card title="VEO3 Pro" icon="crown">
+    <div style={{ marginBottom: '8px' }}>
+      <code style={{ fontSize: '14px', padding: '4px 8px', borderRadius: '4px', backgroundColor: '#f3f4f6' }}>veo3-pro</code>
+    </div>
+    
+    **Price:** $10.00 / video
+    
+    **Features:**
+    - Professional version model
+    - Exceptional video quality
+    - Generation time: 5-15 minutes
+    - Suitable for professional production
+    
+    **Use cases:** Professional production, commercial use
+  </Card>
+
+  <Card title="VEO3 Pro Frames" icon="film">
+    <div style={{ marginBottom: '8px' }}>
+      <code style={{ fontSize: '14px', padding: '4px 8px', borderRadius: '4px', backgroundColor: '#f3f4f6' }}>veo3-pro-frames</code>
+    </div>
+    
+    **Price:** $10.00 / video
+    
+    **Features:**
+    - Pro version + frame control
+    - Ultimate image quality
+    - Generation time: 5-15 minutes
+    - Suitable for top-tier production
+    
+    **Use cases:** Precise control, top-tier production
+  </Card>
+</CardGroup>
+
+## Price Comparison
+
+| Model | Price | Generation Time | Video Quality | Special Features | Recommended Use |
+|------|------|----------|----------|----------|----------|
+| `veo3` | $2.00 | 3-8 min | ⭐⭐⭐⭐ | Standard features | Daily use |
+| `veo3-fast` | $2.00 | 1-3 min | ⭐⭐⭐⭐ | Audio support | Quick testing |
+| `veo3-pro` | $10.00 | 5-15 min | ⭐⭐⭐⭐⭐ | Advanced quality | Professional production |
+| `veo3-pro-frames` | $10.00 | 5-15 min | ⭐⭐⭐⭐⭐ | Frame-level control | Precise control |
+
+## Billing Information
+
+<Info>
+  **Billed on success:** Charges only for successfully generated videos, fees automatically refunded for failed generations
+</Info>
+
+### Billing Process
+
+<Steps>
+  <Step title="Pre-deduction">
+    Corresponding fees pre-deducted based on selected model when task is submitted
+  </Step>
+  <Step title="Task processing">
+    System processes video generation task
+  </Step>
+  <Step title="Result confirmation">
+    - **Success:** Fees deducted, video returned
+    - **Failure:** Pre-deducted fees automatically refunded
+  </Step>
+</Steps>
+
+### Fee Explanation
+
+<Accordion>
+  <AccordionItem title="When will I be charged?">
+    Charges only occur when video is successfully generated and video URL is returned. Failures, timeouts, or other errors during task processing will not incur charges.
+  </AccordionItem>
+  
+  <AccordionItem title="How to choose the right model?">
+    - **Daily use:** Choose `veo3`, best cost-performance ratio
+    - **Need quick results:** Choose `veo3-fast`
+    - **Professional production needs:** Choose `veo3-pro`
+    - **Need precise control:** Choose `veo3-pro-frames`
+  </AccordionItem>
+  
+  <AccordionItem title="Are there volume discounts?">
+    Please contact feedback@laozhang.ai to inquire about bulk purchase discounts
+  </AccordionItem>
+</Accordion>
+
+## Model Selection Recommendations
+
+### Scenario Recommendations
+
+<Tabs>
+  <Tab title="Personal Creation">
+    **Recommended models:** `veo3` or `veo3-fast`
+    
+    Suitable for individual creators, social media content creation, etc. Standard version can meet most needs, fast version suitable for scenarios requiring quick iteration.
+  </Tab>
+  
+  <Tab title="Commercial Production">
+    **Recommended model:** `veo3-pro`
+    
+    Suitable for commercial advertising, product displays, corporate promotion, and other professional scenarios. Provides higher video quality and better detail rendering.
+  </Tab>
+  
+  <Tab title="Film Production">
+    **Recommended model:** `veo3-pro-frames`
+    
+    Suitable for film post-production, special effects production, and other scenarios requiring precise control. Supports frame-level control, ensuring highest quality output.
+  </Tab>
+</Tabs>
+
+### Performance Comparison
+
+<Note>
+  All models generate videos with duration of **10-15 seconds**, resolution and frame rate vary by model.
+</Note>
+
+## Quotas and Limits
+
+| Limit Item | Limit Value | Description |
+|--------|--------|------|
+| Concurrent tasks | 10 | Maximum tasks processed simultaneously |
+| Daily quota | Based on account level | Can contact customer service to adjust |
+| Video duration | 10-15 seconds | Unified across all models |
+| Reference images | Maximum 5 | Each not exceeding 10MB |
+

@@ -1,0 +1,712 @@
+---
+title: 'OpenAI Models Guide'
+sidebarTitle: 'OpenAI Models'
+description: 'Detailed guide for GPT-4o, GPT-4, and O1 series models'
+icon: 'openai'
+---
+
+## Model Overview
+
+OpenAI is one of the world's leading AI research institutions, offering multiple high-performance large language models. From the powerful GPT-4o to the cost-effective GPT-4o Mini, and the reasoning-focused O1 series, OpenAI provides solutions for various scenarios.
+
+<Note>
+  **Full Compatibility**: Laozhang API is 100% compatible with OpenAI's official API format. Simply replace `https://api.openai.com/v1` with `https://api.laozhang.ai/v1` to use it.
+</Note>
+
+## Model Classification
+
+### GPT-4o Series
+
+<AccordionGroup>
+  <Accordion icon="sparkles" title="GPT-4o">
+    **Latest flagship model, the most powerful multimodal AI**
+    
+    - **Core Features**:
+      - Supports text, images, and audio multimodal understanding
+      - 128K context window
+      - Fastest response speed
+      - Excellent multilingual capabilities
+    
+    - **Pricing**:
+      - Input: $2.5/1M tokens
+      - Output: $10/1M tokens
+    
+    - **Suitable Scenarios**:
+      - Complex task handling
+      - Image understanding and analysis
+      - Long document processing
+      - Professional content generation
+  </Accordion>
+
+  <Accordion icon="rocket" title="GPT-4o Mini">
+    **Cost-effective model, price reduced by 90%**
+    
+    - **Core Features**:
+      - 90% price reduction compared to GPT-4o
+      - Supports image understanding
+      - Fast response speed
+      - Excellent performance
+    
+    - **Pricing**:
+      - Input: $0.15/1M tokens  
+      - Output: $0.60/1M tokens
+    
+    - **Suitable Scenarios**:
+      - Daily conversations
+      - Batch processing
+      - Development and testing
+      - Cost-sensitive applications
+  </Accordion>
+</AccordionGroup>
+
+### GPT-4 Series
+
+<AccordionGroup>
+  <Accordion icon="brain" title="GPT-4 Turbo">
+    **Classic high-performance model with powerful reasoning capabilities**
+    
+    - **Core Features**:
+      - 128K context window
+      - Strong logical reasoning
+      - Excellent code understanding
+      - Multi-domain knowledge
+    
+    - **Pricing**:
+      - Input: $10/1M tokens
+      - Output: $30/1M tokens
+    
+    - **Suitable Scenarios**:
+      - Complex reasoning tasks
+      - Code generation and review
+      - Academic research
+      - Professional consulting
+  </Accordion>
+
+  <Accordion icon="file-alt" title="GPT-4">
+    **Classic GPT-4 model, stable and reliable**
+    
+    - **Core Features**:
+      - 8K context window
+      - Outstanding text understanding
+      - Creative writing capabilities
+      - Accurate information extraction
+    
+    - **Pricing**:
+      - Input: $30/1M tokens
+      - Output: $60/1M tokens
+    
+    - **Suitable Scenarios**:
+      - High-quality content creation
+      - Important decision support
+      - Detailed analysis reports
+  </Accordion>
+</AccordionGroup>
+
+### O1 Series
+
+<AccordionGroup>
+  <Accordion icon="calculator" title="O1 Preview">
+    **Reasoning-specialized model with PhD-level thinking ability**
+    
+    - **Core Features**:
+      - Strongest reasoning capabilities
+      - Multi-step thinking process
+      - Excellent math problem solving
+      - Complex logic analysis
+    
+    - **Pricing**:
+      - Input: $15/1M tokens
+      - Output: $60/1M tokens
+    
+    - **Special Limitations**:
+      - Does not support streaming output
+      - Does not support `system` role
+      - Does not support `temperature` parameter
+    
+    - **Suitable Scenarios**:
+      - Mathematical olympiad problems
+      - Scientific research
+      - Code algorithm optimization
+      - Complex decision analysis
+  </Accordion>
+
+  <Accordion icon="bolt" title="O1 Mini">
+    **Lightweight reasoning model, extreme cost-performance**
+    
+    - **Core Features**:
+      - Fast reasoning speed
+      - 80% cheaper than O1 Preview
+      - Good code and math capabilities
+      - Suitable for daily reasoning tasks
+    
+    - **Pricing**:
+      - Input: $3/1M tokens
+      - Output: $12/1M tokens
+    
+    - **Suitable Scenarios**:
+      - Daily math problems
+      - Code logic optimization
+      - Reasoning practice
+      - Education and tutoring
+  </Accordion>
+</AccordionGroup>
+
+### GPT-3.5 Series
+
+<AccordionGroup>
+  <Accordion icon="comments" title="GPT-3.5 Turbo">
+    **Classic dialogue model, excellent cost-performance**
+    
+    - **Core Features**:
+      - 16K context window
+      - Fast response speed
+      - Stable performance
+      - Lowest price
+    
+    - **Pricing**:
+      - Input: $0.5/1M tokens
+      - Output: $1.5/1M tokens
+    
+    - **Suitable Scenarios**:
+      - Simple conversations
+      - Content summarization
+      - Text translation
+      - Customer service bots
+  </Accordion>
+</AccordionGroup>
+
+## Code Examples
+
+### Basic Text Dialogue
+
+<CodeGroup>
+
+```python Python
+from openai import OpenAI
+
+client = OpenAI(
+    api_key="YOUR_API_KEY",
+    base_url="https://api.laozhang.ai/v1"
+)
+
+# Use GPT-4o
+response = client.chat.completions.create(
+    model="gpt-4o",
+    messages=[
+        {"role": "system", "content": "You are a helpful assistant"},
+        {"role": "user", "content": "Introduce quantum computing"}
+    ],
+    temperature=0.7,
+    max_tokens=1000
+)
+
+print(response.choices[0].message.content)
+```
+
+```javascript Node.js
+import OpenAI from 'openai';
+
+const openai = new OpenAI({
+  apiKey: 'YOUR_API_KEY',
+  baseURL: 'https://api.laozhang.ai/v1'
+});
+
+// Use GPT-4o
+const response = await openai.chat.completions.create({
+  model: 'gpt-4o',
+  messages: [
+    { role: 'system', content: 'You are a helpful assistant' },
+    { role: 'user', content: 'Introduce quantum computing' }
+  ],
+  temperature: 0.7,
+  max_tokens: 1000
+});
+
+console.log(response.choices[0].message.content);
+```
+
+</CodeGroup>
+
+### Image Understanding
+
+<CodeGroup>
+
+```python Python
+# Analyze image content
+response = client.chat.completions.create(
+    model="gpt-4o",
+    messages=[
+        {
+            "role": "user",
+            "content": [
+                {"type": "text", "text": "What's in this image?"},
+                {
+                    "type": "image_url",
+                    "image_url": {
+                        "url": "https://example.com/image.jpg"
+                    }
+                }
+            ]
+        }
+    ]
+)
+
+print(response.choices[0].message.content)
+```
+
+```javascript Node.js
+// Analyze image content
+const response = await openai.chat.completions.create({
+  model: 'gpt-4o',
+  messages: [
+    {
+      role: 'user',
+      content: [
+        { type: 'text', text: "What's in this image?" },
+        {
+          type: 'image_url',
+          image_url: {
+            url: 'https://example.com/image.jpg'
+          }
+        }
+      ]
+    }
+  ]
+});
+
+console.log(response.choices[0].message.content);
+```
+
+</CodeGroup>
+
+### Long Document Analysis
+
+```python
+# Read and analyze long documents
+with open('document.txt', 'r', encoding='utf-8') as f:
+    document = f.read()
+
+response = client.chat.completions.create(
+    model="gpt-4o",  # 128K context
+    messages=[
+        {
+            "role": "user",
+            "content": f"Please summarize the following document:\n\n{document}"
+        }
+    ],
+    max_tokens=2000
+)
+
+print(response.choices[0].message.content)
+```
+
+### Creative Writing
+
+```python
+response = client.chat.completions.create(
+    model="gpt-4",
+    messages=[
+        {
+            "role": "system",
+            "content": "You are a professional novelist"
+        },
+        {
+            "role": "user",
+            "content": "Write a 500-word sci-fi short story about time travel"
+        }
+    ],
+    temperature=1.2,  # Higher temperature, more creative
+    max_tokens=1500
+)
+
+print(response.choices[0].message.content)
+```
+
+### Complex Code Review
+
+```python
+code = """
+def fibonacci(n):
+    if n <= 1:
+        return n
+    return fibonacci(n-1) + fibonacci(n-2)
+"""
+
+response = client.chat.completions.create(
+    model="gpt-4o",
+    messages=[
+        {
+            "role": "user",
+            "content": f"Review this code and suggest optimizations:\n\n{code}"
+        }
+    ]
+)
+
+print(response.choices[0].message.content)
+```
+
+### Mathematical Problem Solving
+
+```python
+# Use O1 series to solve complex math problems
+response = client.chat.completions.create(
+    model="o1-preview",
+    messages=[
+        {
+            "role": "user",
+            "content": """
+            Solve: Find all positive integer solutions (x, y, z) satisfying:
+            x² + y² = z²
+            x + y + z = 1000
+            """
+        }
+    ]
+)
+
+print(response.choices[0].message.content)
+```
+
+<Warning>
+  **O1 Series Special Notes**:
+  - Do not support `system` role messages
+  - Do not support streaming output
+  - Do not support `temperature`, `top_p` and other creativity parameters
+  - `max_tokens` defaults to model's maximum value
+</Warning>
+
+## Usage Tips
+
+### 1. Choose the Right Model
+
+| Scenario | Recommended Model | Reason |
+|----------|-------------------|--------|
+| Daily conversations | GPT-4o Mini | Cost-effective, fast speed |
+| Image understanding | GPT-4o | Powerful multimodal capabilities |
+| Complex reasoning | O1 Preview | PhD-level thinking |
+| Code generation | GPT-4o, Claude 3.5 | Strong code understanding |
+| Long documents | GPT-4o, Gemini 1.5 | Large context window |
+| Creative writing | GPT-4 | Creative expression |
+| Math problems | O1 Mini/Preview | Strong reasoning capabilities |
+
+### 2. Optimize Prompts
+
+<AccordionGroup>
+  <Accordion icon="wand-magic" title="Clear Instructions">
+    ✅ **Good Example**:
+    ```
+    Write a 500-word blog post about healthy eating.
+    Requirements:
+    1. Include 3 scientific studies
+    2. Provide 5 practical recommendations
+    3. Casual and easy-to-understand language
+    ```
+    
+    ❌ **Bad Example**:
+    ```
+    Write something about healthy eating
+    ```
+  </Accordion>
+
+  <Accordion icon="list" title="Step-by-Step">
+    For complex tasks, break down into multiple steps:
+    
+    ```python
+    # Step 1: Generate outline
+    outline_response = client.chat.completions.create(
+        model="gpt-4o",
+        messages=[{
+            "role": "user",
+            "content": "Create an outline for a blog post on healthy eating"
+        }]
+    )
+    
+    # Step 2: Expand each section based on outline
+    detail_response = client.chat.completions.create(
+        model="gpt-4o",
+        messages=[
+            {"role": "user", "content": "Create an outline for a blog post on healthy eating"},
+            {"role": "assistant", "content": outline_response.choices[0].message.content},
+            {"role": "user", "content": "Expand the first section in detail"}
+        ]
+    )
+    ```
+  </Accordion>
+
+  <Accordion icon="code" title="Use Examples">
+    Provide examples to help the model understand your needs better:
+    
+    ```python
+    response = client.chat.completions.create(
+        model="gpt-4o",
+        messages=[{
+            "role": "user",
+            "content": """
+            Extract person names from text. Example:
+            
+            Input: "Zhang San and Li Si went to the park together"
+            Output: ["Zhang San", "Li Si"]
+            
+            Now extract names from: "Wang Wu met Zhao Liu at the cafe"
+            """
+        }]
+    )
+    ```
+  </Accordion>
+</AccordionGroup>
+
+### 3. Parameter Tuning
+
+<ParamField path="temperature" type="number" default="1">
+  Control randomness of output:
+  - `0`: Most deterministic (translation, summarization)
+  - `0.7`: Balanced (general dialogue)
+  - `1.0-1.5`: More creative (creative writing)
+</ParamField>
+
+<ParamField path="max_tokens" type="integer">
+  Maximum number of tokens to generate:
+  - Short responses: 500-1000
+  - Medium responses: 2000-4000
+  - Long responses: 8000+
+</ParamField>
+
+<ParamField path="top_p" type="number" default="1">
+  Nucleus sampling, alternative to temperature:
+  - `0.1`: Conservative
+  - `0.9`: More diverse
+  - Generally use either `temperature` or `top_p`, not both
+</ParamField>
+
+<ParamField path="frequency_penalty" type="number" default="0">
+  Reduce repetition:
+  - `0`: No penalty
+  - `0.5-1.0`: Moderate penalty
+  - `2.0`: Maximum penalty
+</ParamField>
+
+## Cost Optimization
+
+### 1. Choose Cost-Effective Models
+
+<CardGroup cols={2}>
+  <Card title="Daily Tasks" icon="comment">
+    Use **GPT-4o Mini** instead of GPT-4o
+    - 90% price reduction
+    - Similar quality
+    - Faster speed
+  </Card>
+  
+  <Card title="Reasoning Tasks" icon="calculator">
+    Use **O1 Mini** instead of O1 Preview
+    - 80% price reduction
+    - Good reasoning capability
+    - Suitable for most scenarios
+  </Card>
+</CardGroup>
+
+### 2. Control Context Length
+
+```python
+# ❌ Inefficient: Passing too much context
+messages = get_all_history()  # May contain hundreds of messages
+
+# ✅ Efficient: Only keep necessary context
+messages = [
+    {"role": "system", "content": system_prompt},
+    *get_recent_messages(5),  # Only recent 5 messages
+    {"role": "user", "content": user_input}
+]
+```
+
+### 3. Set Reasonable max_tokens
+
+```python
+# ❌ Wasteful: No token limit set
+response = client.chat.completions.create(
+    model="gpt-4o",
+    messages=[...]
+)
+
+# ✅ Economical: Set reasonable limit
+response = client.chat.completions.create(
+    model="gpt-4o",
+    messages=[...],
+    max_tokens=500  # Limit output length
+)
+```
+
+## Error Handling
+
+### Common Errors
+
+<AccordionGroup>
+  <Accordion icon="key" title="401: Unauthorized">
+    **Cause**: Invalid or missing API Key
+    
+    **Solution**:
+    ```python
+    # Check if API Key is correct
+    client = OpenAI(
+        api_key="YOUR_API_KEY",  # Ensure this is correct
+        base_url="https://api.laozhang.ai/v1"
+    )
+    ```
+  </Accordion>
+
+  <Accordion icon="clock" title="429: Rate Limit">
+    **Cause**: Request rate limit exceeded
+    
+    **Solution**:
+    ```python
+    import time
+    from openai import RateLimitError
+    
+    for i in range(3):  # Retry up to 3 times
+        try:
+            response = client.chat.completions.create(...)
+            break
+        except RateLimitError:
+            wait_time = 2 ** i  # Exponential backoff
+            print(f"Rate limited, waiting {wait_time} seconds...")
+            time.sleep(wait_time)
+    ```
+  </Accordion>
+
+  <Accordion icon="exclamation" title="400: Invalid Request">
+    **Cause**: Parameter format error
+    
+    **Solution**:
+    - Check if model name is correct
+    - Verify message format is correct
+    - Ensure parameters meet requirements
+    
+    ```python
+    # Correct format
+    response = client.chat.completions.create(
+        model="gpt-4o",  # Use correct model name
+        messages=[
+            {"role": "user", "content": "Hello"}  # Correct message format
+        ]
+    )
+    ```
+  </Accordion>
+</AccordionGroup>
+
+### Retry Mechanism
+
+```python
+import time
+from openai import OpenAI, APIError, RateLimitError, APIConnectionError
+
+client = OpenAI(
+    api_key="YOUR_API_KEY",
+    base_url="https://api.laozhang.ai/v1"
+)
+
+def chat_with_retry(messages, max_retries=3):
+    for i in range(max_retries):
+        try:
+            response = client.chat.completions.create(
+                model="gpt-4o",
+                messages=messages
+            )
+            return response
+        except RateLimitError as e:
+            if i < max_retries - 1:
+                wait_time = 2 ** i
+                print(f"Rate limited, retrying in {wait_time} seconds...")
+                time.sleep(wait_time)
+            else:
+                raise
+        except (APIError, APIConnectionError) as e:
+            if i < max_retries - 1:
+                print(f"Request failed, retrying...")
+                time.sleep(1)
+            else:
+                raise
+
+# Usage
+response = chat_with_retry([
+    {"role": "user", "content": "Hello"}
+])
+```
+
+## Streaming Response
+
+For long responses, use streaming output for better user experience:
+
+<CodeGroup>
+
+```python Python
+# Streaming output
+stream = client.chat.completions.create(
+    model="gpt-4o",
+    messages=[
+        {"role": "user", "content": "Write an article about AI"}
+    ],
+    stream=True
+)
+
+print("Generating...", end="")
+for chunk in stream:
+    if chunk.choices[0].delta.content:
+        print(chunk.choices[0].delta.content, end="", flush=True)
+print()
+```
+
+```javascript Node.js
+// Streaming output
+const stream = await openai.chat.completions.create({
+  model: 'gpt-4o',
+  messages: [
+    { role: 'user', content: 'Write an article about AI' }
+  ],
+  stream: true
+});
+
+process.stdout.write('Generating...');
+for await (const chunk of stream) {
+  const content = chunk.choices[0]?.delta?.content;
+  if (content) {
+    process.stdout.write(content);
+  }
+}
+console.log();
+```
+
+</CodeGroup>
+
+## Best Practices
+
+1. **Choose the Right Model**
+   - Simple tasks → GPT-4o Mini
+   - Complex tasks → GPT-4o
+   - Reasoning tasks → O1 series
+
+2. **Optimize Prompts**
+   - Clear and specific instructions
+   - Provide examples
+   - Break down complex tasks
+
+3. **Control Costs**
+   - Only pass necessary context
+   - Set reasonable `max_tokens`
+   - Use cost-effective models
+
+4. **Error Handling**
+   - Implement retry mechanism
+   - Catch and handle different error types
+   - Set reasonable timeout
+
+5. **User Experience**
+   - Use streaming output
+   - Show loading status
+   - Provide feedback
+
+## Related Resources
+
+- [Chat Completions API](/api-reference/chat-completions) - Complete API documentation
+- [Claude Models](/api-reference/claude) - Anthropic Claude models guide
+- [Gemini Models](/api-reference/gemini) - Google Gemini models guide
+- [Pricing](/pricing) - Detailed model pricing information
+

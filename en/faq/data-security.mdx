@@ -1,0 +1,514 @@
+---
+title: "Data Security"
+description: "Data security measures, privacy protection, and compliance certifications"
+icon: "lock"
+---
+
+## Data Security Commitment
+
+Laozhang API is committed to protecting your data security and privacy, implementing industry-leading security measures.
+
+<Note>
+**Core Principles**
+
+- **Zero Data Retention**: Do not store your request content
+- **Transport Encryption**: All data transmissions use HTTPS/TLS 1.3
+- **Access Control**: Strict permission management and authentication
+- **Compliance**: Meet GDPR, CCPA and other regulations
+- **Transparency**: Clear data handling policies
+</Note>
+
+## Data Handling Policy
+
+### Request Data
+
+| Data Type | Handling Method | Retention Period |
+|---------|----------|----------|
+| **Request Content** | Processed in real-time, not stored | Not retained |
+| **API Key** | Encrypted storage | Until deleted |
+| **Request Metadata** | Log recording | 30-90 days |
+| **Usage Statistics** | Aggregate analysis | 1 year |
+| **Error Logs** | Diagnostic purposes | 30 days |
+
+### User Data
+
+| Data Type | Purpose | Security Measures |
+|---------|------|----------|
+| **Account Information** | Identity verification | Encrypted storage, access control |
+| **Payment Information** | Billing | Third-party payment processor, PCI DSS compliant |
+| **Usage Logs** | Billing and analytics | Encrypted storage, restricted access |
+| **Personal Information** | Account management | Minimization principle, encryption protection |
+
+### Data Flow
+
+```
+Your Application
+    ↓ [HTTPS/TLS 1.3]
+Laozhang API Gateway
+    ↓ [Internal Network Encryption]
+AI Model Service Provider
+    ↓ [Real-time Processing]
+Response Return
+    ↓ [HTTPS/TLS 1.3]
+Your Application
+```
+
+<Info>
+**Zero Data Retention Policy**
+
+- Request content not stored in databases
+- Only transmitted during processing
+- Immediately deleted after processing
+- Model providers do not retain data (per agreements)
+</Info>
+
+## Security Measures
+
+### 1. Transport Encryption
+
+All API communications use industry-standard encryption:
+
+```bash
+# All requests must use HTTPS
+curl https://api.laozhang.ai/v1/chat/completions \
+  -H "Authorization: Bearer your_api_key" \
+  -H "Content-Type: application/json"
+
+# HTTP requests will be rejected
+curl http://api.laozhang.ai/v1/chat/completions
+# Returns: 403 Forbidden
+```
+
+**Encryption Standards:**
+- **Protocol**: TLS 1.3 (highest security)
+- **Cipher Suite**: AES-256-GCM
+- **Certificate**: EV SSL Certificate
+- **HSTS**: Strict transport security enabled
+
+### 2. Authentication and Authorization
+
+Multi-layer authentication ensures security:
+
+```python
+# API Key authentication
+headers = {
+    "Authorization": "Bearer your_api_key",
+    "Content-Type": "application/json"
+}
+
+# Each API Key has independent permissions
+# Cannot access resources of other users
+```
+
+**Security Features:**
+- API Key encrypted storage
+- Support for permission granular control
+- IP whitelist restriction
+- Request frequency limiting
+- Abnormal behavior detection
+
+### 3. Access Control
+
+Strict access control mechanism:
+
+| Control Level | Description | Implementation |
+|----------|------|------|
+| **Network Layer** | DDoS protection, firewall | Cloud provider + CDN |
+| **Application Layer** | Authentication, authorization | JWT + RBAC |
+| **Data Layer** | Encryption storage, access logs | AES-256 + Audit logs |
+| **API Layer** | Rate limiting, abnormal detection | Redis + AI monitoring |
+
+### 4. Audit and Monitoring
+
+Comprehensive security monitoring system:
+
+```
+Real-time Monitoring
+    ↓
+Abnormal Behavior Detection
+    ↓
+Automated Alerts
+    ↓
+Security Team Response
+    ↓
+Incident Handling
+```
+
+**Monitoring Content:**
+- Unusual request patterns
+- High-frequency access
+- Permission violation attempts
+- Data leakage risks
+- Security vulnerabilities
+
+## Privacy Protection
+
+### Data Minimization
+
+Only collect necessary information:
+
+```python
+# Collected data
+{
+    "request_id": "req_123456",
+    "timestamp": "2024-01-15 14:30:25",
+    "model": "gpt-4-turbo",
+    "tokens": 150,
+    "status": "success"
+}
+
+# Not collected data
+# - Request content
+# - Response content
+# - User prompts
+# - AI-generated text
+```
+
+### User Rights
+
+<AccordionGroup>
+  <Accordion title="Right to Know">
+    **What You Have the Right to Know:**
+    - What data is collected
+    - How data is used
+    - Who can access data
+    - How long data is retained
+    
+    View detailed information in [Privacy Policy](https://api.laozhang.ai/privacy)
+  </Accordion>
+  
+  <Accordion title="Right to Access">
+    **How to Access Your Data:**
+    1. Log in to console
+    2. Enter "Data Management"
+    3. View all your data
+    4. Download data exports
+  </Accordion>
+  
+  <Accordion title="Right to Deletion">
+    **How to Delete Your Data:**
+    1. Log in to console
+    2. Enter "Account Settings"
+    3. Click "Delete Account"
+    4. Confirm deletion
+    
+    **Data Deletion:**
+    - Account data immediately deleted
+    - Logs deleted within 30 days
+    - Backups deleted within 90 days
+  </Accordion>
+  
+  <Accordion title="Right to Correction">
+    **How to Correct Data:**
+    1. Log in to console
+    2. Enter "Account Settings"
+    3. Update incorrect information
+    4. Save changes
+  </Accordion>
+  
+  <Accordion title="Right to Portability">
+    **How to Export Data:**
+    1. Log in to console
+    2. Enter "Data Management"
+    3. Click "Export Data"
+    4. Select format (JSON/CSV)
+    5. Download export file
+  </Accordion>
+</AccordionGroup>
+
+## Compliance Certifications
+
+### GDPR Compliance
+
+Fully compliant with EU General Data Protection Regulation:
+
+<Tip>
+**GDPR Compliance Measures**
+
+- ✅ Explicit user consent
+- ✅ Data minimization principle
+- ✅ Right to be forgotten
+- ✅ Data portability
+- ✅ Breach notification (72 hours)
+- ✅ Privacy by design
+- ✅ Data protection officer
+</Tip>
+
+### CCPA Compliance
+
+Compliant with California Consumer Privacy Act:
+
+- ✅ Right to know collected data
+- ✅ Right to delete data
+- ✅ Right to opt out of data sales
+- ✅ Non-discrimination protection
+
+### Other Compliance
+
+| Standard/Regulation | Status | Description |
+|------------|------|------|
+| **SOC 2 Type II** | ✅ Certified | Security, availability, confidentiality |
+| **ISO 27001** | ✅ Certified | Information security management |
+| **PCI DSS** | ✅ Compliant | Payment card data security |
+| **HIPAA** | 🔄 In Progress | Healthcare data protection |
+
+## Security Best Practices
+
+### API Key Management
+
+<Warning>
+**Critical: Protect Your API Key**
+
+API Key is like your account password, if leaked, others can use your quota.
+</Warning>
+
+```python
+# ❌ Bad practice: Hardcode API Key
+api_key = "sk-rHcKJkgO4y3e5CTdDd1a..."
+
+# ✅ Good practice: Use environment variables
+import os
+api_key = os.getenv("LAOZHANG_API_KEY")
+
+# ✅ Good practice: Use configuration files
+import json
+with open('config.json') as f:
+    config = json.load(f)
+    api_key = config['api_key']
+```
+
+**Security Recommendations:**
+1. **Never** commit API Key to version control
+2. **Never** expose API Key in client-side code
+3. **Never** share API Key with others
+4. **Regularly** rotate API Keys
+5. **Use** different keys for different environments (dev/prod)
+6. **Enable** IP whitelist restrictions
+7. **Set** appropriate permission scope
+
+### Request Security
+
+Ensure security of API requests:
+
+```python
+# Enable request timeout
+import requests
+
+response = requests.post(
+    "https://api.laozhang.ai/v1/chat/completions",
+    headers=headers,
+    json=data,
+    timeout=30  # Prevent requests from hanging indefinitely
+)
+
+# Validate response
+if response.status_code != 200:
+    # Handle error
+    print(f"Request failed: {response.status_code}")
+    print(response.text)
+```
+
+### Data Transmission Security
+
+Protect data during transmission:
+
+```python
+# ✅ Always use HTTPS
+api_url = "https://api.laozhang.ai/v1/chat/completions"
+
+# ❌ Never use HTTP
+# api_url = "http://api.laozhang.ai/v1/chat/completions"
+
+# Validate SSL certificate
+response = requests.post(
+    api_url,
+    headers=headers,
+    json=data,
+    verify=True  # Verify SSL certificate
+)
+```
+
+### Sensitive Data Handling
+
+Handle sensitive data carefully:
+
+```python
+# ❌ Bad practice: Directly send sensitive information
+prompt = f"User password is: {user_password}"
+
+# ✅ Good practice: Filter sensitive information
+def filter_sensitive_data(text):
+    """Filter sensitive information"""
+    # Remove credit card numbers
+    text = re.sub(r'\d{4}[-\s]?\d{4}[-\s]?\d{4}[-\s]?\d{4}', '[CARD]', text)
+    # Remove ID numbers
+    text = re.sub(r'\d{17}[\dXx]', '[ID]', text)
+    # Remove phone numbers
+    text = re.sub(r'1[3-9]\d{9}', '[PHONE]', text)
+    return text
+
+prompt = filter_sensitive_data(user_input)
+```
+
+## Security Incident Handling
+
+### Incident Response Process
+
+```
+Detect Incident
+    ↓
+Immediate Containment
+    ↓
+Impact Assessment
+    ↓
+User Notification (if necessary)
+    ↓
+Detailed Investigation
+    ↓
+Implement Fix
+    ↓
+Post-incident Review
+```
+
+### Reporting Mechanism
+
+If you discover security vulnerabilities or incidents:
+
+<Steps>
+  <Step title="Immediate Report">
+    Email: security@laozhang.ai
+    Subject line include: "Security Issue - High Priority"
+  </Step>
+  
+  <Step title="Provide Details">
+    - Vulnerability description
+    - Reproduction steps
+    - Potential impact
+    - Suggested fixes
+  </Step>
+  
+  <Step title="Maintain Confidentiality">
+    Do not publicly disclose vulnerability before it is fixed
+  </Step>
+  
+  <Step title="Receive Response">
+    Security team responds within 24 hours
+  </Step>
+</Steps>
+
+### Vulnerability Rewards
+
+We offer vulnerability reward programs:
+
+| Vulnerability Level | Reward Amount | Description |
+|----------|----------|------|
+| **Critical** | $1000 - $5000 | Remote code execution, data leaks |
+| **High** | $500 - $1000 | Authentication bypass, privilege escalation |
+| **Medium** | $100 - $500 | XSS, CSRF, information disclosure |
+| **Low** | $50 - $100 | Configuration issues, UI vulnerabilities |
+
+## Common Security Questions
+
+<AccordionGroup>
+  <Accordion title="Will you use my data to train models?">
+    **No, we absolutely do not use your data to train models.**
+    
+    - Request content not stored
+    - Model providers do not retain data
+    - No data used for training
+    - Stated in agreements with providers
+  </Accordion>
+  
+  <Accordion title="Will my data be seen by third parties?">
+    **Data only transmitted to necessary service providers:**
+    
+    - **AI Model Providers** (OpenAI, Anthropic, Google, etc.)
+      - Only receive real-time requests
+      - Do not retain data
+      - Have signed strict data protection agreements
+    
+    - **Infrastructure Providers** (AWS, GCP, etc.)
+      - Only provide infrastructure services
+      - Cannot access content data
+      - Data encrypted transmission and storage
+    
+    - **Payment Processors**
+      - Only process payment information
+      - PCI DSS compliant
+      - Do not access API usage data
+  </Accordion>
+  
+  <Accordion title="How do you protect data at rest?">
+    **Data at Rest Security:**
+    
+    - **Encryption**: AES-256 encryption
+    - **Access Control**: Role-based access control (RBAC)
+    - **Audit Logs**: All access recorded
+    - **Regular Backups**: Automated encrypted backups
+    - **Physical Security**: Data centers with physical security measures
+  </Accordion>
+  
+  <Accordion title="What if API Key is leaked?">
+    **Immediate Action:**
+    
+    1. **Immediately Revoke**
+       - Log in to console
+       - Revoke leaked API Key
+       - Create new API Key
+    
+    2. **Check Usage Logs**
+       - Review recent usage records
+       - Identify unusual activities
+       - Evaluate potential losses
+    
+    3. **Update Applications**
+       - Update all applications to use new API Key
+       - Review code to ensure no more leaks
+    
+    4. **Contact Support**
+       - If abnormal usage found, immediately contact support
+       - Request balance freeze or refund
+  </Accordion>
+  
+  <Accordion title="Do you support VPC or dedicated instances?">
+    **Enterprise-level Private Deployment:**
+    
+    For enterprises with special security requirements:
+    - ✅ VPC dedicated instances
+    - ✅ Dedicated servers
+    - ✅ Private network access
+    - ✅ Dedicated support teams
+    
+    Contact sales team for details: sales@laozhang.ai
+  </Accordion>
+</AccordionGroup>
+
+## Security Resources
+
+### Security Documentation
+
+- [Security White Paper](https://api.laozhang.ai/security-whitepaper.pdf)
+- [Privacy Policy](https://api.laozhang.ai/privacy)
+- [Data Processing Agreement](https://api.laozhang.ai/dpa)
+- [Terms of Service](https://api.laozhang.ai/terms)
+
+### Security Training
+
+- [API Security Best Practices](https://api.laozhang.ai/docs/security-best-practices)
+- [Secure Development Guide](https://api.laozhang.ai/docs/secure-development)
+- [Incident Response Guide](https://api.laozhang.ai/docs/incident-response)
+
+### Contact Security Team
+
+- **Security Issues**: security@laozhang.ai
+- **Privacy Questions**: privacy@laozhang.ai
+- **Compliance Inquiries**: compliance@laozhang.ai
+- **Vulnerability Reports**: security@laozhang.ai
+
+## Related Resources
+
+- [Content Safety](/faq/content-safety) - Content policy and compliance
+- [Token Management](/faq/token-management) - API Key management
+- [Usage Logs](/faq/call-logs) - View usage records
+- [API Reference](/api-reference) - API documentation
+

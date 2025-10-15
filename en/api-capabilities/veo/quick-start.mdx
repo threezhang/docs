@@ -1,0 +1,144 @@
+---
+title: "Quick Start"
+description: "Quickly get started with VEO video generation API"
+icon: "rocket"
+---
+
+<Warning>
+  Before starting, please register for LaoZhang API and get your API key at https://api.laozhang.ai/token (copy token)
+</Warning>
+
+## Three Steps to Generate Video
+
+<Steps>
+  <Step title="Submit video generation task">
+    Call the submit interface using your API key
+    
+    ```bash
+    curl -X POST "https://api.laozhang.ai/veo/v1/api/video/submit" \
+      -H "Content-Type: application/json" \
+      -H "Authorization: Bearer your-api-key" \
+      -d '{
+        "prompt": "An orange kitten walking slowly in a sunny garden",
+        "model": "veo3"
+      }'
+    ```
+  </Step>
+  
+  <Step title="Record the returned task ID">
+    System will return task information
+    
+    ```json
+    {
+      "success": true,
+      "data": {
+        "taskId": "veo3:b873872e-7358-4c2f-8d55-bd23f000e14e",
+        "pollingUrl": "https://asyncdata.net/source/veo3:b873872e-7358-4c2f-8d55-bd23f000e14e",
+        "status": "processing",
+        "message": "Task submitted successfully"
+      }
+    }
+    ```
+  </Step>
+  
+  <Step title="Query generation result">
+    Query status using task ID
+    
+    ```bash
+    curl -X GET "https://api.laozhang.ai/veo/v1/api/video/status/veo3:b873872e-7358-4c2f-8d55-bd23f000e14e" \
+      -H "Authorization: Bearer your-api-key"
+    ```
+  </Step>
+</Steps>
+
+## Authentication Method
+
+All API requests need to include a valid Bearer Token in the request header:
+
+```bash
+Authorization: Bearer your-api-key
+```
+
+<Tip>
+  **Security Reminder:** Do not expose API keys in client-side code. It's recommended to store them in server-side environment variables.
+</Tip>
+
+## Basic Request Examples
+
+### Simple Text Generation
+
+```bash
+curl -X POST "https://api.laozhang.ai/veo/v1/api/video/submit" \
+  -H "Content-Type: application/json" \
+  -H "Authorization: Bearer your-api-key" \
+  -d '{
+    "prompt": "A cat walking in the rainy night"
+  }'
+```
+
+### Generation with Reference Image
+
+```bash
+curl -X POST "https://api.laozhang.ai/veo/v1/api/video/submit" \
+  -H "Content-Type: application/json" \
+  -H "Authorization: Bearer your-api-key" \
+  -d '{
+    "prompt": "A cat walking in the rainy night, about to catch a mouse",
+    "model": "veo3",
+    "images": ["https://example.com/cat.png"],
+    "enhance_prompt": true
+  }'
+```
+
+## Handling Responses
+
+### Task Submitted Successfully
+
+```json
+{
+  "success": true,
+  "data": {
+    "taskId": "veo3:b873872e-7358-4c2f-8d55-bd23f000e14e",
+    "pollingUrl": "https://asyncdata.net/source/veo3:b873872e-7358-4c2f-8d55-bd23f000e14e",
+    "status": "processing",
+    "message": "Task submitted successfully"
+  }
+}
+```
+
+### Video Generation Completed
+
+```json
+{
+  "success": true,
+  "data": {
+    "taskId": "veo3:b873872e-7358-4c2f-8d55-bd23f000e14e",
+    "status": "completed",
+    "result": {
+      "video_url": "https://filesystem.site/cdn/20250705/BFvep0SngrqIrN3yDSFChIXAz2mU0M.mp4",
+      "video_media_id": "CAUSJGRlNzE5MzRhLTljMDgtNDE1Mi05NWVlLThjOTlhMTZlODUyYxokY2U4ZjNiYmUtNGFmZS00NTExLWI4ZDEtMGM1MTFkM2ZlNGIxIgNDQUUqJDJlNTY3OWUyLWQ2YmQtNGVlZS05ZTUwLWMyMWE0MWU3ZDYzNw"
+    }
+  }
+}
+```
+
+## Polling Recommendations
+
+<Note>
+  **Recommended polling strategy:**
+  - Polling interval: 10-15 seconds
+  - Maximum wait time: 30 minutes
+  - Recommended to implement exponential backoff strategy
+</Note>
+
+## Next Steps
+
+<CardGroup cols={2}>
+  <Card title="API Reference" icon="book" href="/api-capabilities/veo/api-reference">
+    View complete API documentation
+  </Card>
+  <Card title="Code Examples" icon="code" href="/api-capabilities/veo/examples">
+    View examples in more programming languages
+  </Card>
+</CardGroup>
+

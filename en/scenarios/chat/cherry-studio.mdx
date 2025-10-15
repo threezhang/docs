@@ -1,0 +1,110 @@
+---
+title: Cherry Studio Domestic ChatGPT Usage Configuration Guide
+description: Cherry Studio tutorial for using ChatGPT, Claude, Gemini and other AI models directly in China without VPN
+icon: "cherry"
+---
+
+## Application Introduction
+
+Cherry Studio is a powerful AI conversation client that supports multiple large language models. Through Laozhang API, you can use various mainstream AI models in Cherry Studio.
+
+## Quick Integration
+
+### 1. Get API Key
+
+Visit [Laozhang API Console](https://api.laozhang.ai) to get your API key.
+
+### 2. Configuration Steps
+
+<img src="/images/cherry-studio-config.png" alt="Cherry Studio OpenAI Compatible Configuration Interface" />
+
+Following the diagram above, complete the following configuration steps:
+
+1. Open Cherry Studio application
+2. Click the settings icon on the left to enter settings page
+3. Select "Model Services" option
+4. Create a custom channel [Laozhang API] in the model provider list
+5. Fill in configuration information:
+   - **API Address**: `https://api.laozhang.ai` (the one marked in red box also works)
+   - **API Key**: Enter the key you obtained from Laozhang API console
+6. Click the "➕ Add" button at the bottom to save configuration
+
+<Info>
+**Configuration Key Points**
+- API address must use: `https://api.laozhang.ai`
+- API key can be obtained from the "API Keys" page in Laozhang API console
+- It's recommended to test the connection first to ensure correct configuration
+</Info>
+
+### 3. Add Models
+
+After completing basic configuration, add required models following the model selection interface on the right side of the diagram:
+
+1. Search for the required model in the model search box (e.g., `gemini-2.5-pro-preview-06-05`)
+2. Click the icon next to the model name to select or configure the model
+3. Enable or disable different model variants as needed:
+   - Standard version (e.g., `chatgpt-4o-latest`)
+   - Chain of thought version (e.g., `claude-3.7-sonnet-20250219-thinking`)
+4. Can be configured in detail through the button on the right
+
+## Supported Models
+
+According to the diagram, Cherry Studio supports the following mainstream models through Laozhang API:
+
+### Latest Recommended Models
+
+| Model Series | Model ID | Features |
+|---------|---------|------|
+| **Gemini 2.5** | `gemini-2.5-pro` | Google's latest model, strong multimodal capability |
+| **ChatGPT 5 Chat** | `gpt-5-chat-latest` | OpenAI's latest version, excellent balanced performance |
+| **Claude 4 Sonnet** | `claude-sonnet-4-20250518` | Anthropic's latest model, long text processing |
+| **Claude Chain of Thought** | `claude-3.7-sonnet-20250219-thinking` | Reasoning mode showing thought process |
+
+### Classic Stable Models
+
+| Model Series | Model ID | Use Case |
+|---------|---------|----------|
+| **Claude Sonnet** | `claude-sonnet-4-20250514` | Daily conversation, content creation |
+| **Claude Thinking** | `claude-sonnet-4-20250514-thinking` | Complex reasoning, thought analysis |
+
+<Tip>
+**Model Selection Recommendations**
+- Multimodal tasks: Recommend Gemini 2.5 Pro
+- Daily conversation: Recommend ChatGPT 4o Latest  
+- Long text processing: Recommend Claude 3.7 Sonnet
+- Complex reasoning: Recommend models with thinking suffix
+</Tip>
+
+## Advanced Features
+
+### Image Support
+
+If using models that support images (like GPT-4V):
+1. Enable "Images" option in settings
+2. Select models that support vision
+3. Upload images in conversation
+
+### Streaming Output
+
+Cherry Studio supports streaming output by default, providing a better experience.
+
+## Troubleshooting
+
+### Connection Failed
+- Check if API key is correct
+- Confirm API address: `https://api.laozhang.ai`
+- Verify network connection status
+
+### Model Unavailable
+- Confirm account balance is sufficient
+- Check if model is in subscription plan
+- Try other models
+
+## Usage Tips
+
+1. **Choose Models Wisely**: Select appropriate models based on task requirements
+2. **Regular Updates**: Pay attention to new model releases
+3. **Monitor Usage**: Check usage through Laozhang API console
+
+Need more help? Please visit [Laozhang API Official Website](https://api.laozhang.ai).
+

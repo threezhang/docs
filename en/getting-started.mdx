@@ -1,0 +1,372 @@
+---
+title: Access ChatGPT API in China in 5 Minutes - Quick Start Guide
+sidebarTitle: Quick Start
+description: Detailed tutorial on how to call ChatGPT and Claude API in China, no VPN required, supports Alipay payment.
+icon: "rocket"
+---
+
+## 🌟 Before You Start
+
+Many developers ask us: **"How to use ChatGPT API in China?"**
+
+The answer is simple: No VPN needed, no foreign credit card required, you only need:
+1️⃣ A LaoZhang API account (Alipay registration)
+2️⃣ One line of code change (change the URL)
+3️⃣ Five minutes of configuration (really fast)
+
+This guide will show you the **simplest** way to achieve:
+- 💳 Top up with Alipay, settle in RMB
+- 🌏 Direct connection from China, no proxy needed
+- ⚡ Low latency, high speed
+- 🔄 Switch between all models with one click
+
+## Step 1: Register and Top-up in 5 Minutes
+
+### 📧 Create Account (Free 3M Tokens Gift)
+
+<Steps>
+  <Step title="Visit Registration Page">
+    Open [LaoZhang API Registration](https://api.laozhang.ai/register/?aff_code=Snip)
+    
+    🎁 **New User Bonus**: Get 3 million test tokens upon registration
+  </Step>
+  
+  <Step title="Fill in Information">
+    - Email: Any email will work
+    - Password: At least 8 characters
+    - Verification code: Check spam folder
+  </Step>
+  
+  <Step title="Login to Console">
+    After logging in, enter the [console homepage](https://api.laozhang.ai/account/profile)
+    
+    You will see:
+    - Account balance (including gift credits)
+    - Usage statistics
+    - Quick start guide
+  </Step>
+</Steps>
+
+### 💰 Quick Top-up (Alipay Instant Arrival)
+
+<Tabs>
+  <Tab title="Alipay QR Code">
+    1. Click [Top-up page](https://api.laozhang.ai/topup)
+    2. Select amount:
+       - 🆕 $5 (Trial) = ¥35
+       - 🔥 $20 (Regular) = ¥140
+       - 💰 $100 (10% bonus) = ¥700 gets $110
+    3. Scan with Alipay to pay
+    4. Instant arrival, use immediately
+  </Tab>
+  
+  <Tab title="Enterprise Transfer">
+    Support enterprise transfers:
+    - Issue VAT invoices
+    - Provide purchase contracts
+    - Monthly billing available
+    
+    Contact WeChat: laozhangdaichong
+  </Tab>
+</Tabs>
+
+<Note>
+  🎉 **New User Benefits**:
+  - Free 3M test tokens on registration
+  - Extra bonus on first top-up (top-up $100 get extra $1)
+  - Instant arrival, no waiting
+  - WeChat: `laozhangdaichong` for first top-up bonus
+</Note>
+
+## Step 2: Get API Key in 1 Minute
+
+### 🔑 Two Ways to Get Your Key
+
+<Tabs>
+  <Tab title="Use Default Key (Recommended)">
+    1. Go to [Token Management](https://api.laozhang.ai/token)
+    2. Find **Default Token**
+    3. Click **Copy** button on the right
+    
+    ✅ Advantage: Ready to use, no configuration needed
+  </Tab>
+  
+  <Tab title="Create New Key">
+    1. Click [Add] button in upper right
+    2. Enter key name:
+       - `dev-key`: Development environment
+       - `prod-key`: Production environment
+       - `test-claude`: Test Claude models
+    3. Set quota limit (optional)
+    4. Click create
+    
+    💡 Advantage: Fine-grained management, allocated by project
+  </Tab>
+</Tabs>
+
+<Warning>
+  **Security Reminder**:
+  - Keys are shown only once, save them properly
+  - Don't commit to public GitHub repositories
+  - Recommend storing in environment variables
+</Warning>
+
+## Step 3: Make Your First Call in 30 Seconds
+
+### 🎯 Simplest Testing Method
+
+<Tabs>
+  <Tab title="Online Test (Recommended)">
+    Test directly in [Console Playground](https://api.laozhang.ai/playground):
+    
+    1. Select model: gpt-4.1-mini
+    2. Enter prompt: "Hello, please introduce yourself"
+    3. Click send
+    
+    ✅ Free test credits allow ~40,000 calls
+  </Tab>
+  
+  <Tab title="Command Line Test">
+    ```bash
+    # Replace YOUR_API_KEY with your key
+    curl -X POST https://api.laozhang.ai/v1/chat/completions -H "Content-Type: application/json" -H "Authorization: Bearer YOUR_API_KEY" -d '{"model": "gpt-4.1-mini", "messages": [{"role": "system", "content": "You are a helpful AI assistant"}, {"role": "user", "content": "How is the weather today?"}], "temperature": 0.7}'
+    ```
+    
+    🚀 Response time under 500ms
+  </Tab>
+</Tabs>
+
+### 🔧 Integration Configuration
+
+<Card title="Remember These Three Things" icon="key">
+  ```yaml
+  # API Base URL
+  base_url: https://api.laozhang.ai/v1
+  
+  # API Key (starts with sk-)
+  api_key: sk-xxxxxxxxxxxxxx
+  
+  # Model Name (plug and play)
+  model: gpt-4.1-mini  # or claude-sonnet-4-20250514, etc.
+  ```
+</Card>
+
+### 💻 Complete Examples in Different Languages
+
+<Tabs>
+  <Tab title="Python (Most Common)">
+    ```python
+    # Install: pip install openai
+    from openai import OpenAI
+    
+    # Initialize client
+    client = OpenAI(
+        api_key="Your API Key",  # Get from LaoZhang API
+        base_url="https://api.laozhang.ai/v1"  # Direct connection URL
+    )
+    
+    # Examples of calling different models
+    def test_models():
+        models = [
+            "gpt-4.1-mini",  # Best value
+            "claude-sonnet-4-20250514",  # Best for coding
+            "deepseek-v3"  # Best Chinese model
+        ]
+        
+        for model in models:
+            try:
+                response = client.chat.completions.create(
+                    model=model,
+                    messages=[
+                        {"role": "system", "content": "You are a helpful AI assistant"},
+                        {"role": "user", "content": "Introduce yourself in one sentence"}
+                    ],
+                    temperature=0.7,
+                    max_tokens=100
+                )
+                print(f"{model}: {response.choices[0].message.content}")
+                print(f"Tokens used: {response.usage.total_tokens}\n")
+            except Exception as e:
+                print(f"{model} call failed: {e}\n")
+    
+    if __name__ == "__main__":
+        test_models()
+    ```
+    
+    <Tip>
+      **Best Practice**: Store API key in environment variables
+      ```python
+      import os
+      client = OpenAI(
+          api_key=os.getenv("LAOZHANG_API_KEY"),
+          base_url="https://api.laozhang.ai/v1"
+      )
+      ```
+    </Tip>
+  </Tab>
+  
+  <Tab title="Node.js / TypeScript">
+    ```javascript
+    // Install: npm install openai
+    import OpenAI from 'openai';
+    
+    // Initialize client
+    const client = new OpenAI({
+      apiKey: process.env.LAOZHANG_API_KEY || 'Your API Key',
+      baseURL: 'https://api.laozhang.ai/v1'
+    });
+    
+    // Streaming output example (real-time response)
+    async function streamChat() {
+      const stream = await client.chat.completions.create({
+        model: 'gpt-4.1-mini',
+        messages: [
+          { role: 'system', content: 'You are a helpful AI assistant' },
+          { role: 'user', content: 'Please write a simple React component' }
+        ],
+        stream: true,  // Enable streaming
+        temperature: 0.7
+      });
+      
+      // Output word by word
+      for await (const chunk of stream) {
+        process.stdout.write(chunk.choices[0]?.delta?.content || '');
+      }
+    }
+    
+    // Concurrent calls to multiple models
+    async function compareModels(prompt) {
+      const models = ['gpt-4.1', 'claude-sonnet-4-20250514', 'gemini-2.5-pro'];
+      
+      const promises = models.map(model => 
+        client.chat.completions.create({
+          model,
+          messages: [{ role: 'user', content: prompt }],
+          max_tokens: 100
+        })
+      );
+      
+      const results = await Promise.all(promises);
+      results.forEach((result, index) => {
+        console.log(`\n${models[index]}:\n${result.choices[0].message.content}`);
+      });
+    }
+    
+    // Run examples
+    streamChat().catch(console.error);
+    ```
+  </Tab>
+  
+  <Tab title="Curl / Command Line">
+    ```bash
+    # Basic call
+    curl -X POST https://api.laozhang.ai/v1/chat/completions -H "Authorization: Bearer YOUR_API_KEY" -H "Content-Type: application/json" -d '{"model": "gpt-4.1-mini", "messages": [{"role": "user", "content": "Hello"}]}'
+    
+    # Streaming output (SSE)  
+    curl -X POST https://api.laozhang.ai/v1/chat/completions -H "Authorization: Bearer YOUR_API_KEY" -H "Content-Type: application/json" -d '{"model": "gpt-4.1", "messages": [{"role": "user", "content": "Write a Python quicksort"}], "stream": true}'
+    
+    # Image generation
+    curl -X POST https://api.laozhang.ai/v1/images/generations -H "Authorization: Bearer YOUR_API_KEY" -H "Content-Type: application/json" -d '{"model": "gpt-4o-image", "prompt": "A cute kitten", "n": 1, "size": "1024x1024"}'
+    ```
+  </Tab>
+</Tabs>
+
+## Next Steps
+
+Congratulations! You've successfully integrated LaoZhang API. Next you can:
+
+<CardGroup cols={2}>
+  <Card title="View API Documentation" icon="book" href="/api-reference/introduction">
+    Learn about complete API interface documentation
+  </Card>
+  
+  <Card title="Explore Model List" icon="robot" href="/models">
+    View all supported AI models
+  </Card>
+  
+  <Card title="Integrate into Apps" icon="plug" href="/api-reference/integrations/langchain">
+    Integrate LaoZhang API into various tools
+  </Card>
+  
+  <Card title="View Usage Statistics" icon="chart-line" href="https://api.laozhang.ai/log">
+    Monitor usage in console
+  </Card>
+</CardGroup>
+
+## 🔥 Common Questions Quick Reference
+
+<AccordionGroup>
+  <Accordion title="How to tell if integration is successful?">
+    **Three signs**:
+    1. ✅ API call returns normal results (no errors)
+    2. ✅ Response time under 1 second
+    3. ✅ Can see call records in console
+    
+    View call records: [Usage Logs](https://api.laozhang.ai/log)
+  </Accordion>
+  
+  <Accordion title="How to choose the right model?">
+    **Choose by scenario**:
+    
+    💻 **Programming Development**:
+    - First choice: `claude-sonnet-4-20250514`
+    - Alternative: `deepseek-coder-v3`
+    
+    📝 **Article Writing**:
+    - First choice: `gpt-4o`
+    - Alternative: `claude-3.5-sonnet`
+    
+    ⚡ **Quick Response**:
+    - First choice: `gpt-4.1-mini`
+    - Alternative: `gemini-2.5-flash`
+    
+    💰 **Cost Sensitive**:
+    - First choice: `deepseek-v3`
+    - Alternative: `qwen-max`
+  </Accordion>
+  
+  <Accordion title="What if API key is leaked?">
+    **Immediate actions**:
+    1. Login to [Token Management](https://api.laozhang.ai/token)
+    2. Delete the leaked key
+    3. Create a new key
+    4. Update keys in all applications
+    
+    🔒 **Prevention measures**:
+    - Use environment variables
+    - Set quota limits
+    - Rotate keys regularly
+  </Accordion>
+  
+  <Accordion title="Why does it say insufficient balance?">
+    **Possible reasons**:
+    1. Free credits used up (3M tokens)
+    2. Model being called has high cost
+    3. Batch requests consuming too fast
+    
+    **Solutions**:
+    - [Top up now](https://api.laozhang.ai/topup)
+    - Switch to cheaper models
+    - Set `max_tokens` limit
+  </Accordion>
+  
+  <Accordion title="What payment methods are supported?">
+    **Individual users**:
+    - 💳 Alipay QR code (instant)
+    - 💳 WeChat QR code (instant)
+    - 🎪 USDT (TRC20)
+    
+    **Enterprise users**:
+    - 🏢 Corporate transfer
+    - 🧾 Issue VAT invoices
+    - 📝 Sign purchase contracts
+    
+    Contact WeChat: `laozhangdaichong`
+  </Accordion>
+</AccordionGroup>
+
+<Info>
+Tip: Save your API key properly and check usage logs in the console regularly. Every request has message history for reasonable cost optimization.
+Enjoy using LaoZhang API~
+</Info>
+

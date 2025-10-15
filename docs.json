@@ -23,7 +23,7 @@
   "navigation": {
     "tabs": [
       {
-        "tab": "首页",
+        "tab": "首页 / Home",
         "groups": [
           {
             "group": "产品基础",
@@ -81,7 +81,7 @@
         ]
       },
       {
-        "tab": "使用场景",
+        "tab": "使用场景 / Use Cases",
         "groups": [
           {
             "group": "概览",
@@ -122,7 +122,7 @@
         ]
       },
       {
-        "tab": "资源导航",
+        "tab": "资源导航 / Resources",
         "groups": [
           {
             "group": "官方 API 文档",
@@ -133,7 +133,7 @@
         ]
       },
       {
-        "tab": "常见问题",
+        "tab": "常见问题 / FAQ",
         "groups": [
           {
             "group": "使用指南",
@@ -148,10 +148,138 @@
             ]
           }
         ]
+      },
+      {
+        "tab": "English",
+        "groups": [
+          {
+            "group": "Getting Started",
+            "pages": [
+              "en/index",
+              "en/getting-started",
+              "en/api-manual",
+              "en/pricing",
+              "en/changelog",
+              "en/resources",
+              "en/scenarios"
+            ]
+          },
+          {
+            "group": "Image/Video APIs",
+            "pages": [
+              "en/api-capabilities/seedream-image",
+              "en/api-capabilities/nano-banana-image",
+              "en/api-capabilities/nano-banana-image-edit",
+              "en/api-capabilities/flux-image-generation",
+              "en/api-capabilities/flux-image-edit",
+              "en/api-capabilities/sora-image-generation",
+              "en/api-capabilities/sora-image-edit",
+              {
+                "group": "Sora 2 Video Generation",
+                "icon": "clapperboard",
+                "pages": [
+                  "en/api-capabilities/sora2/overview",
+                  "en/api-capabilities/sora2/quick-start",
+                  "en/api-capabilities/sora2/models-pricing",
+                  "en/api-capabilities/sora2/api-reference",
+                  "en/api-capabilities/sora2/examples",
+                  "en/api-capabilities/sora2/troubleshooting"
+                ]
+              },
+              {
+                "group": "VEO Video Generation",
+                "icon": "video",
+                "pages": [
+                  "en/api-capabilities/veo/overview",
+                  "en/api-capabilities/veo/quick-start",
+                  "en/api-capabilities/veo/models-pricing",
+                  "en/api-capabilities/veo/api-reference",
+                  "en/api-capabilities/veo/examples",
+                  "en/api-capabilities/veo/best-practices",
+                  "en/api-capabilities/veo/troubleshooting"
+                ]
+              }
+            ]
+          },
+          {
+            "group": "Use Cases",
+            "pages": [
+              {
+                "group": "Conversational AI",
+                "pages": [
+                  "en/scenarios/chat/cherry-studio",
+                  "en/scenarios/chat/chatbox",
+                  "en/scenarios/chat/open-webui",
+                  "en/scenarios/chat/chatgpt-next-web"
+                ]
+              },
+              {
+                "group": "Programming",
+                "pages": [
+                  "en/scenarios/programming/cursor",
+                  "en/scenarios/programming/cline"
+                ]
+              },
+              {
+                "group": "Engineering",
+                "pages": [
+                  "en/scenarios/engineering/langchain",
+                  "en/scenarios/engineering/dify"
+                ]
+              },
+              {
+                "group": "Translation",
+                "pages": [
+                  "en/scenarios/translation/bob",
+                  "en/scenarios/translation/immersive"
+                ]
+              }
+            ]
+          },
+          {
+            "group": "FAQ",
+            "pages": [
+              "en/faq/token-management",
+              "en/faq/call-logs",
+              "en/faq/model-availability",
+              "en/faq/balance-insufficient",
+              "en/faq/payment-methods",
+              "en/faq/content-safety",
+              "en/faq/data-security"
+            ]
+          },
+          {
+            "group": "API Reference",
+            "pages": [
+              "en/api-reference/chat-completions",
+              "en/api-reference/models",
+              "en/api-reference/images",
+              "en/api-reference/openai",
+              "en/api-reference/claude",
+              "en/api-reference/gemini"
+            ]
+          },
+          {
+            "group": "Essentials",
+            "pages": [
+              "en/essentials/markdown",
+              "en/essentials/code",
+              "en/essentials/images",
+              "en/essentials/settings",
+              "en/essentials/navigation"
+            ]
+          }
+        ]
       }
     ],
     "global": {
-      "anchors": []
+      "anchors": [
+        {
+          "anchor": "API Key",
+          "icon": "key",
+          "href": "https://api.laozhang.ai"
+        }
+      ]
     }
   },
   "logo": {
@@ -175,23 +303,6 @@
     "socials": {
       "website": "https://api.laozhang.ai"
     }
-  },
-  "topbarLinks": [
-    {
-      "name": "控制台",
-      "url": "https://api.laozhang.ai/account/profile"
-    }
-  ],
-  "anchors": [
-    {
-      "name": "API Key",
-      "icon": "key",
-      "url": "https://api.laozhang.ai"
-    }
-  ],
-  "tabs": [],
-  "primaryTab": {
-    "name": "Documentation"
   },
   "feedback": {
     "thumbsRating": true

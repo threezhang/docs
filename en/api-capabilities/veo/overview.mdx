@@ -1,0 +1,88 @@
+---
+title: "VEO Video Generation API"
+description: "AI video generation service based on VEO3 series models, supports text-to-video, image reference and more"
+icon: "video"
+---
+
+<Info>
+  **Base URL:** `https://api.laozhang.ai`  
+  **API Version:** `v1`  
+  **Service Status:** Running
+</Info>
+
+## Overview
+
+VEO API provides powerful AI video generation capabilities, supporting 4 different VEO3 series models. The service uses asynchronous processing mode to ensure efficient handling of video generation requests.
+
+## Core Features
+
+<CardGroup cols={2}>
+  <Card title="Async Processing" icon="clock">
+    Instant response after task submission, retrieve results via polling
+  </Card>
+  <Card title="Multi-Model Support" icon="layer-group">
+    4 VEO3 models for different needs
+  </Card>
+  <Card title="Image Reference" icon="image">
+    Supports multiple reference images for generation
+  </Card>
+  <Card title="Prompt Enhancement" icon="sparkles">
+    AI optimizes prompts for better results
+  </Card>
+  <Card title="Pay on Success" icon="badge-dollar">
+    Only charged for successfully generated videos
+  </Card>
+  <Card title="High-Quality Output" icon="star">
+    Supports HD video generation, 10-15 seconds duration
+  </Card>
+</CardGroup>
+
+## Workflow
+
+<Steps>
+  <Step title="Submit Task">
+    Call submit endpoint with text description and parameters
+  </Step>
+  <Step title="Get Task ID">
+    System returns unique task ID
+  </Step>
+  <Step title="Poll Status">
+    Use task ID to query processing progress
+  </Step>
+  <Step title="Get Result">
+    Obtain video URL after task completion
+  </Step>
+</Steps>
+
+## Supported Models
+
+| Model | Price | Features | Generation Time |
+|-------|-------|----------|----------------|
+| `veo3` | $2.00 | Standard version, excellent overall performance | 3-8 minutes |
+| `veo3-fast` | $2.00 | Fast version, audio support | 1-3 minutes |
+| `veo3-pro` | $10.00 | Professional version, exceptional quality | 5-15 minutes |
+| `veo3-pro-frames` | $10.00 | Pro version + frame control | 5-15 minutes |
+
+## Getting Started
+
+<Card title="Get API Key" icon="key" href="mailto:feedback@laozhang.ai">
+  Contact **feedback@laozhang.ai** or WeChat **laozhangdaichong** to get API key
+</Card>
+
+## Related Links
+
+<CardGroup cols={2}>
+  <Card title="Quick Start" icon="rocket" href="/api-capabilities/veo/quick-start">
+    Learn how to get started quickly
+  </Card>
+  <Card title="API Reference" icon="book" href="/api-capabilities/veo/api-reference">
+    View detailed API documentation
+  </Card>
+  <Card title="Code Examples" icon="code" href="/api-capabilities/veo/examples">
+    View examples in various programming languages
+  </Card>
+  <Card title="Best Practices" icon="lightbulb" href="/api-capabilities/veo/best-practices">
+    Learn how to achieve best generation results
+  </Card>
+</CardGroup>
+

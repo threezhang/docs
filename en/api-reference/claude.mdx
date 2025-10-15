@@ -1,0 +1,744 @@
+---
+title: 'Claude Models Guide'
+sidebarTitle: 'Claude Models'
+description: 'Detailed guide for Anthropic Claude series models'
+icon: 'anthropic'
+---
+
+## Model Overview
+
+Claude is a series of AI assistants developed by Anthropic, known for their safety, accuracy, and powerful reasoning capabilities. From the flagship Claude 3.5 Sonnet to the fast Claude 3 Haiku, Claude models excel in code generation, long document analysis, complex reasoning, and more.
+
+<Note>
+  **Dual Compatibility**: Supports both **OpenAI format** and **Claude native format**, choose according to your preference.
+</Note>
+
+## Model Classification
+
+### Claude 3.5 Series
+
+<AccordionGroup>
+  <Accordion icon="sparkles" title="Claude 3.5 Sonnet">
+    **Latest flagship model, strongest overall capabilities**
+    
+    - **Core Features**:
+      - 200K context window
+      - Outstanding code generation capabilities
+      - Strong reasoning and analysis abilities
+      - Excellent long document processing
+      - Supports image understanding
+    
+    - **Pricing**:
+      - Input: $3/1M tokens
+      - Output: $15/1M tokens
+    
+    - **Suitable Scenarios**:
+      - Complex code generation
+      - Technical document analysis
+      - Legal contract review
+      - Academic research
+      - Multi-turn complex conversations
+  </Accordion>
+
+  <Accordion icon="zap" title="Claude 3.5 Haiku">
+    **Fast model, best cost-performance in Claude series**
+    
+    - **Core Features**:
+      - 200K context window
+      - Fastest response speed
+      - Excellent cost-performance ratio
+      - Stable and reliable
+    
+    - **Pricing**:
+      - Input: $1/1M tokens
+      - Output: $5/1M tokens
+    
+    - **Suitable Scenarios**:
+      - Daily conversations
+      - Quick queries
+      - Batch processing
+      - Customer service bots
+  </Accordion>
+</AccordionGroup>
+
+### Claude 3 Series
+
+<AccordionGroup>
+  <Accordion icon="brain" title="Claude 3 Opus">
+    **Strongest reasoning capabilities, suitable for most complex tasks**
+    
+    - **Core Features**:
+      - 200K context window
+      - Top-tier reasoning ability
+      - Strong multimodal understanding
+      - Excels at complex problem-solving
+    
+    - **Pricing**:
+      - Input: $15/1M tokens
+      - Output: $75/1M tokens
+    
+    - **Suitable Scenarios**:
+      - Advanced research
+      - Complex decision analysis
+      - Professional consulting
+      - Critical business scenarios
+  </Accordion>
+
+  <Accordion icon="comments" title="Claude 3 Sonnet">
+    **Balanced model with excellent overall performance**
+    
+    - **Core Features**:
+      - 200K context window
+      - Balanced performance and cost
+      - Strong reasoning ability
+      - Good image understanding
+    
+    - **Pricing**:
+      - Input: $3/1M tokens
+      - Output: $15/1M tokens
+    
+    - **Suitable Scenarios**:
+      - Daily business applications
+      - Document analysis
+      - Content generation
+      - Technical support
+  </Accordion>
+
+  <Accordion icon="bolt" title="Claude 3 Haiku">
+    **Fast and economical, suitable for high-frequency calls**
+    
+    - **Core Features**:
+      - 200K context window
+      - Extremely fast response
+      - Ultra-low price
+      - Stable quality
+    
+    - **Pricing**:
+      - Input: $0.25/1M tokens
+      - Output: $1.25/1M tokens
+    
+    - **Suitable Scenarios**:
+      - Real-time conversations
+      - Quick queries
+      - Mass text processing
+      - Low-budget projects
+  </Accordion>
+</AccordionGroup>
+
+## Usage Methods
+
+### Method 1: OpenAI Format (Recommended)
+
+Use the familiar OpenAI SDK, fully compatible:
+
+<CodeGroup>
+
+```python Python
+from openai import OpenAI
+
+client = OpenAI(
+    api_key="YOUR_API_KEY",
+    base_url="https://api.laozhang.ai/v1"
+)
+
+# Use Claude 3.5 Sonnet
+response = client.chat.completions.create(
+    model="claude-3-5-sonnet-20241022",
+    messages=[
+        {"role": "system", "content": "You are a helpful assistant"},
+        {"role": "user", "content": "Explain quantum entanglement"}
+    ],
+    temperature=0.7,
+    max_tokens=1000
+)
+
+print(response.choices[0].message.content)
+```
+
+```javascript Node.js
+import OpenAI from 'openai';
+
+const openai = new OpenAI({
+  apiKey: 'YOUR_API_KEY',
+  baseURL: 'https://api.laozhang.ai/v1'
+});
+
+// Use Claude 3.5 Sonnet
+const response = await openai.chat.completions.create({
+  model: 'claude-3-5-sonnet-20241022',
+  messages: [
+    { role: 'system', content: 'You are a helpful assistant' },
+    { role: 'user', content: 'Explain quantum entanglement' }
+  ],
+  temperature: 0.7,
+  max_tokens: 1000
+});
+
+console.log(response.choices[0].message.content);
+```
+
+</CodeGroup>
+
+### Method 2: Claude Native Format
+
+Use Anthropic's official SDK for more native experience:
+
+<CodeGroup>
+
+```python Python
+import anthropic
+
+client = anthropic.Anthropic(
+    api_key="YOUR_API_KEY",
+    base_url="https://api.laozhang.ai/v1"
+)
+
+# Use Claude native format
+message = client.messages.create(
+    model="claude-3-5-sonnet-20241022",
+    max_tokens=1024,
+    messages=[
+        {"role": "user", "content": "Explain quantum entanglement"}
+    ]
+)
+
+print(message.content[0].text)
+```
+
+```javascript Node.js
+import Anthropic from '@anthropic-ai/sdk';
+
+const anthropic = new Anthropic({
+  apiKey: 'YOUR_API_KEY',
+  baseURL: 'https://api.laozhang.ai/v1'
+});
+
+// Use Claude native format
+const message = await anthropic.messages.create({
+  model: 'claude-3-5-sonnet-20241022',
+  max_tokens: 1024,
+  messages: [
+    { role: 'user', content: 'Explain quantum entanglement' }
+  ]
+});
+
+console.log(message.content[0].text);
+```
+
+</CodeGroup>
+
+## Application Scenarios
+
+### 1. Code Generation and Review
+
+Claude 3.5 Sonnet excels at code-related tasks:
+
+```python
+response = client.chat.completions.create(
+    model="claude-3-5-sonnet-20241022",
+    messages=[
+        {
+            "role": "user",
+            "content": """
+            Write a Python function to implement:
+            1. Binary search algorithm
+            2. Include detailed comments
+            3. Provide usage examples
+            4. Time complexity analysis
+            """
+        }
+    ],
+    temperature=0.5  # Lower temperature for more accurate code
+)
+
+print(response.choices[0].message.content)
+```
+
+### 2. Long Document Analysis
+
+Leverage Claude's 200K context window to process long documents:
+
+```python
+# Read long document
+with open('long_document.txt', 'r', encoding='utf-8') as f:
+    document = f.read()
+
+response = client.chat.completions.create(
+    model="claude-3-5-sonnet-20241022",
+    messages=[
+        {
+            "role": "user",
+            "content": f"""
+            Please analyze the following document and provide:
+            1. Summary (3-5 sentences)
+            2. Key information extraction
+            3. Insights and recommendations
+            
+            Document content:
+            {document}
+            """
+        }
+    ],
+    max_tokens=2000
+)
+
+print(response.choices[0].message.content)
+```
+
+### 3. Complex Data Analysis
+
+```python
+data_analysis_prompt = """
+Please analyze the following sales data and provide:
+1. Growth trends
+2. Key insights
+3. Potential problems
+4. Optimization recommendations
+
+Sales data:
+Q1: 1000 units, revenue $50,000
+Q2: 1200 units, revenue $58,000
+Q3: 900 units, revenue $42,000
+Q4: 1500 units, revenue $75,000
+"""
+
+response = client.chat.completions.create(
+    model="claude-3-5-sonnet-20241022",
+    messages=[{"role": "user", "content": data_analysis_prompt}],
+    temperature=0.3  # Lower temperature for more objective analysis
+)
+
+print(response.choices[0].message.content)
+```
+
+### 4. Creative Writing
+
+```python
+response = client.chat.completions.create(
+    model="claude-3-5-sonnet-20241022",
+    messages=[
+        {
+            "role": "user",
+            "content": """
+            Write a 500-word short story:
+            - Theme: Future city
+            - Style: Cyberpunk
+            - Conflict: Human-AI relationship
+            """
+        }
+    ],
+    temperature=1.0  # Higher temperature for more creativity
+)
+
+print(response.choices[0].message.content)
+```
+
+### 5. Image Understanding
+
+Claude 3 series models support image understanding:
+
+```python
+response = client.chat.completions.create(
+    model="claude-3-5-sonnet-20241022",
+    messages=[
+        {
+            "role": "user",
+            "content": [
+                {"type": "text", "text": "What's in this image? Provide detailed description."},
+                {
+                    "type": "image_url",
+                    "image_url": {
+                        "url": "https://example.com/image.jpg"
+                    }
+                }
+            ]
+        }
+    ]
+)
+
+print(response.choices[0].message.content)
+```
+
+## Claude's Unique Advantages
+
+### 1. Built-in Safety
+
+<Note>
+  Claude models have strong content safety filtering built-in, effectively reducing risks of generating inappropriate content
+</Note>
+
+- Automatically identifies and refuses harmful requests
+- Reduces risk of generating biased content
+- Suitable for scenarios with high safety requirements
+
+### 2. Precise Instruction Following
+
+Claude excels at understanding and executing complex, multi-step instructions:
+
+```python
+complex_task = """
+Please complete the following tasks in order:
+1. Write a Python function to check if a string is a palindrome
+2. Write unit tests for this function
+3. Explain the function's time and space complexity
+4. Provide optimization suggestions
+"""
+
+response = client.chat.completions.create(
+    model="claude-3-5-sonnet-20241022",
+    messages=[{"role": "user", "content": complex_task}]
+)
+```
+
+### 3. Deep Reasoning Ability
+
+Claude excels at handling problems requiring complex reasoning:
+
+- Mathematical proof
+- Logical reasoning
+- Ethical dilemma analysis
+- Strategy planning
+
+### 4. Excellent Multilingual Ability
+
+Claude has excellent language capabilities beyond English:
+
+```python
+# Chinese dialogue
+response = client.chat.completions.create(
+    model="claude-3-5-sonnet-20241022",
+    messages=[
+        {"role": "user", "content": "请介绍一下中国的四大发明"}
+    ]
+)
+```
+
+## Usage Tips
+
+### 1. Choose the Right Model
+
+| Scenario | Recommended Model | Reason |
+|----------|-------------------|--------|
+| Code generation | Claude 3.5 Sonnet | Strongest code capabilities |
+| Long documents | Claude 3.5 Sonnet | 200K context |
+| Daily conversations | Claude 3.5 Haiku | Cost-effective, fast |
+| Complex reasoning | Claude 3 Opus | Strongest reasoning |
+| Batch processing | Claude 3 Haiku | Fastest speed, lowest price |
+| Professional consulting | Claude 3.5 Sonnet | Accurate and reliable |
+
+### 2. Optimize Prompts
+
+<AccordionGroup>
+  <Accordion icon="list" title="Structured Instructions">
+    Use numbered lists or step-by-step descriptions:
+    
+    ```
+    Please complete the following tasks:
+    1. Analyze the problem
+    2. Propose solutions
+    3. List pros and cons
+    4. Give recommendations
+    ```
+  </Accordion>
+
+  <Accordion icon="code" title="Provide Context">
+    Give sufficient background information:
+    
+    ```
+    Background: Our company is an e-commerce platform with 10,000 daily active users
+    Problem: User retention is declining
+    Question: How to improve user retention?
+    ```
+  </Accordion>
+
+  <Accordion icon="wand-magic" title="Specify Output Format">
+    Clearly state the desired output format:
+    
+    ```
+    Please output in the following JSON format:
+    {
+      "summary": "Brief summary",
+      "details": ["Detail 1", "Detail 2"],
+      "recommendation": "Recommendation"
+    }
+    ```
+  </Accordion>
+</AccordionGroup>
+
+### 3. Parameter Tuning
+
+<ParamField path="temperature" type="number" default="1">
+  Control output randomness:
+  - `0-0.3`: Very deterministic (code, analysis, facts)
+  - `0.7`: Balanced (general conversation)
+  - `1.0-1.5`: More creative (creative writing, brainstorming)
+</ParamField>
+
+<ParamField path="max_tokens" type="integer">
+  Control output length:
+  - Code generation: 1000-2000
+  - Article writing: 2000-4000
+  - Detailed analysis: 4000-8000
+</ParamField>
+
+<ParamField path="top_p" type="number" default="1">
+  Alternative to temperature:
+  - `0.9`: Balanced
+  - `0.95`: More diverse
+  - Generally use either temperature or top_p, not both
+</ParamField>
+
+## Cost Optimization
+
+### 1. Model Selection Strategy
+
+<CardGroup cols={2}>
+  <Card title="Development Phase" icon="flask">
+    Use **Claude 3.5 Haiku**
+    - Fast testing iteration
+    - Low cost
+    - Quick feedback
+  </Card>
+  
+  <Card title="Production Phase" icon="rocket">
+    Choose based on needs:
+    - Simple tasks → 3.5 Haiku
+    - Complex tasks → 3.5 Sonnet
+    - Critical tasks → 3 Opus
+  </Card>
+</CardGroup>
+
+### 2. Context Management
+
+```python
+# ❌ Inefficient: Passing too much history
+def chat_inefficient(user_input, all_history):
+    messages = all_history  # May be very long
+    messages.append({"role": "user", "content": user_input})
+    return client.chat.completions.create(model="claude-3-5-sonnet", messages=messages)
+
+# ✅ Efficient: Only keep necessary context
+def chat_efficient(user_input, recent_history):
+    messages = [
+        {"role": "system", "content": "You are a helpful assistant"},
+        *recent_history[-6:],  # Only recent 3 rounds (6 messages)
+        {"role": "user", "content": user_input}
+    ]
+    return client.chat.completions.create(model="claude-3-5-sonnet", messages=messages)
+```
+
+### 3. Caching Strategy
+
+For repeated queries, consider caching results:
+
+```python
+import hashlib
+import json
+
+# Simple cache implementation
+cache = {}
+
+def get_cached_response(messages, model="claude-3-5-sonnet"):
+    # Generate cache key
+    cache_key = hashlib.md5(
+        json.dumps(messages).encode()
+    ).hexdigest()
+    
+    # Check cache
+    if cache_key in cache:
+        return cache[cache_key]
+    
+    # Call API
+    response = client.chat.completions.create(
+        model=model,
+        messages=messages
+    )
+    
+    # Save to cache
+    cache[cache_key] = response
+    return response
+```
+
+## Error Handling
+
+### Common Errors and Solutions
+
+<AccordionGroup>
+  <Accordion icon="clock" title="429: Rate Limit">
+    **Solution**: Implement exponential backoff retry
+    
+    ```python
+    import time
+    from openai import RateLimitError
+    
+    def chat_with_retry(messages, max_retries=3):
+        for i in range(max_retries):
+            try:
+                return client.chat.completions.create(
+                    model="claude-3-5-sonnet-20241022",
+                    messages=messages
+                )
+            except RateLimitError:
+                if i < max_retries - 1:
+                    wait_time = (2 ** i) * 2  # 2, 4, 8 seconds
+                    print(f"Rate limited, waiting {wait_time} seconds...")
+                    time.sleep(wait_time)
+                else:
+                    raise
+    ```
+  </Accordion>
+
+  <Accordion icon="exclamation" title="400: Invalid Request">
+    **Common Causes**:
+    - Incorrect model name
+    - Message format error
+    - Parameter out of range
+    
+    **Solution**: Check parameters carefully
+    
+    ```python
+    # Correct format
+    response = client.chat.completions.create(
+        model="claude-3-5-sonnet-20241022",  # Correct model name
+        messages=[
+            {"role": "user", "content": "Hello"}  # Correct message format
+        ],
+        max_tokens=1000  # Within valid range
+    )
+    ```
+  </Accordion>
+
+  <Accordion icon="server" title="500/502: Server Error">
+    **Solution**: Implement retry with delay
+    
+    ```python
+    import time
+    from openai import APIError
+    
+    def chat_with_error_handling(messages):
+        for i in range(3):
+            try:
+                return client.chat.completions.create(
+                    model="claude-3-5-sonnet-20241022",
+                    messages=messages
+                )
+            except APIError as e:
+                if i < 2:
+                    print(f"Server error, retrying... ({i+1}/3)")
+                    time.sleep(2)
+                else:
+                    raise
+    ```
+  </Accordion>
+</AccordionGroup>
+
+## Best Practices
+
+### 1. System Prompt Best Practices
+
+```python
+# Good system prompt example
+system_prompt = """
+You are a professional Python programming assistant with the following characteristics:
+1. Provide clear, runnable code
+2. Include detailed comments
+3. Follow PEP 8 standards
+4. Consider edge cases
+5. Give usage examples
+"""
+
+response = client.chat.completions.create(
+    model="claude-3-5-sonnet-20241022",
+    messages=[
+        {"role": "system", "content": system_prompt},
+        {"role": "user", "content": "Write a function to merge two sorted arrays"}
+    ]
+)
+```
+
+### 2. Multi-turn Conversation Management
+
+```python
+# Maintain conversation history
+conversation_history = [
+    {"role": "system", "content": "You are a helpful assistant"}
+]
+
+def chat(user_input):
+    # Add user message
+    conversation_history.append({
+        "role": "user",
+        "content": user_input
+    })
+    
+    # Get response
+    response = client.chat.completions.create(
+        model="claude-3-5-sonnet-20241022",
+        messages=conversation_history
+    )
+    
+    # Add assistant response
+    assistant_message = response.choices[0].message.content
+    conversation_history.append({
+        "role": "assistant",
+        "content": assistant_message
+    })
+    
+    return assistant_message
+
+# Usage
+print(chat("What is quantum computing?"))
+print(chat("What are its application scenarios?"))  # Continues previous topic
+```
+
+### 3. Streaming Response
+
+For long responses, use streaming for better user experience:
+
+```python
+def chat_stream(user_input):
+    stream = client.chat.completions.create(
+        model="claude-3-5-sonnet-20241022",
+        messages=[{"role": "user", "content": user_input}],
+        stream=True
+    )
+    
+    print("Response: ", end="")
+    for chunk in stream:
+        if chunk.choices[0].delta.content:
+            print(chunk.choices[0].delta.content, end="", flush=True)
+    print()
+
+# Usage
+chat_stream("Write a story about AI")
+```
+
+## Compare with GPT-4
+
+| Dimension | Claude 3.5 Sonnet | GPT-4o |
+|-----------|-------------------|--------|
+| Price | $3/1M (input) | $2.5/1M (input) |
+| Context | 200K tokens | 128K tokens |
+| Code Generation | ⭐⭐⭐⭐⭐ | ⭐⭐⭐⭐⭐ |
+| Reasoning Ability | ⭐⭐⭐⭐⭐ | ⭐⭐⭐⭐⭐ |
+| Safety | ⭐⭐⭐⭐⭐ | ⭐⭐⭐⭐ |
+| Multilingual | ⭐⭐⭐⭐ | ⭐⭐⭐⭐⭐ |
+| Response Speed | ⭐⭐⭐⭐ | ⭐⭐⭐⭐⭐ |
+| Instruction Following | ⭐⭐⭐⭐⭐ | ⭐⭐⭐⭐ |
+
+<Tip>
+  **Recommendation**:
+  - Code generation and review → Claude 3.5 Sonnet
+  - Image understanding → GPT-4o
+  - Long document analysis → Claude 3.5 Sonnet (larger context)
+  - Multilingual support → GPT-4o
+  - Cost-sensitive → Claude 3.5 Haiku
+</Tip>
+
+## Related Resources
+
+- [Chat Completions API](/api-reference/chat-completions) - Complete API documentation
+- [OpenAI Models](/api-reference/openai) - GPT series models guide
+- [Gemini Models](/api-reference/gemini) - Google Gemini models guide
+- [Pricing](/pricing) - Detailed model pricing information
+

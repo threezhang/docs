@@ -1,0 +1,126 @@
+---
+title: ChatGPT Next Web Domestic Deployment Configuration Guide
+description: ChatGPT Next Web one-click deployment tutorial for domestic use, supporting direct access to ChatGPT in China without VPN
+icon: "app-window"
+---
+
+## Application Introduction
+
+ChatGPT Next Web is a carefully designed ChatGPT web client that supports one-click deployment and multiple AI models.
+
+## Quick Deployment
+
+### Vercel One-Click Deployment
+
+1. Click [One-Click Deploy](https://vercel.com/new/clone?repository-url=https://github.com/Yidadaa/ChatGPT-Next-Web)
+2. Set environment variables:
+   - `OPENAI_API_KEY`: Your Laozhang API key
+   - `BASE_URL`: `https://api.laozhang.ai`
+3. Complete deployment
+
+### Docker Deployment
+
+```bash
+docker run -d \
+  --name chatgpt-next-web \
+  -p 3000:3000 \
+  -e OPENAI_API_KEY="Your Laozhang API key" \
+  -e BASE_URL="https://api.laozhang.ai" \
+  yidadaa/chatgpt-next-web
+```
+
+## Configuration Instructions
+
+### Basic Configuration
+
+Configure in the settings page:
+- **API Key**: Enter your Laozhang API key
+- **API Address**: `https://api.laozhang.ai`
+
+### Non-OpenAI Models
+
+For models like Claude, Gemini, etc.:
+1. Add in "Custom Models"
+2. Format: `+ModelName@OpenAI`
+3. Example: `+claude-3-opus-20240229@OpenAI`
+
+## Core Features
+
+### Preset Prompts
+Built-in rich prompt templates
+
+### Mask Feature
+Create preset AI personas
+
+### Conversation Export
+Supports Markdown, image, and PDF formats
+
+### Access Control
+Set password protection for your application
+
+## Environment Variables
+
+```bash
+# API Configuration
+OPENAI_API_KEY=Your Laozhang API key
+BASE_URL=https://api.laozhang.ai
+
+# Access Control
+CODE=Your access password
+
+# Model Configuration
+DEFAULT_MODEL=gpt-3.5-turbo
+CUSTOM_MODELS=+claude-3-opus-20240229@OpenAI
+```
+
+## Usage Tips
+
+### Model Selection Strategy
+
+| Task Type | Recommended Model | Reason |
+|---------|---------|------|
+| Daily Conversation | GPT-3.5-Turbo | Fast and economical |
+| Complex Reasoning | GPT-4 | High accuracy |
+| Creative Writing | Claude 3 | Strong creativity |
+| Code Programming | GPT-4 | Strong logical ability |
+
+### Prompt Optimization
+
+```markdown
+# Role Setting
+You are an experienced [specific role]
+
+# Task Description
+Please help me [specific task]
+
+# Output Requirements
+- Requirement 1
+- Requirement 2
+```
+
+## Common Issues
+
+### Models Not Showing
+Ensure using version v2.13.0+
+
+### Connection Failed
+Check API address: `https://api.laozhang.ai`
+
+### Response Interrupted
+Check account balance and network connection
+
+## Updates and Maintenance
+
+### Vercel Update
+Sync fork in GitHub, Vercel will automatically redeploy
+
+### Docker Update
+```bash
+docker pull yidadaa/chatgpt-next-web
+docker stop chatgpt-next-web
+docker rm chatgpt-next-web
+# Re-run container
+```
+
+Need more help? Please check [detailed integration documentation](/api-reference/integrations/chatgpt-next-web).
+

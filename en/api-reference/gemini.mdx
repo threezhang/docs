@@ -1,0 +1,842 @@
+---
+title: 'Gemini Models Guide'
+sidebarTitle: 'Gemini Models'
+description: 'Detailed guide for Google Gemini series models'
+icon: 'google'
+---
+
+## Model Overview
+
+Gemini is Google's latest generation of multimodal large language models, featuring ultra-long context windows and powerful multimodal understanding capabilities. From the high-performance Gemini 1.5 Pro to the ultra-fast Gemini 1.5 Flash, Gemini models excel in long document analysis, complex reasoning, code generation, and more.
+
+<Note>
+  **OpenAI Format Compatible**: Fully compatible with OpenAI API format, seamlessly integrate with your existing code
+</Note>
+
+## Model Classification
+
+### Gemini 1.5 Series
+
+<AccordionGroup>
+  <Accordion icon="brain" title="Gemini 1.5 Pro">
+    **High-performance model with ultra-long context window**
+    
+    - **Core Features**:
+      - 2M tokens context window (industry-leading)
+      - Powerful multimodal understanding
+      - Excellent reasoning capabilities
+      - Supports text, images, audio, and video
+      - Precise long document analysis
+    
+    - **Pricing**:
+      - Input (≤128K): $1.25/1M tokens
+      - Input (>128K): $2.5/1M tokens
+      - Output: $10/1M tokens
+    
+    - **Suitable Scenarios**:
+      - Ultra-long document analysis
+      - Complex code repository understanding
+      - Multi-video content analysis
+      - Large-scale data processing
+      - Academic research
+  </Accordion>
+
+  <Accordion icon="zap" title="Gemini 1.5 Flash">
+    **Ultra-fast model with best cost-performance**
+    
+    - **Core Features**:
+      - 1M tokens context window
+      - Fastest response speed in industry
+      - Ultra-low price
+      - Multimodal support
+      - Suitable for high-frequency calls
+    
+    - **Pricing**:
+      - Input (≤128K): $0.075/1M tokens
+      - Input (>128K): $0.15/1M tokens
+      - Output: $0.3/1M tokens
+    
+    - **Suitable Scenarios**:
+      - Daily conversations
+      - Quick queries
+      - Batch processing
+      - Real-time applications
+      - Cost-sensitive projects
+  </Accordion>
+</AccordionGroup>
+
+### Gemini 1.0 Series
+
+<AccordionGroup>
+  <Accordion icon="comments" title="Gemini 1.0 Pro">
+    **Classic model, stable and reliable**
+    
+    - **Core Features**:
+      - 32K context window
+      - Stable performance
+      - Good multilingual support
+      - Balanced cost and performance
+    
+    - **Pricing**:
+      - Input: $0.5/1M tokens
+      - Output: $1.5/1M tokens
+    
+    - **Suitable Scenarios**:
+      - Standard dialogue
+      - Text generation
+      - Translation tasks
+      - General queries
+  </Accordion>
+
+  <Accordion icon="eye" title="Gemini Vision (Pro Vision)">
+    **Image understanding model**
+    
+    - **Core Features**:
+      - Strong image understanding
+      - Supports multi-image analysis
+      - Precise OCR capabilities
+      - Scene description
+    
+    - **Pricing**:
+      - Input: $0.25/1M tokens
+      - Image: $0.0025/image
+    
+    - **Suitable Scenarios**:
+      - Image content analysis
+      - Document OCR
+      - Multi-image comparison
+      - Visual Q&A
+  </Accordion>
+</AccordionGroup>
+
+### Experimental Models
+
+<AccordionGroup>
+  <Accordion icon="flask" title="Gemini 2.0 Flash Exp">
+    **Latest experimental model, free to use**
+    
+    - **Core Features**:
+      - 1M tokens context window
+      - Latest model architecture
+      - Completely free (limited time)
+      - May have instability
+    
+    - **Pricing**:
+      - Completely free (experimental phase)
+    
+    - **Suitable Scenarios**:
+      - Testing and validation
+      - Development prototypes
+      - Feature exploration
+      - Non-critical applications
+  </Accordion>
+</AccordionGroup>
+
+## Usage Methods
+
+### Basic Text Dialogue
+
+<CodeGroup>
+
+```python Python
+from openai import OpenAI
+
+client = OpenAI(
+    api_key="YOUR_API_KEY",
+    base_url="https://api.laozhang.ai/v1"
+)
+
+# Use Gemini 1.5 Flash
+response = client.chat.completions.create(
+    model="gemini-1.5-flash",
+    messages=[
+        {"role": "system", "content": "You are a helpful assistant"},
+        {"role": "user", "content": "Explain how the Internet works"}
+    ],
+    temperature=0.7,
+    max_tokens=1000
+)
+
+print(response.choices[0].message.content)
+```
+
+```javascript Node.js
+import OpenAI from 'openai';
+
+const openai = new OpenAI({
+  apiKey: 'YOUR_API_KEY',
+  baseURL: 'https://api.laozhang.ai/v1'
+});
+
+// Use Gemini 1.5 Flash
+const response = await openai.chat.completions.create({
+  model: 'gemini-1.5-flash',
+  messages: [
+    { role: 'system', content: 'You are a helpful assistant' },
+    { role: 'user', content: 'Explain how the Internet works' }
+  ],
+  temperature: 0.7,
+  max_tokens: 1000
+});
+
+console.log(response.choices[0].message.content);
+```
+
+```bash cURL
+curl https://api.laozhang.ai/v1/chat/completions \
+  -H "Content-Type: application/json" \
+  -H "Authorization: Bearer YOUR_API_KEY" \
+  -d '{
+    "model": "gemini-1.5-flash",
+    "messages": [
+      {"role": "system", "content": "You are a helpful assistant"},
+      {"role": "user", "content": "Explain how the Internet works"}
+    ]
+  }'
+```
+
+</CodeGroup>
+
+## Application Scenarios
+
+### 1. Ultra-Long Document Analysis
+
+Leverage Gemini's 2M tokens context to process entire books:
+
+```python
+# Read entire book or long document
+with open('long_book.txt', 'r', encoding='utf-8') as f:
+    book_content = f.read()
+
+response = client.chat.completions.create(
+    model="gemini-1.5-pro",  # 2M context
+    messages=[
+        {
+            "role": "user",
+            "content": f"""
+            Please analyze this book and provide:
+            1. Main theme summary
+            2. Character relationship diagram
+            3. Plot structure analysis
+            4. Insights and evaluation
+            
+            Book content:
+            {book_content}
+            """
+        }
+    ],
+    max_tokens=4000
+)
+
+print(response.choices[0].message.content)
+```
+
+<Tip>
+  **2M Tokens = About 1.5 Million Words**
+  
+  - A typical novel: 80,000-100,000 words
+  - Gemini 1.5 Pro can process 15-18 novels simultaneously!
+</Tip>
+
+### 2. Code Repository Understanding
+
+Analyze entire code repositories:
+
+```python
+import os
+
+def read_code_files(directory):
+    """Read all code files"""
+    code_content = []
+    for root, dirs, files in os.walk(directory):
+        for file in files:
+            if file.endswith(('.py', '.js', '.java', '.cpp')):
+                file_path = os.path.join(root, file)
+                with open(file_path, 'r', encoding='utf-8') as f:
+                    code_content.append(f"=== {file_path} ===\n{f.read()}\n")
+    return '\n'.join(code_content)
+
+# Read entire project
+project_code = read_code_files('./my_project')
+
+response = client.chat.completions.create(
+    model="gemini-1.5-pro",
+    messages=[
+        {
+            "role": "user",
+            "content": f"""
+            Please analyze this code repository and provide:
+            1. Project architecture overview
+            2. Key module functions
+            3. Code quality assessment
+            4. Improvement suggestions
+            
+            Code content:
+            {project_code}
+            """
+        }
+    ],
+    max_tokens=3000
+)
+
+print(response.choices[0].message.content)
+```
+
+### 3. Multi-Image Analysis
+
+Analyze multiple images simultaneously:
+
+```python
+response = client.chat.completions.create(
+    model="gemini-1.5-flash",
+    messages=[
+        {
+            "role": "user",
+            "content": [
+                {"type": "text", "text": "Compare these product images and analyze their design styles and features"},
+                {
+                    "type": "image_url",
+                    "image_url": {"url": "https://example.com/product1.jpg"}
+                },
+                {
+                    "type": "image_url",
+                    "image_url": {"url": "https://example.com/product2.jpg"}
+                },
+                {
+                    "type": "image_url",
+                    "image_url": {"url": "https://example.com/product3.jpg"}
+                }
+            ]
+        }
+    ]
+)
+
+print(response.choices[0].message.content)
+```
+
+### 4. Document OCR and Information Extraction
+
+```python
+response = client.chat.completions.create(
+    model="gemini-pro-vision",
+    messages=[
+        {
+            "role": "user",
+            "content": [
+                {
+                    "type": "text",
+                    "text": """
+                    Extract all information from this invoice:
+                    1. Invoice number
+                    2. Date
+                    3. Vendor information
+                    4. Item details
+                    5. Total amount
+                    
+                    Output in JSON format
+                    """
+                },
+                {
+                    "type": "image_url",
+                    "image_url": {"url": "https://example.com/invoice.jpg"}
+                }
+            ]
+        }
+    ]
+)
+
+import json
+invoice_data = json.loads(response.choices[0].message.content)
+print(invoice_data)
+```
+
+### 5. Data Analysis and Visualization
+
+```python
+data_prompt = """
+Please analyze the following data and provide:
+1. Data trends analysis
+2. Anomaly detection
+3. Correlation analysis
+4. Forecasting suggestions
+
+Sales data (last 12 months):
+Jan: 12000, Feb: 11500, Mar: 13200, Apr: 14100, May: 13800,
+Jun: 15200, Jul: 14900, Aug: 13600, Sep: 14300, Oct: 15800,
+Nov: 17200, Dec: 19500
+"""
+
+response = client.chat.completions.create(
+    model="gemini-1.5-flash",
+    messages=[{"role": "user", "content": data_prompt}],
+    temperature=0.3  # Lower temperature for more objective analysis
+)
+
+print(response.choices[0].message.content)
+```
+
+### 6. Code Generation
+
+```python
+response = client.chat.completions.create(
+    model="gemini-1.5-flash",
+    messages=[
+        {
+            "role": "user",
+            "content": """
+            Write a Python class with these requirements:
+            1. Class name: DataProcessor
+            2. Functions: read data, process data, save results
+            3. Support CSV and JSON formats
+            4. Include error handling
+            5. Provide usage examples
+            """
+        }
+    ],
+    temperature=0.5
+)
+
+print(response.choices[0].message.content)
+```
+
+## Gemini's Unique Advantages
+
+### 1. Ultra-Long Context Window
+
+<Note>
+  **Industry Leading**: Gemini 1.5 Pro supports 2M tokens context, about 10x Claude and GPT-4
+</Note>
+
+**Application Scenarios**:
+- Entire book analysis
+- Large code repository review
+- Mass document processing
+- Long conversation history maintenance
+
+### 2. Powerful Multimodal Capabilities
+
+Supports multiple modalities including text, images, audio, and video:
+
+```python
+# Multi-modal analysis (video + text)
+response = client.chat.completions.create(
+    model="gemini-1.5-pro",
+    messages=[
+        {
+            "role": "user",
+            "content": [
+                {"type": "text", "text": "Analyze the content and techniques of this video"},
+                {"type": "video_url", "video_url": {"url": "https://example.com/video.mp4"}}
+            ]
+        }
+    ]
+)
+```
+
+### 3. Precise Multimodal Understanding
+
+Gemini has excellent understanding capabilities for images, videos, and audio:
+
+- Accurate scene description
+- Multi-object recognition
+- Temporal sequence understanding
+- Audio content analysis
+
+## Usage Tips
+
+### 1. Model Selection Guide
+
+| Scenario | Recommended Model | Reason |
+|----------|-------------------|--------|
+| Daily conversations | Gemini 1.5 Flash | Fastest speed, lowest price |
+| Long documents | Gemini 1.5 Pro | 2M context |
+| Image understanding | Gemini Pro Vision | Image-specific optimization |
+| Code generation | Gemini 1.5 Flash | Cost-effective, good quality |
+| Complex reasoning | Gemini 1.5 Pro | Powerful reasoning |
+| Testing | Gemini 2.0 Flash Exp | Free |
+
+### 2. Context Window Management
+
+<AccordionGroup>
+  <Accordion icon="file" title="Short Context (< 128K)">
+    **Price advantage**:
+    - Gemini 1.5 Flash: $0.075/1M tokens
+    - Gemini 1.5 Pro: $1.25/1M tokens
+    
+    **Suitable for**:
+    - Daily conversations
+    - Short document processing
+    - Quick queries
+  </Accordion>
+
+  <Accordion icon="book" title="Long Context (> 128K)">
+    **Pricing changes**:
+    - Gemini 1.5 Flash: $0.15/1M tokens (2x)
+    - Gemini 1.5 Pro: $2.5/1M tokens (2x)
+    
+    **Suitable for**:
+    - Entire book analysis
+    - Large code repositories
+    - Mass documents
+    
+    <Tip>
+      If document length is near 128K threshold, consider splitting into multiple requests to save costs
+    </Tip>
+  </Accordion>
+</AccordionGroup>
+
+### 3. Prompt Optimization
+
+```python
+# ✅ Good prompt example
+good_prompt = """
+Task: Analyze user feedback data
+
+Requirements:
+1. Sentiment classification (positive/negative/neutral)
+2. Extract key issues
+3. Count issue frequency
+4. Provide improvement suggestions
+
+Output format:
+{
+  "sentiment_analysis": {...},
+  "key_issues": [...],
+  "suggestions": [...]
+}
+
+Feedback data:
+[User feedback data]
+"""
+
+# ❌ Poor prompt example
+bad_prompt = "Analyze this feedback data"
+```
+
+### 4. Parameter Tuning
+
+<ParamField path="temperature" type="number" default="1">
+  Control creativity:
+  - `0`: Most deterministic (translation, facts)
+  - `0.7`: Balanced (general dialogue)
+  - `1.0-1.5`: More creative (creative writing)
+</ParamField>
+
+<ParamField path="top_p" type="number" default="0.95">
+  Nucleus sampling:
+  - `0.9`: Conservative
+  - `0.95`: Balanced
+  - `1.0`: Most diverse
+</ParamField>
+
+<ParamField path="top_k" type="integer">
+  Top-K sampling:
+  - Gemini-specific parameter
+  - Recommended range: 1-40
+  - Lower values = more deterministic
+</ParamField>
+
+## Cost Optimization Strategies
+
+### 1. Choose Appropriate Models
+
+<CardGroup cols={2}>
+  <Card title="Cost First" icon="dollar-sign">
+    **Gemini 1.5 Flash**
+    
+    - Input: $0.075/1M tokens
+    - 95% cheaper than GPT-4o
+    - Suitable for most scenarios
+  </Card>
+  
+  <Card title="Performance First" icon="rocket">
+    **Gemini 1.5 Pro**
+    
+    - Input: $1.25/1M tokens (<128K)
+    - 2M tokens context
+    - Suitable for complex tasks
+  </Card>
+</CardGroup>
+
+### 2. Control Context Length
+
+```python
+# ❌ Wasteful
+def chat_wasteful(user_input, full_history):
+    messages = full_history  # May exceed 128K threshold
+    messages.append({"role": "user", "content": user_input})
+    return client.chat.completions.create(
+        model="gemini-1.5-flash",
+        messages=messages
+    )
+
+# ✅ Economical
+def chat_economical(user_input, recent_history):
+    # Keep context under 128K for lower pricing
+    messages = recent_history[-10:]  # Only recent messages
+    messages.append({"role": "user", "content": user_input})
+    return client.chat.completions.create(
+        model="gemini-1.5-flash",
+        messages=messages
+    )
+```
+
+### 3. Batch Processing
+
+```python
+import asyncio
+from openai import AsyncOpenAI
+
+client = AsyncOpenAI(
+    api_key="YOUR_API_KEY",
+    base_url="https://api.laozhang.ai/v1"
+)
+
+async def batch_process(tasks):
+    """Parallel batch processing"""
+    async_tasks = [
+        client.chat.completions.create(
+            model="gemini-1.5-flash",
+            messages=[{"role": "user", "content": task}]
+        )
+        for task in tasks
+    ]
+    
+    results = await asyncio.gather(*async_tasks)
+    return [r.choices[0].message.content for r in results]
+
+# Usage
+tasks = [
+    "Translate this to English: 你好世界",
+    "Summarize: [Long text]",
+    "Analyze sentiment: [Review text]"
+]
+
+results = asyncio.run(batch_process(tasks))
+```
+
+## Error Handling
+
+### Common Error Codes
+
+| Error Code | Description | Solution |
+|-----------|-------------|----------|
+| 400 | Invalid request parameters | Check parameter format |
+| 401 | Invalid API Key | Verify API Key |
+| 429 | Rate limit exceeded | Implement retry mechanism |
+| 500 | Server error | Retry later |
+
+### Retry Mechanism Implementation
+
+```python
+import time
+from openai import APIError, RateLimitError
+
+def chat_with_retry(messages, max_retries=3):
+    """Robust retry mechanism"""
+    for attempt in range(max_retries):
+        try:
+            response = client.chat.completions.create(
+                model="gemini-1.5-flash",
+                messages=messages
+            )
+            return response
+        
+        except RateLimitError as e:
+            if attempt < max_retries - 1:
+                wait_time = (2 ** attempt) * 2  # Exponential backoff
+                print(f"Rate limited, retrying in {wait_time} seconds...")
+                time.sleep(wait_time)
+            else:
+                raise
+        
+        except APIError as e:
+            if attempt < max_retries - 1:
+                print(f"API error, retrying...")
+                time.sleep(2)
+            else:
+                raise
+
+# Usage
+response = chat_with_retry([
+    {"role": "user", "content": "Hello"}
+])
+```
+
+## Streaming Response
+
+For long responses, use streaming for better user experience:
+
+<CodeGroup>
+
+```python Python
+# Streaming output
+stream = client.chat.completions.create(
+    model="gemini-1.5-flash",
+    messages=[
+        {"role": "user", "content": "Write a detailed article on AI development history"}
+    ],
+    stream=True
+)
+
+print("Generating content: ", end="")
+for chunk in stream:
+    if chunk.choices[0].delta.content:
+        print(chunk.choices[0].delta.content, end="", flush=True)
+print("\n\nGeneration complete!")
+```
+
+```javascript Node.js
+// Streaming output
+const stream = await openai.chat.completions.create({
+  model: 'gemini-1.5-flash',
+  messages: [
+    { role: 'user', content: 'Write a detailed article on AI development history' }
+  ],
+  stream: true
+});
+
+process.stdout.write('Generating content: ');
+for await (const chunk of stream) {
+  const content = chunk.choices[0]?.delta?.content;
+  if (content) {
+    process.stdout.write(content);
+  }
+}
+console.log('\n\nGeneration complete!');
+```
+
+</CodeGroup>
+
+## Best Practices
+
+### 1. Long Document Processing
+
+```python
+def process_long_document(document_path):
+    """Best practices for processing long documents"""
+    
+    # Read document
+    with open(document_path, 'r', encoding='utf-8') as f:
+        content = f.read()
+    
+    # Check length
+    token_count = len(content) // 4  # Rough estimate
+    
+    # Choose appropriate model
+    if token_count < 100000:  # < 100K
+        model = "gemini-1.5-flash"  # Lower price tier
+    else:  # > 100K
+        model = "gemini-1.5-pro"  # More powerful
+    
+    response = client.chat.completions.create(
+        model=model,
+        messages=[
+            {
+                "role": "user",
+                "content": f"Analyze this document:\n\n{content}"
+            }
+        ],
+        max_tokens=2000
+    )
+    
+    return response.choices[0].message.content
+```
+
+### 2. Multi-turn Conversation Management
+
+```python
+class ConversationManager:
+    def __init__(self, model="gemini-1.5-flash", max_history=10):
+        self.model = model
+        self.max_history = max_history
+        self.messages = []
+    
+    def chat(self, user_input):
+        # Add user message
+        self.messages.append({
+            "role": "user",
+            "content": user_input
+        })
+        
+        # Keep only recent N messages
+        messages_to_send = self.messages[-self.max_history:]
+        
+        # Get response
+        response = client.chat.completions.create(
+            model=self.model,
+            messages=messages_to_send
+        )
+        
+        # Add assistant response
+        assistant_message = response.choices[0].message.content
+        self.messages.append({
+            "role": "assistant",
+            "content": assistant_message
+        })
+        
+        return assistant_message
+
+# Usage
+conversation = ConversationManager()
+print(conversation.chat("What is AI?"))
+print(conversation.chat("What are its application scenarios?"))
+```
+
+### 3. Structured Output
+
+```python
+def get_structured_output(prompt):
+    """Get structured JSON output"""
+    response = client.chat.completions.create(
+        model="gemini-1.5-flash",
+        messages=[
+            {
+                "role": "system",
+                "content": "Always return results in JSON format"
+            },
+            {
+                "role": "user",
+                "content": f"{prompt}\n\nOutput in JSON format"
+            }
+        ],
+        temperature=0.3  # Lower temperature for more structured output
+    )
+    
+    import json
+    return json.loads(response.choices[0].message.content)
+
+# Usage
+result = get_structured_output(
+    "Extract personal information: Zhang San, 28 years old, software engineer"
+)
+print(result)
+```
+
+## Compare with Other Models
+
+| Dimension | Gemini 1.5 Flash | GPT-4o Mini | Claude 3.5 Haiku |
+|-----------|------------------|-------------|------------------|
+| Price | $0.075/1M | $0.15/1M | $1/1M |
+| Context | 1M tokens | 128K tokens | 200K tokens |
+| Speed | ⭐⭐⭐⭐⭐ | ⭐⭐⭐⭐⭐ | ⭐⭐⭐⭐⭐ |
+| Cost-performance | ⭐⭐⭐⭐⭐ | ⭐⭐⭐⭐ | ⭐⭐⭐ |
+| Long documents | ⭐⭐⭐⭐⭐ | ⭐⭐⭐ | ⭐⭐⭐⭐ |
+| Code generation | ⭐⭐⭐⭐ | ⭐⭐⭐⭐ | ⭐⭐⭐⭐⭐ |
+
+<Tip>
+  **Recommendation**:
+  - Ultra-long documents → Gemini 1.5 Pro (2M context)
+  - Cost-sensitive → Gemini 1.5 Flash (lowest price)
+  - Code generation → Claude 3.5 Haiku (strongest capabilities)
+  - Image understanding → GPT-4o (best multimodal)
+  - General applications → Gemini 1.5 Flash (best balance)
+</Tip>
+
+## Related Resources
+
+- [Chat Completions API](/api-reference/chat-completions) - Complete API documentation
+- [OpenAI Models](/api-reference/openai) - GPT series models guide
+- [Claude Models](/api-reference/claude) - Anthropic Claude models guide
+- [Pricing](/pricing) - Detailed model pricing information
+

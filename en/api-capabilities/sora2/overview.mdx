@@ -1,0 +1,144 @@
+---
+title: "Sora 2 Video Generation API"
+description: "OpenAI Sora 2 reverse-engineered API, supports text-to-video and image-to-video, no invitation code required"
+icon: "clapperboard"
+---
+
+<Info>
+  **Base URL:** `https://api.laozhang.ai/v1/chat/completions`
+  **API Version:** `v1`
+  **Service Status:** Running | **No Watermark** | **No Invitation Code Required**
+</Info>
+
+## Major Updates
+
+**Release Date:** October 1, 2025
+
+OpenAI suddenly released Sora 2 new version (The New Sora), and we integrated official website API immediately (reverse-engineered, before OpenAI released official API).
+
+<Note>
+**Latest Updates**
+- **10/07** Added Python example code; official sora-2 and sora-2-pro models launched but with high pricing and rate limits
+- **10/01** Integrated Sora 2 reverse-engineered API, supports text-to-video and image-to-video
+</Note>
+
+## Sora 2 Core Breakthroughs
+
+<CardGroup cols={2}>
+  <Card title="Audio-Video Sync" icon="music">
+    First-time synchronized audio-video generation
+  </Card>
+  <Card title="Physical Realism" icon="atom">
+    Dramatically improved physical realism
+  </Card>
+  <Card title="Long Video Support" icon="film">
+    Supports 10-16 second coherent narrative videos
+  </Card>
+  <Card title="No Watermark Output" icon="droplet-slash">
+    Generated videos have no watermark (official website has watermarks)
+  </Card>
+  <Card title="Cameo Feature" icon="user-plus">
+    Supports integrating real-person recorded clips into AI scenes
+  </Card>
+  <Card title="Remix Feature" icon="waveform">
+    Supports community remixing
+  </Card>
+</CardGroup>
+
+## Core Features
+
+<CardGroup cols={2}>
+  <Card title="Text-to-Video" icon="text">
+    Generate videos from pure text descriptions
+  </Card>
+  <Card title="Image-to-Video" icon="image">
+    Supports reference images (up to 1 image)
+  </Card>
+  <Card title="Streaming Output" icon="stream">
+    Real-time generation progress viewing
+  </Card>
+  <Card title="Multi-Spec Support" icon="grid">
+    Horizontal and vertical orientation options
+  </Card>
+  <Card title="Pay-per-Use" icon="badge-dollar">
+    Charged only by generation count
+  </Card>
+  <Card title="Quick Integration" icon="bolt">
+    Fully compatible with OpenAI interface format
+  </Card>
+</CardGroup>
+
+## Workflow
+
+<Steps>
+  <Step title="Configure API Key">
+    Get API key from laozhang.ai console, set to **pay-as-you-go** or **pay-per-use** mode
+  </Step>
+  <Step title="Send Request">
+    Call `/v1/chat/completions` endpoint, specify model and prompt
+  </Step>
+  <Step title="Real-time Progress">
+    View task queue and generation progress through streaming output
+  </Step>
+  <Step title="Get Video">
+    Obtain video link after generation completes (valid for 1 day)
+  </Step>
+  <Step title="Download & Save">
+    Download video to local storage immediately
+  </Step>
+</Steps>
+
+<Note>
+**Model Simplification Notice**
+
+Due to official OpenAI's insufficient computing power and severe quotas, -hd (high definition) and -15s (15-second) versions are temporarily unavailable. They will be re-launched once computing resources are sufficient.
+
+Currently only two highly stable models are available for selection.
+</Note>
+
+## Supported Models
+
+| Model | Resolution | Duration | Price | Stability |
+|-------|------------|----------|-------|-----------|
+| `sora_video2` | 704×1280 | 10s | $0.15/video | ⭐⭐⭐⭐⭐ Extremely High |
+| `sora_video2-landscape` | 1280×704 | 10s | $0.15/video | ⭐⭐⭐⭐⭐ Extremely High |
+
+## Video Specifications
+
+<Info>
+- **Duration:** 10 seconds
+- **Quality:** 720P / HD
+- **Orientation:** Vertical or horizontal (selected via model name)
+- **Watermark:** No watermark
+- **Audio:** Supports audio-video synchronization
+</Info>
+
+## Getting Started
+
+<CardGroup cols={2}>
+  <Card title="Quick Start" icon="rocket" href="/api-capabilities/sora2/quick-start">
+    View complete example code and usage methods
+  </Card>
+  <Card title="Model Pricing" icon="tag" href="/api-capabilities/sora2/models-pricing">
+    Learn detailed model comparison and pricing
+  </Card>
+  <Card title="Code Examples" icon="code" href="/api-capabilities/sora2/examples">
+    View multi-language example code
+  </Card>
+  <Card title="FAQ" icon="circle-question" href="/api-capabilities/sora2/troubleshooting">
+    Solve common issues
+  </Card>
+</CardGroup>
+
+## Important Notes
+
+<Warning>
+**Video storage valid for only 1 day!**
+
+Generated videos are stored on domestic CDN for convenient access by domestic users. Please **download and save to local storage immediately** after generation.
+</Warning>
+
+<Tip>
+Both models have extremely high stability. Choose horizontal or vertical mode based on your video display scenario.
+</Tip>
+

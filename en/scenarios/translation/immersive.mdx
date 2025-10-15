@@ -1,0 +1,384 @@
+---
+title: Immersive Translate Extension
+description: Immersive Translate bilingual web page translation extension AI model integration guide
+icon: "earth-americas"
+---
+
+Immersive Translate is a powerful bilingual web page translation browser extension. Through Laozhang API, you can integrate various advanced AI models into Immersive Translate for a more natural and accurate translation experience.
+
+## Quick Integration
+
+### Step 1: Install Extension
+
+Install Immersive Translate from the following browsers:
+
+- **Chrome/Edge**: [Chrome Web Store](https://chrome.google.com/webstore/detail/immersive-translate/bpoadfkcbjbfhfodiogcnhhhpibjhbnh)
+- **Firefox**: [Firefox Add-ons](https://addons.mozilla.org/firefox/addon/immersive-translate/)
+- **Safari**: [Safari Extensions](https://apps.apple.com/app/immersive-translate/id6447957425)
+
+### Step 2: Configure Laozhang API
+
+<Steps>
+  <Step title="Open Settings">
+    Click the Immersive Translate extension icon, select "Settings"
+  </Step>
+  
+  <Step title="Choose Translation Service">
+    In "Translation Services", select "OpenAI"
+  </Step>
+  
+  <Step title="Fill In API Configuration">
+    Configure the following information:
+    - **API Key**: Enter your Laozhang API key
+    - **Custom API URL**: `https://api.laozhang.ai/v1/chat/completions`
+    - **Model**: Select the model you need (e.g., `gpt-4-turbo`)
+  </Step>
+  
+  <Step title="Test Configuration">
+    Click "Test" button to ensure connection is successful
+  </Step>
+  
+  <Step title="Save Settings">
+    Click "Save" button to complete configuration
+  </Step>
+</Steps>
+
+<Info>
+**Obtaining API Key**
+
+Visit [Laozhang API Console](https://api.laozhang.ai/token) to create and obtain your API key.
+</Info>
+
+## Recommended Model Selection
+
+Choose appropriate models based on different translation scenarios:
+
+| Translation Scenario | Recommended Model | Speed | Quality | Cost |
+|---------|---------|------|------|------|
+| **General Web Translation** | `gpt-3.5-turbo` | Fast | Good | Low |
+| **Professional Articles** | `gpt-4-turbo` | Medium | Excellent | Medium |
+| **Technical Documentation** | `gpt-4-turbo` | Medium | Excellent | Medium |
+| **News Reading** | `gpt-3.5-turbo` | Fast | Good | Low |
+| **Academic Papers** | `claude-sonnet-4` | Medium | Excellent | Medium |
+| **Literary Works** | `claude-sonnet-4` | Medium | Excellent | Medium |
+
+<Tip>
+**Model Selection Recommendations**
+- **Daily browsing**: Use `gpt-3.5-turbo`, fast and economical
+- **Professional content**: Use `gpt-4-turbo`, high accuracy
+- **Long articles**: Use `claude-sonnet-4`, supports long context
+- **Technical documents**: Use `gpt-4-turbo`, precise terminology
+</Tip>
+
+## Core Features
+
+### 1. Bilingual Comparison Translation
+
+Display original and translation side-by-side:
+- **Paragraph-by-paragraph correspondence**: Clear and intuitive
+- **Hover highlighting**: Highlight corresponding paragraphs
+- **Quick positioning**: Quickly find target content
+
+### 2. Hover Translation
+
+Hover over words for quick translation:
+- No need to copy and paste
+- Instant results
+- Supports multiple languages
+
+### 3. Input Box Translation
+
+Translate while typing:
+- Real-time translation feedback
+- Supports multiple platforms
+- Quick bilingual switching
+
+### 4. PDF Translation
+
+Translate PDF documents:
+- Maintain original layout
+- Support bilingual comparison
+- Export translated files
+
+### 5. Subtitle Translation
+
+Translate video subtitles:
+- Support YouTube, Netflix, etc.
+- Real-time subtitle translation
+- Bilingual subtitle display
+
+## Usage Scenarios
+
+### Scenario 1: Reading Technical Documentation
+
+Reading technical articles/documentation on GitHub, Medium, etc.:
+1. Open the page you need to read
+2. Click the Immersive Translate icon
+3. Automatically translate to bilingual display
+4. Hover over important paragraphs for further reading
+
+### Scenario 2: Academic Research
+
+Reading English academic papers:
+1. Open the paper page
+2. Enable translation feature
+3. Bilingual comparison reading
+4. Accurately understand terminology
+5. Take notes and cite
+
+### Scenario 3: News Browsing
+
+Reading international news:
+1. Visit foreign news websites
+2. Automatically trigger translation
+3. Quickly browse headlines
+4. In-depth reading of interesting content
+
+### Scenario 4: Video Learning
+
+Watching English tutorial videos:
+1. Open YouTube/Coursera videos
+2. Enable subtitle translation
+3. Real-time bilingual subtitle display
+4. Better understand content
+
+## Advanced Configuration
+
+### Custom Prompts
+
+Customize prompts for translation:
+
+```
+You are a professional translator proficient in English and Chinese.
+
+Task: Translate the following text to Chinese
+Requirements:
+1. Accurate and fluent translation
+2. Maintain professional terminology accuracy
+3. Keep paragraph structure unchanged
+4. Ensure text is natural and fluent
+
+Text to translate:
+{text}
+
+Please provide only the translation, without explanations.
+```
+
+### Translation Style Settings
+
+Set different translation styles:
+
+| Style | Temperature | Features | Use Cases |
+|------|-------------|------|----------|
+| **Literal** | 0.1 | Precise and accurate | Technical documents, contracts |
+| **Balanced** | 0.3 | Accurate and fluent | News, general articles |
+| **Free** | 0.5 | Natural and fluent | Literary works, blogs |
+| **Creative** | 0.7 | Creative and diverse | Marketing copy, creative content |
+
+### Domain-specific Configuration
+
+Optimize translation for specific domains:
+
+```json
+{
+  "tech": {
+    "model": "gpt-4-turbo",
+    "temperature": 0.2,
+    "systemPrompt": "You are a technical document translator, proficient in various programming languages and technical terms."
+  },
+  "medical": {
+    "model": "gpt-4-turbo",
+    "temperature": 0.1,
+    "systemPrompt": "You are a medical document translator, proficient in medical terminology and professional expressions."
+  },
+  "legal": {
+    "model": "claude-sonnet-4",
+    "temperature": 0.1,
+    "systemPrompt": "You are a legal document translator, proficient in legal terminology and formal expressions."
+  }
+}
+```
+
+## Feature Tips
+
+### Shortcut Keys
+
+| Shortcut | Function |
+|----------|----------|
+| `Alt + A` | Toggle translation |
+| `Alt + W` | Translate entire page |
+| `Alt + S` | Show/hide original text |
+| `Alt + D` | Toggle translation style |
+
+### Smart Recognition
+
+Auto-recognize and adapt:
+- **Page Language**: Auto-detect source language
+- **Content Type**: Auto-adjust translation strategy
+- **User Preferences**: Learn your habits
+
+### Cache Mechanism
+
+Improve efficiency:
+- **Translation Cache**: Repeat content no re-translation
+- **Terminology Cache**: Consistent professional terms
+- **Speed Optimization**: Faster page loading
+
+## Troubleshooting
+
+### Connection Issues
+
+**Problem**: Unable to connect to API
+
+**Solutions**:
+1. Check if custom API URL is correct: `https://api.laozhang.ai/v1/chat/completions`
+2. Verify API Key validity
+3. Check network connection
+4. Confirm firewall/proxy settings
+
+### Translation Quality Poor
+
+**Problem**: Translation results don't meet expectations
+
+**Solutions**:
+1. Switch to a more advanced model (e.g., from GPT-3.5 to GPT-4)
+2. Adjust translation style (decrease temperature)
+3. Optimize prompt template
+4. Check if source language is correctly identified
+
+### Slow Translation Speed
+
+**Problem**: Translation response is slow
+
+**Solutions**:
+1. Switch to a faster model (e.g., `gpt-3.5-turbo`)
+2. Enable cache feature
+3. Check network speed
+4. Reduce max_tokens setting
+
+### Some Content Not Translated
+
+**Problem**: Some content on page is not translated
+
+**Solutions**:
+1. Check if excluded translation selectors are set
+2. Refresh page and retry
+3. Manually trigger translation
+4. Check page structure if special
+
+## Best Practices
+
+### 1. Choose Models Wisely
+
+Choose appropriate models based on scenarios:
+
+```
+Daily browsing → gpt-3.5-turbo
+    ↓
+Important articles → gpt-4-turbo
+    ↓
+Professional papers → claude-sonnet-4
+```
+
+### 2. Manage Translation Rules
+
+Set translation rules:
+- **Never translate**: Set domain names or page selectors not to translate
+- **Always translate**: Set auto-translation domain names
+- **Translation style**: Set default style for different websites
+
+### 3. Optimize Reading Experience
+
+```
+1. Enable bilingual comparison → Easy to verify accuracy
+2. Use hover translation → Quick understanding of terms
+3. Enable cache → Improve speed
+4. Customize shortcuts → More efficient
+```
+
+### 4. Cost Control
+
+Control usage costs:
+- Use `gpt-3.5-turbo` for daily browsing
+- Use advanced models only for important content
+- Enable cache to reduce repeat translations
+- Set daily usage limit
+
+## Plugin Configuration Examples
+
+### Daily Browsing Configuration
+
+```json
+{
+  "model": "gpt-3.5-turbo",
+  "temperature": 0.3,
+  "maxTokens": 1000,
+  "cacheEnabled": true,
+  "autoTranslate": false
+}
+```
+
+### Professional Reading Configuration
+
+```json
+{
+  "model": "gpt-4-turbo",
+  "temperature": 0.2,
+  "maxTokens": 2000,
+  "cacheEnabled": true,
+  "autoTranslate": true,
+  "bilingualMode": true
+}
+```
+
+### Cost-optimized Configuration
+
+```json
+{
+  "model": "gpt-3.5-turbo",
+  "temperature": 0.3,
+  "maxTokens": 800,
+  "cacheEnabled": true,
+  "autoTranslate": false,
+  "onlyTranslateSelection": true
+}
+```
+
+## Cost Optimization Strategy
+
+### Usage Strategy
+
+| Content Type | Model | Max Tokens | Expected Cost |
+|---------|-------|------------|------------|
+| **News Headlines** | GPT-3.5 | 500 | Very Low |
+| **General Articles** | GPT-3.5 | 1000 | Low |
+| **Professional Articles** | GPT-4 | 1500 | Medium |
+| **Academic Papers** | Claude | 2000 | High |
+
+### Saving Tips
+
+1. **Enable Cache**: Avoid repeat translations
+2. **Selective Translation**: Translate only what you need
+3. **Batch Processing**: Translate multiple paragraphs at once
+4. **Model Switching**: Use appropriate models for different content
+5. **Limit Token Count**: Set reasonable max_tokens
+
+## Further Learning
+
+### Official Resources
+- [Immersive Translate Official Documentation](https://immersivetranslate.com/docs/)
+- [Immersive Translate GitHub](https://github.com/immersive-translate/immersive-translate)
+- [Immersive Translate Community](https://github.com/immersive-translate/immersive-translate/discussions)
+
+### Learning Resources
+- [Quick Start Tutorial](https://immersivetranslate.com/docs/quickstart/)
+- [Advanced Configuration Guide](https://immersivetranslate.com/docs/advanced/)
+- [FAQ](https://immersivetranslate.com/docs/faq/)
+
+### Community Support
+- [GitHub Issues](https://github.com/immersive-translate/immersive-translate/issues)
+- [User Forum](https://github.com/immersive-translate/immersive-translate/discussions)
+- [Twitter](https://twitter.com/immersivetran)
+
+Need more help? Please visit [Laozhang API Official Website](https://api.laozhang.ai) or contact our support team.
+

@@ -1,0 +1,315 @@
+---
+title: Chatbox AI
+description: Cross-platform AI client application integration guide
+icon: "message-square"
+---
+
+Chatbox AI is a powerful cross-platform AI client application that supports multiple large language models and APIs. Through Laozhang API, you can access various mainstream AI models in Chatbox and enjoy the privacy protection of local storage.
+
+## Quick Start
+
+### Download and Install
+
+Chatbox AI supports multi-platform installation:
+- **Desktop**: Windows, macOS, Linux
+- **Mobile**: iOS, Android
+- **Web**: Direct access through browser
+
+Visit [Chatbox AI Official Website](https://chatboxai.app/en) to download the version suitable for your platform.
+
+### Configure Laozhang API
+
+#### Step 1: Open Settings
+
+1. Launch the Chatbox AI application
+2. Click the settings icon (⚙️) in the lower left corner
+3. Enter the "Model Configuration" interface
+
+#### Step 2: Add Custom Provider
+
+<img src="/images/chatbox-setting.png" alt="Chatbox AI Settings Interface - Laozhang API Configuration Example" />
+
+According to the configuration interface shown above, complete the following setup steps:
+
+1. Click the **+ Add** button in the "Model Provider" section
+2. Fill in provider information:
+   - **Name**: Laozhang API (customizable name)
+   - **API Mode**: Select **OpenAI API Compatible**
+   - **API Key**: Enter your Laozhang API key
+   - **API Host**: `https://api.laozhang.ai/v1`
+   - **API Path**: `/chat/completions` (default value)
+
+3. **Advanced Configuration** (optional):
+   - Enable "Improve network compatibility" option (as shown)
+   - Can configure dedicated image generation endpoint
+
+<Info>
+**Configuration Key Points**
+- The API Host field corresponds to Base URL and must include the `/v1` suffix
+- The API Path field is used to specify the specific endpoint path
+- API keys can be obtained from [Laozhang API Console](https://api.laozhang.ai)
+- After configuration, click the **+ New** button in the lower right to add models
+</Info>
+
+#### Step 3: Select Models
+
+After configuration, you can select the following models in the chat interface:
+
+## Supported Models
+
+### Model Support
+
+Chatbox AI supports various mainstream AI models through Laozhang API, including:
+
+- **GPT Series**: GPT-5 series, GPT-4o, gpt-4.1, o3, etc.
+- **Claude Series**: Claude 4 Sonnet, Claude 3.5 Haiku, etc.
+- **Gemini Series**: Gemini 2.5 Pro, Gemini 2.5 Flash, etc.
+- **Featured Models**: Reasoning, vision understanding, code generation specialized models
+
+<Info>
+**View Complete Model List**
+For detailed model information, pricing, and feature comparison, please visit the [Model Information Page](https://docs.laozhang.ai/api-capabilities/model-info)
+</Info>
+
+## Core Features
+
+### Multi-platform Sync
+
+Chatbox AI's core advantages:
+- **Local Storage**: Data is completely stored locally, protecting privacy
+- **Cross-platform Access**: Switch between different devices
+- **Offline Features**: Some features support offline use
+
+### Conversation Management
+
+**Smart Conversation Features**:
+- Multi-turn conversation context retention
+- Conversation history search and management
+- Conversation export (Markdown, PDF)
+- Prompt library and message references
+
+### Document Processing
+
+**Document Understanding Capabilities**:
+- PDF, TXT, DOCX document upload
+- Image understanding and analysis
+- LaTeX and Markdown rendering
+- Code highlighting and preview
+
+### Image Generation
+
+**AI Image Creation**:
+- Supports DALL-E series model image generation
+- Can configure dedicated image generation endpoint
+- Supports various image sizes and styles
+- Batch image generation feature
+
+**Configure Image Generation**:
+1. Add dedicated image generation provider in settings
+2. Use standard `/images/generations` endpoint
+3. Describe image requirements directly in chat
+4. System automatically calls image generation API
+
+### Advanced Settings
+
+**Parameter Adjustment**:
+```yaml
+Conversation Parameter Settings:
+  - Temperature: 0.7        # Creativity control (reasoning models GPT-5 can only use 1)
+  - Max Tokens: 4096       # Maximum output length
+  - Top P: 0.9            # Sampling parameter (reasoning models gpt-5 can only use 1)
+  - Context Length: 8192   # Context length
+```
+
+## Usage Tips
+
+### Prompt Optimization
+
+Chatbox AI has built-in prompt library, and you can also create custom prompts:
+
+```markdown
+# Programming Assistant
+You are an experienced software engineer, please help me:
+- Write high-quality code
+- Explain complex concepts
+- Provide best practice recommendations
+
+# Output Format
+Please format code in code blocks and provide detailed comments.
+```
+
+### Privacy Protection
+
+Chatbox AI adopts a "privacy by design" philosophy:
+- Data stored locally, not uploaded to cloud
+- Supports self-hosted API endpoints
+- Can be used completely offline (with local models)
+
+## Advanced Configuration
+
+### Custom API Endpoints
+
+In addition to basic chat functionality, you can also configure dedicated image generation endpoints:
+
+#### Chat Completion Endpoint Configuration
+```yaml
+Basic Chat Configuration:
+  Provider Name: Laozhang API
+  API Mode: OpenAI API Compatible
+  API Key: sk-your-laozhang-key
+  API Host: https://api.laozhang.ai/v1
+  API Path: /chat/completions
+```
+
+#### Image Generation Endpoint Configuration
+
+**Method 1: Use Dedicated Image API**
+```yaml
+Image Generation Configuration:
+  Provider Name: Laozhang API-Image
+  API Mode: OpenAI API Compatible
+  API Key: sk-your-laozhang-key
+  API Host: https://api.laozhang.ai/v1
+  API Path: /images/generations  # Standard image generation endpoint
+  Applicable Models: gpt-image-1, flux-kontext-pro
+```
+
+**Method 2: Use Responses Endpoint**
+```yaml
+Responses Configuration:
+  Provider Name: Laozhang API-Responses
+  API Mode: OpenAI API Compatible
+  API Key: sk-your-laozhang-key
+  API Host: https://api.laozhang.ai
+  API Path: /v1/responses  # Universal response endpoint
+```
+
+<Tip>
+**Endpoint Selection Recommendations**
+- Regular conversation: Use `/chat/completions` endpoint
+- Reverse image generation models like sora_image: Use `/chat/completions` endpoint
+- Image generation: Prioritize `/images/generations` standard endpoint
+- Special needs: Can use `gpt-image-1` or `/v1/responses` endpoint
+- In Chatbox, the "API Path" field corresponds to the specific endpoint path
+</Tip>
+
+### Network Proxy Settings
+
+If you need to use a proxy to access:
+1. Go to Settings > Network Configuration
+2. Configure HTTP/HTTPS proxy
+3. Set proxy authentication (if needed)
+
+### Keyboard Shortcuts
+
+Common shortcuts:
+- `Ctrl/Cmd + N`: New conversation
+- `Ctrl/Cmd + T`: Switch model
+- `Ctrl/Cmd + /`: Show command palette
+- `Ctrl/Cmd + K`: Quick search
+
+## Mobile Configuration
+
+### iOS/Android Configuration
+
+Mobile configuration is the same as desktop:
+1. Download Chatbox AI mobile app
+2. Go to Settings > Model Configuration
+3. Add Laozhang API custom provider
+4. Configure the same API Base URL and key
+
+### Mobile-specific Features
+
+- **Voice Input**: Supports voice-to-text
+- **Camera Integration**: Take photos directly for image analysis
+- **Offline Caching**: Conversation history available offline
+- **Push Notifications**: Important message alerts
+
+## Troubleshooting
+
+### Common Issues
+
+**Connection Failed**
+- Check API Base URL: `https://api.laozhang.ai/v1`
+- Verify API key validity
+- Confirm network connection is normal
+
+**Models Not Showing**
+- Wait for model list to auto-refresh
+- Manually click "Refresh Models" button
+- Check API key permissions
+
+**Slow Response**
+- Try switching to a faster model
+- Check network latency
+- Reduce context length
+
+### Debug Logging
+
+Enable debug mode:
+1. Settings > Advanced Options
+2. Turn on "Debug Mode"
+3. View detailed log information
+
+### Data Backup
+
+Regularly backup conversation data:
+1. Settings > Data Management
+2. Export conversation history
+3. Backup configuration files
+
+## Best Practices
+
+### Performance Optimization
+
+1. **Choose Models Wisely**
+   - Simple tasks use gpt-4.1
+   - Complex tasks use o3, gpt-5 series
+   - Long text use Claude 4, gemini-2.5-pro series
+
+2. **Context Management**
+   - Regularly clean up unused conversations
+   - Set context length appropriately
+   - Use conversation grouping feature
+
+3. **Resource Management**
+   - Monitor API usage
+   - Set usage limit reminders
+   - Regularly update app version
+
+### Security Recommendations
+
+- Do not share API keys
+- Regularly rotate keys
+- Use strong passwords to protect the app
+- Handle sensitive information carefully
+
+### Team Collaboration
+
+Although Chatbox AI is primarily for individual users, you can support teams through:
+- Share prompt templates
+- Export and share conversation records
+- Unify API configuration standards
+
+## Comparison Advantages
+
+### vs Other Clients
+
+| Feature | Chatbox AI | ChatGPT Web | Other Clients |
+|------|------------|-------------|------------|
+| **Local Storage** | ✅ | ❌ | Partial Support |
+| **Multi-platform** | ✅ | ❌ | Partial Support |
+| **Custom API** | ✅ | ❌ | ✅ |
+| **Offline Features** | ✅ | ❌ | ❌ |
+| **Privacy Protection** | ✅ | ❌ | Uncertain |
+
+### Reasons to Choose Chatbox AI
+
+1. **Privacy First**: Data completely stored locally
+2. **Flexible Configuration**: Supports various API endpoints
+3. **Cross-platform**: Unified user experience
+4. **Feature Rich**: Prompt library, document processing, etc.
+5. **Continuous Updates**: Active development and maintenance
+
+Need more help? Please check the [Chatbox AI Help Center](https://chatboxai.app/en/help-center) or visit [Laozhang API Official Website](https://api.laozhang.ai).
+

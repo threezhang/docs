@@ -1,0 +1,377 @@
+---
+title: Sora Image Editing
+sidebarTitle: Sora Editing
+description: Edit and transform existing images using Sora official reverse-engineered technology, pay-per-use at only $0.01/image
+icon: "paintbrush"
+---
+
+## Model Overview
+
+Sora Image editing functionality is based on image-to-image technology from sora.chatgpt.com, implementing intelligent editing and transformation of existing images through the chat completions interface. Supports single or multiple image processing at highly competitive pricing.
+
+<Note>
+**🎨 Smart Image Editing**  
+Upload image + text description = new creation! Supports style transformation, element modification, multi-image fusion and other advanced features.
+</Note>
+
+## 🌟 Core Features
+
+- **🔄 Flexible Editing**: Supports style transformation, element addition/deletion, color adjustment, etc.
+- **🎭 Multi-Image Processing**: Can process multiple images simultaneously for fusion, stitching effects
+- **💰 Exceptional Value**: $0.01/image, pay-per-use
+- **🚀 Instant Generation**: Based on chat interface, fast response
+- **🌏 Chinese Friendly**: Perfect support for Chinese editing instructions
+
+## 📋 Feature Comparison
+
+| Feature | Sora Image Editing | Traditional Image Edit APIs | DALL·E 2 Edit |
+|---------|-------------------|---------------------------|---------------|
+| Price | $0.01/image | $0.02-0.05/image | $0.018/image |
+| Chinese Support | ✅ Native | ❌ Needs translation | ❌ Needs translation |
+| Multi-Image Input | ✅ Supported | ❌ Not supported | ❌ Not supported |
+| Response Speed | Fast | Medium | Slower |
+
+## 🚀 Quick Start
+
+### Basic Example - Single Image Edit
+
+```python
+import requests
+import re
+
+# API Configuration
+API_KEY = "YOUR_API_KEY"
+API_URL = "https://api.laozhang.ai/v1/chat/completions"
+
+def edit_image(image_url, prompt, model="gpt-4o-image"):
+    """
+    Edit single image
+    
+    Args:
+        image_url: Original image URL
+        prompt: Edit description
+        model: Model to use, "gpt-4o-image" or "sora_image"
+    """
+    headers = {
+        "Authorization": f"Bearer {API_KEY}",
+        "Content-Type": "application/json"
+    }
+    
+    # Build message with image
+    content = [
+        {"type": "text", "text": prompt},
+        {"type": "image_url", "image_url": {"url": image_url}}
+    ]
+    
+    payload = {
+        "model": model,
+        "messages": [{"role": "user", "content": content}]
+    }
+    
+    response = requests.post(API_URL, headers=headers, json=payload)
+    result = response.json()
+    
+    # Extract edited image URL
+    content = result['choices'][0]['message']['content']
+    edited_urls = re.findall(r'!\[.*?\]\((https?://[^)]+)\)', content)
+    
+    return edited_urls[0] if edited_urls else None
+
+# Usage example
+original_url = "https://example.com/cat.jpg"
+edited_url = edit_image(original_url, "Change the cat's fur to rainbow colors")
+print(f"Edited image: {edited_url}")
+```
+
+### Advanced Example - Multi-Image Fusion
+
+```python
+def merge_images(image_urls, prompt, model="gpt-4o-image"):
+    """
+    Merge multiple images
+    
+    Args:
+        image_urls: List of image URLs
+        prompt: Merge description
+    """
+    headers = {
+        "Authorization": f"Bearer {API_KEY}",
+        "Content-Type": "application/json"
+    }
+    
+    # Build message with multiple images
+    content = [{"type": "text", "text": prompt}]
+    for url in image_urls:
+        content.append({
+            "type": "image_url",
+            "image_url": {"url": url}
+        })
+    
+    payload = {
+        "model": model,
+        "messages": [{"role": "user", "content": content}]
+    }
+    
+    response = requests.post(API_URL, headers=headers, json=payload)
+    result = response.json()
+    
+    # Extract result
+    content = result['choices'][0]['message']['content']
+    merged_urls = re.findall(r'!\[.*?\]\((https?://[^)]+)\)', content)
+    
+    return merged_urls
+
+# Merge example
+urls = [
+    "https://example.com/landscape1.jpg",
+    "https://example.com/landscape2.jpg"
+]
+merged = merge_images(urls, "Merge two landscape images into one panoramic view")
+```
+
+## 🎯 Editing Scenarios
+
+### 1. Style Transformation
+
+```python
+# Style transformation templates
+style_templates = {
+    "Cartoon": "Transform into Disney cartoon style with vibrant colors",
+    "Oil Painting": "Transform into classical oil painting style, like Van Gogh",
+    "Ink Wash": "Transform into Chinese ink wash painting style with artistic spacing",
+    "Cyberpunk": "Transform into cyberpunk style with neon lighting effects",
+    "Sketch": "Transform into pencil sketch style with black and white lines"
+}
+
+def apply_style(image_url, style_name):
+    """Apply preset style"""
+    if style_name in style_templates:
+        prompt = style_templates[style_name]
+        return edit_image(image_url, prompt)
+    else:
+        return None
+
+# Batch style transformation
+original = "https://example.com/portrait.jpg"
+for style in ["Cartoon", "Oil Painting", "Ink Wash"]:
+    result = apply_style(original, style)
+    print(f"{style} style: {result}")
+```
+
+### 2. Smart Background Replacement
+
+```python
+def change_background(image_url, new_background):
+    """Replace image background"""
+    prompts = {
+        "Beach": "Keep subject, replace background with sunny beach, palm trees and blue sky",
+        "Office": "Keep person, replace background with modern office",
+        "Space": "Keep subject, replace background with vast starry space",
+        "Solid Color": "Remove background, replace with pure white background"
+    }
+    
+    prompt = prompts.get(new_background, f"Replace background with {new_background}")
+    return edit_image(image_url, prompt)
+
+# Usage example
+new_photo = change_background(
+    "https://example.com/person.jpg",
+    "Beach"
+)
+```
+
+### 3. Object Editing
+
+```python
+def edit_objects(image_url, action, target, details=""):
+    """Edit specific objects in image"""
+    action_prompts = {
+        "Add": f"Add {target} to the image, {details}",
+        "Remove": f"Remove {target} from the image, naturally fill background",
+        "Replace": f"Replace {target} in the image with {details}",
+        "Modify": f"Modify {target} in the image, {details}"
+    }
+    
+    prompt = action_prompts.get(action, "")
+    return edit_image(image_url, prompt)
+
+# Editing examples
+# Add object
+result1 = edit_objects(
+    "https://example.com/room.jpg",
+    "Add", "a cat", "sitting on the sofa"
+)
+
+# Remove object
+result2 = edit_objects(
+    "https://example.com/street.jpg",
+    "Remove", "power pole"
+)
+
+# Replace object
+result3 = edit_objects(
+    "https://example.com/table.jpg",
+    "Replace", "apple", "orange"
+)
+```
+
+### 4. Color and Lighting Adjustment
+
+```python
+def adjust_image(image_url, adjustments):
+    """Adjust image color and lighting"""
+    prompt_parts = []
+    
+    if "brightness" in adjustments:
+        prompt_parts.append(f"Adjust brightness to {adjustments['brightness']}")
+    
+    if "color_tone" in adjustments:
+        prompt_parts.append(f"Adjust color tone to {adjustments['color_tone']}")
+    
+    if "time" in adjustments:
+        prompt_parts.append(f"Adjust lighting to {adjustments['time']} effect")
+    
+    if "season" in adjustments:
+        prompt_parts.append(f"Adjust seasonal feeling to {adjustments['season']}")
+    
+    prompt = ", ".join(prompt_parts)
+    return edit_image(image_url, prompt)
+
+# Adjustment example
+adjusted = adjust_image(
+    "https://example.com/landscape.jpg",
+    {
+        "brightness": "bright",
+        "color_tone": "warm tones",
+        "time": "golden hour",
+        "season": "autumn"
+    }
+)
+```
+
+## 💡 Best Practices
+
+### 1. Precise Editing Instructions
+
+```python
+# ❌ Vague
+prompt = "make it better"
+
+# ✅ Specific and detailed
+prompt = """
+Change the sky to sunset colors with orange and pink hues.
+Keep all foreground elements unchanged.
+Add some birds flying in the sky.
+Maintain natural lighting and shadows.
+"""
+```
+
+### 2. Multi-Image Fusion Tips
+
+```python
+def smart_merge(image_urls, merge_type):
+    """Smart multi-image fusion"""
+    templates = {
+        "panorama": "Merge these images into a seamless panoramic view",
+        "collage": "Create an artistic collage from these images",
+        "blend": "Blend these images together artistically",
+        "comparison": "Create a side-by-side comparison of these images"
+    }
+    
+    prompt = templates.get(merge_type, "Combine these images creatively")
+    return merge_images(image_urls, prompt)
+
+# Panorama fusion
+panorama = smart_merge([url1, url2, url3], "panorama")
+```
+
+### 3. Batch Processing
+
+```python
+def batch_edit_images(edit_tasks):
+    """Batch edit images"""
+    results = []
+    
+    for task in edit_tasks:
+        try:
+            edited = edit_image(
+                task['url'],
+                task['prompt'],
+                task.get('model', 'gpt-4o-image')
+            )
+            
+            results.append({
+                'original': task['url'],
+                'edited': edited,
+                'prompt': task['prompt'],
+                'success': edited is not None
+            })
+        except Exception as e:
+            results.append({
+                'original': task['url'],
+                'success': False,
+                'error': str(e)
+            })
+    
+    return results
+
+# Batch tasks
+tasks = [
+    {'url': 'img1.jpg', 'prompt': 'Make it more vibrant'},
+    {'url': 'img2.jpg', 'prompt': 'Convert to black and white'},
+    {'url': 'img3.jpg', 'prompt': 'Add vintage filter'}
+]
+
+results = batch_edit_images(tasks)
+```
+
+## ⚠️ Important Notes
+
+1. **Model Selection**:
+   - `gpt-4o-image`: Recommended, more stable
+   - `sora_image`: Same technology, similar results
+   - Both are $0.01/image
+
+2. **Image Input**:
+   - Supports online image URLs
+   - Ensure images are publicly accessible
+   - Recommended max size: 20MB
+
+3. **Multi-Image Processing**:
+   - Can include multiple images in one request
+   - Add all images to content array
+   - Describe fusion/editing intent clearly
+
+4. **Result Extraction**:
+   - Results returned in Markdown format
+   - Extract URLs using regex
+   - Download edited images promptly
+
+## 🔍 FAQ
+
+### Q: Can I edit local images?
+A: Upload local images to a public hosting service first, then use the URL. Or use base64 encoding (may increase costs).
+
+### Q: How many images can I process at once?
+A: No strict limit, but 2-5 images per request is recommended for best results and performance.
+
+### Q: Can I use both Sora and GPT-4o Image?
+A: Yes, both use the same underlying technology. Try both to see which works better for your use case.
+
+### Q: Are the edits reversible?
+A: No, each edit generates a new image. Save originals if you need to revert changes.
+
+### Q: What's the quality of edited images?
+A: High quality, comparable to DALL·E 3. Results depend on prompt clarity and original image quality.
+
+## 🔗 Related Resources
+
+- [Sora Image Generation](/api-capabilities/sora-image-generation) - Generate new images
+- [GPT-4o Image Documentation](/api-capabilities/gpt-image-1) - Alternative editing method
+- [Pricing Calculator](https://api.laozhang.ai/account/pricing) - Real-time pricing
+- [API Key Management](https://api.laozhang.ai/token) - Create and manage tokens
+
+<Note>
+🎨 **Pro Tip**: Combine multiple editing techniques in one prompt for complex transformations. The model excels at understanding natural language instructions!
+</Note>
+

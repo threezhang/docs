@@ -1,0 +1,676 @@
+---
+title: 'Image Generation'
+sidebarTitle: 'Images API'
+description: 'Complete guide to Laozhang API image processing - generation, editing, and understanding'
+---
+
+## API Overview
+
+Laozhang API provides comprehensive image processing capabilities, covering image generation, editing, understanding, and more. Supports top-tier models including OpenAI DALL-E, Flux, Sora Image, and GPT-Image-1, offering the most cost-effective image processing solutions.
+
+## 🎯 Image Processing Capabilities Overview
+
+<CardGroup cols={2}>
+  <Card
+    title="Text-to-Image"
+    icon="wand-magic-sparkles"
+  >
+    Generate high-quality images from text descriptions, supporting multiple styles and sizes
+  </Card>
+  <Card
+    title="Image Editing"
+    icon="paintbrush"
+  >
+    Intelligent editing of existing images, supporting partial modifications and style transformations
+  </Card>
+  <Card
+    title="Image Understanding"
+    icon="eye"
+  >
+    Analyze and understand image content, supporting object recognition, OCR, and scene description
+  </Card>
+  <Card
+    title="Multi-Image Fusion"
+    icon="layer-group"
+  >
+    Intelligently merge multiple images to create new visual effects
+  </Card>
+</CardGroup>
+
+## 💰 Pricing Overview
+
+<Note>
+  **Best Value**: GPT-4o Image and Sora Image at only **$0.01/image**, the most cost-effective options on the market!
+</Note>
+
+| Model | Text-to-Image Price | Image Editing Price | Features |
+|-------|---------------------|---------------------|----------|
+| **GPT-4o Image** | $0.01/image | $0.01/image | 💥 Price killer, excellent quality |
+| **Sora Image** | $0.01/image | $0.01/image | 🚀 Ultra-fast generation, Chinese-friendly |
+| **DALL-E 3** | $0.04/image | - | 🎨 Official OpenAI, rich details |
+| **DALL-E 2** | $0.02/image | $0.02/image | 📸 Classic model, stable and reliable |
+| **Flux Pro** | $0.035/image | - | 🌟 Professional-grade quality |
+| **Flux Max** | $0.07/image | $0.07/image | 👑 Highest quality, supports editing |
+| **GPT-Image-1** | Token-based billing | Token-based billing | 🔧 Flexible control, comprehensive features |
+
+## 🚀 Text-to-Image API
+
+### Standard API Format
+
+All text-to-image models use the unified OpenAI Images API format:
+
+**API Endpoint**: `POST https://api.laozhang.ai/v1/images/generations`
+
+<CodeGroup>
+
+```bash cURL
+curl https://api.laozhang.ai/v1/images/generations \
+  -H "Content-Type: application/json" \
+  -H "Authorization: Bearer YOUR_API_KEY" \
+  -d '{
+    "model": "gpt-4o-image",
+    "prompt": "A serene Japanese garden with cherry blossoms",
+    "n": 1,
+    "size": "1024x1024"
+  }'
+```
+
+```python Python
+from openai import OpenAI
+
+client = OpenAI(
+    api_key="YOUR_API_KEY",
+    base_url="https://api.laozhang.ai/v1"
+)
+
+response = client.images.generate(
+    model="gpt-4o-image",
+    prompt="A serene Japanese garden with cherry blossoms",
+    n=1,
+    size="1024x1024"
+)
+
+print(response.data[0].url)
+```
+
+```javascript Node.js
+import OpenAI from 'openai';
+
+const openai = new OpenAI({
+  apiKey: 'YOUR_API_KEY',
+  baseURL: 'https://api.laozhang.ai/v1'
+});
+
+const image = await openai.images.generate({
+  model: 'gpt-4o-image',
+  prompt: 'A serene Japanese garden with cherry blossoms',
+  n: 1,
+  size: '1024x1024'
+});
+
+console.log(image.data[0].url);
+```
+
+</CodeGroup>
+
+### Detailed Model Introduction
+
+#### 🔥 GPT-4o Image (Recommended)
+
+<Note>
+  **Price Killer**: Only $0.01/image, the lowest price for comparable quality!
+</Note>
+
+- **Advantages**: Extreme cost-performance, excellent quality, fast generation speed
+- **Supported Sizes**: 1024x1024, 1024x1792, 1792x1024
+- **Use Cases**: Batch generation, daily use, commercial projects
+
+#### 🚀 Sora Image
+
+High cost-performance solution implemented through reverse engineering:
+
+<CodeGroup>
+
+```python Python
+# Sora Image uses Chat Completions API
+response = client.chat.completions.create(
+    model="gpt-4o",
+    messages=[{
+        "role": "user",
+        "content": "Draw a beautiful sunset seascape【3:2】"  # Specify ratio at the end
+    }]
+)
+
+# Extract image URL from returned markdown
+import re
+content = response.choices[0].message.content
+image_url = re.search(r'!\[.*?\]\((.*?)\)', content).group(1)
+```
+
+```javascript Node.js
+// Sora Image uses Chat Completions API
+const response = await openai.chat.completions.create({
+  model: 'gpt-4o',
+  messages: [{
+    role: 'user',
+    content: 'Draw a beautiful sunset seascape【3:2】'  // Specify ratio at the end
+  }]
+});
+
+// Extract image URL
+const content = response.choices[0].message.content;
+const imageUrl = content.match(/!\[.*?\]\((.*?)\)/)[1];
+```
+
+</CodeGroup>
+
+- **Price**: $0.01/image (fixed price)
+- **Supported Ratios**: 【2:3】, 【3:2】, 【1:1】
+- **Features**: Native Chinese support, second-level generation
+
+#### 🎨 DALL-E Series
+
+Official OpenAI models, suitable for scenarios requiring detail and creativity:
+
+```python
+# DALL-E 3 - Latest version, strong understanding
+response = client.images.generate(
+    model="dall-e-3",
+    prompt="A detailed oil painting of a robot playing chess",
+    size="1024x1024",
+    quality="hd",
+    style="vivid"
+)
+
+# DALL-E 2 - Classic version, high cost-performance
+response = client.images.generate(
+    model="dall-e-2",
+    prompt="A minimalist logo design for a tech company",
+    size="512x512"
+)
+```
+
+#### 🌟 Flux Series
+
+Professional-grade image generation supporting flexible aspect ratios:
+
+<CodeGroup>
+
+```python Python
+# Flux Pro - Professional quality
+response = client.images.generate(
+    model="black-forest-labs/flux-pro-v1.1",
+    prompt="Professional product photography of a luxury watch",
+    extra_body={
+        "aspect_ratio": "16:9",  # Flexible aspect ratio
+        "seed": 42,  # Reproducible results
+        "prompt_upsampling": True  # Automatic prompt enhancement
+    }
+)
+
+# Flux Max - Highest quality, supports editing
+response = client.images.generate(
+    model="black-forest-labs/flux-kontext-max",
+    prompt="Ultra detailed fantasy landscape with dragons",
+    extra_body={
+        "aspect_ratio": "21:9",  # Ultra-wide
+        "safety_tolerance": 2
+    }
+)
+```
+
+```javascript Node.js
+// Flux Pro - Professional quality
+const response = await openai.images.generate({
+  model: 'black-forest-labs/flux-pro-v1.1',
+  prompt: 'Professional product photography of a luxury watch',
+  extra_body: {
+    aspect_ratio: '16:9',  // Flexible aspect ratio
+    seed: 42,  // Reproducible results
+    prompt_upsampling: true  // Automatic prompt enhancement
+  }
+});
+
+// Flux Max - Highest quality
+const response = await openai.images.generate({
+  model: 'black-forest-labs/flux-kontext-max',
+  prompt: 'Ultra detailed fantasy landscape with dragons',
+  extra_body: {
+    aspect_ratio: '21:9',  // Ultra-wide
+    safety_tolerance: 2
+  }
+});
+```
+
+</CodeGroup>
+
+<Warning>
+  Flux-generated image URLs are only valid for 10 minutes, please download and save promptly!
+</Warning>
+
+## 🎨 Image Editing API
+
+### OpenAI Standard Editing Interface
+
+Applicable to DALL-E 2 and GPT-Image-1:
+
+<CodeGroup>
+
+```python Python
+# Local editing using mask
+response = client.images.edit(
+    image=open("original.png", "rb"),
+    mask=open("mask.png", "rb"),  # White = editing area
+    prompt="A sunflower in the vase",
+    model="dall-e-2",
+    n=1,
+    size="1024x1024"
+)
+```
+
+```javascript Node.js
+import fs from 'fs';
+
+// Local editing using mask
+const response = await openai.images.edit({
+  image: fs.createReadStream('original.png'),
+  mask: fs.createReadStream('mask.png'),  // White = editing area
+  prompt: 'A sunflower in the vase',
+  model: 'dall-e-2',
+  n: 1,
+  size: '1024x1024'
+});
+```
+
+</CodeGroup>
+
+### Flux Image Editing
+
+Supports more flexible editing control:
+
+```python
+# Flux Max editing - Supports online images
+response = client.images.edit(
+    image="https://example.com/original.jpg",  # Supports URL
+    mask="https://example.com/mask.png",  # Optional
+    prompt="Transform the car into a futuristic hovering vehicle",
+    model="black-forest-labs/flux-kontext-max",
+    extra_body={
+        "aspect_ratio": "16:9"
+    }
+)
+```
+
+### Sora Image Editing
+
+Implement image editing and multi-image fusion through Chat API:
+
+<CodeGroup>
+
+```python Python
+# Single image editing
+response = client.chat.completions.create(
+    model="gpt-4o",
+    messages=[{
+        "role": "user",
+        "content": [
+            {"type": "text", "text": "Turn this image into watercolor style"},
+            {"type": "image_url", "image_url": {"url": "https://example.com/photo.jpg"}}
+        ]
+    }]
+)
+
+# Multi-image fusion
+response = client.chat.completions.create(
+    model="gpt-4o",
+    messages=[{
+        "role": "user",
+        "content": [
+            {"type": "text", "text": "Merge the style and content of these two images"},
+            {"type": "image_url", "image_url": {"url": "https://example.com/style.jpg"}},
+            {"type": "image_url", "image_url": {"url": "https://example.com/content.jpg"}}
+        ]
+    }]
+)
+```
+
+```javascript Node.js
+// Single image editing
+const response = await openai.chat.completions.create({
+  model: 'gpt-4o',
+  messages: [{
+    role: 'user',
+    content: [
+      { type: 'text', text: 'Turn this image into watercolor style' },
+      { type: 'image_url', image_url: { url: 'https://example.com/photo.jpg' }}
+    ]
+  }]
+});
+
+// Multi-image fusion
+const response = await openai.chat.completions.create({
+  model: 'gpt-4o',
+  messages: [{
+    role: 'user',
+    content: [
+      { type: 'text', text: 'Merge the style and content of these two images' },
+      { type: 'image_url', image_url: { url: 'https://example.com/style.jpg' }},
+      { type: 'image_url', image_url: { url: 'https://example.com/content.jpg' }}
+    ]
+  }]
+});
+```
+
+</CodeGroup>
+
+## 👁️ Image Understanding API
+
+Use Chat Completions API to analyze and understand image content:
+
+<CodeGroup>
+
+```python Python
+# Basic image analysis
+response = client.chat.completions.create(
+    model="gpt-4o",  # or gemini-2.5-pro, claude-3-5-sonnet
+    messages=[{
+        "role": "user",
+        "content": [
+            {"type": "text", "text": "Please describe this image in detail"},
+            {"type": "image_url", "image_url": {"url": "https://example.com/image.jpg"}}
+        ]
+    }]
+)
+
+# OCR text recognition
+response = client.chat.completions.create(
+    model="gpt-4o",
+    messages=[{
+        "role": "user",
+        "content": [
+            {"type": "text", "text": "Please extract all text from the image"},
+            {"type": "image_url", "image_url": {"url": "data:image/jpeg;base64,..."}}
+        ]
+    }]
+)
+
+# Multi-image comparison analysis
+response = client.chat.completions.create(
+    model="gemini-2.5-pro",
+    messages=[{
+        "role": "user",
+        "content": [
+            {"type": "text", "text": "Compare the differences between these two images"},
+            {"type": "image_url", "image_url": {"url": "image1.jpg"}},
+            {"type": "image_url", "image_url": {"url": "image2.jpg"}}
+        ]
+    }]
+)
+```
+
+```javascript Node.js
+// Basic image analysis
+const response = await openai.chat.completions.create({
+  model: 'gpt-4o',  // or gemini-2.5-pro, claude-3-5-sonnet
+  messages: [{
+    role: 'user',
+    content: [
+      { type: 'text', text: 'Please describe this image in detail' },
+      { type: 'image_url', image_url: { url: 'https://example.com/image.jpg' }}
+    ]
+  }]
+});
+
+// OCR text recognition
+const response = await openai.chat.completions.create({
+  model: 'gpt-4o',
+  messages: [{
+    role: 'user',
+    content: [
+      { type: 'text', text: 'Please extract all text from the image' },
+      { type: 'image_url', image_url: { url: 'data:image/jpeg;base64,...' }}
+    ]
+  }]
+});
+```
+
+</CodeGroup>
+
+### Recommended Model Comparison
+
+| Model | Advantages | Use Cases |
+|-------|------------|-----------|
+| **GPT-4o** | Strong overall capabilities, fast speed | General analysis, OCR |
+| **Gemini 2.5 Pro** | 2M context, detail recognition | Complex documents, multi-image analysis |
+| **Claude 3.5 Sonnet** | Strong logical reasoning | Chart analysis, technical drawings |
+
+## 🎯 Selection Guide
+
+### By Budget
+
+<CardGroup cols={3}>
+  <Card
+    title="Ultra-Low Budget"
+    icon="dollar-sign"
+  >
+    **Recommended**: Sora Image, GPT-4o Image
+    
+    Fixed $0.01/image, suitable for bulk usage
+  </Card>
+  <Card
+    title="Balanced Choice"
+    icon="scale-balanced"
+  >
+    **Recommended**: DALL-E 2, Flux Pro
+    
+    $0.02-0.035/image, quality and price balanced
+  </Card>
+  <Card
+    title="Quality Focused"
+    icon="gem"
+  >
+    **Recommended**: DALL-E 3, Flux Max
+    
+    $0.04-0.07/image, professional-grade output
+  </Card>
+</CardGroup>
+
+### By Use Case
+
+| Use Case | Recommended Models | Reason |
+|----------|-------------------|--------|
+| **E-commerce Product Images** | GPT-4o Image | High cost-performance, stable quality |
+| **Artistic Creation** | DALL-E 3, Flux Max | Strong creative understanding, rich details |
+| **Batch Generation** | Sora Image | Lowest price, fast speed |
+| **Social Media** | Flux Pro | Diverse styles, flexible ratios |
+| **Image Editing** | Flux Max, Sora Edit | Strong editing capabilities, multi-image support |
+| **Content Analysis** | GPT-4o, Gemini 2.5 | Accurate understanding, Chinese-friendly |
+
+## 💡 Best Practices
+
+### 1. Prompt Optimization
+
+<AccordionGroup>
+  <Accordion icon="lightbulb" title="Basic Framework">
+    ```
+    [Subject Description] + [Art Style] + [Environment Setting] + [Lighting Effect] + [Quality Modifiers]
+    ```
+    
+    Example:
+    ```
+    A majestic eagle (subject) in photorealistic style (style) 
+    soaring above mountain peaks (environment) during golden hour (lighting) 
+    highly detailed, 8K resolution (quality)
+    ```
+  </Accordion>
+  
+  <Accordion icon="language" title="Chinese vs English Usage">
+    - **English Prompts**: Supported by all models, more precise expression
+    - **Chinese Prompts**: Natively supported by Sora Image, understood by other models but potentially less effective
+    - **Recommendation**: Use English for professional scenarios, Chinese for daily use
+  </Accordion>
+</AccordionGroup>
+
+### 2. Batch Processing Examples
+
+<CodeGroup>
+
+```python Standard Images API
+import asyncio
+from openai import AsyncOpenAI
+
+client = AsyncOpenAI(
+    api_key="YOUR_API_KEY",
+    base_url="https://api.laozhang.ai/v1"
+)
+
+async def generate_batch_images(prompts):
+    tasks = []
+    for prompt in prompts:
+        task = client.images.generate(
+            model="dall-e-3",
+            prompt=prompt,
+            n=1
+        )
+        tasks.append(task)
+    
+    results = await asyncio.gather(*tasks)
+    return [r.data[0].url for r in results]
+
+# Usage example
+prompts = [
+    "A cute cat playing with yarn",
+    "A dog running in the park",
+    "A bird sitting on a branch"
+]
+
+urls = await generate_batch_images(prompts)
+```
+
+```python Reverse Generation API
+import asyncio
+import re
+from openai import AsyncOpenAI
+
+client = AsyncOpenAI(
+    api_key="YOUR_API_KEY",
+    base_url="https://api.laozhang.ai/v1"
+)
+
+async def generate_batch_chat(prompts):
+    tasks = []
+    for prompt in prompts:
+        task = client.chat.completions.create(
+            model="gpt-4o",
+            messages=[{"role": "user", "content": f"Generate image: {prompt}"}]
+        )
+        tasks.append(task)
+    
+    results = await asyncio.gather(*tasks)
+    urls = []
+    for result in results:
+        content = result.choices[0].message.content
+        url = re.search(r'!\[.*?\]\((.*?)\)', content).group(1)
+        urls.append(url)
+    
+    return urls
+
+# Usage example (GPT-4o Image / Sora Image)
+prompts = [
+    "A cute kitten playing with yarn ball",
+    "A dog running in the park",
+    "A bird perched on a branch"
+]
+
+urls = await generate_batch_chat(prompts)
+```
+
+</CodeGroup>
+
+### 3. Image Download and Save
+
+<Warning>
+  Some models (like Flux) generate URLs with expiration times, recommend immediate download and save!
+</Warning>
+
+```python
+import requests
+from datetime import datetime
+
+def download_and_save(image_url, prefix="image"):
+    response = requests.get(image_url)
+    timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
+    filename = f"{prefix}_{timestamp}.png"
+    
+    with open(filename, 'wb') as f:
+        f.write(response.content)
+    
+    return filename
+
+# Generate and save (Standard API)
+response = client.images.generate(
+    model="flux-pro-v1.1",
+    prompt="Beautiful sunset"
+)
+saved_file = download_and_save(response.data[0].url, "sunset")
+print(f"Image saved as: {saved_file}")
+
+# Generate and save (Reverse API - GPT-4o Image/Sora Image)
+import re
+response = client.chat.completions.create(
+    model="gpt-4o",
+    messages=[{"role": "user", "content": "Generate a beautiful sunset image"}]
+)
+content = response.choices[0].message.content
+image_url = re.search(r'!\[.*?\]\((.*?)\)', content).group(1)
+saved_file = download_and_save(image_url, "sunset")
+print(f"Image saved as: {saved_file}")
+```
+
+## 🔧 Error Handling
+
+### Common Error Codes
+
+| Error Code | Description | Solution |
+|-----------|-------------|----------|
+| 400 | Parameter error or content violation | Check parameter format and prompt content |
+| 401 | Invalid API Key | Verify if API Key is correct |
+| 429 | Request rate too high | Reduce request frequency, use queue |
+| 500 | Server error | Retry later or contact support |
+
+### Content Policy
+
+Please avoid generating the following content:
+- ❌ Violent, gory content
+- ❌ Adult, pornographic content  
+- ❌ Politically sensitive content
+- ❌ Copyright-infringing content
+- ❌ Inappropriate content involving real people
+
+## 📊 Usage Statistics
+
+Through Laozhang API console, you can view:
+- Usage statistics by model
+- Daily/monthly generation counts
+- Detailed billing and trends
+- API call logs
+
+---
+
+<CardGroup cols={2}>
+  <Card
+    title="Get Started Now"
+    icon="rocket"
+    href="/getting-started"
+  >
+    Register to get API Key and start your image creation journey
+  </Card>
+  <Card
+    title="View Example Code"
+    icon="code"
+    href="/code-demo"
+  >
+    More programming language examples and complete project code
+  </Card>
+</CardGroup>
+

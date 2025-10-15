@@ -1,0 +1,815 @@
+---
+title: "Chat Completions"
+description: "Core interface for AI model conversations, supports over 200 models"
+icon: "messages"
+---
+
+## API Endpoint
+
+```
+POST https://api.laozhang.ai/v1/chat/completions
+```
+
+<Note>
+  **Full compatibility with OpenAI official format**
+  
+  Laozhang API is fully compatible with OpenAI official interface format, you can directly replace `https://api.openai.com/v1` with `https://api.laozhang.ai/v1` to use.
+</Note>
+
+## Request Parameters
+
+### Required Parameters
+
+<ParamField path="model" type="string" required>
+  Model name to use
+
+  Supported models:
+  - **OpenAI Series**: `gpt-4o`, `gpt-4o-mini`, `gpt-4-turbo`, `gpt-3.5-turbo`, etc.
+  - **Claude Series**: `claude-3-5-sonnet`, `claude-3-opus`, `claude-3-haiku`, etc.
+  - **Gemini Series**: `gemini-1.5-pro`, `gemini-1.5-flash`, `gemini-2.0-flash-exp`, etc.
+  - **Chinese Models**: `deepseek-chat`, `qwen-max`, `glm-4-flash`, `yi-lightning`, etc.
+
+  For complete model list, see [API Reference - Models](/api-reference/models)
+</ParamField>
+
+<ParamField path="messages" type="array" required>
+  Conversation message array, each message contains `role` and `content`
+
+  ```json
+  [
+    {
+      "role": "system",
+      "content": "You are a helpful assistant"
+    },
+    {
+      "role": "user", 
+      "content": "Hello!"
+    }
+  ]
+  ```
+
+  **Role Descriptions**:
+  - `system`: System prompt, defines AI assistant behavior
+  - `user`: User message
+  - `assistant`: AI assistant's previous response
+</ParamField>
+
+### Optional Parameters
+
+<ParamField path="temperature" type="number" default="1">
+  Randomness of generated results, range 0-2
+  
+  - **0**: Deterministic, minimal randomness (recommended for translation, summarization, etc.)
+  - **0.7**: Balanced, suitable for most scenarios
+  - **1.5-2**: High creativity (recommended for creative writing, brainstorming, etc.)
+</ParamField>
+
+<ParamField path="max_tokens" type="integer">
+  Maximum number of tokens to generate
+
+  <Warning>
+    If not set, model will use its default limit. If response is truncated, try increasing this value.
+  </Warning>
+
+  **Recommended Values**:
+  - Short responses: 500-1000
+  - Medium responses: 2000-4000
+  - Long responses: 8000+
+</ParamField>
+
+<ParamField path="stream" type="boolean" default="false">
+  Whether to use stream output
+  
+  - `false`: Wait for complete response
+  - `true`: Receive response in chunks (better user experience)
+</ParamField>
+
+<ParamField path="top_p" type="number" default="1">
+  Nucleus sampling parameter, range 0-1
+
+  Controls diversity of output. Generally use either `temperature` or `top_p`, not both simultaneously.
+</ParamField>
+
+<ParamField path="frequency_penalty" type="number" default="0">
+  Frequency penalty, range -2.0 to 2.0
+  
+  Positive values reduce repetition of already appearing content.
+</ParamField>
+
+<ParamField path="presence_penalty" type="number" default="0">
+  Presence penalty, range -2.0 to 2.0
+  
+  Positive values encourage discussion of new topics.
+</ParamField>
+
+<ParamField path="stop" type="string | array">
+  Stop sequences, generation stops when these strings are encountered
+
+  Can be a single string or array of up to 4 strings.
+</ParamField>
+
+<ParamField path="user" type="string">
+  End user unique identifier for abuse detection
+
+  Recommended for multi-user scenarios.
+</ParamField>
+
+## Message Format
+
+### Basic Text Message
+
+```json
+{
+  "role": "user",
+  "content": "Please introduce yourself"
+}
+```
+
+### Multimodal Message (Image Understanding)
+
+<Tabs>
+  <Tab title="Image URL">
+    ```json
+    {
+      "role": "user",
+      "content": [
+        {
+          "type": "text",
+          "text": "What's in this image?"
+        },
+        {
+          "type": "image_url",
+          "image_url": {
+            "url": "https://example.com/image.jpg"
+          }
+        }
+      ]
+    }
+    ```
+  </Tab>
+
+  <Tab title="Base64 Image">
+    ```json
+    {
+      "role": "user",
+      "content": [
+        {
+          "type": "text",
+          "text": "Please analyze this image"
+        },
+        {
+          "type": "image_url",
+          "image_url": {
+            "url": "data:image/jpeg;base64,/9j/4AAQSkZJRg..."
+          }
+        }
+      ]
+    }
+    ```
+  </Tab>
+</Tabs>
+
+<Note>
+  **Multimodal Models**
+  
+  Support image understanding:
+  - OpenAI: `gpt-4o`, `gpt-4o-mini`, `gpt-4-turbo`
+  - Claude: `claude-3-5-sonnet`, `claude-3-opus`, `claude-3-sonnet`, `claude-3-haiku`
+  - Gemini: `gemini-1.5-pro`, `gemini-1.5-flash`, `gemini-2.0-flash-exp`
+</Note>
+
+## Request Examples
+
+### cURL
+
+<CodeGroup>
+
+```bash Basic Dialogue
+curl https://api.laozhang.ai/v1/chat/completions \
+  -H "Content-Type: application/json" \
+  -H "Authorization: Bearer YOUR_API_KEY" \
+  -d '{
+    "model": "gpt-4o-mini",
+    "messages": [
+      {
+        "role": "system",
+        "content": "You are a helpful assistant"
+      },
+      {
+        "role": "user",
+        "content": "What is the capital of France?"
+      }
+    ]
+  }'
+```
+
+```bash Stream Output
+curl https://api.laozhang.ai/v1/chat/completions \
+  -H "Content-Type: application/json" \
+  -H "Authorization: Bearer YOUR_API_KEY" \
+  -d '{
+    "model": "gpt-4o-mini",
+    "messages": [
+      {
+        "role": "user",
+        "content": "Tell me a story"
+      }
+    ],
+    "stream": true
+  }'
+```
+
+```bash Image Understanding
+curl https://api.laozhang.ai/v1/chat/completions \
+  -H "Content-Type: application/json" \
+  -H "Authorization: Bearer YOUR_API_KEY" \
+  -d '{
+    "model": "gpt-4o",
+    "messages": [
+      {
+        "role": "user",
+        "content": [
+          {
+            "type": "text",
+            "text": "What is in this image?"
+          },
+          {
+            "type": "image_url",
+            "image_url": {
+              "url": "https://example.com/image.jpg"
+            }
+          }
+        ]
+      }
+    ]
+  }'
+```
+
+</CodeGroup>
+
+### Node.js
+
+<CodeGroup>
+
+```javascript Official OpenAI SDK
+import OpenAI from 'openai';
+
+const openai = new OpenAI({
+  apiKey: 'YOUR_API_KEY',
+  baseURL: 'https://api.laozhang.ai/v1'
+});
+
+// Basic dialogue
+const completion = await openai.chat.completions.create({
+  model: 'gpt-4o-mini',
+  messages: [
+    { role: 'system', content: 'You are a helpful assistant' },
+    { role: 'user', content: 'What is the capital of France?' }
+  ]
+});
+
+console.log(completion.choices[0].message.content);
+
+// Stream output
+const stream = await openai.chat.completions.create({
+  model: 'gpt-4o-mini',
+  messages: [
+    { role: 'user', content: 'Tell me a story' }
+  ],
+  stream: true
+});
+
+for await (const chunk of stream) {
+  process.stdout.write(chunk.choices[0]?.delta?.content || '');
+}
+```
+
+```javascript Axios
+import axios from 'axios';
+
+const response = await axios.post(
+  'https://api.laozhang.ai/v1/chat/completions',
+  {
+    model: 'gpt-4o-mini',
+    messages: [
+      { role: 'user', content: 'Hello!' }
+    ]
+  },
+  {
+    headers: {
+      'Content-Type': 'application/json',
+      'Authorization': 'Bearer YOUR_API_KEY'
+    }
+  }
+);
+
+console.log(response.data.choices[0].message.content);
+```
+
+</CodeGroup>
+
+### Python
+
+<CodeGroup>
+
+```python Official OpenAI SDK
+from openai import OpenAI
+
+client = OpenAI(
+    api_key="YOUR_API_KEY",
+    base_url="https://api.laozhang.ai/v1"
+)
+
+# Basic dialogue
+completion = client.chat.completions.create(
+    model="gpt-4o-mini",
+    messages=[
+        {"role": "system", "content": "You are a helpful assistant"},
+        {"role": "user", "content": "What is the capital of France?"}
+    ]
+)
+
+print(completion.choices[0].message.content)
+
+# Stream output
+stream = client.chat.completions.create(
+    model="gpt-4o-mini",
+    messages=[
+        {"role": "user", "content": "Tell me a story"}
+    ],
+    stream=True
+)
+
+for chunk in stream:
+    if chunk.choices[0].delta.content:
+        print(chunk.choices[0].delta.content, end="")
+
+# Image understanding
+completion = client.chat.completions.create(
+    model="gpt-4o",
+    messages=[
+        {
+            "role": "user",
+            "content": [
+                {"type": "text", "text": "What's in this image?"},
+                {
+                    "type": "image_url",
+                    "image_url": {
+                        "url": "https://example.com/image.jpg"
+                    }
+                }
+            ]
+        }
+    ]
+)
+
+print(completion.choices[0].message.content)
+```
+
+```python Requests
+import requests
+
+url = "https://api.laozhang.ai/v1/chat/completions"
+headers = {
+    "Content-Type": "application/json",
+    "Authorization": "Bearer YOUR_API_KEY"
+}
+data = {
+    "model": "gpt-4o-mini",
+    "messages": [
+        {"role": "user", "content": "Hello!"}
+    ]
+}
+
+response = requests.post(url, headers=headers, json=data)
+result = response.json()
+
+print(result['choices'][0]['message']['content'])
+```
+
+</CodeGroup>
+
+### Go
+
+```go
+package main
+
+import (
+    "context"
+    "fmt"
+    "github.com/sashabaranov/go-openai"
+)
+
+func main() {
+    config := openai.DefaultConfig("YOUR_API_KEY")
+    config.BaseURL = "https://api.laozhang.ai/v1"
+    client := openai.NewClientWithConfig(config)
+
+    resp, err := client.CreateChatCompletion(
+        context.Background(),
+        openai.ChatCompletionRequest{
+            Model: "gpt-4o-mini",
+            Messages: []openai.ChatCompletionMessage{
+                {
+                    Role:    openai.ChatMessageRoleSystem,
+                    Content: "You are a helpful assistant",
+                },
+                {
+                    Role:    openai.ChatMessageRoleUser,
+                    Content: "What is the capital of France?",
+                },
+            },
+        },
+    )
+
+    if err != nil {
+        fmt.Printf("Error: %v\n", err)
+        return
+    }
+
+    fmt.Println(resp.Choices[0].Message.Content)
+}
+```
+
+## Response Format
+
+### Standard Response
+
+```json
+{
+  "id": "chatcmpl-abc123",
+  "object": "chat.completion",
+  "created": 1699999999,
+  "model": "gpt-4o-mini",
+  "choices": [
+    {
+      "index": 0,
+      "message": {
+        "role": "assistant",
+        "content": "The capital of France is Paris."
+      },
+      "finish_reason": "stop"
+    }
+  ],
+  "usage": {
+    "prompt_tokens": 20,
+    "completion_tokens": 10,
+    "total_tokens": 30
+  }
+}
+```
+
+### Stream Response
+
+Each chunk format:
+
+```json
+{
+  "id": "chatcmpl-abc123",
+  "object": "chat.completion.chunk",
+  "created": 1699999999,
+  "model": "gpt-4o-mini",
+  "choices": [
+    {
+      "index": 0,
+      "delta": {
+        "content": "Paris"
+      },
+      "finish_reason": null
+    }
+  ]
+}
+```
+
+Last chunk (finish_reason not null):
+
+```json
+{
+  "id": "chatcmpl-abc123",
+  "object": "chat.completion.chunk",
+  "created": 1699999999,
+  "model": "gpt-4o-mini",
+  "choices": [
+    {
+      "index": 0,
+      "delta": {},
+      "finish_reason": "stop"
+    }
+  ],
+  "usage": {
+    "prompt_tokens": 20,
+    "completion_tokens": 10,
+    "total_tokens": 30
+  }
+}
+```
+
+## Response Field Descriptions
+
+<ResponseField name="id" type="string">
+  Unique request identifier
+</ResponseField>
+
+<ResponseField name="object" type="string">
+  Object type:
+  - `chat.completion`: Standard response
+  - `chat.completion.chunk`: Stream response chunk
+</ResponseField>
+
+<ResponseField name="created" type="integer">
+  Creation timestamp (Unix timestamp)
+</ResponseField>
+
+<ResponseField name="model" type="string">
+  Model name used
+</ResponseField>
+
+<ResponseField name="choices" type="array">
+  Generated results array, typically containing one result
+
+  <ResponseField name="choices[].index" type="integer">
+    Result index
+  </ResponseField>
+
+  <ResponseField name="choices[].message" type="object">
+    Message object (standard response)
+    
+    <ResponseField name="choices[].message.role" type="string">
+      Role, always `assistant`
+    </ResponseField>
+
+    <ResponseField name="choices[].message.content" type="string">
+      Generated content
+    </ResponseField>
+  </ResponseField>
+
+  <ResponseField name="choices[].delta" type="object">
+    Incremental content (stream response)
+    
+    <ResponseField name="choices[].delta.content" type="string">
+      This chunk's content
+    </ResponseField>
+  </ResponseField>
+
+  <ResponseField name="choices[].finish_reason" type="string">
+    Completion reason:
+    - `stop`: Natural completion
+    - `length`: Reached `max_tokens` limit
+    - `content_filter`: Content filtered by policy
+    - `null`: Not yet finished (stream output)
+  </ResponseField>
+</ResponseField>
+
+<ResponseField name="usage" type="object">
+  Token usage statistics
+
+  <ResponseField name="usage.prompt_tokens" type="integer">
+    Input tokens
+  </ResponseField>
+
+  <ResponseField name="usage.completion_tokens" type="integer">
+    Output tokens
+  </ResponseField>
+
+  <ResponseField name="usage.total_tokens" type="integer">
+    Total tokens
+  </ResponseField>
+</ResponseField>
+
+## Special Usage
+
+### GPT-4o Vision
+
+```python
+from openai import OpenAI
+
+client = OpenAI(
+    api_key="YOUR_API_KEY",
+    base_url="https://api.laozhang.ai/v1"
+)
+
+completion = client.chat.completions.create(
+    model="gpt-4o",
+    messages=[
+        {
+            "role": "user",
+            "content": [
+                {"type": "text", "text": "Please describe this image in detail"},
+                {
+                    "type": "image_url",
+                    "image_url": {
+                        "url": "https://example.com/image.jpg",
+                        # Optional: control image quality
+                        # "detail": "high"  # or "low"
+                    }
+                }
+            ]
+        }
+    ],
+    max_tokens=1000
+)
+
+print(completion.choices[0].message.content)
+```
+
+<Tip>
+  **Multiple Images**
+  
+  GPT-4o supports analyzing multiple images simultaneously, just add multiple `image_url` objects to the content array.
+</Tip>
+
+### Claude Native Format
+
+Claude models also support native format:
+
+```python
+import anthropic
+
+client = anthropic.Anthropic(
+    api_key="YOUR_API_KEY",
+    base_url="https://api.laozhang.ai/v1"
+)
+
+message = client.messages.create(
+    model="claude-3-5-sonnet-20241022",
+    max_tokens=1024,
+    messages=[
+        {"role": "user", "content": "Hello, Claude"}
+    ]
+)
+
+print(message.content[0].text)
+```
+
+### O1 Series Special Parameters
+
+O1 series models (o1-preview, o1-mini) have parameter limitations:
+
+<Warning>
+  **O1 Series Limitations**
+  
+  - Do not support `system` role messages
+  - Do not support stream output (`stream` must be `false`)
+  - Do not support `temperature`, `top_p`, `presence_penalty`, `frequency_penalty` parameters
+  - `max_tokens` defaults to model's maximum value
+</Warning>
+
+Correct usage:
+
+```python
+completion = client.chat.completions.create(
+    model="o1-mini",
+    messages=[
+        {
+            "role": "user",
+            "content": "Please solve this math problem: ..."
+        }
+    ]
+)
+```
+
+## Usage Tips
+
+### Multi-turn Dialogue
+
+Implement multi-turn dialogue by passing context:
+
+```python
+messages = [
+    {"role": "system", "content": "You are a helpful assistant"},
+]
+
+# First round
+messages.append({"role": "user", "content": "What's the weather in Beijing?"})
+response = client.chat.completions.create(
+    model="gpt-4o-mini",
+    messages=messages
+)
+messages.append({"role": "assistant", "content": response.choices[0].message.content})
+
+# Second round
+messages.append({"role": "user", "content": "What about Shanghai?"})
+response = client.chat.completions.create(
+    model="gpt-4o-mini",
+    messages=messages
+)
+```
+
+### JSON Output
+
+Get structured JSON output:
+
+```python
+completion = client.chat.completions.create(
+    model="gpt-4o-mini",
+    messages=[
+        {
+            "role": "system",
+            "content": "You are a helpful assistant. Always output in JSON format."
+        },
+        {
+            "role": "user",
+            "content": "Extract personal information from the following text: Zhang San, 28 years old, software engineer"
+        }
+    ],
+    response_format={"type": "json_object"}  # Force JSON output
+)
+
+import json
+result = json.loads(completion.choices[0].message.content)
+print(result)
+```
+
+<Note>
+  **JSON Mode Support**
+  
+  Currently supports JSON mode models:
+  - GPT-4o series
+  - GPT-4-turbo series
+  - GPT-3.5-turbo-1106 and later versions
+</Note>
+
+## Billing
+
+Billing is based on actual token usage:
+
+**Total Cost = (Input Tokens × Input Price + Output Tokens × Output Price)**
+
+<Tip>
+  **Save Costs**
+  
+  1. Choose appropriate models: Most scenarios don't require GPT-4o, gpt-4o-mini or gpt-3.5-turbo are sufficient
+  2. Control context length: Only pass necessary historical messages
+  3. Set `max_tokens`: Avoid unnecessarily long output
+  4. Use mini series models: For simple tasks, mini models are much cheaper
+</Tip>
+
+### Model Price Reference
+
+| Model | Input Price | Output Price | Features |
+|-------|------------|--------------|----------|
+| gpt-4o-mini | $0.15/1M tokens | $0.60/1M tokens | Cost-effective, supports image understanding |
+| gpt-4o | $2.5/1M tokens | $10/1M tokens | Strongest capabilities, supports multimodal |
+| claude-3-5-sonnet | $3/1M tokens | $15/1M tokens | Excellent reasoning, supports image understanding |
+| gemini-1.5-flash | $0.075/1M tokens | $0.3/1M tokens | Fastest speed, long context |
+
+For complete pricing, see [Pricing](/pricing)
+
+## Error Handling
+
+Common error codes:
+
+| Error Code | Meaning | Solution |
+|-----------|---------|----------|
+| 401 | API Key invalid or missing | Check if API Key is correct |
+| 429 | Request rate limit exceeded | Slow down request frequency or upgrade plan |
+| 500 | Server internal error | Retry request or contact support |
+| 400 | Request parameter error | Check if request parameters conform to API documentation |
+
+Error response example:
+
+```json
+{
+  "error": {
+    "message": "Invalid API key provided",
+    "type": "invalid_request_error",
+    "code": "invalid_api_key"
+  }
+}
+```
+
+## Best Practices
+
+1. **Use Appropriate Temperature**
+   - Translation, summarization, Q&A: temperature=0
+   - General dialogue: temperature=0.7
+   - Creative writing: temperature=1.0-1.5
+
+2. **Control Context Length**
+   - Only pass necessary historical messages
+   - Regularly clean up irrelevant context
+   - Long documents can be processed in segments
+
+3. **Choose Right Model**
+   - Simple tasks: gpt-4o-mini, gpt-3.5-turbo
+   - Reasoning tasks: claude-3-5-sonnet, gpt-4o
+   - Cost-sensitive: gemini-1.5-flash
+
+4. **Error Retry**
+   - Implement exponential backoff retry mechanism
+   - Catch and handle different error types
+   - Set reasonable timeout
+
+5. **Stream Output**
+   - Better user experience for long responses
+   - Reduce perceived latency
+   - Can implement typewriter effect
+
+## Related Resources
+
+- [Models API](/api-reference/models) - Get complete available model list
+- [Images API](/api-reference/images) - Image generation and editing
+- [OpenAI Models Guide](/api-reference/openai) - Detailed GPT-4o usage
+- [Claude Models Guide](/api-reference/claude) - Detailed Claude usage
+- [Gemini Models Guide](/api-reference/gemini) - Detailed Gemini usage
+

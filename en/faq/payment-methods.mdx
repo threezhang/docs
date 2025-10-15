@@ -1,0 +1,531 @@
+---
+title: "Payment Methods"
+description: "Supported payment methods, recharge process, and refund policy"
+icon: "credit-card"
+---
+
+## Supported Payment Methods
+
+Laozhang API supports multiple convenient payment methods to meet different user needs.
+
+### Online Payment
+
+<CardGroup cols={2}>
+  <Card title="Credit/Debit Card" icon="credit-card">
+    - Visa
+    - Mastercard
+    - American Express
+    - Discover
+    
+    **Processing Time**: Instant  
+    **Fees**: None
+  </Card>
+  
+  <Card title="PayPal" icon="paypal">
+    - Support global PayPal accounts
+    - Support PayPal balance and linked cards
+    
+    **Processing Time**: Instant  
+    **Fees**: None
+  </Card>
+  
+  <Card title="Alipay" icon="alipay">
+    - Domestic Alipay accounts
+    - Scanning code payment
+    
+    **Processing Time**: Instant  
+    **Fees**: None
+  </Card>
+  
+  <Card title="WeChat Pay" icon="wechat">
+    - WeChat scanning code payment
+    - Domestic users only
+    
+    **Processing Time**: Instant  
+    **Fees**: None
+  </Card>
+</CardGroup>
+
+### Cryptocurrency Payment
+
+<Note>
+**Cryptocurrency Payment**
+
+Support mainstream cryptocurrency payment:
+- Bitcoin (BTC)
+- Ethereum (ETH)
+- USDT (TRC20, ERC20)
+
+**Processing Time**: 10-30 minutes (waiting for blockchain confirmation)  
+**Fees**: Network gas fees (user pays)
+</Note>
+
+### Bank Transfer
+
+For large recharges (over $1000):
+
+<Steps>
+  <Step title="Contact Support">
+    Email: billing@laozhang.ai
+    Provide recharge amount and company information
+  </Step>
+  
+  <Step title="Get Account Information">
+    Receive our bank account information
+  </Step>
+  
+  <Step title="Complete Transfer">
+    Complete bank transfer
+  </Step>
+  
+  <Step title="Submit Proof">
+    Submit transfer receipt for verification
+  </Step>
+  
+  <Step title="Balance Update">
+    Balance updated within 1-3 business days
+  </Step>
+</Steps>
+
+## Recharge Process
+
+### Standard Recharge
+
+<Steps>
+  <Step title="Log in to Console">
+    Visit [Laozhang API Console](https://api.laozhang.ai) and log in
+  </Step>
+  
+  <Step title="Select Recharge Amount">
+    Click "Recharge" button and select amount
+    
+    **Recommended Amounts:**
+    - $10 - Small test
+    - $50 - Daily use
+    - $100 - Regular use (10% bonus)
+    - $500+ - Enterprise use (custom discount)
+  </Step>
+  
+  <Step title="Choose Payment Method">
+    Select your payment method
+  </Step>
+  
+  <Step title="Complete Payment">
+    Follow payment flow to complete
+  </Step>
+  
+  <Step title="Confirm Receipt">
+    Balance typically updates immediately
+    Check "Billing History" for confirmation
+  </Step>
+</Steps>
+
+### Auto-Recharge
+
+Set up auto-recharge to avoid service interruption:
+
+<Steps>
+  <Step title="Enable Auto-Recharge">
+    Go to "Account Settings" > "Auto-Recharge"
+  </Step>
+  
+  <Step title="Set Conditions">
+    Configure auto-recharge rules:
+    - **Trigger Condition**: Balance below $10
+    - **Recharge Amount**: $50
+    - **Payment Method**: Credit card auto-deduct
+  </Step>
+  
+  <Step title="Save Configuration">
+    Save settings and wait for confirmation
+  </Step>
+</Steps>
+
+<Tip>
+**Auto-Recharge Benefits**
+
+- ✅ Never interrupt service
+- ✅ No manual operations needed
+- ✅ Enjoy recharge bonuses
+- ✅ Can cancel anytime
+</Tip>
+
+## Pricing and Bonuses
+
+### Recharge Bonus
+
+Enjoy bonuses for larger recharges:
+
+| Recharge Amount | Bonus Ratio | Actual Received | Equivalent Discount |
+|----------|----------|------------|----------|
+| $10-$49 | 0% | $10-$49 | None |
+| $50-$99 | 5% | $52.5-$103.95 | 95% off |
+| $100-$499 | 10% | $110-$548.9 | 91% off |
+| $500-$999 | 15% | $575-$1148.85 | 87% off |
+| $1000+ | Custom | Contact us | Up to 20% off |
+
+<Info>
+**New User Special**
+
+First recharge gets additional 10% bonus!
+
+Example: First recharge $100, get $110 + $10 = $120
+</Info>
+
+### Volume Discount
+
+For high-volume users, we offer custom volume discount plans:
+
+- **Monthly usage $1000+**: 5% additional discount
+- **Monthly usage $5000+**: 10% additional discount
+- **Monthly usage $10000+**: 15% additional discount
+- **Enterprise custom**: Contact sales@laozhang.ai
+
+## Invoice and Receipt
+
+### Request Invoice
+
+<Steps>
+  <Step title="Fill Invoice Information">
+    Go to "Billing History" > "Request Invoice"
+    Fill in:
+    - Company name
+    - Tax ID
+    - Address and phone
+    - Bank account information
+  </Step>
+  
+  <Step title="Select Billing Period">
+    Choose billing period requiring invoice
+  </Step>
+  
+  <Step title="Submit Request">
+    Submit invoice request
+  </Step>
+  
+  <Step title="Receive Invoice">
+    Receive electronic invoice within 3-5 business days
+    Paper invoice can be mailed (additional fees apply)
+  </Step>
+</Steps>
+
+### Invoice Types
+
+| Invoice Type | Applicable Region | Processing Time | Notes |
+|----------|----------|----------|------|
+| **Value-added Tax Invoice** | China | 3-5 business days | Supports deduction |
+| **General Invoice** | China | 1-3 business days | Non-deductible |
+| **Receipt** | Globally | Instant | For recharge records |
+| **Corporate Invoice** | Global enterprises | 5-7 business days | English or local language |
+
+## Refund Policy
+
+### Refund Conditions
+
+Can request refund if:
+
+<Tip>
+**Refundable Cases**
+
+- ✅ Unused balance (no API calls)
+- ✅ Duplicate payment
+- ✅ Mistaken recharge
+- ✅ Service discontinued
+- ✅ Account closed
+</Tip>
+
+<Warning>
+**Non-refundable Cases**
+
+- ❌ Partial refund of used balance
+- ❌ Promotional bonuses
+- ❌ Expired balance
+- ❌ Violation account
+- ❌ Over 90 days
+</Warning>
+
+### Refund Process
+
+<Steps>
+  <Step title="Submit Refund Request">
+    Email: billing@laozhang.ai
+    Include:
+    - Account information
+    - Refund amount
+    - Refund reason
+    - Payment proof
+  </Step>
+  
+  <Step title="Review Process">
+    Financial team reviews within 3-5 business days
+  </Step>
+  
+  <Step title="Approve Refund">
+    If approved, initiate refund process
+  </Step>
+  
+  <Step title="Receive Refund">
+    Refund time varies by payment method:
+    - Credit card: 5-10 business days
+    - PayPal: 3-5 business days
+    - Alipay/WeChat: 1-3 business days
+    - Bank transfer: 5-15 business days
+  </Step>
+</Steps>
+
+### Refund Fees
+
+| Refund Amount | Processing Fee | Example |
+|----------|----------|------|
+| < $50 | $2 fixed fee | Refund $48 for $50 |
+| $50-$500 | 3% of amount | Refund $97 for $100 |
+| > $500 | 2% of amount | Refund $980 for $1000 |
+
+<Note>
+**Free Refund Cases**
+
+- Platform error
+- Duplicate payment
+- Service disruption
+- Account closure
+</Note>
+
+## Payment Security
+
+### Security Measures
+
+<CardGroup cols={2}>
+  <Card title="PCI DSS Compliant" icon="shield-check">
+    Payment processing fully compliant with PCI DSS standards
+  </Card>
+  
+  <Card title="Encrypted Transmission" icon="lock">
+    All payment data transmitted via HTTPS/TLS 1.3 encryption
+  </Card>
+  
+  <Card title="No Card Info Storage" icon="database">
+    Do not store your credit card information
+  </Card>
+  
+  <Card title="Fraud Detection" icon="user-shield">
+    Real-time monitoring of unusual transactions
+  </Card>
+</CardGroup>
+
+### Payment Information Protection
+
+<Tip>
+**Our Commitment**
+
+- ✅ Do not store complete card numbers
+- ✅ Do not store CVV codes
+- ✅ Use tokenization technology
+- ✅ Third-party payment processors (Stripe, PayPal)
+- ✅ Real-time fraud monitoring
+- ✅ SMS/Email payment notifications
+</Tip>
+
+## Common Issues
+
+<AccordionGroup>
+  <Accordion title="Payment failed, what to do?">
+    **Common Causes:**
+    
+    1. **Insufficient Card Balance**
+       - Check card available balance
+       - Try another payment method
+    
+    2. **Card Expired or Invalid**
+       - Verify card expiration date
+       - Check card number accuracy
+    
+    3. **Bank Security Block**
+       - Contact issuing bank
+       - Verify transaction is legitimate
+    
+    4. **Network Issues**
+       - Refresh page and retry
+       - Change browser or network
+    
+    **Solutions:**
+    ```
+    1. Verify payment information accuracy
+    2. Try another payment method
+    3. Contact customer support if still failing
+    4. Provide transaction ID for investigation
+    ```
+  </Accordion>
+  
+  <Accordion title="Recharge not arrived?">
+    **Check Steps:**
+    
+    1. **Confirm Payment Success**
+       - Check bank/payment app deduction record
+       - Verify payment confirmation email
+    
+    2. **Check Account Balance**
+       - Refresh console page
+       - Check "Billing History"
+    
+    3. **View Processing Status**
+       - Some payments require processing time
+       - Cryptocurrency payments require blockchain confirmation
+    
+    **Processing Times:**
+    - Credit card: Instant
+    - PayPal: Instant
+    - Alipay/WeChat: Instant
+    - Cryptocurrency: 10-30 minutes
+    - Bank transfer: 1-3 business days
+    
+    **If Still Not Arrived:**
+    Contact support: billing@laozhang.ai
+    Provide:
+    - Payment method
+    - Payment amount
+    - Payment time
+    - Transaction ID
+  </Accordion>
+  
+  <Accordion title="Can I split payments?">
+    **Split Payment Policy:**
+    
+    Currently do not support split payments, but offer alternatives:
+    
+    1. **Installment Payment**
+       - Use credit card installment (consult issuing bank)
+       - Platform does not charge extra fees
+    
+    2. **Batch Recharge**
+       - Recharge multiple times
+       - Each recharge independent
+    
+    3. **Corporate Monthly Settlement**
+       - Enterprise users can apply for monthly settlement
+       - Contact: sales@laozhang.ai
+  </Accordion>
+  
+  <Accordion title="Can I change payment method?">
+    **Change Payment Method:**
+    
+    1. **For Completed Payments**
+       - Cannot change payment method
+       - If refund needed, follow refund process
+    
+    2. **For Future Recharges**
+       - Can freely choose any supported payment method
+       - No need to set default method
+    
+    3. **For Auto-Recharge**
+       - Can change auto-recharge payment method in settings
+       - Takes effect on next recharge
+  </Accordion>
+  
+  <Accordion title="How to view billing history?">
+    **View Billing Records:**
+    
+    <Steps>
+      <Step title="Log in to Console">
+        Visit [Console](https://api.laozhang.ai)
+      </Step>
+      
+      <Step title="Enter Billing History">
+        Click "Billing" > "Billing History"
+      </Step>
+      
+      <Step title="View Details">
+        View all recharge, usage, refund records
+      </Step>
+      
+      <Step title="Export Records">
+        Can export to CSV or PDF format
+      </Step>
+    </Steps>
+    
+    **Record Contents:**
+    - Date and time
+    - Transaction type (recharge/usage/refund)
+    - Amount
+    - Payment method
+    - Balance
+    - Transaction ID
+  </Accordion>
+</AccordionGroup>
+
+## Enterprise Solutions
+
+### Corporate Account
+
+Provide specialized services for enterprise users:
+
+<CardGroup cols={2}>
+  <Card title="Monthly Settlement" icon="calendar">
+    - No need for advance recharge
+    - Generate bill at month end
+    - Support corporate transfer payment
+  </Card>
+  
+  <Card title="Volume Discount" icon="tags">
+    - Custom pricing based on usage
+    - Up to 20% discount
+    - Long-term contract additional discounts
+  </Card>
+  
+  <Card title="Dedicated Support" icon="headset">
+    - Dedicated account manager
+    - 24/7 technical support
+    - Priority problem resolution
+  </Card>
+  
+  <Card title="Custom Invoice" icon="file-invoice">
+    - Support various invoice types
+    - Custom billing cycles
+    - Detailed usage breakdown
+  </Card>
+</CardGroup>
+
+### Apply for Corporate Account
+
+<Steps>
+  <Step title="Contact Sales Team">
+    Email: sales@laozhang.ai
+    Provide: Company name, estimated monthly usage, business type
+  </Step>
+  
+  <Step title="Submit Materials">
+    Provide:
+    - Business license
+    - Tax registration certificate
+    - Legal representative ID
+    - Corporate email
+  </Step>
+  
+  <Step title="Review and Approval">
+    Business team reviews within 3-5 business days
+  </Step>
+  
+  <Step title="Sign Contract">
+    Sign service contract, clarify terms
+  </Step>
+  
+  <Step title="Account Setup">
+    Configure corporate account, enjoy exclusive services
+  </Step>
+</Steps>
+
+## Contact Support
+
+If questions about payment:
+
+- **Email**: billing@laozhang.ai
+- **Customer Service Phone**: +86 400-xxx-xxxx
+- **Work Hours**: Monday-Friday 9:00-18:00 (UTC+8)
+- **Online Support**: Click chat icon in console
+
+## Related Resources
+
+- [Pricing Description](/pricing) - View detailed pricing
+- [Insufficient Balance](/faq/balance-insufficient) - Handle balance issues
+- [Token Management](/faq/token-management) - Manage API tokens
+- [Terms of Service](https://api.laozhang.ai/terms) - View service terms
+

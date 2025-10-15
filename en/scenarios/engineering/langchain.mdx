@@ -1,0 +1,573 @@
+---
+title: LangChain
+description: LangChain framework integration guide for building LLM application chains
+icon: "link"
+---
+
+LangChain is a powerful framework for building large language model (LLM) applications. Through Laozhang API, you can use various mainstream AI models in LangChain, building complex AI application chains.
+
+## Quick Integration
+
+### 1. Install Dependencies
+
+<CodeGroup>
+
+```bash Python
+pip install langchain langchain-openai
+```
+
+```bash JavaScript/TypeScript
+npm install langchain @langchain/openai
+```
+
+</CodeGroup>
+
+### 2. Configuration
+
+<CodeGroup>
+
+```python Python
+import os
+from langchain_openai import ChatOpenAI
+
+# Set environment variables
+os.environ["OPENAI_API_BASE"] = "https://api.laozhang.ai/v1"
+os.environ["OPENAI_API_KEY"] = "Your Laozhang API key"
+
+# Initialize model
+llm = ChatOpenAI(
+    model="gpt-4-turbo",
+    temperature=0.7,
+    max_tokens=2000
+)
+
+# Test call
+response = llm.invoke("Hello!")
+print(response.content)
+```
+
+```javascript JavaScript
+import { ChatOpenAI } from "@langchain/openai";
+
+// Initialize model
+const llm = new ChatOpenAI({
+  modelName: "gpt-4-turbo",
+  temperature: 0.7,
+  maxTokens: 2000,
+  configuration: {
+    baseURL: "https://api.laozhang.ai/v1",
+    apiKey: "Your Laozhang API key",
+  },
+});
+
+// Test call
+const response = await llm.invoke("Hello!");
+console.log(response.content);
+```
+
+```typescript TypeScript
+import { ChatOpenAI } from "@langchain/openai";
+
+// Initialize model
+const llm = new ChatOpenAI({
+  modelName: "gpt-4-turbo",
+  temperature: 0.7,
+  maxTokens: 2000,
+  configuration: {
+    baseURL: "https://api.laozhang.ai/v1",
+    apiKey: process.env.OPENAI_API_KEY || "",
+  },
+});
+
+// Test call
+const response = await llm.invoke("Hello!");
+console.log(response.content);
+```
+
+</CodeGroup>
+
+<Info>
+**API Key Management**
+
+It's recommended to use environment variables to manage API Keys, avoiding hardcoding keys in code.
+
+Visit [Laozhang API Console](https://api.laozhang.ai/token) to obtain your API Key.
+</Info>
+
+## Supported Models
+
+LangChain supports the following models through Laozhang API:
+
+### Text Generation Models
+
+| Model Series | Model ID | Context Length | Features |
+|---------|---------|----------|------|
+| **GPT-4 Turbo** | `gpt-4-turbo` | 128K | Strong reasoning ability |
+| **GPT-3.5 Turbo** | `gpt-3.5-turbo` | 16K | Fast and economical |
+| **Claude Sonnet** | `claude-sonnet-4` | 200K | Long context support |
+| **Gemini Pro** | `gemini-2.5-pro` | 1M | Multimodal support |
+
+### Embedding Models
+
+| Model | Dimension | Features |
+|-------|------|------|
+| `text-embedding-ada-002` | 1536 | High-quality semantic understanding |
+| `text-embedding-3-small` | 512 | Lightweight, fast |
+| `text-embedding-3-large` | 3072 | Highest precision |
+
+## Core Concepts
+
+### 1. Chains
+
+Chains are the core concept of LangChain, connecting multiple components:
+
+```python
+from langchain.chains import LLMChain
+from langchain.prompts import PromptTemplate
+
+# Create prompt template
+prompt = PromptTemplate(
+    input_variables=["product"],
+    template="Please write an advertising slogan for {product}:"
+)
+
+# Create chain
+chain = LLMChain(llm=llm, prompt=prompt)
+
+# Execute chain
+result = chain.run(product="AI programming assistant")
+print(result)
+```
+
+### 2. Prompts
+
+Prompt template management:
+
+```python
+from langchain.prompts import ChatPromptTemplate
+
+# Multi-turn conversation template
+prompt = ChatPromptTemplate.from_messages([
+    ("system", "You are a professional {role}"),
+    ("human", "{input}"),
+])
+
+# Format prompt
+messages = prompt.format_messages(
+    role="Python programmer",
+    input="How to optimize code performance?"
+)
+
+# Call model
+response = llm.invoke(messages)
+print(response.content)
+```
+
+### 3. Memory
+
+Conversation history management:
+
+```python
+from langchain.memory import ConversationBufferMemory
+from langchain.chains import ConversationChain
+
+# Create memory
+memory = ConversationBufferMemory()
+
+# Create conversation chain
+conversation = ConversationChain(
+    llm=llm,
+    memory=memory,
+    verbose=True
+)
+
+# Multi-turn conversation
+response1 = conversation.predict(input="My name is Zhang San")
+response2 = conversation.predict(input="What's my name?")
+print(response2)  # Will remember your name is Zhang San
+```
+
+### 4. Agents
+
+Autonomous decision-making AI agents:
+
+```python
+from langchain.agents import initialize_agent, AgentType, Tool
+
+# Define tools
+tools = [
+    Tool(
+        name="Calculator",
+        func=lambda x: eval(x),
+        description="Useful for mathematical calculations"
+    )
+]
+
+# Create agent
+agent = initialize_agent(
+    tools=tools,
+    llm=llm,
+    agent=AgentType.ZERO_SHOT_REACT_DESCRIPTION,
+    verbose=True
+)
+
+# Execute task
+result = agent.run("What is (25 + 75) * 2?")
+print(result)
+```
+
+## Application Scenarios
+
+### 1. Document Q&A System
+
+Build an intelligent document Q&A system:
+
+```python
+from langchain.document_loaders import TextLoader
+from langchain.text_splitter import CharacterTextSplitter
+from langchain.embeddings import OpenAIEmbeddings
+from langchain.vectorstores import FAISS
+from langchain.chains import RetrievalQA
+
+# Load documents
+loader = TextLoader("document.txt", encoding="utf-8")
+documents = loader.load()
+
+# Split text
+text_splitter = CharacterTextSplitter(
+    chunk_size=1000,
+    chunk_overlap=200
+)
+texts = text_splitter.split_documents(documents)
+
+# Create vector database
+embeddings = OpenAIEmbeddings(
+    openai_api_base="https://api.laozhang.ai/v1",
+    openai_api_key="Your Laozhang API key"
+)
+vectorstore = FAISS.from_documents(texts, embeddings)
+
+# Create Q&A chain
+qa = RetrievalQA.from_chain_type(
+    llm=llm,
+    chain_type="stuff",
+    retriever=vectorstore.as_retriever()
+)
+
+# Ask questions
+result = qa.run("What is the main content of this document?")
+print(result)
+```
+
+### 2. Multi-step Workflow
+
+Build complex multi-step workflows:
+
+```python
+from langchain.chains import SimpleSequentialChain
+
+# Step 1: Generate outline
+outline_chain = LLMChain(
+    llm=llm,
+    prompt=PromptTemplate(
+        input_variables=["topic"],
+        template="Please create a detailed outline for the following topic:\n\n{topic}"
+    )
+)
+
+# Step 2: Expand content
+content_chain = LLMChain(
+    llm=llm,
+    prompt=PromptTemplate(
+        input_variables=["outline"],
+        template="Please expand the following outline into complete content:\n\n{outline}"
+    )
+)
+
+# Combine chains
+workflow = SimpleSequentialChain(
+    chains=[outline_chain, content_chain],
+    verbose=True
+)
+
+# Execute workflow
+result = workflow.run("AI Application Development Guide")
+print(result)
+```
+
+### 3. Multi-model Collaboration
+
+Use different models for different tasks:
+
+```python
+# Use GPT-3.5 for simple tasks (lower cost)
+cheap_llm = ChatOpenAI(
+    model="gpt-3.5-turbo",
+    temperature=0.5
+)
+
+# Use GPT-4 for complex tasks (higher quality)
+expensive_llm = ChatOpenAI(
+    model="gpt-4-turbo",
+    temperature=0.7
+)
+
+# Simple classification task
+classification = cheap_llm.invoke("Classify this text sentiment: This product is great!")
+
+# Complex analysis task
+analysis = expensive_llm.invoke("Please analyze this product review in depth: This product is great!")
+```
+
+### 4. Streaming Output
+
+Support streaming output for better user experience:
+
+```python
+from langchain.callbacks.streaming_stdout import StreamingStdOutCallbackHandler
+
+# Create model with streaming support
+streaming_llm = ChatOpenAI(
+    model="gpt-4-turbo",
+    temperature=0.7,
+    streaming=True,
+    callbacks=[StreamingStdOutCallbackHandler()]
+)
+
+# Streaming response
+response = streaming_llm.invoke("Please write a short story")
+```
+
+## Advanced Features
+
+### Custom Tools
+
+Create custom tools:
+
+```python
+from langchain.tools import Tool
+
+def search_database(query: str) -> str:
+    """Search database"""
+    # Your database search logic
+    return f"Search result for: {query}"
+
+# Create tool
+search_tool = Tool(
+    name="DatabaseSearch",
+    func=search_database,
+    description="Search information from database. Input should be search keywords."
+)
+```
+
+### Error Handling
+
+Implement robust error handling:
+
+```python
+from langchain.chains import LLMChain
+from langchain.callbacks import get_openai_callback
+
+try:
+    with get_openai_callback() as cb:
+        result = chain.run(input="Your input")
+        print(f"Total tokens: {cb.total_tokens}")
+        print(f"Total cost: ${cb.total_cost}")
+except Exception as e:
+    print(f"Error occurred: {str(e)}")
+```
+
+### Caching
+
+Enable result caching to improve performance:
+
+```python
+from langchain.cache import InMemoryCache
+import langchain
+
+# Enable cache
+langchain.llm_cache = InMemoryCache()
+
+# First call (slower)
+result1 = llm.invoke("What is AI?")
+
+# Second call (use cache, faster)
+result2 = llm.invoke("What is AI?")
+```
+
+## Best Practices
+
+### 1. Prompt Optimization
+
+Write effective prompts:
+
+```python
+# ❌ Bad example
+prompt = "Write something"
+
+# ✅ Good example
+prompt = """
+You are a professional technical writer.
+
+Task: Write an article about AI applications
+Requirements:
+- Word count: 1000 words
+- Audience: Technical professionals
+- Style: Professional yet approachable
+- Structure: Introduction - Body - Conclusion
+- Include: 3 practical cases
+
+Please start writing:
+"""
+```
+
+### 2. Token Management
+
+Control token usage:
+
+```python
+# Set max_tokens
+llm = ChatOpenAI(
+    model="gpt-4-turbo",
+    max_tokens=1000,  # Limit output length
+    temperature=0.7
+)
+
+# Monitor token usage
+with get_openai_callback() as cb:
+    result = chain.run(input="Your input")
+    print(f"Input tokens: {cb.prompt_tokens}")
+    print(f"Output tokens: {cb.completion_tokens}")
+    print(f"Total tokens: {cb.total_tokens}")
+```
+
+### 3. Error Retry
+
+Implement retry mechanism:
+
+```python
+from tenacity import retry, stop_after_attempt, wait_exponential
+
+@retry(
+    stop=stop_after_attempt(3),
+    wait=wait_exponential(multiplier=1, min=4, max=10)
+)
+def call_llm_with_retry(input_text):
+    return llm.invoke(input_text)
+
+# Use retry function
+result = call_llm_with_retry("Your input")
+```
+
+### 4. Security Practices
+
+Protect sensitive information:
+
+```python
+import os
+from dotenv import load_dotenv
+
+# Load environment variables
+load_dotenv()
+
+# Use environment variables
+api_key = os.getenv("OPENAI_API_KEY")
+api_base = os.getenv("OPENAI_API_BASE")
+
+# Do not hardcode API keys in code
+llm = ChatOpenAI(
+    openai_api_base=api_base,
+    openai_api_key=api_key
+)
+```
+
+## Performance Optimization
+
+### Batch Processing
+
+Batch process requests to improve efficiency:
+
+```python
+from langchain.chains import LLMChain
+
+# Create chain
+chain = LLMChain(llm=llm, prompt=prompt)
+
+# Batch processing
+inputs = [
+    {"product": "AI assistant"},
+    {"product": "Smart home"},
+    {"product": "Electric vehicle"}
+]
+
+results = chain.apply(inputs)
+for result in results:
+    print(result)
+```
+
+### Asynchronous Calls
+
+Use asynchronous calls to improve concurrency:
+
+```python
+import asyncio
+from langchain.callbacks import AsyncIteratorCallbackHandler
+
+async def async_call():
+    result = await llm.ainvoke("Hello!")
+    return result
+
+# Execute asynchronously
+result = asyncio.run(async_call())
+```
+
+## Troubleshooting
+
+### Connection Issues
+
+**Problem**: Unable to connect to API
+
+**Solutions**:
+1. Check if API Base URL is correct: `https://api.laozhang.ai/v1`
+2. Verify API Key validity
+3. Check network connection
+4. Confirm firewall settings
+
+### Rate Limiting
+
+**Problem**: Request frequency too high
+
+**Solutions**:
+1. Implement request rate limiting
+2. Use batch processing
+3. Add retry mechanism
+4. Consider upgrading plan
+
+### Memory Issues
+
+**Problem**: Conversation history is too long
+
+**Solutions**:
+1. Use `ConversationBufferWindowMemory` to limit history
+2. Use `ConversationSummaryMemory` to compress history
+3. Regularly clean up old conversations
+4. Use external storage
+
+## Further Learning
+
+### Official Resources
+- [LangChain Official Documentation](https://python.langchain.com/docs/get_started/introduction)
+- [LangChain GitHub Repository](https://github.com/langchain-ai/langchain)
+- [LangChain API Reference](https://api.python.langchain.com/)
+
+### Learning Resources
+- [LangChain Tutorial Series](https://python.langchain.com/docs/get_started/quickstart)
+- [LangChain Best Practices](https://python.langchain.com/docs/guides/)
+- [LangChain Examples](https://github.com/langchain-ai/langchain/tree/master/templates)
+
+### Community Support
+- [LangChain Discord Community](https://discord.gg/langchain)
+- [LangChain GitHub Discussions](https://github.com/langchain-ai/langchain/discussions)
+
+Need more help? Please visit [Laozhang API Official Website](https://api.laozhang.ai) or contact our support team.
+

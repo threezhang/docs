@@ -1,0 +1,329 @@
+---
+title: "Insufficient Balance"
+description: "Solutions and preventive measures for insufficient balance issues"
+icon: "wallet"
+---
+
+## Symptom Description
+
+When calling the API, you receive the following error messages:
+
+```json
+{
+  "error": {
+    "message": "Insufficient balance",
+    "type": "insufficient_balance",
+    "code": "insufficient_balance"
+  }
+}
+```
+
+Or similar prompts:
+- "Account balance is insufficient"
+- "Please recharge"
+- "Balance insufficient, unable to complete request"
+
+## Cause Analysis
+
+### 1. Balance Depleted
+
+Account balance has been completely used up and needs recharge.
+
+### 2. Insufficient Balance
+
+Account has remaining balance, but insufficient for current request:
+- Request token count is too large
+- Selected model is expensive
+- Single request exceeds budget
+
+### 3. Frozen Balance
+
+Part of balance is frozen and unavailable:
+- Pending transactions
+- Risk control freezing
+- System reservation
+
+### 4. Billing Method Mismatch
+
+Using wrong billing method token:
+- Pay-per-use token calling usage-based billing models
+- Usage-based billing token calling pay-per-use models
+
+## Solutions
+
+### Immediate Solutions
+
+<Steps>
+  <Step title="Check Account Balance">
+    1. Log in to [Laozhang API Console](https://api.laozhang.ai)
+    2. Check dashboard balance display
+    3. View detailed transaction history
+  </Step>
+  
+  <Step title="Recharge Account">
+    1. Click "Recharge" button in console
+    2. Select recharge amount
+    3. Complete payment process
+    4. Wait for account balance update (usually instant)
+  </Step>
+  
+  <Step title="Verify Recharge Success">
+    1. Refresh console page
+    2. Check if balance has updated
+    3. Retry API call
+  </Step>
+</Steps>
+
+### Emergency Alternatives
+
+If urgent need to continue using:
+
+1. **Switch to Lighter Model**
+   ```python
+   # Original: Using expensive model
+   model = "gpt-4-turbo"
+   
+   # Alternative: Switch to economical model
+   model = "gpt-3.5-turbo"
+   ```
+
+2. **Reduce Request Parameters**
+   ```python
+   # Reduce max_tokens
+   response = client.chat.completions.create(
+       model="gpt-4-turbo",
+       max_tokens=500,  # Reduce from 2000 to 500
+       messages=[...]
+   )
+   ```
+
+3. **Use Backup Account**
+   - Switch to alternative API key
+   - Switch to different service provider
+
+## Preventive Measures
+
+### 1. Set Low Balance Alert
+
+In console set alert threshold:
+- **Recommended setting**: 20% of usual daily usage
+- **Alert methods**: Email, SMS, webhook
+- **Check frequency**: Daily automatic check
+
+### 2. Enable Auto-recharge
+
+Configure auto-recharge rules:
+```
+Trigger condition: Balance < $10
+Recharge amount: $50
+Payment method: Credit card auto-deduct
+```
+
+### 3. Budget Management
+
+Set usage budget:
+- **Daily limit**: Prevent unusual high usage in single day
+- **Monthly limit**: Control overall cost
+- **Model-specific limit**: Limit expensive model usage
+
+### 4. Monitor Usage
+
+Regularly check usage:
+```
+Weekly tasks:
+- Check balance trend
+- Analyze usage distribution
+- Identify unusual usage
+- Optimize cost structure
+```
+
+### 5. Choose Appropriate Billing Method
+
+Choose based on usage pattern:
+
+| Usage Pattern | Recommended Method | Reason |
+|---------|---------|------|
+| **Stable, high-frequency** | Usage-based billing | Lower unit price |
+| **Occasional use** | Pay-per-use | No waste |
+| **Image/Video generation** | Pay-per-use | Clear pricing |
+| **Chat applications** | Usage-based billing | More economical |
+
+## Balance Management Best Practices
+
+### Budget Allocation
+
+Reasonably allocate budgets:
+
+```
+Total monthly budget: $100
+
+Allocation plan:
+- Production environment: $60 (60%)
+- Development testing: $20 (20%)
+- Emergency reserve: $20 (20%)
+```
+
+### Cost Optimization
+
+Reduce unnecessary expenses:
+
+1. **Model Selection Optimization**
+   ```python
+   # Simple tasks use economical models
+   if task_complexity == "simple":
+       model = "gpt-3.5-turbo"
+   else:
+       model = "gpt-4-turbo"
+   ```
+
+2. **Enable Caching**
+   ```python
+   # Cache common requests
+   from functools import lru_cache
+   
+   @lru_cache(maxsize=100)
+   def get_completion(prompt):
+       return client.chat.completions.create(...)
+   ```
+
+3. **Batch Processing**
+   ```python
+   # Batch process requests to reduce overhead
+   results = []
+   for batch in chunks(requests, batch_size=10):
+       results.extend(process_batch(batch))
+   ```
+
+### Usage Tracking
+
+Record and analyze usage:
+
+```python
+import logging
+
+# Log each API call
+logging.info(f"API call: model={model}, tokens={tokens}, cost=${cost}")
+
+# Regularly generate usage reports
+def generate_usage_report():
+    """Generate weekly usage report"""
+    total_cost = sum(costs)
+    total_requests = len(costs)
+    avg_cost = total_cost / total_requests
+    
+    print(f"Total cost this week: ${total_cost}")
+    print(f"Total requests: {total_requests}")
+    print(f"Average cost per request: ${avg_cost}")
+```
+
+## Common Questions
+
+<AccordionGroup>
+  <Accordion title="How long does recharge take to arrive?">
+    **Recharge arrival time:**
+    - Online payment (credit card, PayPal): Usually instant
+    - Bank transfer: 1-3 business days
+    - Cryptocurrency: Wait for blockchain confirmation, about 10-30 minutes
+    
+    **If delayed:**
+    1. Check payment status
+    2. Confirm correct account information
+    3. Contact customer support
+  </Accordion>
+  
+  <Accordion title="Can I get a refund for unused balance?">
+    **Refund policy:**
+    - Balance can be refunded without violations
+    - Refund processing time: 3-7 business days
+    - May deduct processing fees (typically 3%-5%)
+    
+    **Refund process:**
+    1. Submit refund request in console
+    2. Provide payment proof
+    3. Wait for review
+    4. Receive refund
+  </Accordion>
+  
+  <Accordion title="How to estimate usage costs?">
+    **Estimation methods:**
+    
+    1. **Token Count Estimation**
+       - English: ~1 word = 1.3 tokens
+       - Chinese: ~1 character = 2 tokens
+    
+    2. **Use Official Pricing Calculator**
+       Visit [Pricing Page](/pricing) for calculation
+    
+    3. **Reference Historical Usage**
+       View usage in console
+    
+    **Example calculation:**
+    ```
+    Request: 1000 token prompt
+    Response: 2000 token completion
+    Model: gpt-4-turbo ($10/M tokens)
+    
+    Cost = (1000 + 2000) / 1,000,000 * $10 = $0.03
+    ```
+  </Accordion>
+  
+  <Accordion title="How to prevent accidental high usage?">
+    **Prevention measures:**
+    
+    1. **Set Rate Limits**
+       ```python
+       from ratelimit import limits, sleep_and_retry
+       
+       @sleep_and_retry
+       @limits(calls=10, period=60)  # Limit 10 requests per minute
+       def call_api():
+           return client.chat.completions.create(...)
+       ```
+    
+    2. **Implement Request Validation**
+       ```python
+       def validate_request(prompt):
+           token_count = estimate_tokens(prompt)
+           if token_count > 10000:
+               raise ValueError("Request too large")
+       ```
+    
+    3. **Enable Budget Alerts**
+       Set daily/weekly/monthly budget alerts
+    
+    4. **Code Review**
+       Regularly review API call code to prevent loops or repeated calls
+  </Accordion>
+  
+  <Accordion title="Can I use free tier?">
+    **Free Tier Policy:**
+    
+    Laozhang API currently does not offer free tier, but provides:
+    - **New user discount**: First recharge gets 10% bonus
+    - **Volume discount**: Large recharge gets higher discounts
+    - **Promotional activities**: Occasional promotional offers
+    
+    **Cost Reduction Recommendations:**
+    1. Use economical models (GPT-3.5 Turbo)
+    2. Optimize prompt length
+    3. Enable result caching
+    4. Batch process requests
+  </Accordion>
+</AccordionGroup>
+
+## Emergency Contact
+
+If you cannot resolve the issue through above methods, please contact us through:
+
+- **Online Support**: Click chat icon in console
+- **Email Support**: support@laozhang.ai
+- **Work Hours**: Monday to Friday 9:00-18:00 (UTC+8)
+- **Emergency Contact**: For production environment issues, specify "Emergency" in email subject
+
+## Related Resources
+
+- [Pricing Description](/pricing) - View detailed pricing
+- [Token Management](/faq/token-management) - Learn how to manage API tokens
+- [Usage Logs](/faq/call-logs) - View API usage history
+- [Recharge Tutorial](https://api.laozhang.ai/docs/recharge) - Detailed recharge guide
+

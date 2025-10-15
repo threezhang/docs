@@ -1,0 +1,452 @@
+---
+title: "Model Availability"
+description: "Model availability status, selection recommendations, and troubleshooting"
+icon: "server"
+---
+
+## Model Availability Status
+
+Laozhang API provides multiple mainstream AI models, availability status updated in real-time.
+
+### Currently Available Models
+
+<Tabs>
+  <Tab title="OpenAI Series">
+    | Model | Status | Features | Use Cases |
+    |-------|--------|------|----------|
+    | **GPT-4 Turbo** | 🟢 Available | Latest GPT-4, strong reasoning | Complex tasks, code generation |
+    | **GPT-4** | 🟢 Available | Standard GPT-4 | Professional analysis, long text |
+    | **GPT-3.5 Turbo** | 🟢 Available | Fast and economical | Daily conversation, quick tasks |
+    | **GPT-3.5 Turbo 16K** | 🟢 Available | Long context support | Document processing |
+  </Tab>
+  
+  <Tab title="Anthropic Series">
+    | Model | Status | Features | Use Cases |
+    |-------|--------|------|----------|
+    | **Claude Sonnet 4** | 🟢 Available | Latest Claude, 200K context | Long document, content creation |
+    | **Claude 3 Opus** | 🟢 Available | Highest performance | Complex reasoning, professional writing |
+    | **Claude 3 Sonnet** | 🟢 Available | Balanced performance | General tasks, code review |
+    | **Claude 3 Haiku** | 🟢 Available | Fast response | Quick queries, real-time conversation |
+  </Tab>
+  
+  <Tab title="Google Series">
+    | Model | Status | Features | Use Cases |
+    |-------|--------|------|----------|
+    | **Gemini 2.5 Pro** | 🟢 Available | Multimodal, 1M context | Image understanding, long text |
+    | **Gemini 1.5 Pro** | 🟢 Available | Long context support | Document analysis, code understanding |
+    | **Gemini Flash** | 🟢 Available | Lightweight, fast | Real-time applications, high concurrency |
+  </Tab>
+  
+  <Tab title="Image Generation">
+    | Model | Status | Features | Use Cases |
+    |-------|--------|------|----------|
+    | **DALL-E 3** | 🟢 Available | High quality image generation | Creative design, marketing materials |
+    | **DALL-E 2** | 🟢 Available | Fast generation | Quick prototyping, batch production |
+    | **Flux Pro** | 🟢 Available | Style variety | Artistic creation, illustration |
+    | **Sora Image** | 🟢 Available | OpenAI image model | General image generation |
+  </Tab>
+  
+  <Tab title="Video Generation">
+    | Model | Status | Features | Use Cases |
+    |-------|--------|------|----------|
+    | **Sora 2** | 🟢 Available | 10s video generation | Short video creation, animations |
+    | **VEO 3** | 🟢 Available | 15s high quality video | Professional video production |
+  </Tab>
+</Tabs>
+
+### Real-time Status
+
+Check latest model status:
+
+```python
+import requests
+
+# Get model list
+response = requests.get(
+    "https://api.laozhang.ai/v1/models",
+    headers={"Authorization": "Bearer your_api_key"}
+)
+
+models = response.json()
+for model in models['data']:
+    print(f"{model['id']}: {model['status']}")
+```
+
+## Model Selection Recommendations
+
+### By Task Type
+
+| Task Type | Recommended Model | Alternative | Reason |
+|---------|---------|---------|------|
+| **Daily Conversation** | GPT-3.5 Turbo | Gemini Flash | Fast, economical |
+| **Code Generation** | GPT-4 Turbo | Claude Sonnet 4 | Strong code understanding |
+| **Long Document** | Claude Sonnet 4 | Gemini 2.5 Pro | 200K+ context |
+| **Content Creation** | Claude 3 Opus | GPT-4 Turbo | Strong creativity |
+| **Quick Translation** | GPT-3.5 Turbo | Gemini Flash | Fast response |
+| **Image Understanding** | Gemini 2.5 Pro | GPT-4 Vision | Multimodal capability |
+| **Image Generation** | DALL-E 3 | Flux Pro | High quality |
+| **Video Creation** | Sora 2 | VEO 3 | Cost-effective |
+
+### By Budget
+
+| Budget Level | Recommended Model | Daily Estimated Cost |
+|----------|---------|------------|
+| **Economical** | GPT-3.5 Turbo, Gemini Flash | $1-5 |
+| **Balanced** | GPT-4 Turbo, Claude Sonnet 4 | $10-30 |
+| **Premium** | Claude Opus, Gemini 2.5 Pro | $50-100 |
+| **Custom** | API-specific on-demand | Contact sales |
+
+### By Response Speed
+
+| Speed Requirement | Recommended Model | Average Response Time |
+|------------|---------|------------|
+| **Real-time** | Gemini Flash, GPT-3.5 Turbo | 0.5-2s |
+| **Fast** | GPT-4 Turbo, Claude Sonnet | 2-5s |
+| **Standard** | Claude Opus, Gemini 2.5 Pro | 5-10s |
+
+## Model Unavailability Handling
+
+### Temporary Unavailability
+
+If model is temporarily unavailable:
+
+```python
+import time
+
+def call_with_fallback(primary_model, fallback_model, prompt):
+    """Call with fallback model"""
+    try:
+        # Try primary model
+        response = client.chat.completions.create(
+            model=primary_model,
+            messages=[{"role": "user", "content": prompt}]
+        )
+        return response
+    except Exception as e:
+        if "model_unavailable" in str(e):
+            # Switch to fallback model
+            print(f"{primary_model} unavailable, switching to {fallback_model}")
+            response = client.chat.completions.create(
+                model=fallback_model,
+                messages=[{"role": "user", "content": prompt}]
+            )
+            return response
+        else:
+            raise e
+
+# Usage example
+result = call_with_fallback(
+    primary_model="gpt-4-turbo",
+    fallback_model="gpt-3.5-turbo",
+    prompt="Hello, world!"
+)
+```
+
+### Auto-retry Mechanism
+
+Implement smart retry mechanism:
+
+```python
+from tenacity import retry, stop_after_attempt, wait_exponential, retry_if_exception_type
+
+class ModelUnavailableError(Exception):
+    pass
+
+@retry(
+    retry=retry_if_exception_type(ModelUnavailableError),
+    stop=stop_after_attempt(3),
+    wait=wait_exponential(multiplier=1, min=4, max=10)
+)
+def call_api_with_retry(model, prompt):
+    """API call with retry"""
+    try:
+        response = client.chat.completions.create(
+            model=model,
+            messages=[{"role": "user", "content": prompt}]
+        )
+        return response
+    except Exception as e:
+        if "model_unavailable" in str(e):
+            raise ModelUnavailableError(f"{model} unavailable")
+        raise e
+```
+
+### Model Fallback Chain
+
+Implement multi-level fallback chain:
+
+```python
+MODEL_FALLBACK_CHAIN = {
+    "gpt-4-turbo": ["gpt-4", "claude-sonnet-4", "gpt-3.5-turbo"],
+    "claude-opus": ["claude-sonnet-4", "gpt-4-turbo", "claude-haiku"],
+    "gemini-2.5-pro": ["gemini-1.5-pro", "gpt-4-turbo", "claude-sonnet-4"]
+}
+
+def call_with_fallback_chain(model, prompt):
+    """Try call with fallback chain"""
+    models_to_try = [model] + MODEL_FALLBACK_CHAIN.get(model, [])
+    
+    for current_model in models_to_try:
+        try:
+            response = client.chat.completions.create(
+                model=current_model,
+                messages=[{"role": "user", "content": prompt}]
+            )
+            if current_model != model:
+                print(f"Using fallback model: {current_model}")
+            return response
+        except Exception as e:
+            if "model_unavailable" in str(e):
+                continue
+            raise e
+    
+    raise Exception("All models unavailable")
+```
+
+## Common Issues
+
+<AccordionGroup>
+  <Accordion title='Error: "Model not found"'>
+    **Possible Causes:**
+    1. Model name incorrect
+    2. Model not available in your region
+    3. Model has been deprecated
+    
+    **Solutions:**
+    ```python
+    # Check available models
+    response = requests.get(
+        "https://api.laozhang.ai/v1/models",
+        headers={"Authorization": "Bearer your_api_key"}
+    )
+    available_models = [m['id'] for m in response.json()['data']]
+    print("Available models:", available_models)
+    
+    # Verify model name
+    model = "gpt-4-turbo"  # Ensure name is correct
+    if model not in available_models:
+        print(f"{model} unavailable, please choose another model")
+    ```
+  </Accordion>
+  
+  <Accordion title='Error: "Model temporarily unavailable"'>
+    **Possible Causes:**
+    1. Model under maintenance
+    2. High load on model
+    3. Network issues
+    
+    **Solutions:**
+    1. **Retry**: Retry after a few minutes
+    2. **Switch Model**: Use alternative model
+    3. **Check Status**: Check [Status Page](https://status.laozhang.ai)
+    
+    ```python
+    import time
+    
+    def call_with_retry(model, prompt, max_retries=3):
+        for i in range(max_retries):
+            try:
+                return client.chat.completions.create(
+                    model=model,
+                    messages=[{"role": "user", "content": prompt}]
+                )
+            except Exception as e:
+                if i < max_retries - 1:
+                    wait_time = 2 ** i  # Exponential backoff
+                    print(f"Retry {i+1}/{max_retries}, waiting {wait_time}s...")
+                    time.sleep(wait_time)
+                else:
+                    raise e
+    ```
+  </Accordion>
+  
+  <Accordion title="Why are some models not available?">
+    **Possible Reasons:**
+    
+    1. **Region Restrictions**
+       - Some models restricted by region
+       - Comply with local regulations
+       - Can apply for special access
+    
+    2. **Subscription Plan**
+       - Some models require higher plan
+       - Upgrade plan to access
+       - Or purchase dedicated model access
+    
+    3. **Capacity Limitations**
+       - New models may have capacity limits
+       - Gradually opening to more users
+       - Can join waitlist
+    
+    4. **Maintenance Updates**
+       - Models periodically maintained and updated
+       - Typically choose off-peak hours
+       - Advance notice on [Status Page](https://status.laozhang.ai)
+  </Accordion>
+  
+  <Accordion title="How to get early access to new models?">
+    **Application Methods:**
+    
+    1. **Join Beta Program**
+       - Fill out [Beta Application Form](https://api.laozhang.ai/beta)
+       - Provide usage scenarios and needs
+       - Priority for active users
+    
+    2. **Enterprise Users**
+       - Contact sales team: sales@laozhang.ai
+       - Can get early access privileges
+       - Dedicated support and services
+    
+    3. **Developer Community**
+       - Follow [Official Blog](https://blog.laozhang.ai)
+       - Join [Developer Discord](https://discord.gg/laozhang)
+       - Participate in community activities
+  </Accordion>
+  
+  <Accordion title="Will models be deprecated?">
+    **Deprecation Policy:**
+    
+    - **Advance Notice**: At least 3 months notice before deprecation
+    - **Migration Guide**: Provide detailed migration guide
+    - **Compatibility Period**: Maintain compatibility period
+    - **Support**: Offer free migration support
+    
+    **How to Get Notifications:**
+    - Subscribe to [API Updates](https://api.laozhang.ai/updates)
+    - Enable email notifications in console
+    - Follow [Official Twitter](https://twitter.com/laozhang_ai)
+  </Accordion>
+</AccordionGroup>
+
+## Model Performance Monitoring
+
+### Real-time Monitoring Dashboard
+
+Access [Model Status Dashboard](https://status.laozhang.ai) to view:
+
+- **Availability**: Model online rate
+- **Response Time**: Average response time
+- **Success Rate**: Request success rate
+- **Queue Status**: Current queue length
+
+### Self-built Monitoring
+
+Implement your own monitoring system:
+
+```python
+import time
+import requests
+
+def monitor_model_status(models, interval=60):
+    """Monitor model status"""
+    while True:
+        for model in models:
+            try:
+                start_time = time.time()
+                response = client.chat.completions.create(
+                    model=model,
+                    messages=[{"role": "user", "content": "test"}],
+                    max_tokens=5
+                )
+                response_time = time.time() - start_time
+                
+                print(f"{model}: ✅ Available, Response time: {response_time:.2f}s")
+            except Exception as e:
+                print(f"{model}: ❌ Unavailable, Error: {str(e)}")
+        
+        time.sleep(interval)
+
+# Monitor key models
+models_to_monitor = ["gpt-4-turbo", "claude-sonnet-4", "gemini-2.5-pro"]
+monitor_model_status(models_to_monitor)
+```
+
+## Best Practices
+
+### 1. Smart Model Selection
+
+Dynamically select models based on task:
+
+```python
+def select_model(task_type, complexity, budget):
+    """Smart model selection"""
+    if budget == "low":
+        return "gpt-3.5-turbo"
+    
+    if complexity == "high":
+        if task_type == "code":
+            return "gpt-4-turbo"
+        elif task_type == "long_text":
+            return "claude-sonnet-4"
+        else:
+            return "gpt-4-turbo"
+    else:
+        return "gpt-3.5-turbo"
+```
+
+### 2. Load Balancing
+
+Distribute requests across multiple models:
+
+```python
+import random
+
+AVAILABLE_MODELS = [
+    "gpt-4-turbo",
+    "claude-sonnet-4",
+    "gemini-2.5-pro"
+]
+
+def load_balanced_call(prompt):
+    """Load balanced call"""
+    model = random.choice(AVAILABLE_MODELS)
+    try:
+        return client.chat.completions.create(
+            model=model,
+            messages=[{"role": "user", "content": prompt}]
+        )
+    except Exception as e:
+        # Try other models if one fails
+        for backup_model in AVAILABLE_MODELS:
+            if backup_model != model:
+                try:
+                    return client.chat.completions.create(
+                        model=backup_model,
+                        messages=[{"role": "user", "content": prompt}]
+                    )
+                except:
+                    continue
+        raise e
+```
+
+### 3. Cache Strategy
+
+Cache model responses to reduce calls:
+
+```python
+from functools import lru_cache
+import hashlib
+
+@lru_cache(maxsize=1000)
+def cached_completion(model, prompt_hash):
+    """Cached completion"""
+    # Actual API call
+    response = client.chat.completions.create(
+        model=model,
+        messages=[{"role": "user", "content": prompt_hash}]
+    )
+    return response
+
+def get_completion(model, prompt):
+    """Get completion with cache"""
+    prompt_hash = hashlib.md5(prompt.encode()).hexdigest()
+    return cached_completion(model, prompt_hash)
+```
+
+## Related Resources
+
+- [Pricing Description](/pricing) - View model pricing
+- [API Reference](/api-reference/models) - Model API documentation
+- [Model Comparison](https://api.laozhang.ai/models/comparison) - Detailed model comparison
+- [Status Page](https://status.laozhang.ai) - Real-time service status
+

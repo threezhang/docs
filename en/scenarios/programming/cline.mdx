@@ -1,0 +1,282 @@
+---
+title: Cline
+description: VS Code intelligent programming assistant integration guide
+icon: "code-branch"
+---
+
+Cline (formerly Claude Dev) is a powerful VS Code plugin that integrates large language models to provide developers with intelligent programming assistance. Through Laozhang API, you can use various advanced AI models in Cline.
+
+## Quick Start
+
+### 1. Install Plugin
+
+1. Open VS Code
+2. Click the Extensions icon on the left sidebar (or use shortcut `Ctrl+Shift+X`)
+3. Search for "Cline"
+4. Click "Install" button
+5. Restart VS Code after installation
+
+### 2. Configure API
+
+<Steps>
+  <Step title="Open Cline Settings">
+    Click the Cline icon in the VS Code left sidebar
+  </Step>
+  
+  <Step title="Choose API Service">
+    Select "OpenAI" in the settings interface
+  </Step>
+  
+  <Step title="Fill In Configuration">
+    - **API Provider**: Select "OpenAI"
+    - **Base URL**: `https://api.laozhang.ai/v1`
+    - **API Key**: Enter your Laozhang API key
+    - **Model**: Choose the model you need (e.g., `gpt-4-turbo`)
+  </Step>
+  
+  <Step title="Save Settings">
+    Click "Save" button to complete configuration
+  </Step>
+</Steps>
+
+<Info>
+**Obtaining API Key**
+
+Visit [Laozhang API Console](https://api.laozhang.ai/token) to create and obtain your API key.
+</Info>
+
+## Recommended Model Selection
+
+Cline supports multiple large language models. Here are model recommendations for different programming scenarios:
+
+| Programming Scenario | Recommended Model | Reason |
+|---------|---------|------|
+| **Quick Code Completion** | `gpt-3.5-turbo` | Fast response, economical |
+| **Complex Algorithm Development** | `gpt-4-turbo` | Strong reasoning ability |
+| **Code Refactoring** | `claude-sonnet-4-20250514` | Good at long context understanding |
+| **Documentation Writing** | `gemini-2.5-pro` | Strong text generation ability |
+| **Bug Analysis** | `gpt-4-turbo` | Excellent problem-solving ability |
+
+<Tip>
+**Model Selection Suggestions**
+- **Daily coding**: Recommend using `gpt-3.5-turbo`, lower cost
+- **Complex projects**: Recommend using `gpt-4-turbo`, better quality
+- **Long code files**: Recommend using `claude-sonnet-4`, supports larger context
+</Tip>
+
+## Core Features
+
+### 1. Intelligent Code Completion
+
+Cline can automatically complete code based on context:
+
+- **Variable and function name suggestions**
+- **Code snippet completion**
+- **Import statement generation**
+- **Type annotation completion**
+
+### 2. Code Explanation
+
+Select a code segment, Cline can:
+- Explain code functionality
+- Analyze algorithm complexity
+- Point out potential issues
+- Provide optimization suggestions
+
+### 3. Code Generation
+
+Describe your requirements, Cline can generate corresponding code:
+
+```
+"Write a Python function to calculate Fibonacci sequence"
+"Create a React component for user login interface"
+"Generate a SQL query to find top 10 best-selling products"
+```
+
+### 4. Refactoring Suggestions
+
+Cline can analyze your code and provide:
+- Code structure optimization suggestions
+- Performance improvement solutions
+- Best practice recommendations
+- Security issue warnings
+
+### 5. Test Generation
+
+Automatically generate unit tests:
+- Support multiple testing frameworks
+- Generate edge case tests
+- Provide test coverage suggestions
+
+## Usage Scenarios
+
+### Scenario 1: Rapid Prototyping
+
+```markdown
+User: I need to create a RESTful API to manage users
+
+Cline:
+- Generates API route definitions
+- Creates user model
+- Implements CRUD operations
+- Adds input validation
+- Provides usage examples
+```
+
+### Scenario 2: Code Review
+
+```markdown
+User: Please review this function
+
+Cline:
+- Analyzes code logic
+- Identifies potential bugs
+- Suggests performance optimizations
+- Points out security risks
+- Provides improved code examples
+```
+
+### Scenario 3: Learning New Technologies
+
+```markdown
+User: How to use React Hooks?
+
+Cline:
+- Explains Hook concepts
+- Provides usage examples
+- Shows common patterns
+- Warns about common pitfalls
+- Recommends best practices
+```
+
+## Configuration Examples
+
+### Basic Configuration
+
+```json
+{
+  "cline.apiProvider": "openai",
+  "cline.baseUrl": "https://api.laozhang.ai/v1",
+  "cline.apiKey": "Your Laozhang API key",
+  "cline.model": "gpt-4-turbo",
+  "cline.maxTokens": 2000,
+  "cline.temperature": 0.7
+}
+```
+
+### Advanced Configuration
+
+```json
+{
+  "cline.apiProvider": "openai",
+  "cline.baseUrl": "https://api.laozhang.ai/v1",
+  "cline.apiKey": "Your Laozhang API key",
+  "cline.model": "gpt-4-turbo",
+  "cline.maxTokens": 4000,
+  "cline.temperature": 0.7,
+  "cline.enableAutoComplete": true,
+  "cline.enableCodeLens": true,
+  "cline.enableInlineCompletion": true,
+  "cline.autoTriggerDelay": 300
+}
+```
+
+## Troubleshooting
+
+### Connection Issues
+
+**Problem**: Unable to connect to API
+
+**Solutions**:
+1. Check if Base URL is correct: `https://api.laozhang.ai/v1`
+2. Verify API Key validity
+3. Check network connection
+4. Confirm firewall settings
+
+### Response Timeout
+
+**Problem**: Request timeout
+
+**Solutions**:
+1. Switch to a faster model (e.g., from GPT-4 to GPT-3.5)
+2. Reduce maxTokens setting
+3. Check network speed
+4. Try during off-peak hours
+
+### Inaccurate Suggestions
+
+**Problem**: Code suggestions don't meet expectations
+
+**Solutions**:
+1. Provide more detailed descriptions
+2. Include necessary context information
+3. Try different models
+4. Adjust temperature parameter
+
+## Best Practices
+
+### 1. Clear Requirements
+
+Provide clear and specific requirements:
+```
+❌ "Write a function"
+✅ "Write a Python function that accepts a list of numbers and returns average, with type hints"
+```
+
+### 2. Provide Context
+
+Include necessary code context:
+```
+❌ "Optimize this code"
+✅ "This is a user authentication function, needs performance optimization, code: [paste code]"
+```
+
+### 3. Iterative Improvement
+
+Don't expect perfect results at once:
+1. Get initial code
+2. Test and identify issues
+3. Provide feedback
+4. Iterate improvements
+
+### 4. Security Awareness
+
+Avoid including sensitive information:
+- Don't paste API keys
+- Don't share database passwords
+- Don't upload internal business logic
+
+### 5. Cost Control
+
+Reasonably control usage costs:
+- Use lighter models for simple tasks
+- Limit maxTokens setting
+- Avoid unnecessary repeated calls
+
+## Shortcut Keys
+
+| Shortcut | Function |
+|----------|----------|
+| `Ctrl+Shift+P` then type "Cline" | Open Cline command panel |
+| `Ctrl+L` | Open Cline chat window |
+| `Ctrl+Shift+L` | Explain selected code |
+| `Ctrl+Alt+L` | Generate code |
+
+<Note>
+**Shortcut Key Customization**
+
+You can customize shortcuts in VS Code settings (File > Preferences > Keyboard Shortcuts, search "Cline").
+</Note>
+
+## Further Learning
+
+### Official Resources
+- [Cline Official Documentation](https://github.com/cline/cline)
+- [VS Code Plugin Development Guide](https://code.visualstudio.com/api)
+
+### Community Support
+- [Cline GitHub Issues](https://github.com/cline/cline/issues)
+- [VS Code Community Forum](https://github.com/microsoft/vscode/discussions)
+
+Need more help? Please visit [Laozhang API Official Website](https://api.laozhang.ai) or contact our support team.
+

@@ -1,0 +1,352 @@
+---
+title: "Best Practices"
+description: "Recommendations and tips for optimizing VEO API usage"
+icon: "lightbulb"
+---
+
+## Prompt Writing Guide
+
+Writing high-quality prompts is key to obtaining excellent videos. Below are detailed explanations of each element:
+
+### Prompt Structure
+
+<Tabs>
+  <Tab title="Subject Description">
+    Clearly describe the main object or character in the video
+    
+    **Good examples:**
+    - "An orange kitten"
+    - "A young girl in a red dress"
+    - "A silver sports car"
+    
+    **Avoid:**
+    - "Something"
+    - "Some animals"
+  </Tab>
+  
+  <Tab title="Actions & Behaviors">
+    Specifically describe the subject's actions and behaviors
+    
+    **Good examples:**
+    - "Walking slowly"
+    - "Running quickly"
+    - "Dancing gracefully"
+    
+    **Avoid:**
+    - "Moving"
+    - "Doing something"
+  </Tab>
+  
+  <Tab title="Environment & Scene">
+    Describe the background and environment in detail
+    
+    **Good examples:**
+    - "A sunny garden"
+    - "Rainy city streets at night"
+    - "A beach at sunset"
+    
+    **Avoid:**
+    - "Some place"
+    - "Outside"
+  </Tab>
+  
+  <Tab title="Camera Movement">
+    Describe the camera movement
+    
+    **Good examples:**
+    - "Camera following"
+    - "Overhead view"
+    - "360-degree rotation"
+    
+    **Optional element**
+  </Tab>
+  
+  <Tab title="Visual Style">
+    Specify the desired visual style
+    
+    **Good examples:**
+    - "4K high definition, cinematic quality"
+    - "Animation style"
+    - "Vintage film aesthetic"
+    
+    **Optional element**
+  </Tab>
+</Tabs>
+
+### Excellent Prompt Examples
+
+<Accordion>
+  <AccordionItem title="Natural Scene">
+    ```
+    An orange kitten walking slowly through a sunny garden,
+    flower petals dancing in the gentle breeze, camera following the cat's steps,
+    4K high definition, cinematic quality, warm tones
+    ```
+  </AccordionItem>
+  
+  <AccordionItem title="Urban Scene">
+    ```
+    A rainy night in Tokyo, neon lights reflecting on wet streets,
+    a girl with a transparent umbrella crossing the pedestrian crossing,
+    cyberpunk style, cinematic color grading
+    ```
+  </AccordionItem>
+  
+  <AccordionItem title="Action Scene">
+    ```
+    Professional skateboarder performing difficult tricks at an urban skate park,
+    slow-motion capturing mid-air flips, illuminated by sunset glow,
+    sports photography style, high frame rate
+    ```
+  </AccordionItem>
+  
+  <AccordionItem title="Product Showcase">
+    ```
+    Latest smartwatch rotating 360 degrees against pure white background,
+    close-up shots revealing metallic texture and screen details,
+    product photography style, minimalist
+    ```
+  </AccordionItem>
+</Accordion>
+
+## Prompt Enhancement Feature
+
+<Info>
+  Enabling `enhance_prompt` allows AI to automatically optimize your prompt, improving generation quality
+</Info>
+
+### When to Use Prompt Enhancement
+
+<CardGroup cols={2}>
+  <Card title="Recommended" icon="check">
+    - First-time API usage
+    - Simple prompts
+    - Want better results
+    - Unsure how to describe
+  </Card>
+  
+  <Card title="Can Disable" icon="xmark">
+    - Need precise control
+    - Already have comprehensive prompts
+    - Specific style requirements
+    - Technical descriptions
+  </Card>
+</CardGroup>
+
+## Using Reference Images
+
+### Image Requirements
+
+| Requirement | Description |
+|------|------|
+| Format | JPG, PNG, WebP |
+| Size | Max 10MB per image |
+| Quantity | Max 5 images |
+| Resolution | Recommended 1024x1024 or higher |
+| Content | Clear, relevant reference material |
+
+### Usage Tips
+
+<Steps>
+  <Step title="Choose High-Quality Images">
+    Use clear, high-resolution images as references
+  </Step>
+  
+  <Step title="Maintain Consistent Style">
+    Multiple images should maintain visual style consistency
+  </Step>
+  
+  <Step title="Prioritize Relevance">
+    Select reference images most relevant to the target video
+  </Step>
+  
+  <Step title="Avoid Conflicts">
+    Image content should not conflict with text descriptions
+  </Step>
+</Steps>
+
+## Polling Strategy
+
+### Recommended Polling Implementation
+
+```python
+import time
+import math
+
+def exponential_backoff_polling(client, task_id, initial_interval=5, max_interval=60):
+    """
+    Exponential backoff polling strategy
+    """
+    interval = initial_interval
+    attempt = 0
+    
+    while True:
+        try:
+            status_data = client.get_status(task_id)
+            status = status_data.get('status')
+            
+            if status == 'completed':
+                return status_data['result']
+            elif status == 'failed':
+                raise Exception(f"Generation failed: {status_data.get('error')}")
+            
+            # Exponential backoff
+            time.sleep(interval)
+            attempt += 1
+            interval = min(initial_interval * math.pow(1.5, attempt), max_interval)
+            
+        except Exception as e:
+            print(f"Polling error: {e}")
+            time.sleep(interval)
+```
+
+### Polling Parameter Recommendations
+
+<Note>
+  - **Initial interval:** 5 seconds
+  - **Max interval:** 60 seconds
+  - **Backoff factor:** 1.5
+  - **Max wait:** 30 minutes
+</Note>
+
+## Error Handling
+
+### Retry Strategy
+
+```python
+def retry_with_backoff(func, max_retries=3, backoff_factor=2):
+    """
+    Retry mechanism with backoff
+    """
+    for attempt in range(max_retries):
+        try:
+            return func()
+        except Exception as e:
+            if attempt == max_retries - 1:
+                raise
+            
+            wait_time = backoff_factor ** attempt
+            print(f"Failed, retrying in {wait_time} seconds...")
+            time.sleep(wait_time)
+```
+
+### Common Error Handling
+
+<Tabs>
+  <Tab title="Network Errors">
+    ```python
+    try:
+        result = client.submit_task(prompt)
+    except requests.exceptions.ConnectionError:
+        print("Network connection failed, please check network")
+    except requests.exceptions.Timeout:
+        print("Request timeout, please retry later")
+    ```
+  </Tab>
+  
+  <Tab title="API Errors">
+    ```python
+    try:
+        result = client.submit_task(prompt)
+    except Exception as e:
+        if "QUOTA_EXCEEDED" in str(e):
+            print("Quota exceeded")
+        elif "INVALID_PROMPT" in str(e):
+            print("Invalid prompt")
+    ```
+  </Tab>
+  
+  <Tab title="Task Failures">
+    ```python
+    status = client.get_status(task_id)
+    if status['status'] == 'failed':
+        error_info = status.get('error', {})
+        print(f"Task failed: {error_info.get('message')}")
+        # Can try resubmitting
+    ```
+  </Tab>
+</Tabs>
+
+## Performance Optimization
+
+### Batch Processing
+
+When generating multiple videos, batch processing is recommended:
+
+```python
+async def batch_process_videos(prompts, max_concurrent=5):
+    """
+    Batch process video generation
+    """
+    semaphore = asyncio.Semaphore(max_concurrent)
+    
+    async def process_one(prompt):
+        async with semaphore:
+            return await client.submit_and_wait(prompt)
+    
+    tasks = [process_one(prompt) for prompt in prompts]
+    return await asyncio.gather(*tasks)
+```
+
+### Resource Management
+
+<Warning>
+  Note concurrency limit: Maximum 10 tasks simultaneously
+</Warning>
+
+## Cost Optimization
+
+### Model Selection Strategy
+
+```python
+def choose_model(requirements):
+    """
+    Intelligently select model based on requirements
+    """
+    if requirements.get('need_fast'):
+        return 'veo3-fast'
+    elif requirements.get('high_quality'):
+        return 'veo3-pro'
+    elif requirements.get('precise_control'):
+        return 'veo3-pro-frames'
+    else:
+        return 'veo3'  # Default to standard version
+```
+
+### Testing Recommendations
+
+<Tip>
+  Use `veo3` or `veo3-fast` for testing during development, select appropriate models for production based on needs
+</Tip>
+
+## Monitoring and Logging
+
+### Recommended Logging
+
+```python
+import logging
+from datetime import datetime
+
+class VEOLogger:
+    def __init__(self):
+        self.logger = logging.getLogger('veo_api')
+        
+    def log_task_submission(self, task_id, prompt, model):
+        self.logger.info(f"Task submitted: {task_id}")
+        self.logger.debug(f"Prompt: {prompt[:50]}...")
+        self.logger.debug(f"Model: {model}")
+        
+    def log_task_completion(self, task_id, duration, video_url):
+        self.logger.info(f"Task completed: {task_id}")
+        self.logger.info(f"Duration: {duration}s")
+        self.logger.debug(f"Video URL: {video_url}")
+```
+
+### Monitoring Metrics
+
+- Task success rate
+- Average generation time
+- API response time
+- Error rate statistics
+- Cost tracking
+

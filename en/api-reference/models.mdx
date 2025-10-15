@@ -1,0 +1,524 @@
+---
+title: 'Model List'
+sidebarTitle: 'Models API'
+description: 'Get available model list and detailed information'
+---
+
+## API Overview
+
+The Models API is used to obtain the AI model list and detailed information supported by the Laozhang API platform. Through this interface, you can view all available models, understand model features, and pricing information.
+
+## API Information
+
+**API Endpoint**: `GET https://api.laozhang.ai/v1/models`
+
+**Compatibility**: Fully compatible with OpenAI official API format
+
+## Get Model List
+
+### Request Examples
+
+<CodeGroup>
+
+```bash cURL
+curl https://api.laozhang.ai/v1/models \
+  -H "Authorization: Bearer YOUR_API_KEY"
+```
+
+```javascript Node.js
+import OpenAI from 'openai';
+
+const openai = new OpenAI({
+  apiKey: 'YOUR_API_KEY',
+  baseURL: 'https://api.laozhang.ai/v1'
+});
+
+async function getModels() {
+  const models = await openai.models.list();
+  console.log(models);
+}
+
+getModels();
+```
+
+```python Python
+from openai import OpenAI
+
+client = OpenAI(
+    api_key="YOUR_API_KEY",
+    base_url="https://api.laozhang.ai/v1"
+)
+
+models = client.models.list()
+print(models)
+```
+
+```go Go
+package main
+
+import (
+    "context"
+    "fmt"
+    "github.com/sashabaranov/go-openai"
+)
+
+func main() {
+    config := openai.DefaultConfig("YOUR_API_KEY")
+    config.BaseURL = "https://api.laozhang.ai/v1"
+    
+    client := openai.NewClientWithConfig(config)
+    
+    models, err := client.ListModels(context.Background())
+    if err != nil {
+        fmt.Printf("Error: %v\n", err)
+        return
+    }
+    
+    for _, model := range models.Models {
+        fmt.Printf("Model: %s\n", model.ID)
+    }
+}
+```
+
+</CodeGroup>
+
+### Response Format
+
+```json
+{
+  "object": "list",
+  "data": [
+    {
+      "id": "gpt-4o",
+      "object": "model",
+      "created": 1687882411,
+      "owned_by": "openai",
+      "permission": [
+        {
+          "id": "modelperm-xxx",
+          "object": "model_permission",
+          "created": 1687882411,
+          "allow_create_engine": false,
+          "allow_sampling": true,
+          "allow_logprobs": true,
+          "allow_search_indices": false,
+          "allow_view": true,
+          "allow_fine_tuning": false,
+          "organization": "*",
+          "group": null,
+          "is_blocking": false
+        }
+      ],
+      "root": "gpt-4o",
+      "parent": null
+    },
+    {
+      "id": "gpt-4o-mini",
+      "object": "model",
+      "created": 1687882411,
+      "owned_by": "openai",
+      "permission": [...],
+      "root": "gpt-4o-mini",
+      "parent": null
+    }
+  ]
+}
+```
+
+## Get Specific Model Information
+
+### Request Examples
+
+<CodeGroup>
+
+```bash cURL
+curl https://api.laozhang.ai/v1/models/gpt-4o \
+  -H "Authorization: Bearer YOUR_API_KEY"
+```
+
+```javascript Node.js
+const model = await openai.models.retrieve('gpt-4o');
+console.log(model);
+```
+
+```python Python
+model = client.models.retrieve('gpt-4o')
+print(model)
+```
+
+```go Go
+model, err := client.GetModel(context.Background(), "gpt-4o")
+if err != nil {
+    fmt.Printf("Error: %v\n", err)
+    return
+}
+fmt.Printf("Model: %+v\n", model)
+```
+
+</CodeGroup>
+
+### Response Format
+
+```json
+{
+  "id": "gpt-4o",
+  "object": "model",
+  "created": 1687882411,
+  "owned_by": "openai",
+  "permission": [
+    {
+      "id": "modelperm-xxx",
+      "object": "model_permission",
+      "created": 1687882411,
+      "allow_create_engine": false,
+      "allow_sampling": true,
+      "allow_logprobs": true,
+      "allow_search_indices": false,
+      "allow_view": true,
+      "allow_fine_tuning": false,
+      "organization": "*",
+      "group": null,
+      "is_blocking": false
+    }
+  ],
+  "root": "gpt-4o",
+  "parent": null
+}
+```
+
+## Response Field Descriptions
+
+| Field | Type | Description |
+|-------|------|-------------|
+| `id` | string | Unique identifier for the model |
+| `object` | string | Object type, fixed as "model" |
+| `created` | integer | Model creation timestamp |
+| `owned_by` | string | Model owner |
+| `permission` | array | Model permission list |
+| `root` | string | Root model name |
+| `parent` | string | Parent model name (if applicable) |
+
+## Major Model Categories
+
+### OpenAI Series
+
+<AccordionGroup>
+  <Accordion icon="openai" title="GPT-4o Series">
+    Latest multimodal models supporting text, image, and audio processing
+    
+    **Available Models:**
+    - `gpt-4o` - Latest flagship model
+    - `gpt-4o-mini` - Lightweight and efficient version
+    - `gpt-4o-2024-11-20` - Specific date version
+    
+    **Features:**
+    - Supports image understanding and generation
+    - Excellent multilingual capabilities
+    - Powerful reasoning abilities
+  </Accordion>
+  
+  <Accordion icon="openai" title="GPT-4 Series">
+    Classic GPT-4 model series providing powerful text generation capabilities
+    
+    **Available Models:**
+    - `gpt-4` - Standard GPT-4 model
+    - `gpt-4-turbo` - Faster version
+    - `gpt-4-32k` - Supports 32K context
+    
+    **Features:**
+    - Excellent text generation quality
+    - Strong logical reasoning ability
+    - Good code understanding capability
+  </Accordion>
+  
+  <Accordion icon="openai" title="O1 Series">
+    Models designed specifically for complex reasoning tasks
+    
+    **Available Models:**
+    - `o1-preview` - Reasoning capability preview version
+    - `o1-mini` - Lightweight reasoning model
+    - `o3` - Latest reasoning model
+    
+    **Features:**
+    - Powerful mathematical reasoning ability
+    - Suitable for complex logical problems
+    - Does not support streaming output
+  </Accordion>
+</AccordionGroup>
+
+### Claude Series
+
+<AccordionGroup>
+  <Accordion icon="anthropic" title="Claude 3.5 Series">
+    Anthropic's latest high-performance models
+    
+    **Available Models:**
+    - `claude-3-5-sonnet-20241022` - Most powerful version
+    - `claude-3-5-haiku-20241022` - Fast version
+    
+    **Features:**
+    - Excellent code generation capability
+    - Strong text understanding ability
+    - Supports long text processing
+  </Accordion>
+  
+  <Accordion icon="anthropic" title="Claude 3 Series">
+    Classic Claude 3 model series
+    
+    **Available Models:**
+    - `claude-3-opus-20240229` - Strongest reasoning capability
+    - `claude-3-sonnet-20240229` - Balanced version
+    - `claude-3-haiku-20240307` - Fast version
+    
+    **Features:**
+    - High security
+    - Strong reasoning ability
+    - Supports multiple task types
+  </Accordion>
+</AccordionGroup>
+
+### Google Gemini Series
+
+<AccordionGroup>
+  <Accordion icon="google" title="Gemini 1.5 Series">
+    Google's latest multimodal models
+    
+    **Available Models:**
+    - `gemini-1.5-pro` - High-performance version
+    - `gemini-1.5-flash` - Fast version
+    
+    **Features:**
+    - Ultra-long context support (up to 2 million tokens)
+    - Strong multimodal capabilities
+    - Fast processing speed
+  </Accordion>
+  
+  <Accordion icon="google" title="Gemini Pro Series">
+    Classic Gemini Pro models
+    
+    **Available Models:**
+    - `gemini-pro` - Standard version
+    - `gemini-pro-vision` - Supports image understanding
+    
+    **Features:**
+    - Good multilingual support
+    - Powerful analytical capabilities
+    - Suitable for enterprise applications
+  </Accordion>
+</AccordionGroup>
+
+### Chinese Language Models
+
+<AccordionGroup>
+  <Accordion icon="language" title="Alibaba Tongyi Series">
+    Large language models developed by Alibaba
+    
+    **Available Models:**
+    - `qwen-turbo` - Fast version
+    - `qwen-plus` - High-performance version
+    - `qwen-max` - Most powerful version
+    
+    **Features:**
+    - Outstanding Chinese capabilities
+    - Rich multi-domain knowledge
+    - High cost-performance ratio
+  </Accordion>
+  
+  <Accordion icon="code" title="DeepSeek Series">
+    Models focused on code and reasoning
+    
+    **Available Models:**
+    - `deepseek-chat` - Dialogue model
+    - `deepseek-coder` - Code-specific
+    - `deepseek-v2.5` - Latest version
+    
+    **Features:**
+    - Outstanding code capabilities
+    - Strong reasoning ability
+    - Open-source friendly
+  </Accordion>
+  
+  <Accordion icon="brain" title="Zhipu GLM Series">
+    Large models developed by Tsinghua University
+    
+    **Available Models:**
+    - `glm-4` - Fourth generation model
+    - `glm-4v` - Multimodal version
+    - `glm-3-turbo` - Fast version
+    
+    **Features:**
+    - Strong academic capabilities
+    - Excellent Chinese-English bilingual
+    - Suitable for research applications
+  </Accordion>
+</AccordionGroup>
+
+## Image Generation Models
+
+### Text-to-Image
+
+| Model ID | Provider | Features | Price |
+|----------|----------|----------|-------|
+| `dall-e-3` | OpenAI | High-quality image generation | $0.04/image |
+| `dall-e-2` | OpenAI | Classic image generation | $0.02/image |
+| `gpt-4o-image` | Laozhang API optimized | Ultra-high cost-performance | $0.01/image |
+| `flux-pro` | Flux | Professional-grade quality | $0.05/image |
+| `flux-dev` | Flux | Development version | $0.03/image |
+| `midjourney-v6` | Midjourney | Strong artistic quality | $0.08/image |
+| `stable-diffusion-xl` | Stability AI | Open-source high-quality | $0.02/image |
+
+### Image Understanding
+
+| Model ID | Provider | Features | Price |
+|----------|----------|----------|-------|
+| `gpt-4o` | OpenAI | Strong image understanding | $5/1M tokens |
+| `gpt-4o-mini` | OpenAI | Lightweight image understanding | $0.15/1M tokens |
+| `gemini-pro-vision` | Google | Multimodal understanding | $0.25/1M tokens |
+| `claude-3-5-sonnet` | Anthropic | Document image understanding | $3/1M tokens |
+
+## Audio Models
+
+### Text-to-Speech (TTS)
+
+| Model ID | Provider | Features | Price |
+|----------|----------|----------|-------|
+| `tts-1` | OpenAI | Standard speech synthesis | $15/1M characters |
+| `tts-1-hd` | OpenAI | High-definition speech synthesis | $30/1M characters |
+
+### Speech-to-Text (STT)
+
+| Model ID | Provider | Features | Price |
+|----------|----------|----------|-------|
+| `whisper-1` | OpenAI | Multilingual speech recognition | $0.006/minute |
+
+## Usage Recommendations
+
+### Select Models by Scenario
+
+<CardGroup cols={2}>
+  <Card
+    title="Daily Conversations"
+    icon="comments"
+    href="/api-reference/chat-completions"
+  >
+    Recommended: GPT-4o Mini, Claude 3.5 Haiku
+    Features: Fast response, low cost, good quality
+  </Card>
+  
+  <Card
+    title="Code Generation"
+    icon="code"
+    href="/api-reference/openai"
+  >
+    Recommended: GPT-4o, Claude 3.5 Sonnet, DeepSeek Coder
+    Features: Strong code understanding, high generation quality
+  </Card>
+  
+  <Card
+    title="Complex Reasoning"
+    icon="brain"
+    href="/models"
+  >
+    Recommended: O1 Preview, Claude 3 Opus
+    Features: Strong logical reasoning, suitable for math problems
+  </Card>
+  
+  <Card
+    title="Chinese Processing"
+    icon="language"
+    href="/api-reference/chinese-models"
+  >
+    Recommended: Tongyi Qianwen, GLM-4, Wenxin Yiyan
+    Features: Excellent Chinese understanding and generation
+  </Card>
+</CardGroup>
+
+### Cost-Performance Selection
+
+<AccordionGroup>
+  <Accordion icon="dollar-sign" title="Budget Priority">
+    **Recommended Models:**
+    - GPT-4o Mini: $0.15/1M tokens (input)
+    - Claude 3.5 Haiku: $1/1M tokens (input)
+    - Tongyi Qianwen Turbo: $0.3/1M tokens (input)
+    - DeepSeek Chat: $0.14/1M tokens (input)
+    
+    **Suitable Scenarios:**
+    - Large-scale text processing
+    - Batch data analysis
+    - Development and testing phases
+  </Accordion>
+  
+  <Accordion icon="zap" title="Performance Priority">
+    **Recommended Models:**
+    - GPT-4o: $5/1M tokens (input)
+    - Claude 3.5 Sonnet: $3/1M tokens (input)
+    - O1 Preview: $15/1M tokens (input)
+    
+    **Suitable Scenarios:**
+    - Critical business applications
+    - Complex reasoning tasks
+    - High-quality content generation
+  </Accordion>
+  
+  <Accordion icon="balance-scale" title="Balanced Choice">
+    **Recommended Models:**
+    - GPT-4 Turbo: $10/1M tokens (input)
+    - Claude 3 Sonnet: $3/1M tokens (input)
+    - Gemini 1.5 Pro: $1.25/1M tokens (input)
+    
+    **Suitable Scenarios:**
+    - Daily business applications
+    - Medium-complexity tasks
+    - Long-term stable usage
+  </Accordion>
+</AccordionGroup>
+
+## Real-time Model Information Retrieval
+
+You can obtain the latest model list and pricing information in real-time through the API:
+
+```python
+import requests
+
+# Get model list
+response = requests.get(
+    "https://api.laozhang.ai/v1/models",
+    headers={"Authorization": "Bearer YOUR_API_KEY"}
+)
+
+models = response.json()
+for model in models['data']:
+    print(f"Model: {model['id']}, Owner: {model['owned_by']}")
+```
+
+## Error Handling
+
+| Error Code | Description | Solution |
+|------------|-------------|----------|
+| 401 | Invalid API Key | Check if API Key is correct |
+| 403 | Insufficient permissions | Confirm API Key has access permissions |
+| 404 | Model does not exist | Check if model ID is correct |
+| 429 | Too many requests | Reduce request frequency |
+| 500 | Server error | Retry later or contact support |
+
+---
+
+<CardGroup cols={2}>
+  <Card
+    title="View Complete Model List"
+    icon="list"
+    href="/models"
+  >
+    View detailed information and pricing for all 200+ AI models
+  </Card>
+  
+  <Card
+    title="Start Using Chat API"
+    icon="comments"
+    href="/api-reference/chat-completions"
+  >
+    Learn how to call models using Chat Completions API
+  </Card>
+</CardGroup>
+
