@@ -1,0 +1,579 @@
+---
+title: "SeeDream 4.0 图片生成/编辑"
+description: "BytePlus 火山方舟 SeeDream 4.0 AI图片生成和编辑API，价格仅为官网65%折扣"
+icon: "palette"
+---
+
+<Info>
+**API 端点：** `https://api.laozhang.ai/v1/images/generations`
+
+**模型名称：** `seedream-4-0-250828`
+
+**计费方式：** 按次计费
+
+**价格：** $0.025/图（官网65%折扣）
+</Info>
+
+## 更新日志
+
+<Note>
+**2025年9月11日** - SeeDream 4.0 API 官网上线，老张AI 当天接入并上线
+</Note>
+
+## 核心特性
+
+<CardGroup cols={2}>
+  <Card title="文生图" icon="paintbrush">
+    纯文字描述生成高质量图片
+  </Card>
+  <Card title="图改图" icon="images">
+    基于原图进行AI编辑和重绘
+  </Card>
+  <Card title="多图输入" icon="layer-group">
+    最多支持 10 张参考图片
+  </Card>
+  <Card title="灵活尺寸" icon="expand">
+    可自定义图片分辨率和尺寸
+  </Card>
+  <Card title="OpenAI 格式" icon="code">
+    完全兼容 OpenAI Image API 格式
+  </Card>
+  <Card title="超值价格" icon="tag">
+    仅 $0.025/图，官网 65% 折扣
+  </Card>
+</CardGroup>
+
+## 重点信息
+
+### 资源来源
+
+<Tip>
+**战略合作伙伴**
+
+SeeDream 4.0 源自 **BytePlus 火山方舟**的海外版，老张AI 已与其达成战略合作，为您提供稳定可靠的服务。
+</Tip>
+
+### 技术规格
+
+| 项目 | 说明 |
+|------|------|
+| **API 格式** | OpenAI Image API 兼容 |
+| **请求端点** | `/v1/images/generations` |
+| **模型名称** | `seedream-4-0-250828` |
+| **最大参考图** | 10 张 |
+| **尺寸支持** | 可自定义分辨率 |
+| **水印** | 可选关闭 |
+
+### 价格优势
+
+<Note>
+💰 **超值定价**
+
+- **老张AI价格**：$0.025/图
+- **官方价格**：$0.03/图
+- **折扣力度**：相当于官网 **65% 折扣**
+- **充值优惠**：充值 100 美金 +15% 赠送，折上折
+- **实际成本**：约 **0.14 元/图**
+
+价格等同于 Nano Banana (Gemini 图片生成)，性价比极高！
+</Note>
+
+## 准备工作
+
+<Steps>
+  <Step title="创建令牌">
+    登录 [老张API令牌管理](https://api.laozhang.ai/token) 创建**按次计费**类型的令牌
+    
+    ![令牌创建界面](/images/token-create-per-request.png)
+  </Step>
+  <Step title="选择计费方式">
+    **重要**：必须选择"按次计费"类型
+  </Step>
+  <Step title="保存令牌">
+    复制生成的令牌，格式为 `sk-xxxxxx`，在代码中替换 `API_KEY`
+  </Step>
+</Steps>
+
+## 文生图 (Text to Image)
+
+### Python 版本
+
+```python
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+
+"""
+Seedream API 图片生成器 - 纯Python版本
+修改 API_KEY 即可使用
+"""
+
+# =================== 配置区域 ===================
+API_KEY = "sk-"                                              # 替换为您的API密钥
+API_URL = "https://api.laozhang.ai/v1/images/generations"    # API地址
+PROMPT = "A beautiful sunset over mountains, realistic style"  # 图片描述
+MODEL = "seedream-4-0-250828"                                # 模型名称
+OUTPUT_DIR = "."                                             # 输出目录
+# ==============================================
+
+import requests
+import os
+import datetime
+
+def generate_image(prompt, output_dir="."):
+    """生成图片并保存到本地"""
+    print(f"🎨 Seedream 图片生成器")
+    print(f"📝 提示词: {prompt}")
+    print("=" * 50)
+    
+    # API 请求参数
+    headers = {
+        "Content-Type": "application/json",
+        "Authorization": f"Bearer {API_KEY}"
+    }
+    
+    payload = {
+        "model": MODEL,
+        "prompt": prompt,
+        "response_format": "url",
+        "size": "2K",
+        "watermark": False
+    }
+    
+    try:
+        print("⏳ 正在生成图片...")
+        
+        # 调用 API
+        response = requests.post(API_URL, headers=headers, json=payload, timeout=60)
+        
+        if response.status_code != 200:
+            return False, f"API错误 ({response.status_code}): {response.text}"
+        
+        # 解析响应
+        result = response.json()
+        if "data" not in result or len(result["data"]) == 0:
+            return False, "API未返回图片数据"
+        
+        # 获取图片URL
+        image_url = result["data"][0]["url"]
+        print(f"🌐 获取图片URL成功")
+        
+        # 下载图片
+        print("⬇️ 正在下载图片...")
+        img_response = requests.get(image_url, timeout=30)
+        img_response.raise_for_status()
+        
+        # 生成文件名（带时间戳）
+        timestamp = datetime.datetime.now().strftime("%Y%m%d_%H%M%S")
+        filename = os.path.join(output_dir, f"generated_{timestamp}.jpg")
+        
+        # 保存图片
+        os.makedirs(output_dir, exist_ok=True)
+        with open(filename, 'wb') as f:
+            f.write(img_response.content)
+        
+        file_size = len(img_response.content)
+        return True, f"✅ 生成成功: {filename} ({file_size // 1024}KB)"
+        
+    except Exception as e:
+        return False, f"生成失败: {str(e)}"
+
+def main():
+    """主函数"""
+    print("🚀 Seedream API 图片生成器 - Python版本")
+    print("=" * 50)
+    
+    # 检查 API 密钥
+    if API_KEY == "sk-" or not API_KEY:
+        print("⚠️  请先修改代码顶部的 API_KEY")
+        print("   将 'sk-' 替换为您的真实API密钥")
+        print()
+        print("📋 使用说明:")
+        print("1. 修改 API_KEY 为您的真实密钥")
+        print("2. 可选：修改 PROMPT 生成不同内容的图片")
+        print("3. 运行: python3 seedream-text-to-image.py")
+        return
+    
+    # 执行图片生成
+    success, message = generate_image(PROMPT, OUTPUT_DIR)
+    print(message)
+    
+    if success:
+        print()
+        print("🎉 任务完成！")
+        print("💡 提示：修改 PROMPT 可以生成不同内容的图片")
+
+if __name__ == "__main__":
+    main()
+```
+
+### Curl 简单版本
+
+```bash
+curl -X POST https://api.laozhang.ai/v1/images/generations \
+  -H "Content-Type: application/json" \
+  -H "Authorization: Bearer sk-YOUR_API_KEY" \
+  -d '{
+    "model": "seedream-4-0-250828",
+    "prompt": "A beautiful sunset over mountains, realistic style",
+    "response_format": "url",
+    "size": "2K",
+    "watermark": false
+}'
+```
+
+### Curl 一行版本（带自动下载）
+
+<Tip>
+需要安装 python3，会自动解析响应并下载图片
+</Tip>
+
+```bash
+curl -X POST https://api.laozhang.ai/v1/images/generations \
+  -H "Content-Type: application/json" \
+  -H "Authorization: Bearer sk-YOUR_API_KEY" \
+  -d '{"model": "seedream-4-0-250828","prompt": "A beautiful sunset over mountains, realistic style","response_format": "url","size": "2K","watermark": false}' \
+  | python3 -c "import json,sys,os; data=json.loads(sys.stdin.read()); os.system(f'curl -L -o generated_\$(date +%Y%m%d_%H%M%S).jpg \"{data[\"data\"][0][\"url\"]}\"') if 'data' in data else print('Error')"
+```
+
+## 图改图 (Image to Image)
+
+基于原图进行AI编辑和重绘，支持最多 10 张参考图。
+
+### Python 版本
+
+```python
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+
+"""
+Seedream API 图片编辑器 - Python版本
+基于原图生成新图片，修改 API_KEY 即可使用
+"""
+
+# =================== 配置区域 ===================
+API_KEY = "sk-"                                              # 替换为您的API密钥
+API_URL = "https://api.laozhang.ai/v1/images/generations"    # 图片编辑API地址        
+PROMPT = "Generate a close-up image of a dog lying on lush grass."  # 编辑提示词
+IMAGE_URL = "https://ark-doc.tos-ap-southeast-1.bytepluses.com/doc_image/seedream4_imageToimage.png"  # 原图URL
+MODEL = "seedream-4-0-250828"                                # 使用的模型
+OUTPUT_DIR = "."                                             # 输出目录
+# ==============================================
+
+import requests
+import os
+import datetime
+
+def edit_image(prompt, image_url, output_dir="."):
+    """基于原图生成编辑后的图片"""
+    print(f"🎨 Seedream 图片编辑器")
+    print(f"📝 编辑提示: {prompt}")
+    print(f"🖼️  原图链接: {image_url[:50]}...")
+    print("=" * 50)
+    
+    # API 请求参数
+    headers = {
+        "Content-Type": "application/json",
+        "Authorization": f"Bearer {API_KEY}"
+    }
+    
+    payload = {
+        "model": MODEL,
+        "prompt": prompt,
+        "image": image_url,
+        "sequential_image_generation": "disabled",
+        "response_format": "url",
+        "size": "2K",
+        "stream": False,
+        "watermark": False
+    }
+    
+    try:
+        print("⏳ 正在编辑图片...")
+        
+        # 调用 API
+        response = requests.post(API_URL, headers=headers, json=payload, timeout=60)
+        
+        if response.status_code != 200:
+            return False, f"API错误 ({response.status_code}): {response.text}"
+        
+        # 解析响应
+        result = response.json()
+        if "data" not in result or len(result["data"]) == 0:
+            return False, "API未返回图片数据"
+        
+        # 获取图片URL
+        edited_image_url = result["data"][0]["url"]
+        print(f"🌐 获取编辑图片URL成功")
+        
+        # 下载图片
+        print("⬇️ 正在下载编辑后的图片...")
+        img_response = requests.get(edited_image_url, timeout=30)
+        img_response.raise_for_status()
+        
+        # 生成文件名（带时间戳）
+        timestamp = datetime.datetime.now().strftime("%Y%m%d_%H%M%S")
+        filename = os.path.join(output_dir, f"edited_{timestamp}.jpg")
+        
+        # 保存图片
+        os.makedirs(output_dir, exist_ok=True)
+        with open(filename, 'wb') as f:
+            f.write(img_response.content)
+        
+        file_size = len(img_response.content)
+        return True, f"✅ 编辑成功: {filename} ({file_size // 1024}KB)"
+        
+    except Exception as e:
+        return False, f"编辑失败: {str(e)}"
+
+def main():
+    """主函数"""
+    print("🚀 Seedream API 图片编辑器 - Python版本")
+    print("=" * 50)
+    
+    # 检查 API 密钥
+    if API_KEY == "sk-" or not API_KEY:
+        print("⚠️  请先修改代码顶部的 API_KEY")
+        print("   将 'sk-' 替换为您的真实API密钥")
+        print()
+        print("📋 使用说明:")
+        print("1. 修改 API_KEY 为您的真实密钥")
+        print("2. 修改 IMAGE_URL 为您要编辑的图片链接")
+        print("3. 修改 PROMPT 描述您想要的编辑效果")
+        print("4. 运行: python3 seedream-image-edit.py")
+        return
+    
+    # 执行图片编辑
+    success, message = edit_image(PROMPT, IMAGE_URL, OUTPUT_DIR)
+    print(message)
+    
+    if success:
+        print()
+        print("🎉 编辑完成！")
+        print("💡 提示：修改 PROMPT 和 IMAGE_URL 可以编辑不同的图片")
+
+if __name__ == "__main__":
+    main()
+```
+
+### Curl 版本
+
+```bash
+#!/bin/bash
+
+# Seedream API 图片编辑器 - Curl版本
+# 基于原图生成新图片，修改 API_KEY 即可使用
+
+# =============== 配置区域 ===============
+API_KEY="sk-YOUR_API_KEY"                                    # 请替换为您的API密钥
+API_URL="https://api.laozhang.ai/v1/images/generations"      # 图片编辑API地址
+PROMPT="Generate a close-up image of a dog lying on lush grass."  # 编辑提示词
+IMAGE_URL="https://ark-doc.tos-ap-southeast-1.bytepluses.com/doc_image/seedream4_imageToimage.png"  # 原图URL
+MODEL="seedream-4-0-250828"                                  # 模型名称
+# ====================================
+
+# 检查API密钥
+if [ "$API_KEY" = "sk-YOUR_API_KEY" ]; then
+    echo "⚠️  请先修改脚本中的 API_KEY"
+    echo "   将 'sk-YOUR_API_KEY' 替换为您的真实API密钥"
+    echo ""
+    echo "📋 使用说明:"
+    echo "1. 修改 API_KEY 为您的真实密钥"
+    echo "2. 修改 IMAGE_URL 为您要编辑的图片链接"
+    echo "3. 修改 PROMPT 描述您想要的编辑效果"
+    echo "4. 运行: ./seedream-image-edit.sh"
+    exit 1
+fi
+
+# 生成输出文件名
+TIMESTAMP=$(date +"%Y%m%d_%H%M%S")
+OUTPUT_FILE="edited_${TIMESTAMP}.jpg"
+
+echo "🎨 Seedream API 图片编辑器 - Curl版本"
+echo "========================================"
+echo "📝 编辑提示: $PROMPT"
+echo "🖼️  原图链接: ${IMAGE_URL:0:50}..."
+echo "📁 输出文件: $OUTPUT_FILE"
+echo "========================================"
+
+# 步骤1: 调用API获取JSON响应
+echo "⏳ 正在编辑图片..."
+
+# 构建JSON请求体
+JSON_DATA=$(cat <<EOF
+{
+  "model": "$MODEL",
+  "prompt": "$PROMPT",
+  "image": "$IMAGE_URL",
+  "sequential_image_generation": "disabled",
+  "response_format": "url",
+  "size": "2K",
+  "stream": false,
+  "watermark": false
+}
+EOF
+)
+
+RESPONSE=$(curl -s -X POST "$API_URL" \
+  -H "Content-Type: application/json" \
+  -H "Authorization: Bearer $API_KEY" \
+  -d "$JSON_DATA")
+
+# 检查API响应
+if [ -z "$RESPONSE" ]; then
+    echo "❌ API无响应，请检查网络连接"
+    exit 1
+fi
+
+echo "✅ API响应成功"
+
+# 步骤2: 使用Python解析JSON并提取图片URL
+echo "🔍 解析编辑后的图片URL..."
+EDITED_IMAGE_URL=$(echo "$RESPONSE" | python3 -c "
+import json
+import sys
+
+try:
+    data = json.loads(sys.stdin.read())
+    
+    if 'data' in data and len(data['data']) > 0:
+        url = data['data'][0]['url']
+        print(url)
+    else:
+        print('ERROR: 未找到图片URL')
+        sys.exit(1)
+        
+except Exception as e:
+    print(f'ERROR: {e}')
+    sys.exit(1)
+")
+
+# 检查URL解析结果
+if [[ "$EDITED_IMAGE_URL" == ERROR* ]]; then
+    echo "❌ URL解析失败: $EDITED_IMAGE_URL"
+    echo "📄 原始API响应:"
+    echo "$RESPONSE"
+    exit 1
+fi
+
+echo "🌐 编辑图片URL获取成功"
+
+# 步骤3: 下载编辑后的图片
+echo "⬇️ 正在下载编辑后的图片..."
+curl -s -L -o "$OUTPUT_FILE" "$EDITED_IMAGE_URL"
+
+# 检查下载结果
+if [ -f "$OUTPUT_FILE" ] && [ -s "$OUTPUT_FILE" ]; then
+    FILE_SIZE=$(du -h "$OUTPUT_FILE" | cut -f1)
+    echo "✅ 图片编辑成功!"
+    echo "📁 文件: $OUTPUT_FILE"
+    echo "📊 大小: $FILE_SIZE"
+    echo ""
+    echo "🎉 完成! 请查看编辑后的图片文件"
+    echo "💡 提示: 修改 PROMPT 和 IMAGE_URL 可以编辑不同的图片"
+else
+    echo "❌ 图片下载失败"
+    echo "🔗 您可以手动访问: $EDITED_IMAGE_URL"
+fi
+```
+
+## 相关资源
+
+### 官方文档
+
+<CardGroup cols={2}>
+  <Card title="API 开发文档" icon="book" href="https://docs.byteplus.com/en/docs/ModelArk/1541523">
+    BytePlus ModelArk 官方技术文档
+  </Card>
+  <Card title="用户手册" icon="file-lines" href="https://docs.byteplus.com/en/docs/ModelArk/seedream-4-0-user-manual">
+    Seedream 4.0 用户手册
+  </Card>
+  <Card title="用户指南" icon="compass" href="https://docs.byteplus.com/en/docs/ModelArk/seedream-4-0-user-guide">
+    Seedream 4.0 使用指南
+  </Card>
+  <Card title="提示词技巧" icon="lightbulb" href="https://docs.byteplus.com/en/docs/ModelArk/seedream-4-0-user-manual#prompting-guide">
+    提示词和风格关键词指南
+  </Card>
+</CardGroup>
+
+### 常用边界问题
+
+<AccordionGroup>
+  <Accordion title="尺寸和分辨率" icon="ruler">
+    支持自定义图片尺寸，可通过 `size` 参数指定：
+    - `2K`：2048像素（推荐）
+    - 也支持自定义分辨率
+    
+    详见官方文档的参数说明。
+  </Accordion>
+
+  <Accordion title="参考图数量" icon="images">
+    - 文生图：无需参考图
+    - 图改图：支持 1-10 张参考图
+    - 通过 `image` 参数传入图片URL或Base64
+  </Accordion>
+
+  <Accordion title="水印设置" icon="droplet">
+    可通过 `watermark` 参数控制：
+    - `false`：无水印（推荐）
+    - `true`：带水印
+  </Accordion>
+
+  <Accordion title="响应格式" icon="file-code">
+    支持两种响应格式（`response_format`）：
+    - `url`：返回图片链接（推荐，方便下载）
+    - `b64_json`：返回Base64编码
+  </Accordion>
+
+  <Accordion title="生成模式" icon="sliders">
+    通过 `sequential_image_generation` 参数控制：
+    - `disabled`：标准生成模式（推荐）
+    - `enabled`：顺序生成模式
+  </Accordion>
+</AccordionGroup>
+
+## API 参数说明
+
+### 请求参数
+
+| 参数 | 类型 | 必需 | 说明 |
+|------|------|------|------|
+| `model` | string | ✓ | 模型名称：`seedream-4-0-250828` |
+| `prompt` | string | ✓ | 图片描述或编辑提示词 |
+| `image` | string | ✗ | 参考图片URL（图改图时使用） |
+| `size` | string | ✗ | 图片尺寸，默认 `2K` |
+| `response_format` | string | ✗ | 响应格式：`url` 或 `b64_json`，默认 `url` |
+| `watermark` | boolean | ✗ | 是否添加水印，默认 `false` |
+| `sequential_image_generation` | string | ✗ | 生成模式，默认 `disabled` |
+| `stream` | boolean | ✗ | 是否流式响应，默认 `false` |
+
+### 响应格式
+
+```json
+{
+  "created": 1726051200,
+  "data": [
+    {
+      "url": "https://example.com/generated_image.jpg",
+      "revised_prompt": "..."
+    }
+  ]
+}
+```
+
+## 下一步
+
+<CardGroup cols={2}>
+  <Card title="Nano Banana 图片生成" icon="sparkles" href="/api-capabilities/nano-banana-image">
+    同样 $0.025/图的 Gemini 图片生成
+  </Card>
+  <Card title="FLUX 图片生成" icon="bolt" href="/api-capabilities/flux-image-generation">
+    查看 FLUX 图片生成 API
+  </Card>
+  <Card title="API 控制台" icon="key" href="https://api.laozhang.ai/token">
+    创建 API 令牌
+  </Card>
+  <Card title="充值优惠" icon="wallet" href="https://api.laozhang.ai">
+    充值 100 美金 +15% 赠送
+  </Card>
+</CardGroup>
+
