@@ -206,8 +206,18 @@
                 "en/api-manual",
                 "en/pricing",
                 "en/changelog",
-                "en/resources",
-                "en/scenarios"
+                "en/resources"
+              ]
+            },
+            {
+              "group": "API Capabilities",
+              "pages": [
+                "en/api-capabilities/model-info",
+                "en/api-capabilities/openai-sdk",
+                "en/api-capabilities/openai-responses",
+                "en/api-capabilities/vision-understanding",
+                "en/api-capabilities/gpt-image-1",
+                "en/api-capabilities/image-edit"
               ]
             },
             {
@@ -273,6 +283,12 @@
         {
           "tab": "Use Cases",
           "groups": [
+            {
+              "group": "Overview",
+              "pages": [
+                "en/scenarios"
+              ]
+            },
             {
               "group": "Conversational AI",
               "pages": [
