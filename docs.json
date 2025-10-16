@@ -419,13 +419,13 @@
     },
     "en": {
       "og:type": "website",
-      "og:title": "LaoZhang API - Enterprise AI Model API Gateway",
-      "og:description": "Access ChatGPT, Claude, Gemini and 200+ AI models from China. Fully compatible with OpenAI interface, supports Alipay payment.",
+      "og:title": "LaoZhang API - Unified AI API Gateway | 200+ Models",
+      "og:description": "Access 200+ AI models through a single OpenAI-compatible API. ChatGPT, Claude, Gemini, DeepSeek and more. Pay-as-you-go pricing, no subscription.",
       "og:image": "/logo/logo-default.webp",
       "og:url": "https://docs.laozhang.ai/en",
       "twitter:card": "summary_large_image",
-      "twitter:title": "LaoZhang API - Enterprise AI Model API Gateway",
-      "twitter:description": "Access 200+ AI models from China. OpenAI compatible, Alipay supported.",
+      "twitter:title": "LaoZhang API - Unified AI API Gateway",
+      "twitter:description": "200+ AI models, one API. OpenAI compatible. Pay-as-you-go pricing, no subscription.",
       "twitter:image": "/logo/logo-default.webp"
     }
   },

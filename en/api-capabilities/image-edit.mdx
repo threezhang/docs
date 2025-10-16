@@ -1,0 +1,576 @@
+---
+title: Image Edit API | OpenAI-Compatible Image Editing | LaoZhang API
+sidebarTitle: GPT-Image-1 Image Edit
+description: Professional image editing and modification using OpenAI official Image Edit API format - unified API gateway with 200+ AI models
+icon: "image"
+---
+
+## Feature Overview
+
+Use OpenAI's standard image editing API through LaoZhang API to edit and modify existing images. This documentation explains how to use the Image Edit API for professional image editing.
+
+## Introduction
+
+The Image Edit API allows you to edit specific parts of an image by providing the original image, a mask, and a text prompt. This feature is particularly suitable for:
+
+- **Localized Modifications**: Only modify specific regions of an image
+- **Content Replacement**: Replace certain elements in an image
+- **Creative Editing**: Add new elements while maintaining overall style
+- **Image Restoration**: Repair or improve specific parts of an image
+
+## API Working Principle
+
+Image editing requires three key elements:
+
+1. **Original Image**: The base image to edit
+2. **Mask Image**: Specifies the region to edit (transparent areas will be edited)
+3. **Prompt**: Describes what you want to generate in the edited region
+
+<Note>
+Transparent areas (alpha channel = 0) in the mask image will be identified as parts to edit. Fully opaque areas will remain unchanged.
+</Note>
+
+## Quick Start
+
+### Basic Configuration
+
+```python
+import openai
+from PIL import Image
+import requests
+from io import BytesIO
+
+{/* Configure LaoZhang API */}
+openai.api_base = "https://api.laozhang.ai/v1"
+openai.api_key = "your-api-key"
+```
+
+### Basic Editing Example
+
+```python
+{/* Edit image */}
+response = openai.Image.create_edit(
+    image=open("original.png", "rb"),
+    mask=open("mask.png", "rb"),
+    prompt="A modern glass skyscraper with reflective windows",
+    n=1,
+    size="1024x1024"
+)
+
+{/* Get edited image URL */}
+edited_image_url = response['data'][0]['url']
+print(f"Edited image URL: {edited_image_url}")
+```
+
+## API Parameters
+
+### Request Parameters
+
+| Parameter | Type | Required | Description |
+|------|------|------|------|
+| `image` | file | Yes | Image to edit, must be PNG format, under 4MB, and square |
+| `mask` | file | Yes | Mask image specifying edit region, same format requirements as image |
+| `prompt` | string | Yes | Describes content to generate in masked area, max 1000 characters |
+| `n` | integer | No | Number of images to generate, default 1, max 10 |
+| `size` | string | No | Output image size, supports `256x256`, `512x512`, `1024x1024` (default) |
+| `response_format` | string | No | Return format, `url` (default) or `b64_json` |
+| `user` | string | No | User identifier |
+
+### Response Format
+
+```json
+{
+  "created": 1702486395,
+  "data": [
+    {
+      "url": "https://..."
+    }
+  ]
+}
+```
+
+## Creating Mask Images
+
+### Using Python PIL to Create Masks
+
+```python
+from PIL import Image, ImageDraw
+
+def create_mask(image_path, mask_areas):
+    """
+    Create mask image
+    mask_areas: list containing region coordinates to edit [(x1, y1, x2, y2), ...]
+    """
+    {/* Open original image to get dimensions */}
+    original = Image.open(image_path)
+    width, height = original.size
+
+    {/* Create all-black mask (fully opaque) */}
+    mask = Image.new('RGBA', (width, height), (0, 0, 0, 255))
+    draw = ImageDraw.Draw(mask)
+
+    {/* Draw transparent areas in specified regions (parts to edit) */}
+    for area in mask_areas:
+        draw.rectangle(area, fill=(0, 0, 0, 0))
+
+    {/* Save mask */}
+    mask.save('mask.png')
+    return mask
+
+{/* Example: create mask for center region */}
+image_path = 'original.png'
+img = Image.open(image_path)
+width, height = img.size
+
+{/* Edit center 50% of image */}
+center_area = [
+    (width * 0.25, height * 0.25,
+     width * 0.75, height * 0.75)
+]
+
+mask = create_mask(image_path, center_area)
+```
+
+### Using Circular Mask
+
+```python
+def create_circular_mask(image_path, center, radius):
+    """Create circular mask"""
+    original = Image.open(image_path)
+    width, height = original.size
+
+    {/* Create mask */}
+    mask = Image.new('RGBA', (width, height), (0, 0, 0, 255))
+    draw = ImageDraw.Draw(mask)
+
+    {/* Draw circular transparent area */}
+    x, y = center
+    draw.ellipse(
+        [(x - radius, y - radius),
+         (x + radius, y + radius)],
+        fill=(0, 0, 0, 0)
+    )
+
+    mask.save('circular_mask.png')
+    return mask
+```
+
+## Complete Usage Examples
+
+### Complete Python Example
+
+```python
+import openai
+from PIL import Image, ImageDraw
+import requests
+from io import BytesIO
+import os
+
+{/* Configuration */}
+openai.api_base = "https://api.laozhang.ai/v1"
+openai.api_key = "your-api-key"
+
+class ImageEditor:
+    def __init__(self):
+        self.api_key = openai.api_key
+
+    def create_mask_for_object_removal(self, image_path, bbox):
+        """Create mask for object removal"""
+        img = Image.open(image_path)
+        mask = Image.new('RGBA', img.size, (0, 0, 0, 255))
+        draw = ImageDraw.Draw(mask)
+        draw.rectangle(bbox, fill=(0, 0, 0, 0))
+        return mask
+
+    def edit_image(self, image_path, mask, prompt):
+        """Execute image editing"""
+        try:
+            {/* Prepare files */}
+            with open(image_path, 'rb') as img_file:
+                {/* Save mask to temporary file */}
+                mask_path = 'temp_mask.png'
+                mask.save(mask_path)
+
+                with open(mask_path, 'rb') as mask_file:
+                    {/* Call API */}
+                    response = openai.Image.create_edit(
+                        image=img_file,
+                        mask=mask_file,
+                        prompt=prompt,
+                        n=1,
+                        size="1024x1024"
+                    )
+
+                {/* Clean up temporary file */}
+                os.remove(mask_path)
+
+                return response['data'][0]['url']
+
+        except Exception as e:
+            print(f"Edit failed: {e}")
+            return None
+
+    def download_result(self, url, output_path):
+        """Download edited image"""
+        response = requests.get(url)
+        img = Image.open(BytesIO(response.content))
+        img.save(output_path)
+        print(f"Saved to: {output_path}")
+
+{/* Usage example */}
+editor = ImageEditor()
+
+{/* 1. Object removal example */}
+image_path = "street_photo.png"
+{/* Assume object to remove is at position (300, 200) to (500, 400) */}
+bbox = (300, 200, 500, 400)
+mask = editor.create_mask_for_object_removal(image_path, bbox)
+
+{/* Edit image, fill removed area with background */}
+result_url = editor.edit_image(
+    image_path,
+    mask,
+    "empty street background, seamlessly blended"
+)
+
+if result_url:
+    editor.download_result(result_url, "edited_street.png")
+```
+
+### Node.js Example
+
+```javascript
+const OpenAI = require('openai');
+const fs = require('fs');
+const { createCanvas, loadImage } = require('canvas');
+
+{/* Initialize client */}
+const openai = new OpenAI({
+  apiKey: 'your-api-key',
+  baseURL: 'https://api.laozhang.ai/v1'
+});
+
+{/* Create mask */}
+async function createMask(imagePath, editArea) {
+  const image = await loadImage(imagePath);
+  const canvas = createCanvas(image.width, image.height);
+  const ctx = canvas.getContext('2d');
+
+  {/* Fill black background (parts not to edit) */}
+  ctx.fillStyle = 'black';
+  ctx.fillRect(0, 0, image.width, image.height);
+
+  {/* Set transparent area (parts to edit) */}
+  ctx.globalCompositeOperation = 'destination-out';
+  ctx.fillRect(editArea.x, editArea.y, editArea.width, editArea.height);
+
+  {/* Save mask */}
+  const buffer = canvas.toBuffer('image/png');
+  fs.writeFileSync('mask.png', buffer);
+  return 'mask.png';
+}
+
+{/* Edit image */}
+async function editImage(imagePath, maskPath, prompt) {
+  try {
+    const response = await openai.images.edit({
+      image: fs.createReadStream(imagePath),
+      mask: fs.createReadStream(maskPath),
+      prompt: prompt,
+      n: 1,
+      size: "1024x1024"
+    });
+
+    return response.data[0].url;
+  } catch (error) {
+    console.error('Edit failed:', error);
+    return null;
+  }
+}
+
+{/* Usage example */}
+async function main() {
+  const imagePath = 'original.png';
+
+  {/* Create mask - edit bottom-right region */}
+  const editArea = {
+    x: 512,
+    y: 512,
+    width: 512,
+    height: 512
+  };
+
+  const maskPath = await createMask(imagePath, editArea);
+
+  {/* Execute edit */}
+  const editedUrl = await editImage(
+    imagePath,
+    maskPath,
+    "A beautiful garden with colorful flowers"
+  );
+
+  if (editedUrl) {
+    console.log('Edit successful:', editedUrl);
+  }
+
+  {/* Clean up temporary file */}
+  fs.unlinkSync(maskPath);
+}
+
+main();
+```
+
+## Practical Application Scenarios
+
+### 1. Background Replacement
+
+```python
+def replace_background(image_path, prompt_background):
+    """Replace image background"""
+    {/* Assume we have mask with foreground segmented */}
+    mask = Image.open("foreground_mask.png")
+
+    response = openai.Image.create_edit(
+        image=open(image_path, "rb"),
+        mask=mask,
+        prompt=f"Professional studio background, {prompt_background}",
+        size="1024x1024"
+    )
+
+    return response['data'][0]['url']
+
+{/* Usage example */}
+new_url = replace_background(
+    "portrait.png",
+    "gradient blue background with soft lighting"
+)
+```
+
+### 2. Object Removal
+
+```python
+def remove_object(image_path, object_bbox):
+    """Remove specific object from image"""
+    {/* Create mask for object area */}
+    img = Image.open(image_path)
+    mask = Image.new('RGBA', img.size, (0, 0, 0, 255))
+    draw = ImageDraw.Draw(mask)
+    draw.rectangle(object_bbox, fill=(0, 0, 0, 0))
+
+    {/* Save mask */}
+    mask_path = "object_mask.png"
+    mask.save(mask_path)
+
+    {/* Edit image */}
+    response = openai.Image.create_edit(
+        image=open(image_path, "rb"),
+        mask=open(mask_path, "rb"),
+        prompt="seamlessly blend with surrounding environment, natural continuation of background",
+        size="1024x1024"
+    )
+
+    return response['data'][0]['url']
+```
+
+### 3. Clothing Change
+
+```python
+def change_clothing(portrait_path, clothing_mask_path, new_clothing_desc):
+    """Change person's clothing"""
+    response = openai.Image.create_edit(
+        image=open(portrait_path, "rb"),
+        mask=open(clothing_mask_path, "rb"),
+        prompt=f"person wearing {new_clothing_desc}, natural fit and lighting",
+        size="1024x1024"
+    )
+
+    return response['data'][0]['url']
+
+{/* Example */}
+new_url = change_clothing(
+    "person.png",
+    "clothing_mask.png",
+    "elegant black business suit with white shirt"
+)
+```
+
+### 4. Image Restoration
+
+```python
+def repair_damaged_area(image_path, damage_mask_path):
+    """Repair damaged image area"""
+    response = openai.Image.create_edit(
+        image=open(image_path, "rb"),
+        mask=open(damage_mask_path, "rb"),
+        prompt="restore and repair the damaged area, maintain original style and details",
+        size="1024x1024"
+    )
+
+    return response['data'][0]['url']
+```
+
+## Advanced Techniques
+
+### 1. Feathered Mask
+
+Create mask with feathered edges for more natural edits:
+
+```python
+from PIL import ImageFilter
+
+def create_feathered_mask(image_path, edit_area, feather_radius=20):
+    """Create feathered mask"""
+    img = Image.open(image_path)
+    mask = Image.new('L', img.size, 0)
+    draw = ImageDraw.Draw(mask)
+
+    {/* Draw edit area */}
+    draw.rectangle(edit_area, fill=255)
+
+    {/* Apply Gaussian blur for feathering */}
+    mask = mask.filter(ImageFilter.GaussianBlur(feather_radius))
+
+    {/* Convert to RGBA */}
+    rgba_mask = Image.new('RGBA', img.size, (0, 0, 0, 255))
+    rgba_mask.putalpha(255 - mask)
+
+    return rgba_mask
+```
+
+### 2. Multi-Region Editing
+
+Edit multiple regions simultaneously:
+
+```python
+def create_multi_region_mask(image_path, regions):
+    """Create multi-region mask"""
+    img = Image.open(image_path)
+    mask = Image.new('RGBA', img.size, (0, 0, 0, 255))
+    draw = ImageDraw.Draw(mask)
+
+    for region in regions:
+        if region['type'] == 'rectangle':
+            draw.rectangle(region['coords'], fill=(0, 0, 0, 0))
+        elif region['type'] == 'ellipse':
+            draw.ellipse(region['coords'], fill=(0, 0, 0, 0))
+
+    return mask
+
+{/* Usage example */}
+regions = [
+    {'type': 'rectangle', 'coords': (100, 100, 300, 300)},
+    {'type': 'ellipse', 'coords': (400, 400, 600, 600)}
+]
+
+mask = create_multi_region_mask('image.png', regions)
+```
+
+### 3. Smart Prompt Building
+
+```python
+def build_context_aware_prompt(original_desc, edit_type, new_element):
+    """Build context-aware prompt"""
+    prompts = {
+        'replace': f"Replace with {new_element}, matching the {original_desc} style and lighting",
+        'remove': f"Natural {original_desc} background, seamlessly filled",
+        'add': f"Add {new_element} that fits naturally with {original_desc}",
+        'repair': f"Restore and fix, maintaining {original_desc} characteristics"
+    }
+
+    return prompts.get(edit_type, f"{new_element} in {original_desc}")
+```
+
+## Best Practices
+
+### 1. Image Preparation
+
+- **Format Requirement**: Ensure image is PNG format
+- **Size Requirement**: Image must be square
+- **File Size**: Under 4MB
+- **Resolution Recommendation**: Use 1024x1024 for best results
+
+### 2. Mask Design
+
+- **Precise Masks**: More precise masks yield better editing results
+- **Edge Handling**: Consider using feathered edges for more natural edits
+- **Region Size**: Avoid overly large edit regions, may affect results
+
+### 3. Prompt Optimization
+
+```python
+{/* Good prompt examples */}
+good_prompts = [
+    "Empty wooden table surface, matching the existing wood grain and lighting",
+    "Clear blue sky with soft clouds, natural continuation of the horizon",
+    "Modern glass building facade, reflecting the surrounding environment"
+]
+
+{/* Prompts to avoid */}
+bad_prompts = [
+    "Something different",  {/* Too vague */}
+    "Red",  {/* Lacks context */}
+    "Change it"  {/* No specific instructions */}
+]
+```
+
+### 4. Error Handling
+
+```python
+def safe_edit_image(image_path, mask_path, prompt, max_retries=3):
+    """Image editing with error handling and retry"""
+    for attempt in range(max_retries):
+        try:
+            {/* Validate files */}
+            if not os.path.exists(image_path):
+                raise FileNotFoundError(f"Image file not found: {image_path}")
+
+            if not os.path.exists(mask_path):
+                raise FileNotFoundError(f"Mask file not found: {mask_path}")
+
+            {/* Check file size */}
+            if os.path.getsize(image_path) > 4 * 1024 * 1024:
+                raise ValueError("Image file larger than 4MB")
+
+            {/* Execute edit */}
+            response = openai.Image.create_edit(
+                image=open(image_path, "rb"),
+                mask=open(mask_path, "rb"),
+                prompt=prompt,
+                size="1024x1024"
+            )
+
+            return response['data'][0]['url']
+
+        except Exception as e:
+            print(f"Attempt {attempt + 1} failed: {e}")
+            if attempt == max_retries - 1:
+                raise
+            time.sleep(2 ** attempt)  {/* Exponential backoff */}
+```
+
+## FAQ
+
+### Q: Why don't edit results match expectations?
+A: Check if mask is correct, ensuring transparent areas accurately cover parts to edit. Also optimize prompt for more specific descriptions.
+
+### Q: Which image formats are supported?
+A: Currently only PNG format is supported, and images must be square.
+
+### Q: How to achieve more natural edit results?
+A: Use feathered masks and emphasize "natural blending", "matching surrounding environment" in prompts.
+
+### Q: Can multiple regions be edited simultaneously?
+A: Yes, simply mark multiple transparent areas in the mask.
+
+### Q: What limitations exist when editing large images?
+A: Image files must be under 4MB, compression before upload is recommended.
+
+## Related Resources
+
+- [OpenAI Image Editing Guide](https://platform.openai.com/docs/guides/images/edits)
+- [PIL/Pillow Documentation](https://pillow.readthedocs.io/)
+- [LaoZhang API Console](https://api.laozhang.ai)
+
+<Note>
+The Image Edit API is particularly suitable for scenarios requiring precise control over edit regions. Through proper mask design and prompt optimization, professional-grade image editing results can be achieved.
+</Note>

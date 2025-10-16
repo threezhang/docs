@@ -1,0 +1,594 @@
+---
+title: OpenAI Responses API Support | Next-Gen Agent API | LaoZhang API
+description: New generation agent API combining chat completions simplicity with powerful tool calling capabilities - OpenAI-compatible unified API gateway
+icon: "message-circle-reply"
+---
+
+## /v1/responses Endpoint Introduction
+
+LaoZhang API fully supports OpenAI's latest Responses API, the next-generation agent-building interface introduced in March 2025. Responses API combines the simplicity of Chat Completions with the tool usage and state management capabilities of Assistants API, providing developers with a more flexible and powerful AI application development experience.
+
+<Note>
+  **Next-Gen API**: Responses API is a superset of Chat Completions, providing all Chat Completions features plus advanced capabilities like built-in tools and state management. However, it only supports select new OpenAI models - see details below.
+</Note>
+
+## Core Features
+
+<CardGroup cols={2}>
+  <Card
+    title="Built-in Tool Support"
+    icon="codesandbox"
+  >
+    Rich tools including web search, file search, code interpreter, function calling
+  </Card>
+  <Card
+    title="State Management"
+    icon="database"
+  >
+    Maintain conversation context and state via previous_response_id
+  </Card>
+  <Card
+    title="Reasoning Persistence"
+    icon="brain"
+  >
+    O3/O4-mini reasoning tokens persist across requests
+  </Card>
+  <Card
+    title="Full Compatibility"
+    icon="scale"
+  >
+    Supports all tool-capable GPT-4.1 and O3 series models
+  </Card>
+</CardGroup>
+
+## Supported Models
+
+### Reasoning Models (Recommended)
+- **O3 Series**: `o3`, `o3-pro`, `o4-mini`
+- **Features**: Reasoning tokens persist across requests for smarter contextual understanding
+
+### Conversational Models
+- **GPT-4.1 Series**: `gpt-4.1`, `gpt-4.1-mini`
+- **Features**: Powerful tool calling and multimodal capabilities
+
+<Warning>
+  **Model Requirements**: Only newer models support the `/v1/responses` endpoint. Legacy models like GPT-3.5 do not support this interface.
+</Warning>
+
+## Basic Usage
+
+### Simple Conversation
+
+<CodeGroup>
+
+```bash cURL
+curl https://api.laozhang.ai/v1/responses \
+  -H "Content-Type: application/json" \
+  -H "Authorization: Bearer YOUR_API_KEY" \
+  -d '{
+    "model": "gpt-4.1",
+    "input": "Hello! How can you help me today?",
+    "instructions": "You are a helpful assistant."
+  }'
+```
+
+```python Python
+from openai import OpenAI
+
+client = OpenAI(
+    api_key="YOUR_API_KEY",
+    base_url="https://api.laozhang.ai/v1"
+)
+
+response = client.responses.create(
+    model="gpt-4.1",
+    input="Hello! How can you help me today?",
+    instructions="You are a helpful assistant."
+)
+
+print(response.output[0].content[0].text)
+```
+
+```javascript Node.js
+import OpenAI from 'openai';
+
+const openai = new OpenAI({
+  apiKey: 'YOUR_API_KEY',
+  baseURL: 'https://api.laozhang.ai/v1'
+});
+
+const response = await openai.responses.create({
+  model: 'gpt-4.1',
+  input: 'Hello! How can you help me today?',
+  instructions: 'You are a helpful assistant.'
+});
+
+console.log(response.output[0].content[0].text);
+```
+
+</CodeGroup>
+
+### Actual Response Example
+
+Complete response format:
+
+```json
+{
+  "id": "resp_6884fcab4930819dbbc02f15cbe63f6c0a92c38ff214d10a",
+  "object": "response",
+  "created_at": 1753545899,
+  "status": "completed",
+  "background": false,
+  "error": null,
+  "incomplete_details": null,
+  "instructions": "You are a helpful assistant.",
+  "max_output_tokens": null,
+  "max_tool_calls": null,
+  "model": "gpt-4.1-2025-04-14",
+  "output": [
+    {
+      "id": "msg_6884fcab8f18819dbcdf349f01b424f80a92c38ff214d10a",
+      "type": "message",
+      "status": "completed",
+      "content": [
+        {
+          "type": "output_text",
+          "annotations": [],
+          "logprobs": [],
+          "text": "Hello! How can I assist you today?"
+        }
+      ],
+      "role": "assistant"
+    }
+  ],
+  "parallel_tool_calls": true,
+  "previous_response_id": null,
+  "prompt_cache_key": null,
+  "reasoning": {
+    "effort": null,
+    "summary": null
+  },
+  "safety_identifier": null,
+  "service_tier": "default",
+  "store": true,
+  "temperature": 1.0,
+  "text": {
+    "format": {
+      "type": "text"
+    }
+  },
+  "tool_choice": "auto",
+  "tools": [],
+  "top_logprobs": 0,
+  "top_p": 1.0,
+  "truncation": "disabled",
+  "usage": {
+    "input_tokens": 19,
+    "input_tokens_details": {
+      "cached_tokens": 0
+    },
+    "output_tokens": 10,
+    "output_tokens_details": {
+      "reasoning_tokens": 0
+    },
+    "total_tokens": 29
+  },
+  "user": null,
+  "metadata": {}
+}
+```
+
+## Request Parameters
+
+### Required Parameters
+
+| Parameter | Type | Description |
+|------|------|------|
+| `model` | string | Model name, e.g., `gpt-4.1`, `o3` |
+| `input` | string | User input content |
+
+### Optional Parameters
+
+| Parameter | Type | Default | Description |
+|------|------|--------|------|
+| `instructions` | string | null | System instructions defining assistant behavior |
+| `previous_response_id` | string | null | Previous response ID for context maintenance |
+| `temperature` | float | 1.0 | Controls output randomness (0-2) |
+| `max_output_tokens` | int | null | Maximum output tokens |
+| `tools` | array | [] | Available tools list |
+| `tool_choice` | string | "auto" | Tool selection strategy |
+| `parallel_tool_calls` | boolean | true | Allow parallel tool calls |
+| `store` | boolean | true | Store conversation for training |
+| `metadata` | object | {} | Custom metadata |
+
+## Built-in Tool Support
+
+### 1. Function Calling
+
+```python
+response = client.responses.create(
+    model="gpt-4.1",
+    input="What's the weather like in New York?",
+    instructions="You are a helpful weather assistant.",
+    tools=[
+        {
+            "type": "function",
+            "function": {
+                "name": "get_weather",
+                "description": "Get current weather for a city",
+                "parameters": {
+                    "type": "object",
+                    "properties": {
+                        "city": {
+                            "type": "string",
+                            "description": "City name"
+                        }
+                    },
+                    "required": ["city"]
+                }
+            }
+        }
+    ]
+)
+```
+
+### 2. Code Interpreter
+
+```python
+response = client.responses.create(
+    model="gpt-4.1",
+    input="Create a chart showing sales data: Jan:100, Feb:150, Mar:120",
+    instructions="You are a data analyst. Use code interpreter to create visualizations.",
+    tools=[{"type": "code_interpreter"}]
+)
+```
+
+### 3. File Search
+
+```python
+response = client.responses.create(
+    model="gpt-4.1",
+    input="Search for information about quarterly reports",
+    instructions="You are a document analyst.",
+    tools=[{"type": "file_search"}]
+)
+```
+
+## State Management
+
+### Maintaining Conversation Context
+
+```python
+{/* First conversation round */}
+response1 = client.responses.create(
+    model="gpt-4.1",
+    input="My name is Alice. Please remember this.",
+    instructions="You are a helpful assistant with good memory."
+)
+
+{/* Second round - use previous_response_id to maintain context */}
+response2 = client.responses.create(
+    model="gpt-4.1",
+    input="What's my name?",
+    instructions="You are a helpful assistant with good memory.",
+    previous_response_id=response1.id
+)
+
+print(response2.output[0].content[0].text)  {/* Should answer "Alice" */}
+```
+
+### Multi-turn Tool Calling
+
+```python
+def multi_turn_conversation():
+    response_id = None
+
+    for user_input in ["What's 2+2?", "Now multiply that by 3", "And divide by 2"]:
+        response = client.responses.create(
+            model="o3",
+            input=user_input,
+            instructions="You are a math tutor. Show your reasoning.",
+            previous_response_id=response_id,
+            tools=[{"type": "code_interpreter"}]
+        )
+
+        print(f"User: {user_input}")
+        print(f"Assistant: {response.output[0].content[0].text}")
+
+        response_id = response.id  {/* Maintain context */}
+```
+
+## Reasoning Model Features
+
+### O3/O4-mini Reasoning Persistence
+
+Reasoning models have special advantages in Responses API:
+
+```python
+{/* Use O3 for complex reasoning */}
+response = client.responses.create(
+    model="o3",
+    input="Solve this step by step: If a train travels 120km in 2 hours, then speeds up 20% for the next hour, how far did it travel in total?",
+    instructions="Think through this problem step by step, showing all reasoning."
+)
+
+{/* View reasoning process */}
+reasoning_tokens = response.usage.output_tokens_details.reasoning_tokens
+print(f"Reasoning tokens used: {reasoning_tokens}")
+
+{/* Continue conversation, reasoning context persists */}
+follow_up = client.responses.create(
+    model="o3",
+    input="Now what if the train slowed down 10% in the fourth hour?",
+    previous_response_id=response.id
+)
+```
+
+## Comparison with Chat Completions
+
+| Feature | Chat Completions | Responses API |
+|------|-----------------|---------------|
+| **Basic Conversation** | ✅ Supported | ✅ Supported |
+| **Streaming** | ✅ Supported | ✅ Supported |
+| **Function Calling** | ✅ Supported | ✅ Enhanced |
+| **Built-in Tools** | ❌ Not supported | ✅ Rich tools |
+| **State Management** | ❌ Stateless | ✅ Stateful |
+| **Reasoning Persistence** | ❌ Not supported | ✅ O3/O4 support |
+| **File Search** | ❌ Not supported | ✅ Supported |
+| **Code Interpreter** | ❌ Not supported | ✅ Supported |
+
+### Migration Example
+
+Migrating from Chat Completions to Responses API:
+
+<CodeGroup>
+
+```python Chat Completions
+{/* Old way */}
+response = client.chat.completions.create(
+    model="gpt-4.1",
+    messages=[
+        {"role": "system", "content": "You are a helpful assistant."},
+        {"role": "user", "content": "Hello!"}
+    ]
+)
+content = response.choices[0].message.content
+```
+
+```python Responses API
+{/* New way */}
+response = client.responses.create(
+    model="gpt-4.1",
+    input="Hello!",
+    instructions="You are a helpful assistant."
+)
+content = response.output[0].content[0].text
+```
+
+</CodeGroup>
+
+## Advanced Features
+
+### Parallel Tool Calling
+
+```python
+response = client.responses.create(
+    model="gpt-4.1",
+    input="Get weather for New York and Los Angeles, then calculate travel time between them",
+    instructions="You are a travel assistant.",
+    parallel_tool_calls=True,
+    tools=[
+        {"type": "function", "function": {"name": "get_weather", ...}},
+        {"type": "function", "function": {"name": "calculate_distance", ...}}
+    ]
+)
+```
+
+### Output Format Control
+
+```python
+response = client.responses.create(
+    model="gpt-4.1",
+    input="Summarize this data in JSON format",
+    instructions="Always respond in valid JSON.",
+    text={
+        "format": {
+            "type": "json_object"
+        }
+    }
+)
+```
+
+### Reasoning Effort Control (O3 Series)
+
+```python
+response = client.responses.create(
+    model="o3",
+    input="Solve this complex physics problem",
+    instructions="Think carefully and show detailed reasoning.",
+    reasoning={
+        "effort": "high"  {/* low, medium, high */}
+    }
+)
+```
+
+## Response Fields
+
+### Core Fields
+
+| Field | Type | Description |
+|------|------|------|
+| `id` | string | Response unique identifier |
+| `object` | string | Fixed as "response" |
+| `created_at` | integer | Creation timestamp |
+| `status` | string | Status: completed/failed/in_progress |
+| `model` | string | Actual model version used |
+| `output` | array | Output message array |
+| `usage` | object | Token usage statistics |
+
+### Output Message Format
+
+```json
+{
+  "id": "msg_xxx",
+  "type": "message",
+  "status": "completed",
+  "content": [
+    {
+      "type": "output_text",
+      "text": "Response content",
+      "annotations": [],
+      "logprobs": []
+    }
+  ],
+  "role": "assistant"
+}
+```
+
+### Usage Statistics
+
+```json
+{
+  "usage": {
+    "input_tokens": 19,
+    "input_tokens_details": {
+      "cached_tokens": 0
+    },
+    "output_tokens": 10,
+    "output_tokens_details": {
+      "reasoning_tokens": 0  {/* Only for reasoning models */}
+    },
+    "total_tokens": 29
+  }
+}
+```
+
+## Error Handling
+
+### Standard Error Format
+
+```json
+{
+  "error": {
+    "type": "invalid_request_error",
+    "code": "model_not_supported",
+    "message": "The model 'gpt-3.5-turbo' is not supported for the responses endpoint.",
+    "param": "model"
+  }
+}
+```
+
+### Common Errors
+
+| Error Code | Description | Solution |
+|--------|------|----------|
+| `model_not_supported` | Model doesn't support Responses API | Use supported newer models |
+| `invalid_previous_response_id` | Invalid previous response ID | Check response ID is correct |
+| `tool_not_available` | Tool unavailable | Check tool configuration |
+| `max_tokens_exceeded` | Token limit exceeded | Reduce input or set max_output_tokens |
+
+## Best Practices
+
+### 1. State Management Strategy
+
+```python
+class ConversationManager:
+    def __init__(self, model="gpt-4.1", instructions="You are a helpful assistant."):
+        self.model = model
+        self.instructions = instructions
+        self.last_response_id = None
+
+    def send_message(self, input_text, tools=None):
+        response = client.responses.create(
+            model=self.model,
+            input=input_text,
+            instructions=self.instructions,
+            previous_response_id=self.last_response_id,
+            tools=tools or []
+        )
+
+        self.last_response_id = response.id
+        return response.output[0].content[0].text
+
+    def reset_conversation(self):
+        self.last_response_id = None
+
+{/* Usage example */}
+conv = ConversationManager()
+print(conv.send_message("Hello, I'm Alice"))
+print(conv.send_message("What's my name?"))  {/* Will remember Alice */}
+```
+
+### 2. Tool Calling Optimization
+
+```python
+def smart_tool_calling(user_input):
+    {/* Intelligently select tools based on input */}
+    available_tools = []
+
+    if "weather" in user_input.lower():
+        available_tools.append(weather_tool)
+    if "calculate" in user_input.lower():
+        available_tools.append(calculator_tool)
+    if "search" in user_input.lower():
+        available_tools.append(search_tool)
+
+    response = client.responses.create(
+        model="gpt-4.1",
+        input=user_input,
+        instructions="Use the appropriate tools to help the user.",
+        tools=available_tools,
+        tool_choice="auto"
+    )
+
+    return response
+```
+
+### 3. Reasoning Model Optimization
+
+```python
+def optimized_reasoning(complex_problem):
+    response = client.responses.create(
+        model="o3",
+        input=complex_problem,
+        instructions="Think step by step and show your reasoning process.",
+        reasoning={
+            "effort": "high"  {/* Use high reasoning effort for complex problems */}
+        },
+        temperature=0.1  {/* Lower randomness for consistent results */}
+    )
+
+    {/* Analyze reasoning usage */}
+    reasoning_tokens = response.usage.output_tokens_details.reasoning_tokens
+    total_cost = calculate_cost(response.usage)
+
+    return {
+        "answer": response.output[0].content[0].text,
+        "reasoning_tokens": reasoning_tokens,
+        "cost": total_cost
+    }
+```
+
+## Future Development
+
+### Upcoming Features
+
+1. **Full Assistants API feature integration** (H1 2026)
+2. **More built-in tools**: Web search, computer use, etc.
+3. **Model Context Protocol (MCP) support**
+4. **Enhanced multimodal capabilities**
+
+### Migration Timeline
+
+- **Now**: Can start using Responses API
+- **H1 2026**: Feature parity with Assistants API
+- **2026**: Assistants API deprecation announcement
+- **2027**: Complete migration to Responses API
+
+<Info>
+  **Development Recommendation**: New projects should use Responses API directly, existing projects can migrate gradually. LaoZhang API will continue to follow OpenAI updates to ensure feature completeness.
+</Info>
+
+---
+
+Need more help? Visit [LaoZhang API](https://api.laozhang.ai) or check [OpenAI Responses API Official Documentation](https://platform.openai.com/docs/api-reference/responses).

@@ -1,138 +1,117 @@
 ---
-title: Access ChatGPT API in China in 5 Minutes - Quick Start Guide
+title: Quick Start Guide | Get Started in 5 Minutes | LaoZhang API
 sidebarTitle: Quick Start
-description: Detailed tutorial on how to call ChatGPT and Claude API in China, no VPN required, supports Alipay payment.
+description: Complete integration guide for LaoZhang AI API Gateway. Access 200+ models with a single API key. OpenAI SDK compatible. Free trial credits included.
 icon: "rocket"
 ---
 
 ## 🌟 Before You Start
 
-Many developers ask us: **"How to use ChatGPT API in China?"**
+Get started with LaoZhang API in just 5 minutes. All you need:
 
-The answer is simple: No VPN needed, no foreign credit card required, you only need:
-1️⃣ A LaoZhang API account (Alipay registration)
-2️⃣ One line of code change (change the URL)
-3️⃣ Five minutes of configuration (really fast)
+1️⃣ **Create an account** (free trial credits included)
+2️⃣ **Get your API key** (takes 30 seconds)
+3️⃣ **Change one line of code** (replace base URL)
 
-This guide will show you the **simplest** way to achieve:
-- 💳 Top up with Alipay, settle in RMB
-- 🌏 Direct connection from China, no proxy needed
-- ⚡ Low latency, high speed
-- 🔄 Switch between all models with one click
+This guide will show you how to:
+- ✅ Access 200+ AI models through a single API
+- ✅ Use existing OpenAI SDK with zero code changes
+- ✅ Switch between models with one parameter
+- ✅ Start building immediately with free credits
 
-## Step 1: Register and Top-up in 5 Minutes
+## Step 1: Create Account and Get API Key
 
-### 📧 Create Account (Free 3M Tokens Gift)
+### 📧 Create Account (Free Trial Credits Included)
 
 <Steps>
-  <Step title="Visit Registration Page">
-    Open [LaoZhang API Registration](https://api.laozhang.ai/register/?aff_code=Snip)
-    
-    🎁 **New User Bonus**: Get 3 million test tokens upon registration
+  <Step title="Sign Up">
+    Visit [LaoZhang API](https://api.laozhang.ai/register) to create your account
+
+    🎁 **New User Bonus**: Free trial credits automatically added upon registration
   </Step>
-  
-  <Step title="Fill in Information">
-    - Email: Any email will work
-    - Password: At least 8 characters
-    - Verification code: Check spam folder
+
+  <Step title="Verify Email">
+    - Enter your email address
+    - Create a secure password (8+ characters)
+    - Verify your email via the confirmation link
   </Step>
-  
-  <Step title="Login to Console">
-    After logging in, enter the [console homepage](https://api.laozhang.ai/account/profile)
-    
-    You will see:
-    - Account balance (including gift credits)
-    - Usage statistics
-    - Quick start guide
+
+  <Step title="Access Console">
+    Log in to your [console dashboard](https://api.laozhang.ai/account/profile)
+
+    You'll see:
+    - Account balance with trial credits
+    - Usage statistics and history
+    - API key management
   </Step>
 </Steps>
 
-### 💰 Quick Top-up (Alipay Instant Arrival)
-
-<Tabs>
-  <Tab title="Alipay QR Code">
-    1. Click [Top-up page](https://api.laozhang.ai/topup)
-    2. Select amount:
-       - 🆕 $5 (Trial) = ¥35
-       - 🔥 $20 (Regular) = ¥140
-       - 💰 $100 (10% bonus) = ¥700 gets $110
-    3. Scan with Alipay to pay
-    4. Instant arrival, use immediately
-  </Tab>
-  
-  <Tab title="Enterprise Transfer">
-    Support enterprise transfers:
-    - Issue VAT invoices
-    - Provide purchase contracts
-    - Monthly billing available
-    
-    Contact WeChat: laozhangdaichong
-  </Tab>
-</Tabs>
-
 <Note>
-  🎉 **New User Benefits**:
-  - Free 3M test tokens on registration
-  - Extra bonus on first top-up (top-up $100 get extra $1)
-  - Instant arrival, no waiting
-  - WeChat: `laozhangdaichong` for first top-up bonus
+  🎉 **Trial Credits**: New users receive free credits to test all features. Start building immediately without payment information.
 </Note>
 
-## Step 2: Get API Key in 1 Minute
+## Step 2: Get Your API Key
 
-### 🔑 Two Ways to Get Your Key
+### 🔑 Generate Your API Key
 
 <Tabs>
-  <Tab title="Use Default Key (Recommended)">
-    1. Go to [Token Management](https://api.laozhang.ai/token)
-    2. Find **Default Token**
-    3. Click **Copy** button on the right
-    
-    ✅ Advantage: Ready to use, no configuration needed
+  <Tab title="Use Default Key (Quickest)">
+    1. Navigate to [Token Management](https://api.laozhang.ai/token)
+    2. Locate your **Default Token**
+    3. Click **Copy** to clipboard
+
+    ✅ **Advantage**: Pre-configured and ready to use immediately
   </Tab>
-  
-  <Tab title="Create New Key">
-    1. Click [Add] button in upper right
-    2. Enter key name:
-       - `dev-key`: Development environment
-       - `prod-key`: Production environment
-       - `test-claude`: Test Claude models
-    3. Set quota limit (optional)
-    4. Click create
-    
-    💡 Advantage: Fine-grained management, allocated by project
+
+  <Tab title="Create Custom Key">
+    1. Click **Create New Token** button
+    2. Name your key (e.g., `production-api`, `development-test`)
+    3. Optionally set spending limits for budget control
+    4. Click **Generate**
+
+    💡 **Advantage**: Better organization for multiple projects or environments
   </Tab>
 </Tabs>
 
 <Warning>
-  **Security Reminder**:
-  - Keys are shown only once, save them properly
-  - Don't commit to public GitHub repositories
-  - Recommend storing in environment variables
+  **Security Best Practices**:
+  - API keys are shown only once - save securely immediately
+  - Never commit keys to version control (use `.gitignore`)
+  - Store keys in environment variables
+  - Rotate keys periodically for enhanced security
 </Warning>
 
-## Step 3: Make Your First Call in 30 Seconds
+## Step 3: Make Your First API Call
 
-### 🎯 Simplest Testing Method
+### 🎯 Test Your Integration
 
 <Tabs>
-  <Tab title="Online Test (Recommended)">
-    Test directly in [Console Playground](https://api.laozhang.ai/playground):
-    
-    1. Select model: gpt-4.1-mini
-    2. Enter prompt: "Hello, please introduce yourself"
-    3. Click send
-    
-    ✅ Free test credits allow ~40,000 calls
+  <Tab title="Online Playground (Recommended)">
+    Test instantly in the [API Playground](https://api.laozhang.ai/playground):
+
+    1. Select a model (e.g., `gpt-4o-mini`)
+    2. Enter a test prompt: "Hello, introduce yourself"
+    3. Click **Send**
+
+    ✅ **No code required** - verify your setup works before integrating
   </Tab>
-  
-  <Tab title="Command Line Test">
+
+  <Tab title="cURL Command">
     ```bash
-    # Replace YOUR_API_KEY with your key
-    curl -X POST https://api.laozhang.ai/v1/chat/completions -H "Content-Type: application/json" -H "Authorization: Bearer YOUR_API_KEY" -d '{"model": "gpt-4.1-mini", "messages": [{"role": "system", "content": "You are a helpful AI assistant"}, {"role": "user", "content": "How is the weather today?"}], "temperature": 0.7}'
+    # Replace YOUR_API_KEY with your actual key
+    curl -X POST https://api.laozhang.ai/v1/chat/completions \
+      -H "Content-Type: application/json" \
+      -H "Authorization: Bearer YOUR_API_KEY" \
+      -d '{
+        "model": "gpt-4o-mini",
+        "messages": [
+          {"role": "system", "content": "You are a helpful AI assistant"},
+          {"role": "user", "content": "What can you help me with?"}
+        ]
+      }'
     ```
-    
-    🚀 Response time under 500ms
+
+    🚀 **Typical response time**: < 500ms
   </Tab>
 </Tabs>
 
@@ -325,43 +304,41 @@ Congratulations! You've successfully integrated LaoZhang API. Next you can:
     - Alternative: `qwen-max`
   </Accordion>
   
-  <Accordion title="What if API key is leaked?">
+  <Accordion title="What if my API key is leaked?">
     **Immediate actions**:
-    1. Login to [Token Management](https://api.laozhang.ai/token)
-    2. Delete the leaked key
-    3. Create a new key
-    4. Update keys in all applications
-    
+    1. Go to [Token Management](https://api.laozhang.ai/token)
+    2. Revoke the compromised key immediately
+    3. Generate a new API key
+    4. Update the key in all your applications
+
     🔒 **Prevention measures**:
-    - Use environment variables
-    - Set quota limits
-    - Rotate keys regularly
+    - Always use environment variables
+    - Never hardcode keys in source code
+    - Set spending limits per key
+    - Rotate keys every 90 days
   </Accordion>
-  
-  <Accordion title="Why does it say insufficient balance?">
-    **Possible reasons**:
-    1. Free credits used up (3M tokens)
-    2. Model being called has high cost
-    3. Batch requests consuming too fast
-    
-    **Solutions**:
-    - [Top up now](https://api.laozhang.ai/topup)
-    - Switch to cheaper models
-    - Set `max_tokens` limit
+
+  <Accordion title="What happens when trial credits run out?">
+    **Options available**:
+    1. Add credits to your account via the [billing page](https://api.laozhang.ai/topup)
+    2. Switch to more cost-effective models (e.g., `gpt-4o-mini`, `gemini-flash`)
+    3. Optimize your usage with `max_tokens` limits
+
+    **Cost management tips**:
+    - Monitor usage in the console dashboard
+    - Set budget alerts
+    - Use streaming for better user experience
   </Accordion>
-  
-  <Accordion title="What payment methods are supported?">
-    **Individual users**:
-    - 💳 Alipay QR code (instant)
-    - 💳 WeChat QR code (instant)
-    - 🎪 USDT (TRC20)
-    
-    **Enterprise users**:
-    - 🏢 Corporate transfer
-    - 🧾 Issue VAT invoices
-    - 📝 Sign purchase contracts
-    
-    Contact WeChat: `laozhangdaichong`
+
+  <Accordion title="How do I add more credits?">
+    Visit the [billing page](https://api.laozhang.ai/topup) to add credits to your account.
+
+    **Payment options**:
+    - Credit/debit cards
+    - Cryptocurrency (USDT)
+    - Wire transfer for enterprise accounts
+
+    **Enterprise users**: Contact support@laozhang.ai for invoicing and contract options.
   </Accordion>
 </AccordionGroup>
 
