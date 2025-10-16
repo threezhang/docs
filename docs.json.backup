@@ -20,8 +20,7 @@
   "seo": {
     "indexHiddenPages": false
   },
-  "navigation": {
-    "languages": [
+  "languages": [
     {
       "language": "zh",
       "tabs": [
@@ -352,8 +351,7 @@
         }
       ]
     }
-    ]
-  },
+  ],
   "logo": {
     "light": "/logo/light.svg",
     "dark": "/logo/dark.svg"
