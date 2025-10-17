@@ -9,16 +9,18 @@ icon: "tag"
 Sora 2 provides stable video generation models, distinguished by **model name** for portrait and landscape orientations.
 
 <Note>
-**Temporary Model Simplification Notice**
+**Model Update Notice**
 
-Due to insufficient OpenAI official computing power and severe quota limitations, -hd (high definition) and -15s (15 seconds) versions are temporarily unavailable and will be relaunched when computing power becomes sufficient.
+**15-second versions** are now available, offering longer video generation duration!
+
+Due to official OpenAI computing power limitations, -hd (high definition) versions are temporarily unavailable and will be relaunched when resources become sufficient.
 </Note>
 
 ## Available Models
 
 <CardGroup cols={2}>
   <Card title="sora_video2" icon="mobile">
-    **Portrait Mode** (Recommended)
+    **Portrait Mode - 10s**
 
     - Resolution: 704 × 1280
     - Duration: 10 seconds
@@ -27,11 +29,29 @@ Due to insufficient OpenAI official computing power and severe quota limitations
   </Card>
 
   <Card title="sora_video2-landscape" icon="tv">
-    **Landscape Mode**
+    **Landscape Mode - 10s**
 
     - Resolution: 1280 × 704
     - Duration: 10 seconds
     - Price: $0.15/call
+    - Stability: ⭐⭐⭐⭐⭐ Extremely High
+  </Card>
+
+  <Card title="sora_video2-15s" icon="mobile">
+    **Portrait Mode - 15s** ⭐
+
+    - Resolution: 704 × 1280
+    - Duration: 15 seconds
+    - Price: $0.25/call
+    - Stability: ⭐⭐⭐⭐⭐ Extremely High
+  </Card>
+
+  <Card title="sora_video2-landscape-15s" icon="tv">
+    **Landscape Mode - 15s** ⭐
+
+    - Resolution: 1280 × 704
+    - Duration: 15 seconds
+    - Price: $0.25/call
     - Stability: ⭐⭐⭐⭐⭐ Extremely High
   </Card>
 </CardGroup>
@@ -51,6 +71,7 @@ Charges only when video is **successfully generated**, no charge for failures.
 | Model | Duration | Unit Price | Discounted Price with $100 Top-up |
 |------|------|------|---------------|
 | Portrait/Landscape | 10s | $0.15/call | ≈ ¥1.0/call |
+| Portrait/Landscape - 15s | 15s | $0.25/call | ≈ ¥1.7/call |
 
 <Note>
 **Official Comparison**
@@ -67,8 +88,8 @@ The advantages of choosing laozhang.ai are obvious!
 ## Cost Optimization Recommendations
 
 <AccordionGroup>
-  <Accordion title="Both models have extremely high stability" icon="mobile">
-    Both portrait and landscape models have very good stability. You can freely choose based on display scenarios without worrying about retry issues.
+  <Accordion title="All models have extremely high stability" icon="mobile">
+    Whether 10s or 15s, portrait or landscape, all models have very good stability. You can freely choose based on your needs and display scenarios without worrying about retry issues.
   </Accordion>
 
   <Accordion title="Batch generation optimization" icon="list">
@@ -105,14 +126,20 @@ The advantages of choosing laozhang.ai are obvious!
 ## Model Selection Recommendations
 
 <Steps>
+  <Step title="Determine Duration">
+    Choose based on content needs:
+    - Quick previews, short content → Choose 10s version ($0.15/call)
+    - Full narratives, more details → Choose 15s version ($0.25/call)
+  </Step>
+
   <Step title="Determine Orientation">
     Choose based on video display scenario:
-    - Mobile short videos, social media portrait display → Choose `sora_video2`
-    - Landscape display, widescreen content, computer playback → Choose `sora_video2-landscape`
+    - Mobile short videos, social media portrait display → Choose portrait version
+    - Landscape display, widescreen content, computer playback → Choose landscape version
   </Step>
 
   <Step title="Stability Guarantee">
-    Both models have extremely high stability, no need to worry about failure retry issues, feel free to choose any orientation.
+    All models have extremely high stability, no need to worry about failure retry issues, feel free to choose any combination.
   </Step>
 </Steps>
 
@@ -121,25 +148,32 @@ The advantages of choosing laozhang.ai are obvious!
 ### Choose Model Based on Scenario
 
 ```python
-# Portrait video - mobile short videos, social media
+# Portrait video - 10s - mobile short videos, social media
 model = "sora_video2"
 
-# Landscape video - widescreen display, computer playback
+# Landscape video - 10s - widescreen display, computer playback
 model = "sora_video2-landscape"
+
+# Portrait video - 15s - longer story narratives
+model = "sora_video2-15s"
+
+# Landscape video - 15s - more complete content presentation
+model = "sora_video2-landscape-15s"
 ```
 
 ## FAQ
 
 <AccordionGroup>
-  <Accordion title="Why are there only two models temporarily?" icon="circle-question">
-    Due to insufficient OpenAI official computing power and severe quota limitations, -hd (high definition) and -15s (15 seconds) versions are temporarily unavailable and will be relaunched when computing power becomes sufficient.
+  <Accordion title="Why is there no HD version?" icon="circle-question">
+    Due to official OpenAI computing power limitations, -hd (high definition) versions are temporarily unavailable and will be relaunched when resources become sufficient.
     
-    The two currently available models both have extremely high stability and can meet most use cases.
+    The four currently available models (10s and 15s, portrait and landscape) all have extremely high stability and can meet most use cases.
   </Accordion>
 
   <Accordion title="How to get discounted prices through top-up?" icon="wallet">
     Single top-up of $100 can enjoy discounted prices:
     - 10-second video approximately ¥1.0/call
+    - 15-second video approximately ¥1.7/call
 
     See [Top-up Page](https://api.laozhang.ai)
   </Accordion>
