@@ -45,6 +45,7 @@
                 "api-capabilities/openai-sdk",
                 "api-capabilities/openai-responses",
                 "api-capabilities/vision-understanding",
+                "api-capabilities/audio-transcription",
                 "api-capabilities/nano-banana-image",
                 "api-capabilities/nano-banana-image-edit",
                 "api-capabilities/seedream-image",
@@ -216,6 +217,7 @@
                 "en/api-capabilities/openai-sdk",
                 "en/api-capabilities/openai-responses",
                 "en/api-capabilities/vision-understanding",
+                "en/api-capabilities/audio-transcription",
                 "en/api-capabilities/gpt-image-1",
                 "en/api-capabilities/image-edit"
               ]

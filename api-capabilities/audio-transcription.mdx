@@ -1,0 +1,451 @@
+---
+title: 音频转录与语音合成
+sidebarTitle: 音频 API
+description: 使用 AI 模型进行音频转文字（STT）和文字转语音（TTS），支持多语言识别、高清语音合成等功能
+icon: "microphone"
+---
+
+## 功能简介
+
+老张API 提供强大的音频处理能力，包括音频转文字（Speech-to-Text）和文字转语音（Text-to-Speech）两大功能。通过统一的 OpenAI API 格式，您可以轻松实现会议记录转录、字幕生成、语音助手、有声读物制作等应用。
+
+<Note>
+**🎙️ 智能音频处理**  
+支持多语言音频转文字、高清语音合成、实时流式输出，让 AI 真正"听懂"和"说出"内容。
+</Note>
+
+## 🌟 核心特性
+
+- **🎯 多模型支持**：GPT-4o Transcribe、Whisper、TTS-1/HD 等专业音频模型
+- **🌍 多语言识别**：支持 50+ 种语言的音频转文字
+- **🎤 高质量合成**：支持标准和高清两种语音质量
+- **🗣️ 多种音色**：6 种不同的语音音色可选
+- **⚡ 快速响应**：高性能处理，秒级返回结果
+- **💰 灵活计费**：按 Token 或时长计费，成本可控
+
+## 📋 支持的音频模型
+
+### 音频转文字（Speech-to-Text）
+
+| 模型名称 | 模型 ID | 计费方式 | 特点 |
+|---------|---------|---------|------|
+| **GPT-4o Transcribe** ⭐ | `gpt-4o-transcribe` | Token | 高准确度，支持多语言 |
+| **GPT-4o Mini Transcribe** | `gpt-4o-mini-transcribe` | Token | 快速高效，成本低 |
+| **Whisper v1** | `whisper-1` | 时长（秒） | OpenAI Whisper 模型 |
+
+### 文字转语音（Text-to-Speech）
+
+| 模型名称 | 模型 ID | 音质 | 特点 |
+|---------|---------|------|------|
+| **TTS-1** ⭐ | `tts-1` | 标准质量 | 快速生成，适合实时应用 |
+| **TTS-1 HD** | `tts-1-hd` | 高清质量 | 音质更佳，适合内容创作 |
+
+### 可用的语音音色
+
+- **alloy** - 中性音色，清晰自然
+- **echo** - 男性音色，沉稳有力
+- **fable** - 英式口音，优雅动听
+- **onyx** - 深沉男声，适合播报
+- **nova** - 女性音色，温暖亲切
+- **shimmer** - 柔和女声，适合旁白
+
+## 🎙️ 音频转文字
+
+### 1. 基础示例 - cURL
+
+```bash
+curl -X POST "https://api.laozhang.ai/v1/audio/transcriptions" \
+  -H "Authorization: Bearer YOUR_API_KEY" \
+  -H "Content-Type: multipart/form-data" \
+  -F "file=@audio.mp3" \
+  -F "model=gpt-4o-transcribe"
+```
+
+**响应示例**：
+```json
+{
+  "text": "你好，这是一段测试语音",
+  "usage": {
+    "type": "tokens",
+    "total_tokens": 32,
+    "input_tokens": 23,
+    "output_tokens": 9
+  }
+}
+```
+
+### 2. Python 示例 - 使用 OpenAI SDK
+
+```python
+from openai import OpenAI
+
+client = OpenAI(
+    api_key="YOUR_API_KEY",
+    base_url="https://api.laozhang.ai/v1"
+)
+
+# 方式 1：直接传文件路径
+with open("audio.mp3", "rb") as audio_file:
+    transcript = client.audio.transcriptions.create(
+        model="gpt-4o-transcribe",
+        file=audio_file
+    )
+
+print(transcript.text)
+```
+
+### 3. 指定语言和响应格式
+
+```python
+from openai import OpenAI
+
+client = OpenAI(
+    api_key="YOUR_API_KEY",
+    base_url="https://api.laozhang.ai/v1"
+)
+
+with open("audio.mp3", "rb") as audio_file:
+    transcript = client.audio.transcriptions.create(
+        model="whisper-1",
+        file=audio_file,
+        language="zh",  # 指定语言：中文
+        response_format="json"  # 可选：json, text, srt, vtt, verbose_json
+    )
+
+print(transcript.text)
+```
+
+### 4. 使用 Whisper 模型（按时长计费）
+
+```bash
+curl -X POST "https://api.laozhang.ai/v1/audio/transcriptions" \
+  -H "Authorization: Bearer YOUR_API_KEY" \
+  -H "Content-Type: multipart/form-data" \
+  -F "file=@audio.wav" \
+  -F "model=whisper-1" \
+  -F "language=zh"
+```
+
+**响应示例**：
+```json
+{
+  "text": "你好,这是一段测试语音",
+  "usage": {
+    "type": "duration",
+    "seconds": 3
+  }
+}
+```
+
+### 支持的音频格式
+
+支持以下音频格式（文件大小限制 25 MB）：
+- **mp3** - MP3 音频文件
+- **mp4** - MP4 音频文件
+- **mpeg** - MPEG 音频文件
+- **mpga** - MPEG 音频文件
+- **m4a** - M4A 音频文件
+- **wav** - WAV 音频文件
+- **webm** - WebM 音频文件
+
+## 🗣️ 文字转语音
+
+### 1. 基础示例 - cURL
+
+```bash
+curl -X POST "https://api.laozhang.ai/v1/audio/speech" \
+  -H "Authorization: Bearer YOUR_API_KEY" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "model": "tts-1",
+    "input": "你好，欢迎使用老张API的语音合成功能。",
+    "voice": "alloy"
+  }' \
+  --output speech.mp3
+```
+
+### 2. Python 示例 - 生成语音文件
+
+```python
+from openai import OpenAI
+from pathlib import Path
+
+client = OpenAI(
+    api_key="YOUR_API_KEY",
+    base_url="https://api.laozhang.ai/v1"
+)
+
+response = client.audio.speech.create(
+    model="tts-1",
+    voice="nova",
+    input="这是一段需要转换为语音的文字内容。"
+)
+
+# 保存为 MP3 文件
+response.stream_to_file("output.mp3")
+```
+
+### 3. 使用高清模型
+
+```python
+from openai import OpenAI
+
+client = OpenAI(
+    api_key="YOUR_API_KEY",
+    base_url="https://api.laozhang.ai/v1"
+)
+
+response = client.audio.speech.create(
+    model="tts-1-hd",  # 使用高清模型
+    voice="shimmer",
+    input="使用高清模型可以获得更好的音质效果。",
+    speed=1.0  # 语速：0.25 到 4.0，默认 1.0
+)
+
+response.stream_to_file("speech_hd.mp3")
+```
+
+### 4. 调整语速
+
+```python
+# 快速播放（1.5 倍速）
+response = client.audio.speech.create(
+    model="tts-1",
+    voice="onyx",
+    input="这段内容会以 1.5 倍速播放。",
+    speed=1.5
+)
+
+response.stream_to_file("speech_fast.mp3")
+```
+
+### 5. 实时流式输出
+
+```python
+from openai import OpenAI
+
+client = OpenAI(
+    api_key="YOUR_API_KEY",
+    base_url="https://api.laozhang.ai/v1"
+)
+
+response = client.audio.speech.create(
+    model="tts-1",
+    voice="alloy",
+    input="实时流式输出可以边生成边播放，提供更好的用户体验。"
+)
+
+# 流式处理音频数据
+response.stream_to_file("streaming_speech.mp3")
+```
+
+## 🎯 常见应用场景
+
+### 1. 会议记录转录
+
+```python
+from openai import OpenAI
+
+client = OpenAI(
+    api_key="YOUR_API_KEY",
+    base_url="https://api.laozhang.ai/v1"
+)
+
+# 转录会议录音
+with open("meeting.mp3", "rb") as audio_file:
+    transcript = client.audio.transcriptions.create(
+        model="gpt-4o-transcribe",
+        file=audio_file,
+        response_format="text"
+    )
+
+# 保存为文本文件
+with open("meeting_transcript.txt", "w", encoding="utf-8") as f:
+    f.write(transcript.text)
+```
+
+### 2. 视频字幕生成
+
+```python
+from openai import OpenAI
+
+client = OpenAI(
+    api_key="YOUR_API_KEY",
+    base_url="https://api.laozhang.ai/v1"
+)
+
+# 生成 SRT 字幕文件
+with open("video_audio.mp3", "rb") as audio_file:
+    transcript = client.audio.transcriptions.create(
+        model="whisper-1",
+        file=audio_file,
+        response_format="srt"  # SRT 字幕格式
+    )
+
+# 保存字幕文件
+with open("subtitles.srt", "w", encoding="utf-8") as f:
+    f.write(transcript.text)
+```
+
+### 3. 多语言内容播报
+
+```python
+from openai import OpenAI
+
+client = OpenAI(
+    api_key="YOUR_API_KEY",
+    base_url="https://api.laozhang.ai/v1"
+)
+
+# 生成多种语言的语音
+texts = {
+    "中文": "欢迎使用老张API",
+    "English": "Welcome to LaoZhang API",
+    "日本語": "ようこそ"
+}
+
+for lang, text in texts.items():
+    response = client.audio.speech.create(
+        model="tts-1",
+        voice="nova",
+        input=text
+    )
+    response.stream_to_file(f"welcome_{lang}.mp3")
+```
+
+### 4. 有声读物制作
+
+```python
+from openai import OpenAI
+
+client = OpenAI(
+    api_key="YOUR_API_KEY",
+    base_url="https://api.laozhang.ai/v1"
+)
+
+# 将长篇文本转换为语音
+with open("book_chapter.txt", "r", encoding="utf-8") as f:
+    text = f.read()
+
+# 分段处理（TTS 有字符限制）
+max_chars = 4096
+segments = [text[i:i+max_chars] for i in range(0, len(text), max_chars)]
+
+for idx, segment in enumerate(segments):
+    response = client.audio.speech.create(
+        model="tts-1-hd",  # 使用高清模型
+        voice="fable",  # 适合朗读的音色
+        input=segment
+    )
+    response.stream_to_file(f"audiobook_part_{idx+1}.mp3")
+```
+
+## 💡 最佳实践
+
+### 音频转文字优化
+
+1. **音频质量**：
+   - 采样率建议 ≥16 kHz
+   - 降低背景噪音可提高识别准确度
+   - 清晰的人声录音效果最佳
+
+2. **文件大小**：
+   - 单个文件 ≤25 MB
+   - 超大文件建议先分段处理
+
+3. **语言指定**：
+   - 明确指定语言可提高准确度
+   - 支持的语言代码：zh（中文）、en（英文）、ja（日语）等
+
+4. **响应格式选择**：
+   - `json`：默认格式，包含完整信息
+   - `text`：纯文本输出
+   - `srt`/`vtt`：带时间戳的字幕格式
+   - `verbose_json`：详细 JSON，包含时间戳和词级信息
+
+### 文字转语音优化
+
+1. **音色选择**：
+   - `alloy`/`nova`：适合通用场景
+   - `echo`/`onyx`：适合新闻播报
+   - `fable`/`shimmer`：适合故事朗读
+
+2. **语速调整**：
+   - 正常语速：1.0
+   - 快速播报：1.2 - 1.5
+   - 慢速教学：0.75 - 0.9
+
+3. **文本优化**：
+   - 单次请求文本 ≤4096 字符
+   - 使用标点符号控制停顿和语调
+   - 数字和特殊符号建议转换为文字
+
+4. **成本控制**：
+   - 标准场景使用 `tts-1`
+   - 高质量需求使用 `tts-1-hd`
+   - 根据实际需求选择合适的模型
+
+### 错误处理
+
+```python
+from openai import OpenAI
+import time
+
+client = OpenAI(
+    api_key="YOUR_API_KEY",
+    base_url="https://api.laozhang.ai/v1"
+)
+
+def transcribe_with_retry(audio_file_path, max_retries=3):
+    """带重试机制的音频转文字函数"""
+    for attempt in range(max_retries):
+        try:
+            with open(audio_file_path, "rb") as audio_file:
+                transcript = client.audio.transcriptions.create(
+                    model="gpt-4o-transcribe",
+                    file=audio_file
+                )
+            return transcript.text
+        except Exception as e:
+            print(f"尝试 {attempt + 1}/{max_retries} 失败: {e}")
+            if attempt < max_retries - 1:
+                time.sleep(2 ** attempt)  # 指数退避
+            else:
+                raise
+    return None
+```
+
+## 📊 性能对比
+
+### 音频转文字模型对比
+
+| 模型 | 准确度 | 速度 | 支持语言 | 计费方式 | 价格 |
+|------|--------|------|---------|---------|------|
+| gpt-4o-transcribe | ⭐⭐⭐⭐⭐ | ⭐⭐⭐⭐ | 50+ | Token | $$ |
+| gpt-4o-mini-transcribe | ⭐⭐⭐⭐ | ⭐⭐⭐⭐⭐ | 50+ | Token | $ |
+| whisper-1 | ⭐⭐⭐⭐ | ⭐⭐⭐ | 50+ | 时长 | $ |
+
+### 文字转语音模型对比
+
+| 模型 | 音质 | 速度 | 自然度 | 价格 |
+|------|------|------|--------|------|
+| tts-1 | ⭐⭐⭐ | ⭐⭐⭐⭐⭐ | ⭐⭐⭐⭐ | $ |
+| tts-1-hd | ⭐⭐⭐⭐⭐ | ⭐⭐⭐⭐ | ⭐⭐⭐⭐⭐ | $$ |
+
+## 🚨 注意事项
+
+1. **隐私保护**：不要上传包含敏感信息的音频文件
+2. **合规使用**：遵守相关法律法规，不用于非法用途
+3. **版权声明**：生成的语音内容需注明由 AI 生成
+4. **文件限制**：音频文件最大 25 MB，文本最长 4096 字符
+5. **使用限制**：请勿用于冒充他人身份或虚假信息传播
+
+## 🔗 相关资源
+
+- [Chat Completions API](/api-reference/chat-completions) - 了解更多关于对话 API 的信息
+- [API 定价说明](https://api.laozhang.ai/account/pricing) - 查看详细价格信息
+
+<Note>
+💡 **小贴士**：建议先使用 `gpt-4o-mini-transcribe` 或 `tts-1` 进行测试，确认效果后再使用高级模型进行生产部署。
+</Note>
+

@@ -1,0 +1,451 @@
+---
+title: Audio Transcription & Speech Synthesis API | LaoZhang API
+sidebarTitle: Audio API
+description: Use AI models for Speech-to-Text (STT) and Text-to-Speech (TTS). Multi-language recognition, HD voice synthesis through OpenAI-compatible API.
+icon: "microphone"
+---
+
+## Overview
+
+LaoZhang API provides powerful audio processing capabilities, including Speech-to-Text (STT) and Text-to-Speech (TTS). Using the unified OpenAI API format, you can easily implement meeting transcription, subtitle generation, voice assistants, audiobook creation and more.
+
+<Note>
+**🎙️ Intelligent Audio Processing**  
+Support for multi-language audio transcription, HD voice synthesis, and real-time streaming - let AI truly "hear" and "speak" your content.
+</Note>
+
+## 🌟 Key Features
+
+- **🎯 Multiple Models**: GPT-4o Transcribe, Whisper, TTS-1/HD and other professional audio models
+- **🌍 Multi-language**: Support for 50+ languages in audio transcription
+- **🎤 High Quality**: Standard and HD quality voice synthesis
+- **🗣️ Multiple Voices**: 6 different voice options available
+- **⚡ Fast Response**: High-performance processing with sub-second results
+- **💰 Flexible Pricing**: Pay per token or duration, cost-effective
+
+## 📋 Supported Audio Models
+
+### Speech-to-Text (Transcription)
+
+| Model Name | Model ID | Billing | Features |
+|---------|---------|---------|------|
+| **GPT-4o Transcribe** ⭐ | `gpt-4o-transcribe` | Token | High accuracy, multi-language |
+| **GPT-4o Mini Transcribe** | `gpt-4o-mini-transcribe` | Token | Fast and efficient, low cost |
+| **Whisper v1** | `whisper-1` | Duration (seconds) | OpenAI Whisper model |
+
+### Text-to-Speech (TTS)
+
+| Model Name | Model ID | Quality | Features |
+|---------|---------|------|------|
+| **TTS-1** ⭐ | `tts-1` | Standard | Fast generation, real-time apps |
+| **TTS-1 HD** | `tts-1-hd` | HD Quality | Better audio, content creation |
+
+### Available Voice Options
+
+- **alloy** - Neutral, clear and natural
+- **echo** - Male voice, steady and strong
+- **fable** - British accent, elegant
+- **onyx** - Deep male voice, news/broadcast
+- **nova** - Female voice, warm and friendly
+- **shimmer** - Soft female voice, narration
+
+## 🎙️ Speech-to-Text
+
+### 1. Basic Example - cURL
+
+```bash
+curl -X POST "https://api.laozhang.ai/v1/audio/transcriptions" \
+  -H "Authorization: Bearer YOUR_API_KEY" \
+  -H "Content-Type: multipart/form-data" \
+  -F "file=@audio.mp3" \
+  -F "model=gpt-4o-transcribe"
+```
+
+**Response Example**:
+```json
+{
+  "text": "Hello, this is a test audio.",
+  "usage": {
+    "type": "tokens",
+    "total_tokens": 32,
+    "input_tokens": 23,
+    "output_tokens": 9
+  }
+}
+```
+
+### 2. Python Example - Using OpenAI SDK
+
+```python
+from openai import OpenAI
+
+client = OpenAI(
+    api_key="YOUR_API_KEY",
+    base_url="https://api.laozhang.ai/v1"
+)
+
+# Method 1: Pass file directly
+with open("audio.mp3", "rb") as audio_file:
+    transcript = client.audio.transcriptions.create(
+        model="gpt-4o-transcribe",
+        file=audio_file
+    )
+
+print(transcript.text)
+```
+
+### 3. Specify Language and Response Format
+
+```python
+from openai import OpenAI
+
+client = OpenAI(
+    api_key="YOUR_API_KEY",
+    base_url="https://api.laozhang.ai/v1"
+)
+
+with open("audio.mp3", "rb") as audio_file:
+    transcript = client.audio.transcriptions.create(
+        model="whisper-1",
+        file=audio_file,
+        language="en",  # Specify language: English
+        response_format="json"  # Options: json, text, srt, vtt, verbose_json
+    )
+
+print(transcript.text)
+```
+
+### 4. Using Whisper Model (Duration-based Billing)
+
+```bash
+curl -X POST "https://api.laozhang.ai/v1/audio/transcriptions" \
+  -H "Authorization: Bearer YOUR_API_KEY" \
+  -H "Content-Type: multipart/form-data" \
+  -F "file=@audio.wav" \
+  -F "model=whisper-1" \
+  -F "language=en"
+```
+
+**Response Example**:
+```json
+{
+  "text": "Hello, this is a test audio.",
+  "usage": {
+    "type": "duration",
+    "seconds": 3
+  }
+}
+```
+
+### Supported Audio Formats
+
+Supports the following audio formats (max file size 25 MB):
+- **mp3** - MP3 audio file
+- **mp4** - MP4 audio file
+- **mpeg** - MPEG audio file
+- **mpga** - MPEG audio file
+- **m4a** - M4A audio file
+- **wav** - WAV audio file
+- **webm** - WebM audio file
+
+## 🗣️ Text-to-Speech
+
+### 1. Basic Example - cURL
+
+```bash
+curl -X POST "https://api.laozhang.ai/v1/audio/speech" \
+  -H "Authorization: Bearer YOUR_API_KEY" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "model": "tts-1",
+    "input": "Hello, welcome to LaoZhang API speech synthesis.",
+    "voice": "alloy"
+  }' \
+  --output speech.mp3
+```
+
+### 2. Python Example - Generate Audio File
+
+```python
+from openai import OpenAI
+from pathlib import Path
+
+client = OpenAI(
+    api_key="YOUR_API_KEY",
+    base_url="https://api.laozhang.ai/v1"
+)
+
+response = client.audio.speech.create(
+    model="tts-1",
+    voice="nova",
+    input="This is text content to be converted to speech."
+)
+
+# Save as MP3 file
+response.stream_to_file("output.mp3")
+```
+
+### 3. Using HD Model
+
+```python
+from openai import OpenAI
+
+client = OpenAI(
+    api_key="YOUR_API_KEY",
+    base_url="https://api.laozhang.ai/v1"
+)
+
+response = client.audio.speech.create(
+    model="tts-1-hd",  # Use HD model
+    voice="shimmer",
+    input="Using the HD model provides better audio quality.",
+    speed=1.0  # Speed: 0.25 to 4.0, default 1.0
+)
+
+response.stream_to_file("speech_hd.mp3")
+```
+
+### 4. Adjust Speech Speed
+
+```python
+# Fast playback (1.5x speed)
+response = client.audio.speech.create(
+    model="tts-1",
+    voice="onyx",
+    input="This content will play at 1.5x speed.",
+    speed=1.5
+)
+
+response.stream_to_file("speech_fast.mp3")
+```
+
+### 5. Real-time Streaming Output
+
+```python
+from openai import OpenAI
+
+client = OpenAI(
+    api_key="YOUR_API_KEY",
+    base_url="https://api.laozhang.ai/v1"
+)
+
+response = client.audio.speech.create(
+    model="tts-1",
+    voice="alloy",
+    input="Real-time streaming allows playback while generating for better UX."
+)
+
+# Stream audio data
+response.stream_to_file("streaming_speech.mp3")
+```
+
+## 🎯 Common Use Cases
+
+### 1. Meeting Transcription
+
+```python
+from openai import OpenAI
+
+client = OpenAI(
+    api_key="YOUR_API_KEY",
+    base_url="https://api.laozhang.ai/v1"
+)
+
+# Transcribe meeting recording
+with open("meeting.mp3", "rb") as audio_file:
+    transcript = client.audio.transcriptions.create(
+        model="gpt-4o-transcribe",
+        file=audio_file,
+        response_format="text"
+    )
+
+# Save as text file
+with open("meeting_transcript.txt", "w", encoding="utf-8") as f:
+    f.write(transcript.text)
+```
+
+### 2. Video Subtitle Generation
+
+```python
+from openai import OpenAI
+
+client = OpenAI(
+    api_key="YOUR_API_KEY",
+    base_url="https://api.laozhang.ai/v1"
+)
+
+# Generate SRT subtitle file
+with open("video_audio.mp3", "rb") as audio_file:
+    transcript = client.audio.transcriptions.create(
+        model="whisper-1",
+        file=audio_file,
+        response_format="srt"  # SRT subtitle format
+    )
+
+# Save subtitle file
+with open("subtitles.srt", "w", encoding="utf-8") as f:
+    f.write(transcript.text)
+```
+
+### 3. Multi-language Content Broadcasting
+
+```python
+from openai import OpenAI
+
+client = OpenAI(
+    api_key="YOUR_API_KEY",
+    base_url="https://api.laozhang.ai/v1"
+)
+
+# Generate speech in multiple languages
+texts = {
+    "Chinese": "欢迎使用老张API",
+    "English": "Welcome to LaoZhang API",
+    "Japanese": "ようこそ"
+}
+
+for lang, text in texts.items():
+    response = client.audio.speech.create(
+        model="tts-1",
+        voice="nova",
+        input=text
+    )
+    response.stream_to_file(f"welcome_{lang}.mp3")
+```
+
+### 4. Audiobook Creation
+
+```python
+from openai import OpenAI
+
+client = OpenAI(
+    api_key="YOUR_API_KEY",
+    base_url="https://api.laozhang.ai/v1"
+)
+
+# Convert long text to speech
+with open("book_chapter.txt", "r", encoding="utf-8") as f:
+    text = f.read()
+
+# Process in segments (TTS has character limit)
+max_chars = 4096
+segments = [text[i:i+max_chars] for i in range(0, len(text), max_chars)]
+
+for idx, segment in enumerate(segments):
+    response = client.audio.speech.create(
+        model="tts-1-hd",  # Use HD model
+        voice="fable",  # Good for narration
+        input=segment
+    )
+    response.stream_to_file(f"audiobook_part_{idx+1}.mp3")
+```
+
+## 💡 Best Practices
+
+### Speech-to-Text Optimization
+
+1. **Audio Quality**:
+   - Sample rate ≥16 kHz recommended
+   - Lower background noise improves accuracy
+   - Clear voice recording works best
+
+2. **File Size**:
+   - Single file ≤25 MB
+   - Split large files into segments
+
+3. **Language Specification**:
+   - Specify language for better accuracy
+   - Supported codes: zh (Chinese), en (English), ja (Japanese), etc.
+
+4. **Response Format Selection**:
+   - `json`: Default format with full information
+   - `text`: Plain text output
+   - `srt`/`vtt`: Subtitles with timestamps
+   - `verbose_json`: Detailed JSON with timestamps and word-level info
+
+### Text-to-Speech Optimization
+
+1. **Voice Selection**:
+   - `alloy`/`nova`: General purpose
+   - `echo`/`onyx`: News and broadcasting
+   - `fable`/`shimmer`: Story narration
+
+2. **Speed Adjustment**:
+   - Normal speed: 1.0
+   - Fast broadcast: 1.2 - 1.5
+   - Slow teaching: 0.75 - 0.9
+
+3. **Text Optimization**:
+   - Max text length ≤4096 characters per request
+   - Use punctuation to control pauses and intonation
+   - Convert numbers and symbols to words
+
+4. **Cost Control**:
+   - Use `tts-1` for standard scenarios
+   - Use `tts-1-hd` for high-quality needs
+   - Choose appropriate model based on requirements
+
+### Error Handling
+
+```python
+from openai import OpenAI
+import time
+
+client = OpenAI(
+    api_key="YOUR_API_KEY",
+    base_url="https://api.laozhang.ai/v1"
+)
+
+def transcribe_with_retry(audio_file_path, max_retries=3):
+    """Audio transcription with retry mechanism"""
+    for attempt in range(max_retries):
+        try:
+            with open(audio_file_path, "rb") as audio_file:
+                transcript = client.audio.transcriptions.create(
+                    model="gpt-4o-transcribe",
+                    file=audio_file
+                )
+            return transcript.text
+        except Exception as e:
+            print(f"Attempt {attempt + 1}/{max_retries} failed: {e}")
+            if attempt < max_retries - 1:
+                time.sleep(2 ** attempt)  # Exponential backoff
+            else:
+                raise
+    return None
+```
+
+## 📊 Performance Comparison
+
+### Speech-to-Text Models
+
+| Model | Accuracy | Speed | Languages | Billing | Price |
+|------|--------|------|---------|---------|------|
+| gpt-4o-transcribe | ⭐⭐⭐⭐⭐ | ⭐⭐⭐⭐ | 50+ | Token | $$ |
+| gpt-4o-mini-transcribe | ⭐⭐⭐⭐ | ⭐⭐⭐⭐⭐ | 50+ | Token | $ |
+| whisper-1 | ⭐⭐⭐⭐ | ⭐⭐⭐ | 50+ | Duration | $ |
+
+### Text-to-Speech Models
+
+| Model | Quality | Speed | Naturalness | Price |
+|------|------|------|--------|------|
+| tts-1 | ⭐⭐⭐ | ⭐⭐⭐⭐⭐ | ⭐⭐⭐⭐ | $ |
+| tts-1-hd | ⭐⭐⭐⭐⭐ | ⭐⭐⭐⭐ | ⭐⭐⭐⭐⭐ | $$ |
+
+## 🚨 Important Notes
+
+1. **Privacy Protection**: Don't upload audio files with sensitive information
+2. **Compliance**: Follow relevant laws and regulations, avoid illegal uses
+3. **Copyright Notice**: Generated speech content should be marked as AI-generated
+4. **File Limits**: Max audio file 25 MB, max text 4096 characters
+5. **Usage Restrictions**: Do not use for impersonation or misinformation
+
+## 🔗 Related Resources
+
+- [Chat Completions API](/en/api-reference/chat-completions) - Learn more about the Chat API
+- [Pricing Information](/en/pricing) - View pricing details
+
+<Note>
+💡 **Tip**: Start with `gpt-4o-mini-transcribe` or `tts-1` for testing, then upgrade to premium models for production deployment.
+</Note>
+
