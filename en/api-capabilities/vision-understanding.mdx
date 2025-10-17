@@ -299,6 +299,61 @@ response = client.chat.completions.create(
 print(response.choices[0].message.content)
 ```
 
+### 5. Local Video Analysis - Base64 Encoding
+
+For local video files, you can use Base64 encoding to upload:
+
+```python
+import base64
+from openai import OpenAI
+
+def video_to_base64(video_path):
+    """Convert local video to base64 encoding"""
+    with open(video_path, "rb") as video_file:
+        return base64.b64encode(video_file.read()).decode('utf-8')
+
+client = OpenAI(
+    api_key="YOUR_API_KEY",
+    base_url="https://api.laozhang.ai/v1"
+)
+
+# Encode local video
+base64_video = video_to_base64("path/to/your/video.mp4")
+
+response = client.chat.completions.create(
+    model="gemini-2.5-flash",
+    messages=[
+        {
+            "role": "user",
+            "content": [
+                {"type": "text", "text": "Please describe the content of this video in detail"},
+                {
+                    "type": "image_url",
+                    "image_url": {
+                        "url": f"data:video/mp4;base64,{base64_video}"
+                    }
+                }
+            ]
+        }
+    ],
+    max_tokens=1000
+)
+
+print(response.choices[0].message.content)
+```
+
+**MIME Type Reference**:
+
+Different video formats require corresponding MIME types:
+- **MP4**: `data:video/mp4;base64,...`
+- **WebM**: `data:video/webm;base64,...`
+- **MOV**: `data:video/quicktime;base64,...`
+- **AVI**: `data:video/x-msvideo;base64,...`
+
+<Tip>
+💡 **Best Practice**: Base64 encoding increases data size by approximately 33%. For large video files (>10MB), prefer URL method. For small videos (<5MB), Base64 is more convenient.
+</Tip>
+
 ### Video Analysis Best Practices
 
 1. **File Size**: Recommend max 20 MB per video - larger files may take longer to process

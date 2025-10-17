@@ -46,15 +46,6 @@
                 "api-capabilities/openai-responses",
                 "api-capabilities/vision-understanding",
                 "api-capabilities/audio-transcription",
-                "api-capabilities/nano-banana-image",
-                "api-capabilities/nano-banana-image-edit",
-                "api-capabilities/seedream-image",
-                "api-capabilities/flux-image-generation",
-                "api-capabilities/flux-image-edit",
-                "api-capabilities/sora-image-generation",
-                "api-capabilities/sora-image-edit",
-                "api-capabilities/gpt-image-1",
-                "api-capabilities/image-edit",
                 {
                   "group": "Sora 2 视频生成",
                   "icon": "clapperboard",
@@ -67,6 +58,15 @@
                     "api-capabilities/sora2/troubleshooting"
                   ]
                 },
+                "api-capabilities/sora-image-generation",
+                "api-capabilities/sora-image-edit",
+                "api-capabilities/nano-banana-image",
+                "api-capabilities/nano-banana-image-edit",
+                "api-capabilities/flux-image-generation",
+                "api-capabilities/flux-image-edit",
+                "api-capabilities/gpt-image-1",
+                "api-capabilities/seedream-image",
+                "api-capabilities/image-edit",
                 {
                   "group": "VEO 视频生成",
                   "icon": "video",
@@ -217,21 +217,12 @@
                 "en/api-capabilities/openai-sdk",
                 "en/api-capabilities/openai-responses",
                 "en/api-capabilities/vision-understanding",
-                "en/api-capabilities/audio-transcription",
-                "en/api-capabilities/gpt-image-1",
-                "en/api-capabilities/image-edit"
+                "en/api-capabilities/audio-transcription"
               ]
             },
             {
               "group": "Image & Video APIs",
               "pages": [
-                "en/api-capabilities/seedream-image",
-                "en/api-capabilities/nano-banana-image",
-                "en/api-capabilities/nano-banana-image-edit",
-                "en/api-capabilities/flux-image-generation",
-                "en/api-capabilities/flux-image-edit",
-                "en/api-capabilities/sora-image-generation",
-                "en/api-capabilities/sora-image-edit",
                 {
                   "group": "Sora 2 Video Generation",
                   "icon": "clapperboard",
@@ -244,6 +235,15 @@
                     "en/api-capabilities/sora2/troubleshooting"
                   ]
                 },
+                "en/api-capabilities/sora-image-generation",
+                "en/api-capabilities/sora-image-edit",
+                "en/api-capabilities/nano-banana-image",
+                "en/api-capabilities/nano-banana-image-edit",
+                "en/api-capabilities/flux-image-generation",
+                "en/api-capabilities/flux-image-edit",
+                "en/api-capabilities/gpt-image-1",
+                "en/api-capabilities/seedream-image",
+                "en/api-capabilities/image-edit",
                 {
                   "group": "VEO Video Generation",
                   "icon": "video",

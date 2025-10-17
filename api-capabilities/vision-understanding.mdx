@@ -299,6 +299,61 @@ response = client.chat.completions.create(
 print(response.choices[0].message.content)
 ```
 
+### 5. 本地视频分析 - Base64 编码
+
+对于本地视频文件，可以使用 Base64 编码上传：
+
+```python
+import base64
+from openai import OpenAI
+
+def video_to_base64(video_path):
+    """将本地视频转换为 base64 编码"""
+    with open(video_path, "rb") as video_file:
+        return base64.b64encode(video_file.read()).decode('utf-8')
+
+client = OpenAI(
+    api_key="YOUR_API_KEY",
+    base_url="https://api.laozhang.ai/v1"
+)
+
+# 编码本地视频
+base64_video = video_to_base64("path/to/your/video.mp4")
+
+response = client.chat.completions.create(
+    model="gemini-2.5-flash",
+    messages=[
+        {
+            "role": "user",
+            "content": [
+                {"type": "text", "text": "请详细描述这个视频的内容"},
+                {
+                    "type": "image_url",
+                    "image_url": {
+                        "url": f"data:video/mp4;base64,{base64_video}"
+                    }
+                }
+            ]
+        }
+    ],
+    max_tokens=1000
+)
+
+print(response.choices[0].message.content)
+```
+
+**MIME 类型说明**：
+
+不同视频格式需要使用对应的 MIME 类型：
+- **MP4**: `data:video/mp4;base64,...`
+- **WebM**: `data:video/webm;base64,...`
+- **MOV**: `data:video/quicktime;base64,...`
+- **AVI**: `data:video/x-msvideo;base64,...`
+
+<Tip>
+💡 **最佳实践**：Base64 编码会增加约 33% 的数据量。对于大视频文件（>10MB），建议优先使用 URL 方式。小视频文件（<5MB）使用 Base64 更方便。
+</Tip>
+
 ### 视频分析最佳实践
 
 1. **文件大小**：建议单个视频 ≤20 MB，超大视频可能导致处理时间过长
