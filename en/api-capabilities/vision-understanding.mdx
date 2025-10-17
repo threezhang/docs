@@ -1,36 +1,41 @@
 ---
-title: Image Understanding API | Vision AI Analysis | LaoZhang API
-sidebarTitle: Vision API
-description: Use AI models for intelligent image analysis and understanding. Object recognition, scene description, OCR text extraction and more through OpenAI-compatible API.
+title: Image & Video Understanding API | Vision AI Analysis | LaoZhang API
+sidebarTitle: Vision & Video API
+description: Use AI models for intelligent image and video analysis. Object recognition, scene description, OCR text extraction, video content understanding through OpenAI-compatible API.
 icon: "eye"
 ---
 
 ## Overview
 
-LaoZhang API provides powerful image understanding capabilities through multiple advanced AI models. Using the unified OpenAI API format, you can easily implement image recognition, scene description, OCR text extraction and more.
+LaoZhang API provides powerful image and video understanding capabilities through multiple advanced AI models. Using the unified OpenAI API format, you can easily implement image recognition, scene description, OCR text extraction, video content analysis and more.
 
 <Note>
 **🔍 Intelligent Visual Analysis**
-Support for object recognition, scene understanding, text extraction, sentiment analysis and various other vision tasks - let AI truly "see" and understand images.
+Support for object recognition, scene understanding, text extraction, sentiment analysis, video content understanding and various other vision tasks - let AI truly "see" and understand images and videos.
 </Note>
 
 ## 🌟 Key Features
 
-- **🎯 Multiple Models**: GPT-4o, Gemini 2.5 Pro, Claude and other top vision models
-- **📸 Flexible Input**: Support for URL links and Base64-encoded images
+- **🎯 Multiple Models**: GPT-5, Gemini 2.5 Pro/Flash and other top vision models
+- **📸 Flexible Input**: Support for URL links and Base64-encoded images and videos
+- **🎬 Video Understanding**: Gemini series supports video content analysis (up to several minutes)
 - **⚡ Fast Response**: High-performance inference with sub-second results
 - **💰 Cost Control**: Multiple model options to fit different budgets
 - **🔄 OpenAI Compatible**: Drop-in replacement for OpenAI vision APIs
 
 ## 📋 Supported Vision Models
 
-| Model Name | Model ID | Features | Recommended Use |
-|---------|---------|------|----------|
-| **GPT-4o** ⭐ | `gpt-4o` | Strong overall capabilities, accurate recognition | General image understanding |
-| **GPT-4.1 Mini** | `gpt-4.1-mini` | Lightweight, fast, low cost | Batch processing |
-| **Gemini 2.5 Pro** ⭐ | `gemini-2.5-pro` | Ultra-long context, rich details | Complex scene analysis |
-| **Gemini 2.5 Flash** | `gemini-2.5-flash` | Extremely fast, high value | Real-time applications |
-| **Claude 3.5 Sonnet** | `claude-3-5-sonnet` | Deep understanding, accurate descriptions | Professional analysis |
+| Model Name | Model ID | Image | Video | Features |
+|---------|---------|------|------|----------|
+| **GPT-5** ⭐ | `gpt-5` | ✅ | ❌ | Latest model, highly detailed image recognition |
+| **Gemini 2.5 Pro** ⭐ | `gemini-2.5-pro` | ✅ | ✅ | Ultra-long context, supports video analysis |
+| **Gemini 2.5 Flash** ⭐ | `gemini-2.5-flash` | ✅ | ✅ | Extremely fast, best value, supports video |
+| **GPT-4.1 Mini** | `gpt-4.1-mini` | ✅ | ❌ | Lightweight, fast, low cost |
+| **Claude 3.5 Sonnet** | `claude-3-5-sonnet` | ✅ | ❌ | Deep understanding, accurate descriptions |
+
+<Note>
+💡 **Video Analysis**: Currently only Gemini series models support video content understanding. GPT-5 and Claude support image analysis only.
+</Note>
 
 ## 🚀 Quick Start
 
@@ -151,6 +156,171 @@ payload = {
 response = requests.post(url, headers=headers, json=payload)
 print(response.json()['choices'][0]['message']['content'])
 ```
+
+## 🎬 Video Content Analysis
+
+### Supported Video Models
+
+Currently **only Gemini series models** support video analysis:
+- `gemini-2.5-pro` - Detailed and accurate, recommended for complex video analysis
+- `gemini-2.5-flash` - Fast and cost-effective, suitable for batch processing
+
+### 1. Basic Video Analysis - URL Method
+
+```python
+import requests
+
+url = "https://api.laozhang.ai/v1/chat/completions"
+headers = {
+    "Authorization": "Bearer YOUR_API_KEY",
+    "Content-Type": "application/json"
+}
+
+payload = {
+    "model": "gemini-2.5-pro",
+    "messages": [
+        {
+            "role": "user",
+            "content": [
+                {
+                    "type": "text",
+                    "text": "Please describe the content of this video in detail"
+                },
+                {
+                    "type": "image_url",
+                    "image_url": {
+                        "url": "https://example.com/video.mp4"
+                    }
+                }
+            ]
+        }
+    ],
+    "max_tokens": 1000
+}
+
+response = requests.post(url, headers=headers, json=payload)
+print(response.json()['choices'][0]['message']['content'])
+```
+
+### 2. Using OpenAI SDK
+
+```python
+from openai import OpenAI
+
+client = OpenAI(
+    api_key="YOUR_API_KEY",
+    base_url="https://api.laozhang.ai/v1"
+)
+
+response = client.chat.completions.create(
+    model="gemini-2.5-flash",
+    messages=[
+        {
+            "role": "user",
+            "content": [
+                {"type": "text", "text": "Analyze this video content, including scenes, people, and actions"},
+                {
+                    "type": "image_url",
+                    "image_url": {
+                        "url": "https://example.com/video.mp4"
+                    }
+                }
+            ]
+        }
+    ],
+    max_tokens=1000
+)
+
+print(response.choices[0].message.content)
+```
+
+### 3. cURL Command Example
+
+```bash
+curl -X POST "https://api.laozhang.ai/v1/chat/completions" \
+  -H "Authorization: Bearer YOUR_API_KEY" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "model": "gemini-2.5-pro",
+    "messages": [
+      {
+        "role": "user",
+        "content": [
+          {
+            "type": "text",
+            "text": "Describe the content of this video"
+          },
+          {
+            "type": "image_url",
+            "image_url": {
+              "url": "https://example.com/video.mp4"
+            }
+          }
+        ]
+      }
+    ],
+    "max_tokens": 1000
+  }'
+```
+
+### 4. Video + Image Mixed Analysis
+
+Gemini supports analyzing videos and images in the same request:
+
+```python
+from openai import OpenAI
+
+client = OpenAI(
+    api_key="YOUR_API_KEY",
+    base_url="https://api.laozhang.ai/v1"
+)
+
+response = client.chat.completions.create(
+    model="gemini-2.5-pro",
+    messages=[
+        {
+            "role": "user",
+            "content": [
+                {"type": "text", "text": "Compare the differences between this video and this image"},
+                {
+                    "type": "image_url",
+                    "image_url": {"url": "https://example.com/video.mp4"}
+                },
+                {
+                    "type": "image_url",
+                    "image_url": {"url": "https://example.com/image.jpg"}
+                }
+            ]
+        }
+    ],
+    max_tokens=1500
+)
+
+print(response.choices[0].message.content)
+```
+
+### Video Analysis Best Practices
+
+1. **File Size**: Recommend max 20 MB per video - larger files may take longer to process
+2. **Video Formats**: Supports MP4, WebM, MOV, AVI and other mainstream formats
+3. **Video Duration**: Short videos (< 5 minutes) work best - consider splitting longer videos
+4. **Resolution**: Higher resolution videos provide better recognition but take longer to process
+5. **Prompt Optimization**: Be specific about what to analyze (e.g., "analyze character movements", "extract dialogue")
+
+### Video Analysis Use Cases
+
+- **📹 Content Moderation**: Automatically identify inappropriate content in videos
+- **🎓 Educational Video Analysis**: Extract key points and subtitles
+- **🛡️ Surveillance Video Understanding**: Detect abnormal behaviors and identify events
+- **🎬 Ad Creative Analysis**: Evaluate creative elements and emotional impact
+- **📊 Sports Analysis**: Recognize athlete movements and key moments in games
+
+<Warning>
+⚠️ **Important Notes**:
+- Video processing typically takes longer than images (depending on video length and complexity)
+- Use `max_tokens` parameter to limit output length and avoid excessive costs
+- Be mindful of data security when processing privacy-sensitive video content
+</Warning>
 
 ## 🎯 Common Use Cases
 
@@ -337,19 +507,20 @@ payload = {
 
 ## 📊 Performance Comparison
 
-| Model | Response Speed | Recognition Accuracy | Multilingual Support | Price |
-|------|---------|-----------|---------|------|
-| GPT-4o | ⭐⭐⭐⭐ | ⭐⭐⭐⭐⭐ | ⭐⭐⭐⭐⭐ | $$ |
-| Gemini 2.5 Pro | ⭐⭐⭐⭐⭐ | ⭐⭐⭐⭐⭐ | ⭐⭐⭐⭐ | $$ |
-| Gemini 2.5 Flash | ⭐⭐⭐⭐⭐ | ⭐⭐⭐⭐ | ⭐⭐⭐⭐ | $ |
-| GPT-4.1 Mini | ⭐⭐⭐⭐⭐ | ⭐⭐⭐ | ⭐⭐⭐⭐ | $ |
+| Model | Image Support | Video Support | Response Speed | Recognition Accuracy | Price |
+|------|---------|---------|---------|-----------|------|
+| GPT-5 | ✅ | ❌ | ⭐⭐⭐⭐ | ⭐⭐⭐⭐⭐ | $$$ |
+| Gemini 2.5 Pro | ✅ | ✅ | ⭐⭐⭐⭐ | ⭐⭐⭐⭐⭐ | $$ |
+| Gemini 2.5 Flash | ✅ | ✅ | ⭐⭐⭐⭐⭐ | ⭐⭐⭐⭐ | $ |
+| GPT-4.1 Mini | ✅ | ❌ | ⭐⭐⭐⭐⭐ | ⭐⭐⭐ | $ |
 
 ## 🚨 Important Notes
 
-1. **Privacy Protection**: Don't upload images containing sensitive information
+1. **Privacy Protection**: Don't upload images or videos containing sensitive information
 2. **Compliance**: Follow relevant laws and regulations, avoid illegal uses
 3. **Result Verification**: AI analysis results are for reference only - verify for critical decisions
 4. **Cost Control**: Choose appropriate models to avoid unnecessary expenses
+5. **Video Limitations**: Video analysis is only supported by Gemini series, other models don't support it yet
 
 ## 🔗 Related Resources
 
@@ -357,5 +528,5 @@ payload = {
 - [Pricing Information](/en/pricing) - View model pricing details
 
 <Note>
-💡 **Tip**: Start with GPT-4.1 Mini or Gemini 2.5 Flash for testing, then upgrade to premium models for production deployment.
+💡 **Tip**: Start with Gemini 2.5 Flash or GPT-4.1 Mini for testing, then upgrade to premium models for production deployment.
 </Note>
