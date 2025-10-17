@@ -1,0 +1,590 @@
+---
+title: Gemini 2.5 Flash Image Generation
+sidebarTitle: Gemini Flash Image
+description: Google's official image generation model with custom aspect ratios, OpenAI-compatible, $0.025 per image
+icon: "sparkles"
+---
+
+## Model Overview
+
+Gemini 2.5 Flash Image (`gemini-2.5-flash-image`) is Google's **official release** image generation model, more stable and reliable than the preview version (`gemini-2.5-flash-image-preview`). Supports both OpenAI-compatible format and Google native format.
+
+<Note>
+**🎉 Official Release**  
+- ✅ Stable and reliable, recommended for production
+- 🎨 Supports custom aspect ratios (16:9, 9:16, and 10 other ratios)
+- ⚡ Generates high-quality images in ~10 seconds
+- 💰 Great value: $0.025/image (37.5% cheaper than official)
+</Note>
+
+## 🔀 Two Calling Methods
+
+Gemini Flash Image supports two API endpoints, each with advantages:
+
+| Feature | OpenAI Compatible Mode | Google Native Format |
+|---------|------------------------|---------------------|
+| **Endpoint** | `/v1/chat/completions` | `/v1beta/models/gemini-2.5-flash-image:generateContent` |
+| **Model Name** | `gemini-2.5-flash-image` | Specified in URL |
+| **Image Size** | Fixed 1:1 | Supports 10 aspect ratios |
+| **Compatibility** | Perfect OpenAI SDK compatibility | Requires native calling |
+| **Return Format** | Base64 | Base64 |
+| **Use Case** | Quick migration, simple needs | Custom dimensions needed |
+| **Aspect Ratio** | ❌ No | ✅ 21:9, 16:9, 4:3, 3:2, 1:1, 9:16, 3:4, 2:3, 5:4, 4:5 |
+
+<Tip>
+💡 **How to Choose?**
+- If you only need square (1:1) images, use **OpenAI Compatible Mode** for simplicity
+- If you need widescreen (16:9), portrait (9:16), or other specific ratios, use **Google Native Format**
+</Tip>
+
+## 🌟 Key Features
+
+- **⚡ Fast Response**: ~10 seconds generation, significantly faster than OpenAI series
+- **💰 Great Value**: $0.025/image, 37.5% cheaper than official ($0.04/image)
+- **🔄 Dual Compatibility**: Supports both OpenAI SDK and Google native format
+- **📐 Flexible Sizes**: Google native format supports 10 aspect ratios
+- **📦 Base64 Output**: Returns base64-encoded image data directly, no secondary download needed
+- **🎨 Google Technology**: Based on Google's latest image generation technology, excellent quality
+
+## 📋 Model Comparison
+
+| Model | Model ID | Billing | LaoZhang Price | Official Price | Savings | Speed |
+|-------|----------|---------|---------------|----------------|---------|-------|
+| **Gemini Flash Image** | `gemini-2.5-flash-image` | Per Request | $0.025/image | $0.04/image | 37.5% | ~10s |
+| **GPT-Image-1** | `gpt-image-1` | Per Token | $10 input/$40 output per M | - | - | Medium |
+| **Flux Kontext Pro** | `flux-kontext-pro` | Per Request | $0.035/image | $0.04/image | 12.5% | Fast |
+| **Sora Image** | `sora_image` | Per Request | $0.01/image | - | - | Slower |
+
+<Tip>
+💡 **Pricing Advantage**  
+- 37.5% cheaper than official price
+- Top up $100 get +10% bonus, combined with exchange rate advantage, total ~73% of official price
+- Transparent and predictable pricing, no need to worry about token consumption
+</Tip>
+
+## 🚀 Quick Start
+
+### Prerequisites
+
+<Steps>
+  <Step title="Create Token">
+    Log in to [LaoZhang API Token Management](https://api.laozhang.ai/token) and create a **per-request billing** token
+    
+    ![Token Creation Interface](/images/token-create-per-request.png)
+  </Step>
+  <Step title="Select Billing Method">
+    **Important**: Must select "Per-Request Billing" type, not "Pay-As-You-Go"
+  </Step>
+  <Step title="Save Token">
+    Copy the generated token, format is `sk-xxxxxx`
+  </Step>
+</Steps>
+
+<Tip>
+💰 **Detailed Pricing Advantage**  
+- **LaoZhang API Price**: $0.025/image (37.5% cheaper than official)
+- **Official Price**: $0.04/image
+- **Top-up Bonus**: Top up $100 get +10% bonus
+- **Exchange Rate Advantage**: Combined advantage equals **~73% of official price**
+</Tip>
+
+## Method 1: OpenAI Compatible Mode (1:1 Images)
+
+### Basic Example - Curl
+
+```bash
+curl -X POST "https://api.laozhang.ai/v1/chat/completions" \
+     -H "Authorization: Bearer $API_KEY" \
+     -H "Content-Type: application/json" \
+     -d '{
+    "model": "gemini-2.5-flash-image",
+    "stream": false,
+    "messages": [
+        {
+            "role": "user",
+            "content": "a beautiful sunset over mountains"
+        }
+    ]
+}'
+```
+
+### Python SDK Example
+
+```python
+from openai import OpenAI
+import base64
+import re
+
+client = OpenAI(
+    api_key="sk-YOUR_API_KEY",
+    base_url="https://api.laozhang.ai/v1"
+)
+
+response = client.chat.completions.create(
+    model="gemini-2.5-flash-image",
+    messages=[
+        {
+            "role": "user",
+            "content": "a beautiful sunset over mountains"
+        }
+    ]
+)
+
+# Extract base64 image data
+content = response.choices[0].message.content
+match = re.search(r'!\[.*?\]\((data:image/png;base64,.*?)\)', content)
+
+if match:
+    base64_data = match.group(1).split(',')[1]
+    image_data = base64.b64decode(base64_data)
+    
+    with open('output.png', 'wb') as f:
+        f.write(image_data)
+    print("✅ Image saved: output.png")
+```
+
+## Method 2: Google Native Format (Custom Aspect Ratios)
+
+### Supported Aspect Ratios
+
+| Type | Aspect Ratio Options |
+|------|---------------------|
+| **Landscape** | 21:9 (ultra-wide), 16:9 (widescreen), 4:3, 3:2 |
+| **Square** | 1:1 |
+| **Portrait** | 9:16 (vertical), 3:4, 2:3 |
+| **Other** | 5:4, 4:5 |
+
+### Simple Curl Example
+
+```bash
+curl -s -X POST "https://api.laozhang.ai/v1beta/models/gemini-2.5-flash-image:generateContent" \
+  -H "Authorization: Bearer $API_KEY" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "contents": [{
+      "parts": [
+        {"text": "a beautiful sunset over mountains"}
+      ]
+    }],
+    "generationConfig": {
+      "responseModalities": ["IMAGE"],
+      "imageConfig": {
+        "aspectRatio": "16:9"
+      }
+    }
+  }' \
+  | jq -r '.candidates[0].content.parts[0].inlineData.data' \
+  | base64 --decode > output.png
+```
+
+### Complete Python Tool Script
+
+<Accordion title="Expand to view complete Python script (with aspect ratio support)">
+
+```python
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+
+"""
+Gemini Image Generation Tool - Python Version
+Generate images using Google Gemini 2.5 Flash Image model with custom aspect ratios
+
+Supported aspect ratios:
+- Landscape: 21:9, 16:9, 4:3, 3:2
+- Square: 1:1
+- Portrait: 9:16, 3:4, 2:3
+- Other: 5:4, 4:5
+"""
+
+import requests
+import base64
+import os
+import datetime
+from typing import Optional, Tuple
+
+class GeminiImageGenerator:
+    """Gemini Image Generator"""
+
+    # Supported aspect ratios
+    SUPPORTED_ASPECT_RATIOS = [
+        "21:9", "16:9", "4:3", "3:2", "1:1",
+        "9:16", "3:4", "2:3", "5:4", "4:5"
+    ]
+
+    def __init__(self, api_key: str, api_url: str = "https://api.laozhang.ai/v1beta/models/gemini-2.5-flash-image:generateContent"):
+        """
+        Initialize image generator
+
+        Args:
+            api_key: API key
+            api_url: API URL (defaults to Google native Gemini API)
+        """
+        self.api_key = api_key
+        self.api_url = api_url
+        self.headers = {
+            "Content-Type": "application/json",
+            "Authorization": f"Bearer {api_key}"
+        }
+
+    def generate_image(self, prompt: str, aspect_ratio: Optional[str] = "1:1",
+                      output_dir: str = ".") -> Tuple[bool, str]:
+        """
+        Generate image and save locally
+
+        Args:
+            prompt: Image description (prompt)
+            aspect_ratio: Aspect ratio like "16:9", "1:1" etc (default 1:1)
+            output_dir: Output directory (default current directory)
+
+        Returns:
+            (success, message)
+        """
+        print(f"🚀 Starting image generation...")
+        print(f"📝 Prompt: {prompt}")
+        print(f"📐 Aspect Ratio: {aspect_ratio}")
+
+        # Validate aspect ratio
+        if aspect_ratio and aspect_ratio not in self.SUPPORTED_ASPECT_RATIOS:
+            return False, f"Unsupported aspect ratio {aspect_ratio}. Supported: {', '.join(self.SUPPORTED_ASPECT_RATIOS)}"
+
+        # Generate filename
+        timestamp = datetime.datetime.now().strftime("%Y%m%d_%H%M%S")
+        output_file = os.path.join(output_dir, f"gemini_{timestamp}.png")
+
+        try:
+            # Build request payload
+            payload = {
+                "contents": [{
+                    "parts": [{"text": prompt}]
+                }]
+            }
+
+            # Add aspect ratio config
+            if aspect_ratio:
+                payload["generationConfig"] = {
+                    "responseModalities": ["IMAGE"],
+                    "imageConfig": {
+                        "aspectRatio": aspect_ratio
+                    }
+                }
+
+            print("📡 Sending request to Gemini API...")
+
+            # Send request
+            response = requests.post(
+                self.api_url,
+                headers=self.headers,
+                json=payload,
+                timeout=120
+            )
+
+            if response.status_code != 200:
+                return False, f"API request failed, status code: {response.status_code}"
+
+            # Parse response
+            result = response.json()
+
+            # Extract image data
+            if "candidates" not in result or len(result["candidates"]) == 0:
+                return False, "Image data not found"
+
+            candidate = result["candidates"][0]
+            if "content" not in candidate or "parts" not in candidate["content"]:
+                return False, "Response format error"
+
+            parts = candidate["content"]["parts"]
+            image_data = None
+
+            for part in parts:
+                if "inlineData" in part and "data" in part["inlineData"]:
+                    image_data = part["inlineData"]["data"]
+                    break
+
+            if not image_data:
+                return False, "Image data not found"
+
+            # Decode and save image
+            print("💾 Saving image...")
+            decoded_data = base64.b64decode(image_data)
+
+            os.makedirs(os.path.dirname(output_file) if os.path.dirname(output_file) else ".", exist_ok=True)
+
+            with open(output_file, 'wb') as f:
+                f.write(decoded_data)
+
+            file_size = len(decoded_data) / 1024  # KB
+            print(f"✅ Image saved: {output_file}")
+            print(f"📊 File size: {file_size:.2f} KB")
+
+            return True, f"Successfully saved image: {output_file}"
+
+        except requests.exceptions.Timeout:
+            return False, "Request timeout (120 seconds)"
+        except requests.exceptions.ConnectionError:
+            return False, "Network connection error"
+        except Exception as e:
+            return False, f"Error: {str(e)}"
+
+def main():
+    """Main function - usage example"""
+
+    # ========== Configuration ==========
+    # 1. Set your API key
+    API_KEY = "sk-YOUR_API_KEY"
+
+    # 2. Input image description (prompt)
+    PROMPT = "a beautiful sunset over mountains"
+
+    # 3. Select aspect ratio (optional)
+    # Supported: 21:9, 16:9, 4:3, 3:2, 1:1, 9:16, 3:4, 2:3, 5:4, 4:5
+    ASPECT_RATIO = "16:9"  # Widescreen
+    # ASPECT_RATIO = "1:1"   # Square
+    # ASPECT_RATIO = "9:16"  # Portrait
+
+    # 4. Set output directory (optional)
+    OUTPUT_DIR = "."  # Current directory
+    # ============================
+
+    print("="*60)
+    print("Gemini Image Generation Tool")
+    print("="*60)
+    print(f"⏰ Start time: {datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')}")
+    print("="*60)
+
+    # Create generator and generate image
+    generator = GeminiImageGenerator(API_KEY)
+    success, message = generator.generate_image(
+        prompt=PROMPT,
+        aspect_ratio=ASPECT_RATIO,
+        output_dir=OUTPUT_DIR
+    )
+
+    # Display result
+    print("\n" + "="*60)
+    if success:
+        print("🎉 Generation successful!")
+        print(f"✅ {message}")
+    else:
+        print("❌ Generation failed")
+        print(f"💥 {message}")
+        print("\nSuggestions:")
+        print("  1. Check if API key is correct")
+        print("  2. Check network connection")
+        print("  3. Check if prompt is reasonable")
+
+    print(f"⏰ End time: {datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')}")
+    print("="*60)
+
+if __name__ == "__main__":
+    main()
+```
+
+</Accordion>
+
+### Bash Script Example
+
+<Accordion title="Expand to view complete Bash script (with aspect ratio support)">
+
+```bash
+#!/bin/bash
+
+# ============================================================
+# Gemini Image Generation Tool - Bash/Curl Version
+# Generate images using Google Gemini 2.5 Flash Image model
+# ============================================================
+
+# ========== Configuration ==========
+# 1. Set your API key
+API_KEY="sk-YOUR_API_KEY"
+
+# 2. Input image description (prompt)
+PROMPT="a beautiful sunset over mountains"
+
+# 3. Select aspect ratio (optional)
+# Supported: 21:9, 16:9, 4:3, 3:2, 1:1, 9:16, 3:4, 2:3, 5:4, 4:5
+ASPECT_RATIO="16:9"  # Widescreen
+# ASPECT_RATIO="1:1"   # Square
+# ASPECT_RATIO="9:16"  # Portrait
+
+# 4. Set output filename
+OUTPUT_FILE="gemini_generated_$(date +%Y%m%d_%H%M%S).png"
+
+# 5. API endpoint
+API_URL="https://api.laozhang.ai/v1beta/models/gemini-2.5-flash-image:generateContent"
+# ============================
+
+# Check dependencies
+if ! command -v jq &> /dev/null; then
+    echo "❌ Error: jq tool required"
+    echo ""
+    echo "Installation:"
+    echo "  macOS:   brew install jq"
+    echo "  Ubuntu:  sudo apt-get install jq"
+    echo "  CentOS:  sudo yum install jq"
+    echo ""
+    exit 1
+fi
+
+echo "============================================================"
+echo "Gemini Image Generation Tool"
+echo "============================================================"
+echo "⏰ Start time: $(date '+%Y-%m-%d %H:%M:%S')"
+echo "============================================================"
+echo "🚀 Starting image generation..."
+echo "📝 Prompt: ${PROMPT}"
+echo "📐 Aspect Ratio: ${ASPECT_RATIO}"
+echo "📡 Sending request to Gemini API..."
+
+# Build JSON request
+REQUEST_JSON=$(jq -n \
+  --arg prompt "$PROMPT" \
+  --arg ratio "$ASPECT_RATIO" \
+  '{
+    contents: [{
+      parts: [{text: $prompt}]
+    }],
+    generationConfig: {
+      responseModalities: ["IMAGE"],
+      imageConfig: {
+        aspectRatio: $ratio
+      }
+    }
+  }')
+
+# Send request
+RESPONSE=$(curl -s -X POST "${API_URL}" \
+  -H "Authorization: Bearer ${API_KEY}" \
+  -H "Content-Type: application/json" \
+  -d "${REQUEST_JSON}")
+
+# Check errors
+if echo "${RESPONSE}" | jq -e '.error' &> /dev/null; then
+    echo "❌ Generation failed"
+    echo "💥 Error message:"
+    echo "${RESPONSE}" | jq -r '.error.message // .error'
+    echo ""
+    echo "Suggestions:"
+    echo "  1. Check if API key is correct"
+    echo "  2. Check network connection"
+    echo "  3. Check if prompt is reasonable"
+    exit 1
+fi
+
+# Extract image data
+echo "💾 Saving image..."
+IMAGE_DATA=$(echo "${RESPONSE}" | jq -r '.candidates[0].content.parts[0].inlineData.data' 2>/dev/null)
+
+if [ -z "$IMAGE_DATA" ] || [ "$IMAGE_DATA" = "null" ]; then
+    echo "❌ Image data not found"
+    echo "📋 Response content:"
+    echo "${RESPONSE}" | jq '.' 2>/dev/null || echo "${RESPONSE}"
+    exit 1
+fi
+
+# Decode and save image
+echo "${IMAGE_DATA}" | base64 --decode > "${OUTPUT_FILE}"
+
+# Check result
+if [ -f "${OUTPUT_FILE}" ]; then
+    FILE_SIZE=$(du -h "${OUTPUT_FILE}" | cut -f1)
+    echo "✅ Image saved: ${OUTPUT_FILE}"
+    echo "📊 File size: ${FILE_SIZE}"
+    echo ""
+    echo "============================================================"
+    echo "🎉 Generation successful!"
+    echo "⏰ End time: $(date '+%Y-%m-%d %H:%M:%S')"
+    echo "============================================================"
+else
+    echo "❌ Failed to save image"
+    exit 1
+fi
+```
+
+</Accordion>
+
+## 💡 Best Practices
+
+### Prompt Optimization
+
+<CardGroup cols={2}>
+  <Card title="Clear Description" icon="pen-fancy">
+    Use specific, detailed descriptions including subject, style, colors, lighting, etc.
+  </Card>
+  <Card title="Reference Styles" icon="palette">
+    Specify art styles: "oil painting style", "watercolor", "cyberpunk style", etc.
+  </Card>
+  <Card title="Avoid Ambiguity" icon="circle-xmark">
+    Avoid overly abstract or vague terms
+  </Card>
+  <Card title="English Preferred" icon="language">
+    English prompts usually work better, though Chinese is also supported
+  </Card>
+</CardGroup>
+
+### Aspect Ratio Selection Guide
+
+| Use Case | Recommended Ratio |
+|----------|------------------|
+| Social media landscape | 16:9 |
+| Phone wallpaper/portrait | 9:16 |
+| Instagram square | 1:1 |
+| Print photos | 4:3 or 3:2 |
+| Movie poster | 2:3 |
+| Banner ads | 21:9 |
+
+## ❓ FAQ
+
+<AccordionGroup>
+  <Accordion title="How to choose calling method?">
+    - If you only need 1:1 square images, use **OpenAI Compatible Mode** for simplicity and perfect compatibility with existing code
+    - If you need specific aspect ratios (like 16:9 widescreen), use **Google Native Format**
+    - Both methods have the same price of $0.025/image
+  </Accordion>
+
+  <Accordion title="What aspect ratios are supported?">
+    Google native format supports 10 aspect ratios:
+    - Landscape: 21:9, 16:9, 4:3, 3:2
+    - Square: 1:1
+    - Portrait: 9:16, 3:4, 2:3
+    - Other: 5:4, 4:5
+  </Accordion>
+
+  <Accordion title="What's the difference from Preview version?">
+    - **Official Release** (`gemini-2.5-flash-image`): Stable and reliable, recommended for production
+    - **Preview** (`gemini-2.5-flash-image-preview`): Being deprecated, migration recommended
+    - Price, speed, and quality are identical, just update the model name to migrate
+  </Accordion>
+
+  <Accordion title="How to get better generation results?">
+    1. **Detailed Description**: Provide specific details (colors, style, scene, etc.)
+    2. **English Prompts**: English usually works better
+    3. **Reference Styles**: Specify art styles (e.g., "oil painting style", "watercolor")
+    4. **Multiple Attempts**: Try different prompts, prices are affordable
+  </Accordion>
+
+  <Accordion title="How to use returned Base64 data?">
+    Base64 data can be displayed directly in web pages:
+    ```html
+    <img src="data:image/png;base64,iVBORw0KG..." />
+    ```
+    Or decode and save as a file (refer to code examples above)
+  </Accordion>
+</AccordionGroup>
+
+## 🔗 Related Resources
+
+<CardGroup cols={2}>
+  <Card title="Image Editing" icon="paintbrush" href="/en/api-capabilities/gemini-flash-image-edit">
+    Learn how to edit and transform existing images with Gemini Flash Image
+  </Card>
+  <Card title="API Reference" icon="code" href="/en/api-reference/chat-completions">
+    View complete API interface documentation
+  </Card>
+  <Card title="Token Management" icon="key" href="https://api.laozhang.ai/token">
+    Create and manage your API tokens
+  </Card>
+  <Card title="Pricing Details" icon="dollar-sign" href="/en/pricing">
+    View detailed pricing table and billing information
+  </Card>
+</CardGroup>
+

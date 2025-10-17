@@ -1,0 +1,544 @@
+---
+title: Gemini 2.5 Flash Image Editing
+sidebarTitle: Gemini Edit
+description: Google's official image editing model supporting single/multi-image editing with custom aspect ratios, $0.025 per edit
+icon: "paintbrush"
+---
+
+## Model Overview
+
+Gemini 2.5 Flash Image (`gemini-2.5-flash-image`) editing feature supports intelligent editing and transformation of existing images. Upload single or multiple images and use text descriptions to achieve advanced functions like element addition, style conversion, and image composition.
+
+<Note>
+**🎨 Intelligent Image Editing**  
+Upload image + text description = precise editing! Supports multi-image composition, element modification, style conversion, and more.
+</Note>
+
+## 🔀 Two Calling Methods
+
+| Feature | OpenAI Compatible Mode | Google Native Format |
+|---------|------------------------|---------------------|
+| **Endpoint** | `/v1/chat/completions` | `/v1beta/models/gemini-2.5-flash-image:generateContent` |
+| **Output Size** | Default ratio | Supports 10 aspect ratios |
+| **Multi-image** | ✅ Supported | ✅ Supported |
+| **Compatibility** | Perfect OpenAI SDK compatibility | Requires native calling |
+| **Return Format** | Base64 | Base64 |
+| **Image Input** | URL or Base64 | Base64 (inline_data) |
+
+## 🌟 Key Features
+
+- **🔄 Flexible Editing**: Supports element addition/removal, style conversion, image composition, etc.
+- **🎭 Multi-image Processing**: Can process multiple images simultaneously for fusion, splicing, and other effects
+- **📐 Custom Dimensions**: Google native format supports 10 aspect ratio outputs
+- **💰 Great Value**: $0.025/edit, per-request billing, transparent pricing
+- **🚀 Fast Processing**: Completes editing in ~10 seconds on average
+- **📦 Base64 Output**: Returns edited base64 image data directly
+
+## 📋 Feature Comparison
+
+| Feature | Gemini Flash Image | GPT-4o Edit | DALL·E 2 Edit | Flux Edit |
+|---------|-------------------|-------------|---------------|-----------|
+| Price | $0.025/edit | Token-based | $0.018/image | $0.035/edit |
+| Multi-image Input | ✅ Supported | ✅ Supported | ❌ Not supported | ❌ Native not supported |
+| Custom Dimensions | ✅ 10 ratios | ❌ Fixed | ❌ Fixed | ✅ Partial support |
+| Response Speed | ~10s | ~20s | Slower | Medium |
+| Return Format | Base64 | Base64 | URL | URL |
+| Chinese Support | ✅ Perfect | ✅ Perfect | ❌ Translation needed | ❌ Translation needed |
+
+## 🚀 Quick Start
+
+### Prerequisites
+
+<Steps>
+  <Step title="Create Token">
+    Log in to [LaoZhang API Token Management](https://api.laozhang.ai/token) and create a **per-request billing** token
+    
+    ![Token Creation Interface](/images/token-create-per-request.png)
+  </Step>
+  <Step title="Select Billing Method">
+    **Important**: Must select "Per-Request Billing" type, not "Pay-As-You-Go"
+  </Step>
+  <Step title="Save Token">
+    Copy the generated token, format is `sk-xxxxxx`
+  </Step>
+</Steps>
+
+<Tip>
+💰 **Great Value Advantage**  
+- **LaoZhang API**: $0.025/edit (37.5% cheaper than official)
+- **Official Price**: $0.04/edit  
+- **Top-up Bonus**: Top up $100 get +10% bonus
+- **Exchange Rate Advantage**: Total equals **~73% of official price**
+</Tip>
+
+## Method 1: OpenAI Compatible Mode
+
+### Single Image Edit - Curl
+
+```bash
+curl -X POST "https://api.laozhang.ai/v1/chat/completions" \
+     -H "Authorization: Bearer sk-YOUR_API_KEY" \
+     -H "Content-Type: application/json" \
+     -d '{
+    "model": "gemini-2.5-flash-image",
+    "stream": false,
+    "messages": [
+        {
+            "role": "user",
+            "content": [
+                {
+                    "type": "text",
+                    "text": "add a cute dog to this image"
+                },
+                {
+                    "type": "image_url",
+                    "image_url": {
+                        "url": "https://example.com/your-image.jpg"
+                    }
+                }
+            ]
+        }
+    ]
+}'
+```
+
+### Single Image Edit - Python SDK
+
+```python
+from openai import OpenAI
+import base64
+import re
+
+client = OpenAI(
+    api_key="sk-YOUR_API_KEY",
+    base_url="https://api.laozhang.ai/v1"
+)
+
+response = client.chat.completions.create(
+    model="gemini-2.5-flash-image",
+    messages=[
+        {
+            "role": "user",
+            "content": [
+                {
+                    "type": "text",
+                    "text": "add a cute dog to this image"
+                },
+                {
+                    "type": "image_url",
+                    "image_url": {
+                        "url": "https://example.com/your-image.jpg"
+                    }
+                }
+            ]
+        }
+    ]
+)
+
+# Extract and save image
+content = response.choices[0].message.content
+match = re.search(r'!\[.*?\]\((data:image/png;base64,.*?)\)', content)
+
+if match:
+    base64_data = match.group(1).split(',')[1]
+    image_data = base64.b64decode(base64_data)
+    
+    with open('edited.png', 'wb') as f:
+        f.write(image_data)
+    print("✅ Edited image saved: edited.png")
+```
+
+### Multi-image Composition - Python SDK
+
+```python
+from openai import OpenAI
+import base64
+import re
+
+client = OpenAI(
+    api_key="sk-YOUR_API_KEY",
+    base_url="https://api.laozhang.ai/v1"
+)
+
+response = client.chat.completions.create(
+    model="gemini-2.5-flash-image",
+    messages=[
+        {
+            "role": "user",
+            "content": [
+                {
+                    "type": "text",
+                    "text": "merge these two images into one artistic composition"
+                },
+                {
+                    "type": "image_url",
+                    "image_url": {"url": "https://example.com/image1.jpg"}
+                },
+                {
+                    "type": "image_url",
+                    "image_url": {"url": "https://example.com/image2.jpg"}
+                }
+            ]
+        }
+    ]
+)
+
+# Extract and save image
+content = response.choices[0].message.content
+match = re.search(r'!\[.*?\]\((data:image/png;base64,.*?)\)', content)
+
+if match:
+    base64_data = match.group(1).split(',')[1]
+    image_data = base64.b64decode(base64_data)
+    
+    with open('merged.png', 'wb') as f:
+        f.write(image_data)
+    print("✅ Merged image saved: merged.png")
+```
+
+## Method 2: Google Native Format (Custom Aspect Ratios)
+
+### Complete Python Tool Script
+
+<Accordion title="Expand to view complete Python script (with aspect ratio support)">
+
+```python
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+
+"""
+Gemini Image Editing Tool - Python Version
+Upload local image + text description to generate new image with custom aspect ratios
+"""
+
+import requests
+import base64
+import os
+import datetime
+import mimetypes
+from typing import Optional, Tuple
+
+class GeminiImageEditor:
+    """Gemini Image Editor"""
+
+    # Supported aspect ratios
+    SUPPORTED_ASPECT_RATIOS = [
+        "21:9", "16:9", "4:3", "3:2", "1:1",
+        "9:16", "3:4", "2:3", "5:4", "4:5"
+    ]
+
+    def __init__(self, api_key: str,
+                 api_url: str = "https://api.laozhang.ai/v1beta/models/gemini-2.5-flash-image:generateContent"):
+        """
+        Initialize image editor
+
+        Args:
+            api_key: API key
+            api_url: API URL (using Google native Gemini API)
+        """
+        self.api_key = api_key
+        self.api_url = api_url
+        self.headers = {
+            "Content-Type": "application/json",
+            "Authorization": f"Bearer {api_key}"
+        }
+
+    def edit_image(self, image_path: str, prompt: str,
+                   aspect_ratio: Optional[str] = "1:1",
+                   output_dir: str = ".") -> Tuple[bool, str]:
+        """
+        Edit image and generate new image
+
+        Args:
+            image_path: Input image path
+            prompt: Edit description (prompt)
+            aspect_ratio: Aspect ratio like "16:9", "1:1" etc (default 1:1)
+            output_dir: Output directory (default current directory)
+
+        Returns:
+            (success, message)
+        """
+        print(f"🚀 Starting image editing...")
+        print(f"📁 Input image: {image_path}")
+        print(f"📝 Edit description: {prompt}")
+        print(f"📐 Aspect ratio: {aspect_ratio}")
+
+        # Check if image file exists
+        if not os.path.exists(image_path):
+            return False, f"Image file not found: {image_path}"
+
+        # Validate aspect ratio
+        if aspect_ratio and aspect_ratio not in self.SUPPORTED_ASPECT_RATIOS:
+            return False, f"Unsupported aspect ratio {aspect_ratio}. Supported: {', '.join(self.SUPPORTED_ASPECT_RATIOS)}"
+
+        # Read and encode image
+        try:
+            with open(image_path, 'rb') as f:
+                image_data = f.read()
+            image_base64 = base64.b64encode(image_data).decode('utf-8')
+
+            # Detect image type
+            mime_type, _ = mimetypes.guess_type(image_path)
+            if not mime_type or not mime_type.startswith('image/'):
+                mime_type = 'image/jpeg'  # Default
+            print(f"🎨 Image type: {mime_type}")
+
+        except Exception as e:
+            return False, f"Failed to read image: {str(e)}"
+
+        # Generate output filename
+        timestamp = datetime.datetime.now().strftime("%Y%m%d_%H%M%S")
+        output_file = os.path.join(output_dir, f"gemini_edited_{timestamp}.png")
+
+        try:
+            # Build request payload (Google native format)
+            payload = {
+                "contents": [{
+                    "parts": [
+                        {"text": prompt},
+                        {
+                            "inline_data": {
+                                "mime_type": mime_type,
+                                "data": image_base64
+                            }
+                        }
+                    ]
+                }]
+            }
+
+            # Add aspect ratio config
+            if aspect_ratio:
+                payload["generationConfig"] = {
+                    "responseModalities": ["IMAGE"],
+                    "imageConfig": {
+                        "aspectRatio": aspect_ratio
+                    }
+                }
+
+            print("📡 Sending request to Gemini API...")
+
+            # Send request
+            response = requests.post(
+                self.api_url,
+                headers=self.headers,
+                json=payload,
+                timeout=120
+            )
+
+            if response.status_code != 200:
+                return False, f"API request failed, status code: {response.status_code}"
+
+            # Parse response
+            result = response.json()
+
+            # Extract image data
+            if "candidates" not in result or len(result["candidates"]) == 0:
+                return False, "Image data not found"
+
+            candidate = result["candidates"][0]
+            if "content" not in candidate or "parts" not in candidate["content"]:
+                return False, "Response format error"
+
+            parts = candidate["content"]["parts"]
+            output_image_data = None
+
+            for part in parts:
+                if "inlineData" in part and "data" in part["inlineData"]:
+                    output_image_data = part["inlineData"]["data"]
+                    break
+
+            if not output_image_data:
+                return False, "Image data not found"
+
+            # Decode and save image
+            print("💾 Saving image...")
+            decoded_data = base64.b64decode(output_image_data)
+
+            os.makedirs(os.path.dirname(output_file) if os.path.dirname(output_file) else ".", exist_ok=True)
+
+            with open(output_file, 'wb') as f:
+                f.write(decoded_data)
+
+            file_size = len(decoded_data) / 1024  # KB
+            print(f"✅ Image saved: {output_file}")
+            print(f"📊 File size: {file_size:.2f} KB")
+
+            return True, f"Successfully saved image: {output_file}"
+
+        except requests.exceptions.Timeout:
+            return False, "Request timeout (120 seconds)"
+        except requests.exceptions.ConnectionError:
+            return False, "Network connection error"
+        except Exception as e:
+            return False, f"Error: {str(e)}"
+
+def main():
+    """Main function - usage example"""
+
+    # ========== Configuration ==========
+    # 1. Set your API key
+    API_KEY = "sk-YOUR_API_KEY"
+
+    # 2. Input image path
+    INPUT_IMAGE = "./input.jpg"  # Replace with your image path
+
+    # 3. Input edit description (prompt)
+    PROMPT = "add a cute cat next to the dog, keep the original composition"
+
+    # 4. Select aspect ratio (optional)
+    # Supported: 21:9, 16:9, 4:3, 3:2, 1:1, 9:16, 3:4, 2:3, 5:4, 4:5
+    ASPECT_RATIO = "16:9"  # Widescreen
+    # ASPECT_RATIO = "1:1"   # Square
+    # ASPECT_RATIO = "9:16"  # Portrait
+
+    # 5. Set output directory (optional)
+    OUTPUT_DIR = "."  # Current directory
+    # ============================
+
+    print("="*60)
+    print("Gemini Image Editing Tool")
+    print("="*60)
+    print(f"⏰ Start time: {datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')}")
+    print("="*60)
+
+    # Create editor and edit image
+    editor = GeminiImageEditor(API_KEY)
+    success, message = editor.edit_image(
+        image_path=INPUT_IMAGE,
+        prompt=PROMPT,
+        aspect_ratio=ASPECT_RATIO,
+        output_dir=OUTPUT_DIR
+    )
+
+    # Display result
+    print("\n" + "="*60)
+    if success:
+        print("🎉 Edit successful!")
+        print(f"✅ {message}")
+    else:
+        print("❌ Edit failed")
+        print(f"💥 {message}")
+        print("\nSuggestions:")
+        print("  1. Check if API key is correct")
+        print("  2. Check if image path is correct")
+        print("  3. Check network connection")
+        print("  4. Check if prompt is reasonable")
+
+    print(f"⏰ End time: {datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')}")
+    print("="*60)
+
+if __name__ == "__main__":
+    main()
+```
+
+</Accordion>
+
+## 🎯 Use Cases
+
+<CardGroup cols={2}>
+  <Card title="Element Addition" icon="plus">
+    Add new elements to existing images (people, animals, objects, etc.)
+  </Card>
+  <Card title="Style Conversion" icon="wand-magic-sparkles">
+    Convert images to different art styles (oil painting, watercolor, cartoon, etc.)
+  </Card>
+  <Card title="Multi-image Composition" icon="layer-group">
+    Merge multiple images into one creative work
+  </Card>
+  <Card title="Scene Transformation" icon="landscape">
+    Change image background, lighting, season, and other environmental factors
+  </Card>
+  <Card title="Product Display" icon="shopping-bag">
+    Place product images in different scenarios for display
+  </Card>
+  <Card title="Creative Design" icon="lightbulb">
+    Provide rapid prototyping and creative inspiration for designers
+  </Card>
+</CardGroup>
+
+## 💡 Best Practices
+
+### Editing Prompt Tips
+
+<Steps>
+  <Step title="Preserve Original">
+    If you want to preserve most of the original, clearly state "keep the original composition" or similar
+  </Step>
+  <Step title="Specific Description">
+    Describe in detail the elements to add or modify, including position, size, style, etc.
+  </Step>
+  <Step title="Style Consistency">
+    If style consistency is needed, state "in the same style as the original image"
+  </Step>
+  <Step title="Multi-image Processing">
+    When processing multiple images, clearly explain how to combine them ("merge", "combine", "place side by side", etc.)
+  </Step>
+</Steps>
+
+### Aspect Ratio Selection Guide
+
+| Original Ratio | Recommended Output | Notes |
+|----------------|-------------------|-------|
+| Landscape photo | 16:9 or 4:3 | Suitable for horizontal display |
+| Portrait photo | 9:16 or 3:4 | Suitable for phone wallpaper, posters |
+| Square | 1:1 | Suitable for social media |
+| Uncertain | 1:1 | Universal choice |
+
+## ❓ FAQ
+
+<AccordionGroup>
+  <Accordion title="What image formats are supported?">
+    Supports common image formats:
+    - JPG/JPEG
+    - PNG
+    - WebP
+    - GIF (static)
+    
+    Recommend using JPG or PNG format for best results.
+  </Accordion>
+
+  <Accordion title="Is there a size limit?">
+    - **Recommended size**: Single image ≤ 5MB
+    - **Maximum size**: ≤ 10MB
+    - Oversized images increase processing time, recommend compressing before upload
+  </Accordion>
+
+  <Accordion title="How many images can be processed at once?">
+    - **OpenAI Compatible Mode**: Supports multiple images (recommend ≤ 4)
+    - **Google Native Format**: Supports multiple images (recommend ≤ 4)
+    - Too many images affect generation quality and processing time
+  </Accordion>
+
+  <Accordion title="What if results are unsatisfactory?">
+    Try:
+    1. **Optimize Prompt**: Provide more detailed, specific descriptions
+    2. **Adjust Aspect Ratio**: Choose more suitable output dimensions
+    3. **Step-by-step Processing**: Complex edits can be done in multiple steps
+    4. **Multiple Attempts**: AI generation has randomness, try multiple times
+  </Accordion>
+
+  <Accordion title="How to ensure consistent style after editing?">
+    Clearly state in the prompt:
+    - "in the same style as the original image"
+    - "keep the original lighting and color tone"
+    - "seamlessly integrate"
+  </Accordion>
+</AccordionGroup>
+
+## 🔗 Related Resources
+
+<CardGroup cols={2}>
+  <Card title="Image Generation" icon="sparkles" href="/en/api-capabilities/gemini-flash-image">
+    Learn how to generate brand new images from text
+  </Card>
+  <Card title="API Reference" icon="code" href="/en/api-reference/chat-completions">
+    View complete API interface documentation
+  </Card>
+  <Card title="Token Management" icon="key" href="https://api.laozhang.ai/token">
+    Create and manage your API tokens
+  </Card>
+  <Card title="Pricing Details" icon="dollar-sign" href="/en/pricing">
+    View detailed pricing table and billing information
+  </Card>
+</CardGroup>
+

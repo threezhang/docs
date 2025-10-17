@@ -1,0 +1,544 @@
+---
+title: Gemini 2.5 Flash Image 图像编辑
+sidebarTitle: Gemini 编辑
+description: Google 正式版图像编辑模型，支持单图/多图智能编辑，自定义输出纵横比，按次计费 $0.025/次
+icon: "paintbrush"
+---
+
+## 模型简介
+
+Gemini 2.5 Flash Image（`gemini-2.5-flash-image`）图像编辑功能支持对现有图片进行智能编辑和改造。可以上传单张或多张图片，通过文字描述实现元素添加、风格转换、图像合成等高级功能。
+
+<Note>
+**🎨 智能图像编辑**  
+上传图片 + 文字描述 = 精准编辑！支持多图合成、元素修改、风格转换等高级功能。
+</Note>
+
+## 🔀 两种调用方式
+
+| 特性 | OpenAI 兼容模式 | Google 原生格式 |
+|------|----------------|----------------|
+| **端点** | `/v1/chat/completions` | `/v1beta/models/gemini-2.5-flash-image:generateContent` |
+| **输出尺寸** | 默认比例 | 支持 10 种纵横比 |
+| **多图支持** | ✅ 支持 | ✅ 支持 |
+| **兼容性** | 完美兼容 OpenAI SDK | 需要原生调用 |
+| **返回格式** | Base64 | Base64 |
+| **图片输入** | URL 或 Base64 | Base64（inline_data） |
+
+## 🌟 核心特性
+
+- **🔄 灵活编辑**：支持元素添加/删除、风格转换、图像合成等
+- **🎭 多图处理**：可同时处理多张图片，实现融合、拼接等效果
+- **📐 自定义尺寸**：Google 原生格式支持 10 种纵横比输出
+- **💰 超值价格**：$0.025/次，按次计费，价格透明
+- **🚀 快速处理**：平均 10 秒完成编辑
+- **📦 Base64 输出**：直接返回编辑后的 base64 图片数据
+
+## 📋 功能对比
+
+| 功能 | Gemini Flash Image | GPT-4o 编辑 | DALL·E 2 编辑 | Flux 编辑 |
+|------|-------------------|-------------|---------------|-----------|
+| 价格 | $0.025/次 | Token计费 | $0.018/张 | $0.035/次 |
+| 多图输入 | ✅ 支持 | ✅ 支持 | ❌ 不支持 | ❌ 原生不支持 |
+| 自定义尺寸 | ✅ 10种纵横比 | ❌ 固定 | ❌ 固定 | ✅ 部分支持 |
+| 响应速度 | ~10秒 | ~20秒 | 较慢 | 中等 |
+| 返回格式 | Base64 | Base64 | URL | URL |
+| 中文支持 | ✅ 完美 | ✅ 完美 | ❌ 需翻译 | ❌ 需翻译 |
+
+## 🚀 快速开始
+
+### 准备工作
+
+<Steps>
+  <Step title="创建令牌">
+    登录 [老张API令牌管理](https://api.laozhang.ai/token) 创建**按次计费**类型的令牌
+    
+    ![令牌创建界面](/images/token-create-per-request.png)
+  </Step>
+  <Step title="选择计费方式">
+    **重要**：必须选择"按次计费"类型，不要选择"按量计费"
+  </Step>
+  <Step title="保存令牌">
+    复制生成的令牌，格式为 `sk-xxxxxx`
+  </Step>
+</Steps>
+
+<Tip>
+💰 **超值价格优势**  
+- **老张API**：$0.025/次（比官网便宜 37.5%）
+- **官网价格**：$0.04/次  
+- **充值福利**：充值 100 美金 +10% 赠送
+- **汇率优势**：总体相当于官网 **7.3 折**
+</Tip>
+
+## 方式一：OpenAI 兼容模式
+
+### 单图编辑 - Curl
+
+```bash
+curl -X POST "https://api.laozhang.ai/v1/chat/completions" \
+     -H "Authorization: Bearer sk-YOUR_API_KEY" \
+     -H "Content-Type: application/json" \
+     -d '{
+    "model": "gemini-2.5-flash-image",
+    "stream": false,
+    "messages": [
+        {
+            "role": "user",
+            "content": [
+                {
+                    "type": "text",
+                    "text": "add a cute dog to this image"
+                },
+                {
+                    "type": "image_url",
+                    "image_url": {
+                        "url": "https://example.com/your-image.jpg"
+                    }
+                }
+            ]
+        }
+    ]
+}'
+```
+
+### 单图编辑 - Python SDK
+
+```python
+from openai import OpenAI
+import base64
+import re
+
+client = OpenAI(
+    api_key="sk-YOUR_API_KEY",
+    base_url="https://api.laozhang.ai/v1"
+)
+
+response = client.chat.completions.create(
+    model="gemini-2.5-flash-image",
+    messages=[
+        {
+            "role": "user",
+            "content": [
+                {
+                    "type": "text",
+                    "text": "add a cute dog to this image"
+                },
+                {
+                    "type": "image_url",
+                    "image_url": {
+                        "url": "https://example.com/your-image.jpg"
+                    }
+                }
+            ]
+        }
+    ]
+)
+
+# 提取并保存图片
+content = response.choices[0].message.content
+match = re.search(r'!\[.*?\]\((data:image/png;base64,.*?)\)', content)
+
+if match:
+    base64_data = match.group(1).split(',')[1]
+    image_data = base64.b64decode(base64_data)
+    
+    with open('edited.png', 'wb') as f:
+        f.write(image_data)
+    print("✅ 编辑后的图片已保存: edited.png")
+```
+
+### 多图合成 - Python SDK
+
+```python
+from openai import OpenAI
+import base64
+import re
+
+client = OpenAI(
+    api_key="sk-YOUR_API_KEY",
+    base_url="https://api.laozhang.ai/v1"
+)
+
+response = client.chat.completions.create(
+    model="gemini-2.5-flash-image",
+    messages=[
+        {
+            "role": "user",
+            "content": [
+                {
+                    "type": "text",
+                    "text": "merge these two images into one artistic composition"
+                },
+                {
+                    "type": "image_url",
+                    "image_url": {"url": "https://example.com/image1.jpg"}
+                },
+                {
+                    "type": "image_url",
+                    "image_url": {"url": "https://example.com/image2.jpg"}
+                }
+            ]
+        }
+    ]
+)
+
+# 提取并保存图片
+content = response.choices[0].message.content
+match = re.search(r'!\[.*?\]\((data:image/png;base64,.*?)\)', content)
+
+if match:
+    base64_data = match.group(1).split(',')[1]
+    image_data = base64.b64decode(base64_data)
+    
+    with open('merged.png', 'wb') as f:
+        f.write(image_data)
+    print("✅ 合成图片已保存: merged.png")
+```
+
+## 方式二：Google 原生格式（支持自定义纵横比）
+
+### Python 完整工具脚本
+
+<Accordion title="展开查看完整 Python 脚本（支持纵横比配置）">
+
+```python
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+
+"""
+Gemini 图片编辑工具 - Python版本
+上传本地图片 + 文字描述，生成新图片，支持自定义纵横比
+"""
+
+import requests
+import base64
+import os
+import datetime
+import mimetypes
+from typing import Optional, Tuple
+
+class GeminiImageEditor:
+    """Gemini 图片编辑器"""
+
+    # 支持的纵横比
+    SUPPORTED_ASPECT_RATIOS = [
+        "21:9", "16:9", "4:3", "3:2", "1:1",
+        "9:16", "3:4", "2:3", "5:4", "4:5"
+    ]
+
+    def __init__(self, api_key: str,
+                 api_url: str = "https://api.laozhang.ai/v1beta/models/gemini-2.5-flash-image:generateContent"):
+        """
+        初始化图片编辑器
+
+        参数:
+            api_key: API密钥
+            api_url: API地址（使用 Google 原生 Gemini API）
+        """
+        self.api_key = api_key
+        self.api_url = api_url
+        self.headers = {
+            "Content-Type": "application/json",
+            "Authorization": f"Bearer {api_key}"
+        }
+
+    def edit_image(self, image_path: str, prompt: str,
+                   aspect_ratio: Optional[str] = "1:1",
+                   output_dir: str = ".") -> Tuple[bool, str]:
+        """
+        编辑图片并生成新图片
+
+        参数:
+            image_path: 输入图片路径
+            prompt: 编辑描述（提示词）
+            aspect_ratio: 纵横比，如 "16:9", "1:1" 等（默认 1:1）
+            output_dir: 保存目录（默认当前目录）
+
+        返回:
+            (是否成功, 结果消息)
+        """
+        print(f"🚀 开始编辑图片...")
+        print(f"📁 输入图片: {image_path}")
+        print(f"📝 编辑描述: {prompt}")
+        print(f"📐 纵横比: {aspect_ratio}")
+
+        # 检查图片文件是否存在
+        if not os.path.exists(image_path):
+            return False, f"图片文件不存在: {image_path}"
+
+        # 验证纵横比
+        if aspect_ratio and aspect_ratio not in self.SUPPORTED_ASPECT_RATIOS:
+            return False, f"不支持的纵横比 {aspect_ratio}。支持: {', '.join(self.SUPPORTED_ASPECT_RATIOS)}"
+
+        # 读取并编码图片
+        try:
+            with open(image_path, 'rb') as f:
+                image_data = f.read()
+            image_base64 = base64.b64encode(image_data).decode('utf-8')
+
+            # 检测图片类型
+            mime_type, _ = mimetypes.guess_type(image_path)
+            if not mime_type or not mime_type.startswith('image/'):
+                mime_type = 'image/jpeg'  # 默认
+            print(f"🎨 图片类型: {mime_type}")
+
+        except Exception as e:
+            return False, f"读取图片失败: {str(e)}"
+
+        # 生成输出文件名
+        timestamp = datetime.datetime.now().strftime("%Y%m%d_%H%M%S")
+        output_file = os.path.join(output_dir, f"gemini_edited_{timestamp}.png")
+
+        try:
+            # 构建请求数据（Google 原生格式）
+            payload = {
+                "contents": [{
+                    "parts": [
+                        {"text": prompt},
+                        {
+                            "inline_data": {
+                                "mime_type": mime_type,
+                                "data": image_base64
+                            }
+                        }
+                    ]
+                }]
+            }
+
+            # 添加纵横比配置
+            if aspect_ratio:
+                payload["generationConfig"] = {
+                    "responseModalities": ["IMAGE"],
+                    "imageConfig": {
+                        "aspectRatio": aspect_ratio
+                    }
+                }
+
+            print("📡 发送请求到 Gemini API...")
+
+            # 发送请求
+            response = requests.post(
+                self.api_url,
+                headers=self.headers,
+                json=payload,
+                timeout=120
+            )
+
+            if response.status_code != 200:
+                return False, f"API 请求失败，状态码: {response.status_code}"
+
+            # 解析响应
+            result = response.json()
+
+            # 提取图片数据
+            if "candidates" not in result or len(result["candidates"]) == 0:
+                return False, "未找到图片数据"
+
+            candidate = result["candidates"][0]
+            if "content" not in candidate or "parts" not in candidate["content"]:
+                return False, "响应格式错误"
+
+            parts = candidate["content"]["parts"]
+            output_image_data = None
+
+            for part in parts:
+                if "inlineData" in part and "data" in part["inlineData"]:
+                    output_image_data = part["inlineData"]["data"]
+                    break
+
+            if not output_image_data:
+                return False, "未找到图片数据"
+
+            # 解码并保存图片
+            print("💾 正在保存图片...")
+            decoded_data = base64.b64decode(output_image_data)
+
+            os.makedirs(os.path.dirname(output_file) if os.path.dirname(output_file) else ".", exist_ok=True)
+
+            with open(output_file, 'wb') as f:
+                f.write(decoded_data)
+
+            file_size = len(decoded_data) / 1024  # KB
+            print(f"✅ 图片已保存: {output_file}")
+            print(f"📊 文件大小: {file_size:.2f} KB")
+
+            return True, f"成功保存图片: {output_file}"
+
+        except requests.exceptions.Timeout:
+            return False, "请求超时（120秒）"
+        except requests.exceptions.ConnectionError:
+            return False, "网络连接错误"
+        except Exception as e:
+            return False, f"错误: {str(e)}"
+
+def main():
+    """主函数 - 使用示例"""
+
+    # ========== 配置区 ==========
+    # 1. 设置你的 API 密钥
+    API_KEY = "sk-YOUR_API_KEY"
+
+    # 2. 输入图片路径
+    INPUT_IMAGE = "./input.jpg"  # 替换为你的图片路径
+
+    # 3. 输入编辑描述（提示词）
+    PROMPT = "add a cute cat next to the dog, keep the original composition"
+
+    # 4. 选择纵横比（可选）
+    # 支持: 21:9, 16:9, 4:3, 3:2, 1:1, 9:16, 3:4, 2:3, 5:4, 4:5
+    ASPECT_RATIO = "16:9"  # 宽屏
+    # ASPECT_RATIO = "1:1"   # 正方形
+    # ASPECT_RATIO = "9:16"  # 竖屏
+
+    # 5. 设置保存目录（可选）
+    OUTPUT_DIR = "."  # 当前目录
+    # ============================
+
+    print("="*60)
+    print("Gemini 图片编辑工具")
+    print("="*60)
+    print(f"⏰ 开始时间: {datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')}")
+    print("="*60)
+
+    # 创建编辑器并编辑图片
+    editor = GeminiImageEditor(API_KEY)
+    success, message = editor.edit_image(
+        image_path=INPUT_IMAGE,
+        prompt=PROMPT,
+        aspect_ratio=ASPECT_RATIO,
+        output_dir=OUTPUT_DIR
+    )
+
+    # 显示结果
+    print("\n" + "="*60)
+    if success:
+        print("🎉 编辑成功！")
+        print(f"✅ {message}")
+    else:
+        print("❌ 编辑失败")
+        print(f"💥 {message}")
+        print("\n建议检查:")
+        print("  1. API 密钥是否正确")
+        print("  2. 图片路径是否正确")
+        print("  3. 网络连接是否正常")
+        print("  4. 提示词是否合理")
+
+    print(f"⏰ 结束时间: {datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')}")
+    print("="*60)
+
+if __name__ == "__main__":
+    main()
+```
+
+</Accordion>
+
+## 🎯 应用场景
+
+<CardGroup cols={2}>
+  <Card title="元素添加" icon="plus">
+    在现有图片中添加新元素（人物、动物、物体等）
+  </Card>
+  <Card title="风格转换" icon="wand-magic-sparkles">
+    将图片转换为不同艺术风格（油画、水彩、卡通等）
+  </Card>
+  <Card title="多图合成" icon="layer-group">
+    将多张图片融合成一张创意作品
+  </Card>
+  <Card title="场景改造" icon="landscape">
+    改变图片背景、光线、季节等环境因素
+  </Card>
+  <Card title="商品展示" icon="shopping-bag">
+    将商品图片放入不同场景中展示
+  </Card>
+  <Card title="创意设计" icon="lightbulb">
+    为设计师提供快速原型和创意灵感
+  </Card>
+</CardGroup>
+
+## 💡 最佳实践
+
+### 编辑提示词技巧
+
+<Steps>
+  <Step title="保留原图">
+    如果想保留原图大部分内容，明确说明"keep the original composition"或"保持原有结构"
+  </Step>
+  <Step title="具体描述">
+    详细描述要添加或修改的元素，包括位置、大小、风格等
+  </Step>
+  <Step title="风格一致">
+    如果需要保持风格一致，说明"in the same style as the original image"
+  </Step>
+  <Step title="多图处理">
+    处理多图时，清楚说明如何组合（"merge"、"combine"、"place side by side"等）
+  </Step>
+</Steps>
+
+### 纵横比选择建议
+
+| 原图比例 | 建议输出比例 | 说明 |
+|---------|-------------|------|
+| 横向照片 | 16:9 或 4:3 | 适合横向展示场景 |
+| 竖向照片 | 9:16 或 3:4 | 适合手机壁纸、海报 |
+| 正方形 | 1:1 | 适合社交媒体 |
+| 不确定 | 1:1 | 通用选择 |
+
+## ❓ 常见问题
+
+<AccordionGroup>
+  <Accordion title="支持哪些图片格式？">
+    支持常见的图片格式：
+    - JPG/JPEG
+    - PNG
+    - WebP
+    - GIF（静态）
+    
+    建议使用 JPG 或 PNG 格式以获得最佳效果。
+  </Accordion>
+
+  <Accordion title="图片大小有限制吗？">
+    - **推荐大小**：单张图片 ≤ 5MB
+    - **最大大小**：≤ 10MB
+    - 过大的图片会增加处理时间，建议压缩后上传
+  </Accordion>
+
+  <Accordion title="可以同时处理多少张图片？">
+    - **OpenAI 兼容模式**：支持多张图片（建议 ≤ 4 张）
+    - **Google 原生格式**：支持多张图片（建议 ≤ 4 张）
+    - 图片过多会影响生成质量和处理时间
+  </Accordion>
+
+  <Accordion title="编辑结果不理想怎么办？">
+    可以尝试：
+    1. **优化提示词**：提供更详细、具体的描述
+    2. **调整纵横比**：选择更适合的输出尺寸
+    3. **分步处理**：复杂编辑可以分多次完成
+    4. **多次尝试**：AI 生成有一定随机性，可以多试几次
+  </Accordion>
+
+  <Accordion title="如何保证编辑后风格一致？">
+    在提示词中明确说明：
+    - "in the same style as the original image"（保持原图风格）
+    - "keep the original lighting and color tone"（保持原图光线和色调）
+    - "seamlessly integrate"（无缝融合）
+  </Accordion>
+</AccordionGroup>
+
+## 🔗 相关资源
+
+<CardGroup cols={2}>
+  <Card title="图像生成" icon="sparkles" href="/api-capabilities/gemini-flash-image">
+    学习如何从文字生成全新图片
+  </Card>
+  <Card title="API 参考" icon="code" href="/api-reference/chat-completions">
+    查看完整的 API 接口文档
+  </Card>
+  <Card title="令牌管理" icon="key" href="https://api.laozhang.ai/token">
+    创建和管理你的 API 令牌
+  </Card>
+  <Card title="价格说明" icon="dollar-sign" href="/pricing">
+    查看详细的价格表和计费说明
+  </Card>
+</CardGroup>
+

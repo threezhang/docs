@@ -1,0 +1,590 @@
+---
+title: Gemini 2.5 Flash Image 图像生成
+sidebarTitle: Gemini Flash Image
+description: Google 最新正式版图像生成模型，支持自定义纵横比，兼容 OpenAI 格式，按次计费 $0.025/张
+icon: "sparkles"
+---
+
+## 模型简介
+
+Gemini 2.5 Flash Image（`gemini-2.5-flash-image`）是 Google 推出的**正式版**图像生成模型，相比预览版（`gemini-2.5-flash-image-preview`）更稳定可靠。支持 OpenAI 兼容格式和 Google 原生格式两种调用方式。
+
+<Note>
+**🎉 正式版发布**  
+- ✅ 稳定可靠，生产环境推荐使用
+- 🎨 支持自定义纵横比（16:9、9:16 等 10 种比例）
+- ⚡ 平均 10 秒生成高质量图片
+- 💰 超值价格：$0.025/张（比官方便宜 37.5%）
+</Note>
+
+## 🔀 两种调用方式
+
+Gemini Flash Image 支持两种调用端点，各有优势：
+
+| 特性 | OpenAI 兼容模式 | Google 原生格式 |
+|------|----------------|----------------|
+| **端点** | `/v1/chat/completions` | `/v1beta/models/gemini-2.5-flash-image:generateContent` |
+| **模型名** | `gemini-2.5-flash-image` | URL 中指定 |
+| **图片尺寸** | 固定 1:1 | 支持 10 种纵横比 |
+| **兼容性** | 完美兼容 OpenAI SDK | 需要原生调用 |
+| **返回格式** | Base64 | Base64 |
+| **使用场景** | 快速迁移、简单需求 | 需要自定义尺寸 |
+| **纵横比支持** | ❌ 否 | ✅ 21:9, 16:9, 4:3, 3:2, 1:1, 9:16, 3:4, 2:3, 5:4, 4:5 |
+
+<Tip>
+💡 **如何选择？**
+- 如果只需要正方形（1:1）图片，使用 **OpenAI 兼容模式**更简单
+- 如果需要宽屏（16:9）、竖屏（9:16）等特定比例，使用 **Google 原生格式**
+</Tip>
+
+## 🌟 核心特性
+
+- **⚡ 极速响应**：平均 10 秒生成，显著快于 OpenAI 系列
+- **💰 超值价格**：$0.025/张，比官方价格（$0.04/张）便宜 37.5%
+- **🔄 双重兼容**：支持 OpenAI SDK 和 Google 原生格式
+- **📐 灵活尺寸**：Google 原生格式支持 10 种纵横比
+- **📦 Base64 输出**：直接返回 base64 编码图片数据，无需二次下载
+- **🎨 Google 技术**：基于 Google 最新图像生成技术，质量出众
+
+## 📋 模型对比
+
+| 模型 | 模型 ID | 计费方式 | 老张API价格 | 官方价格 | 节省比例 | 速度 |
+|------|---------|----------|-----------|----------|----------|------|
+| **Gemini Flash Image** | `gemini-2.5-flash-image` | 按次计费 | $0.025/张 | $0.04/张 | 37.5% | ~10秒 |
+| **GPT-Image-1** | `gpt-image-1` | 按Token | $10输入/$40输出 per M | - | - | 中等 |
+| **Flux Kontext Pro** | `flux-kontext-pro` | 按次计费 | $0.035/张 | $0.04/张 | 12.5% | 快速 |
+| **Sora Image** | `sora_image` | 按次计费 | $0.01/张 | - | - | 较慢 |
+
+<Tip>
+💡 **价格优势**  
+- 比官方价格便宜 37.5%
+- 充值 100 美金 +10% 赠送，叠加汇率优势，总体是官网 7.3 折
+- 价格透明可预测，无需担心 Token 消耗
+</Tip>
+
+## 🚀 快速开始
+
+### 准备工作
+
+<Steps>
+  <Step title="创建令牌">
+    登录 [老张API令牌管理](https://api.laozhang.ai/token) 创建**按次计费**类型的令牌
+    
+    ![令牌创建界面](/images/token-create-per-request.png)
+  </Step>
+  <Step title="选择计费方式">
+    **重要**：必须选择"按次计费"类型，不要选择"按量计费"
+  </Step>
+  <Step title="保存令牌">
+    复制生成的令牌，格式为 `sk-xxxxxx`
+  </Step>
+</Steps>
+
+<Tip>
+💰 **价格优势详解**  
+- **老张API价格**：$0.025/张（比官网便宜 37.5%）
+- **官网价格**：$0.04/张
+- **充值优惠**：充值 100 美金 +10% 赠送
+- **汇率优势**：叠加汇率优势，**总体相当于官网 7.3 折**
+</Tip>
+
+## 方式一：OpenAI 兼容模式（1:1 图片）
+
+### 基础示例 - Curl
+
+```bash
+curl -X POST "https://api.laozhang.ai/v1/chat/completions" \
+     -H "Authorization: Bearer $API_KEY" \
+     -H "Content-Type: application/json" \
+     -d '{
+    "model": "gemini-2.5-flash-image",
+    "stream": false,
+    "messages": [
+        {
+            "role": "user",
+            "content": "a beautiful sunset over mountains"
+        }
+    ]
+}'
+```
+
+### Python SDK 示例
+
+```python
+from openai import OpenAI
+import base64
+import re
+
+client = OpenAI(
+    api_key="sk-YOUR_API_KEY",
+    base_url="https://api.laozhang.ai/v1"
+)
+
+response = client.chat.completions.create(
+    model="gemini-2.5-flash-image",
+    messages=[
+        {
+            "role": "user",
+            "content": "a beautiful sunset over mountains"
+        }
+    ]
+)
+
+# 提取 base64 图片数据
+content = response.choices[0].message.content
+match = re.search(r'!\[.*?\]\((data:image/png;base64,.*?)\)', content)
+
+if match:
+    base64_data = match.group(1).split(',')[1]
+    image_data = base64.b64decode(base64_data)
+    
+    with open('output.png', 'wb') as f:
+        f.write(image_data)
+    print("✅ 图片已保存: output.png")
+```
+
+## 方式二：Google 原生格式（支持自定义纵横比）
+
+### 支持的纵横比
+
+| 类型 | 纵横比选项 |
+|------|-----------|
+| **横向** | 21:9（超宽屏）, 16:9（宽屏）, 4:3, 3:2 |
+| **正方形** | 1:1 |
+| **纵向** | 9:16（竖屏）, 3:4, 2:3 |
+| **其他** | 5:4, 4:5 |
+
+### 简单 Curl 示例
+
+```bash
+curl -s -X POST "https://api.laozhang.ai/v1beta/models/gemini-2.5-flash-image:generateContent" \
+  -H "Authorization: Bearer $API_KEY" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "contents": [{
+      "parts": [
+        {"text": "a beautiful sunset over mountains"}
+      ]
+    }],
+    "generationConfig": {
+      "responseModalities": ["IMAGE"],
+      "imageConfig": {
+        "aspectRatio": "16:9"
+      }
+    }
+  }' \
+  | jq -r '.candidates[0].content.parts[0].inlineData.data' \
+  | base64 --decode > output.png
+```
+
+### Python 完整工具脚本
+
+<Accordion title="展开查看完整 Python 脚本（支持纵横比配置）">
+
+```python
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+
+"""
+Gemini 图片生成工具 - Python版本
+使用 Google Gemini 2.5 Flash Image 模型生成图片，支持自定义纵横比
+
+支持的纵横比：
+- 横向: 21:9, 16:9, 4:3, 3:2
+- 正方形: 1:1
+- 纵向: 9:16, 3:4, 2:3
+- 其他: 5:4, 4:5
+"""
+
+import requests
+import base64
+import os
+import datetime
+from typing import Optional, Tuple
+
+class GeminiImageGenerator:
+    """Gemini 图片生成器"""
+
+    # 支持的纵横比
+    SUPPORTED_ASPECT_RATIOS = [
+        "21:9", "16:9", "4:3", "3:2", "1:1",
+        "9:16", "3:4", "2:3", "5:4", "4:5"
+    ]
+
+    def __init__(self, api_key: str, api_url: str = "https://api.laozhang.ai/v1beta/models/gemini-2.5-flash-image:generateContent"):
+        """
+        初始化图片生成器
+
+        参数:
+            api_key: API密钥
+            api_url: API地址（默认使用 Google 原生 Gemini API）
+        """
+        self.api_key = api_key
+        self.api_url = api_url
+        self.headers = {
+            "Content-Type": "application/json",
+            "Authorization": f"Bearer {api_key}"
+        }
+
+    def generate_image(self, prompt: str, aspect_ratio: Optional[str] = "1:1",
+                      output_dir: str = ".") -> Tuple[bool, str]:
+        """
+        生成图片并保存到本地
+
+        参数:
+            prompt: 图片描述（提示词）
+            aspect_ratio: 纵横比，如 "16:9", "1:1" 等（默认 1:1）
+            output_dir: 保存目录（默认当前目录）
+
+        返回:
+            (是否成功, 结果消息)
+        """
+        print(f"🚀 开始生成图片...")
+        print(f"📝 提示词: {prompt}")
+        print(f"📐 纵横比: {aspect_ratio}")
+
+        # 验证纵横比
+        if aspect_ratio and aspect_ratio not in self.SUPPORTED_ASPECT_RATIOS:
+            return False, f"不支持的纵横比 {aspect_ratio}。支持: {', '.join(self.SUPPORTED_ASPECT_RATIOS)}"
+
+        # 生成文件名
+        timestamp = datetime.datetime.now().strftime("%Y%m%d_%H%M%S")
+        output_file = os.path.join(output_dir, f"gemini_{timestamp}.png")
+
+        try:
+            # 构建请求数据
+            payload = {
+                "contents": [{
+                    "parts": [{"text": prompt}]
+                }]
+            }
+
+            # 添加纵横比配置
+            if aspect_ratio:
+                payload["generationConfig"] = {
+                    "responseModalities": ["IMAGE"],
+                    "imageConfig": {
+                        "aspectRatio": aspect_ratio
+                    }
+                }
+
+            print("📡 发送请求到 Gemini API...")
+
+            # 发送请求
+            response = requests.post(
+                self.api_url,
+                headers=self.headers,
+                json=payload,
+                timeout=120
+            )
+
+            if response.status_code != 200:
+                return False, f"API 请求失败，状态码: {response.status_code}"
+
+            # 解析响应
+            result = response.json()
+
+            # 提取图片数据
+            if "candidates" not in result or len(result["candidates"]) == 0:
+                return False, "未找到图片数据"
+
+            candidate = result["candidates"][0]
+            if "content" not in candidate or "parts" not in candidate["content"]:
+                return False, "响应格式错误"
+
+            parts = candidate["content"]["parts"]
+            image_data = None
+
+            for part in parts:
+                if "inlineData" in part and "data" in part["inlineData"]:
+                    image_data = part["inlineData"]["data"]
+                    break
+
+            if not image_data:
+                return False, "未找到图片数据"
+
+            # 解码并保存图片
+            print("💾 正在保存图片...")
+            decoded_data = base64.b64decode(image_data)
+
+            os.makedirs(os.path.dirname(output_file) if os.path.dirname(output_file) else ".", exist_ok=True)
+
+            with open(output_file, 'wb') as f:
+                f.write(decoded_data)
+
+            file_size = len(decoded_data) / 1024  # KB
+            print(f"✅ 图片已保存: {output_file}")
+            print(f"📊 文件大小: {file_size:.2f} KB")
+
+            return True, f"成功保存图片: {output_file}"
+
+        except requests.exceptions.Timeout:
+            return False, "请求超时（120秒）"
+        except requests.exceptions.ConnectionError:
+            return False, "网络连接错误"
+        except Exception as e:
+            return False, f"错误: {str(e)}"
+
+def main():
+    """主函数 - 使用示例"""
+
+    # ========== 配置区 ==========
+    # 1. 设置你的 API 密钥
+    API_KEY = "sk-YOUR_API_KEY"
+
+    # 2. 输入图片描述（提示词）
+    PROMPT = "a beautiful sunset over mountains"
+
+    # 3. 选择纵横比（可选）
+    # 支持: 21:9, 16:9, 4:3, 3:2, 1:1, 9:16, 3:4, 2:3, 5:4, 4:5
+    ASPECT_RATIO = "16:9"  # 宽屏
+    # ASPECT_RATIO = "1:1"   # 正方形
+    # ASPECT_RATIO = "9:16"  # 竖屏
+
+    # 4. 设置保存目录（可选）
+    OUTPUT_DIR = "."  # 当前目录
+    # ============================
+
+    print("="*60)
+    print("Gemini 图片生成工具")
+    print("="*60)
+    print(f"⏰ 开始时间: {datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')}")
+    print("="*60)
+
+    # 创建生成器并生成图片
+    generator = GeminiImageGenerator(API_KEY)
+    success, message = generator.generate_image(
+        prompt=PROMPT,
+        aspect_ratio=ASPECT_RATIO,
+        output_dir=OUTPUT_DIR
+    )
+
+    # 显示结果
+    print("\n" + "="*60)
+    if success:
+        print("🎉 生成成功！")
+        print(f"✅ {message}")
+    else:
+        print("❌ 生成失败")
+        print(f"💥 {message}")
+        print("\n建议检查:")
+        print("  1. API 密钥是否正确")
+        print("  2. 网络连接是否正常")
+        print("  3. 提示词是否合理")
+
+    print(f"⏰ 结束时间: {datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')}")
+    print("="*60)
+
+if __name__ == "__main__":
+    main()
+```
+
+</Accordion>
+
+### Bash 脚本示例
+
+<Accordion title="展开查看完整 Bash 脚本（支持纵横比配置）">
+
+```bash
+#!/bin/bash
+
+# ============================================================
+# Gemini 图片生成工具 - Bash/Curl 版本
+# 使用 Google Gemini 2.5 Flash Image 模型生成图片
+# ============================================================
+
+# ========== 配置区 ==========
+# 1. 设置你的 API 密钥
+API_KEY="sk-YOUR_API_KEY"
+
+# 2. 输入图片描述（提示词）
+PROMPT="a beautiful sunset over mountains"
+
+# 3. 选择纵横比（可选）
+# 支持: 21:9, 16:9, 4:3, 3:2, 1:1, 9:16, 3:4, 2:3, 5:4, 4:5
+ASPECT_RATIO="16:9"  # 宽屏
+# ASPECT_RATIO="1:1"   # 正方形
+# ASPECT_RATIO="9:16"  # 竖屏
+
+# 4. 设置输出文件名
+OUTPUT_FILE="gemini_generated_$(date +%Y%m%d_%H%M%S).png"
+
+# 5. API 端点
+API_URL="https://api.laozhang.ai/v1beta/models/gemini-2.5-flash-image:generateContent"
+# ============================
+
+# 检查依赖
+if ! command -v jq &> /dev/null; then
+    echo "❌ 错误: 需要安装 jq 工具"
+    echo ""
+    echo "安装方法:"
+    echo "  macOS:   brew install jq"
+    echo "  Ubuntu:  sudo apt-get install jq"
+    echo "  CentOS:  sudo yum install jq"
+    echo ""
+    exit 1
+fi
+
+echo "============================================================"
+echo "Gemini 图片生成工具"
+echo "============================================================"
+echo "⏰ 开始时间: $(date '+%Y-%m-%d %H:%M:%S')"
+echo "============================================================"
+echo "🚀 开始生成图片..."
+echo "📝 提示词: ${PROMPT}"
+echo "📐 纵横比: ${ASPECT_RATIO}"
+echo "📡 发送请求到 Gemini API..."
+
+# 构建 JSON 请求
+REQUEST_JSON=$(jq -n \
+  --arg prompt "$PROMPT" \
+  --arg ratio "$ASPECT_RATIO" \
+  '{
+    contents: [{
+      parts: [{text: $prompt}]
+    }],
+    generationConfig: {
+      responseModalities: ["IMAGE"],
+      imageConfig: {
+        aspectRatio: $ratio
+      }
+    }
+  }')
+
+# 发送请求
+RESPONSE=$(curl -s -X POST "${API_URL}" \
+  -H "Authorization: Bearer ${API_KEY}" \
+  -H "Content-Type: application/json" \
+  -d "${REQUEST_JSON}")
+
+# 检查错误
+if echo "${RESPONSE}" | jq -e '.error' &> /dev/null; then
+    echo "❌ 生成失败"
+    echo "💥 错误信息:"
+    echo "${RESPONSE}" | jq -r '.error.message // .error'
+    echo ""
+    echo "建议检查:"
+    echo "  1. API 密钥是否正确"
+    echo "  2. 网络连接是否正常"
+    echo "  3. 提示词是否合理"
+    exit 1
+fi
+
+# 提取图片数据
+echo "💾 正在保存图片..."
+IMAGE_DATA=$(echo "${RESPONSE}" | jq -r '.candidates[0].content.parts[0].inlineData.data' 2>/dev/null)
+
+if [ -z "$IMAGE_DATA" ] || [ "$IMAGE_DATA" = "null" ]; then
+    echo "❌ 未找到图片数据"
+    echo "📋 响应内容:"
+    echo "${RESPONSE}" | jq '.' 2>/dev/null || echo "${RESPONSE}"
+    exit 1
+fi
+
+# 解码并保存图片
+echo "${IMAGE_DATA}" | base64 --decode > "${OUTPUT_FILE}"
+
+# 检查结果
+if [ -f "${OUTPUT_FILE}" ]; then
+    FILE_SIZE=$(du -h "${OUTPUT_FILE}" | cut -f1)
+    echo "✅ 图片已保存: ${OUTPUT_FILE}"
+    echo "📊 文件大小: ${FILE_SIZE}"
+    echo ""
+    echo "============================================================"
+    echo "🎉 生成成功！"
+    echo "⏰ 结束时间: $(date '+%Y-%m-%d %H:%M:%S')"
+    echo "============================================================"
+else
+    echo "❌ 图片保存失败"
+    exit 1
+fi
+```
+
+</Accordion>
+
+## 💡 最佳实践
+
+### 提示词优化
+
+<CardGroup cols={2}>
+  <Card title="明确描述" icon="pen-fancy">
+    使用具体、详细的描述，包括主体、风格、颜色、光线等
+  </Card>
+  <Card title="参考风格" icon="palette">
+    可以指定艺术风格："油画风格"、"水彩画"、"赛博朋克风格"等
+  </Card>
+  <Card title="避免模糊" icon="circle-xmark">
+    避免使用过于抽象或模糊的词汇
+  </Card>
+  <Card title="英文优先" icon="language">
+    英文提示词通常效果更好，中文也支持
+  </Card>
+</CardGroup>
+
+### 纵横比选择建议
+
+| 用途 | 推荐纵横比 |
+|------|-----------|
+| 社交媒体横图 | 16:9 |
+| 手机壁纸/竖屏 | 9:16 |
+| Instagram 正方形 | 1:1 |
+| 打印照片 | 4:3 或 3:2 |
+| 电影海报 | 2:3 |
+| 横幅广告 | 21:9 |
+
+## ❓ 常见问题
+
+<AccordionGroup>
+  <Accordion title="如何选择调用方式？">
+    - 如果只需要 1:1 正方形图片，使用 **OpenAI 兼容模式**更简单，完美兼容现有代码
+    - 如果需要特定纵横比（如 16:9 宽屏），使用 **Google 原生格式**
+    - 两种方式价格相同，都是 $0.025/张
+  </Accordion>
+
+  <Accordion title="支持哪些纵横比？">
+    Google 原生格式支持 10 种纵横比：
+    - 横向：21:9, 16:9, 4:3, 3:2
+    - 正方形：1:1
+    - 纵向：9:16, 3:4, 2:3
+    - 其他：5:4, 4:5
+  </Accordion>
+
+  <Accordion title="与 Preview 版本有什么区别？">
+    - **正式版** (`gemini-2.5-flash-image`)：稳定可靠，生产环境推荐
+    - **预览版** (`gemini-2.5-flash-image-preview`)：即将下线，建议迁移
+    - 价格、速度、质量完全相同，只需更新模型名称即可迁移
+  </Accordion>
+
+  <Accordion title="如何获取更好的生成效果？">
+    1. **详细描述**：提供具体的细节（颜色、风格、场景等）
+    2. **英文提示词**：英文通常效果更好
+    3. **参考风格**：指定艺术风格（如"油画风格"、"水彩画"）
+    4. **多次尝试**：可以用不同的提示词尝试，价格低廉
+  </Accordion>
+
+  <Accordion title="返回的 Base64 数据如何使用？">
+    Base64 数据可以直接在网页中显示：
+    ```html
+    <img src="data:image/png;base64,iVBORw0KG..." />
+    ```
+    或者解码保存为文件（参考上面的代码示例）
+  </Accordion>
+</AccordionGroup>
+
+## 🔗 相关资源
+
+<CardGroup cols={2}>
+  <Card title="图像编辑" icon="paintbrush" href="/api-capabilities/gemini-flash-image-edit">
+    学习如何使用 Gemini Flash Image 编辑和改造现有图片
+  </Card>
+  <Card title="API 参考" icon="code" href="/api-reference/chat-completions">
+    查看完整的 API 接口文档
+  </Card>
+  <Card title="令牌管理" icon="key" href="https://api.laozhang.ai/token">
+    创建和管理你的 API 令牌
+  </Card>
+  <Card title="价格说明" icon="dollar-sign" href="/pricing">
+    查看详细的价格表和计费说明
+  </Card>
+</CardGroup>
+

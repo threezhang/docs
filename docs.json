@@ -24,62 +24,109 @@
     "languages": [
     {
       "language": "zh",
-      "tabs": [
-        {
-          "tab": "首页",
-          "groups": [
-            {
-              "group": "产品基础",
-              "pages": [
-                "index",
-                "getting-started",
-                "api-manual",
-                "pricing",
-                "changelog"
+    "tabs": [
+      {
+        "tab": "首页",
+        "groups": [
+          {
+            "group": "产品基础",
+            "pages": [
+              "index",
+              "getting-started", 
+              "api-manual",
+              "pricing",
+              "changelog"
+            ]
+          },
+          {
+              "group": "核心 API",
+            "pages": [
+              "api-capabilities/model-info",
+              "api-capabilities/openai-sdk",
+                "api-capabilities/openai-responses"
               ]
             },
             {
-              "group": "API 能力",
+              "group": "视频生成 API",
               "pages": [
-                "api-capabilities/model-info",
-                "api-capabilities/openai-sdk",
-                "api-capabilities/openai-responses",
-                "api-capabilities/vision-understanding",
-                "api-capabilities/audio-transcription",
-                {
-                  "group": "Sora 2 视频生成",
-                  "icon": "clapperboard",
-                  "pages": [
-                    "api-capabilities/sora2/overview",
-                    "api-capabilities/sora2/quick-start",
-                    "api-capabilities/sora2/api-reference",
+              {
+                "group": "Sora 2 视频生成",
+                "icon": "clapperboard",
+                "pages": [
+                  "api-capabilities/sora2/overview",
+                  "api-capabilities/sora2/quick-start",
                     "api-capabilities/sora2/models-pricing",
-                    "api-capabilities/sora2/examples",
-                    "api-capabilities/sora2/troubleshooting"
+                  "api-capabilities/sora2/api-reference",
+                  "api-capabilities/sora2/examples",
+                  "api-capabilities/sora2/troubleshooting"
+                ]
+              },
+              {
+                "group": "VEO 视频生成",
+                "icon": "video",
+                "pages": [
+                  "api-capabilities/veo/overview",
+                  "api-capabilities/veo/quick-start",
+                    "api-capabilities/veo/models-pricing",
+                  "api-capabilities/veo/api-reference",
+                  "api-capabilities/veo/examples",
+                  "api-capabilities/veo/best-practices",
+                  "api-capabilities/veo/troubleshooting"
+                ]
+              }
+            ]
+            },
+            {
+              "group": "图像生成 API",
+              "pages": [
+                {
+                  "group": "Sora 图像",
+                  "icon": "image",
+                  "pages": [
+                    "api-capabilities/sora-image-generation",
+                    "api-capabilities/sora-image-edit"
                   ]
                 },
-                "api-capabilities/sora-image-generation",
-                "api-capabilities/sora-image-edit",
-                "api-capabilities/nano-banana-image",
-                "api-capabilities/nano-banana-image-edit",
-                "api-capabilities/flux-image-generation",
-                "api-capabilities/flux-image-edit",
-                "api-capabilities/gpt-image-1",
-                "api-capabilities/seedream-image",
-                "api-capabilities/image-edit",
                 {
-                  "group": "VEO 视频生成",
-                  "icon": "video",
+                  "group": "Gemini Flash Image",
+                  "icon": "sparkles",
                   "pages": [
-                    "api-capabilities/veo/overview",
-                    "api-capabilities/veo/quick-start",
-                    "api-capabilities/veo/api-reference",
-                    "api-capabilities/veo/models-pricing",
-                    "api-capabilities/veo/examples",
-                    "api-capabilities/veo/best-practices",
-                    "api-capabilities/veo/troubleshooting"
+                    "api-capabilities/gemini-flash-image",
+                    "api-capabilities/gemini-flash-image-edit"
                   ]
-                }
+                },
+                {
+                  "group": "Nano Banana (Preview)",
+                  "icon": "sparkles",
+                  "pages": [
+                    "api-capabilities/nano-banana-image",
+                    "api-capabilities/nano-banana-image-edit"
+                  ]
+                },
+                {
+                  "group": "Flux 图像生成",
+                  "icon": "zap",
+                  "pages": [
+                    "api-capabilities/flux-image-generation",
+                    "api-capabilities/flux-image-edit"
+                  ]
+                },
+                {
+                  "group": "GPT-Image-1",
+                  "icon": "palette",
+                  "pages": [
+                    "api-capabilities/gpt-image-1",
+                    "api-capabilities/image-edit"
+                  ]
+                },
+                "api-capabilities/seedream-image"
+              ]
+            },
+            {
+              "group": "AI 理解能力",
+              "pages": [
+                "api-capabilities/vision-understanding",
+                "api-capabilities/audio-transcription"
               ]
             }
           ]
@@ -102,79 +149,79 @@
                 "api-reference/claude",
                 "api-reference/gemini"
               ]
-            }
-          ]
-        },
-        {
-          "tab": "使用场景",
-          "groups": [
-            {
-              "group": "概览",
-              "pages": [
-                "scenarios"
-              ]
-            },
-            {
-              "group": "对话型 AI",
-              "pages": [
-                "scenarios/chat/cherry-studio",
-                "scenarios/chat/chatbox",
-                "scenarios/chat/open-webui",
-                "scenarios/chat/chatgpt-next-web"
-              ]
-            },
-            {
-              "group": "编程开发",
-              "pages": [
-                "scenarios/programming/cursor",
-                "scenarios/programming/cline"
-              ]
-            },
-            {
-              "group": "技术工程",
-              "pages": [
-                "scenarios/engineering/langchain",
-                "scenarios/engineering/dify"
-              ]
-            },
-            {
-              "group": "翻译场景",
-              "pages": [
-                "scenarios/translation/bob",
-                "scenarios/translation/immersive"
-              ]
-            }
-          ]
-        },
-        {
-          "tab": "资源导航",
-          "groups": [
-            {
-              "group": "官方 API 文档",
-              "pages": [
-                "resources"
-              ]
-            }
-          ]
-        },
-        {
-          "tab": "常见问题",
-          "groups": [
-            {
-              "group": "使用指南",
-              "pages": [
-                "faq/token-management",
-                "faq/call-logs",
-                "faq/model-availability",
-                "faq/balance-insufficient",
-                "faq/payment-methods",
-                "faq/content-safety",
-                "faq/data-security"
-              ]
-            }
-          ]
-        }
-      ],
+          }
+        ]
+      },
+      {
+        "tab": "使用场景",
+        "groups": [
+          {
+            "group": "概览",
+            "pages": [
+              "scenarios"
+            ]
+          },
+          {
+            "group": "对话型 AI",
+            "pages": [
+              "scenarios/chat/cherry-studio",
+              "scenarios/chat/chatbox",
+              "scenarios/chat/open-webui",
+              "scenarios/chat/chatgpt-next-web"
+            ]
+          },
+          {
+            "group": "编程开发",
+            "pages": [
+              "scenarios/programming/cursor",
+              "scenarios/programming/cline"
+            ]
+          },
+          {
+            "group": "技术工程",
+            "pages": [
+              "scenarios/engineering/langchain",
+              "scenarios/engineering/dify"
+            ]
+          },
+          {
+            "group": "翻译场景",
+            "pages": [
+              "scenarios/translation/bob",
+              "scenarios/translation/immersive"
+            ]
+          }
+        ]
+      },
+      {
+        "tab": "资源导航",
+        "groups": [
+          {
+            "group": "官方 API 文档",
+            "pages": [
+              "resources"
+            ]
+          }
+        ]
+      },
+      {
+        "tab": "常见问题",
+        "groups": [
+          {
+            "group": "使用指南",
+            "pages": [
+              "faq/token-management",
+              "faq/call-logs",
+              "faq/model-availability",
+              "faq/balance-insufficient",
+              "faq/payment-methods",
+              "faq/content-safety",
+              "faq/data-security"
+            ]
+          }
+        ]
+      }
+    ],
       "anchors": [
         {
           "anchor": "控制台",
@@ -211,17 +258,15 @@
               ]
             },
             {
-              "group": "API Capabilities",
+              "group": "Core API",
               "pages": [
                 "en/api-capabilities/model-info",
                 "en/api-capabilities/openai-sdk",
-                "en/api-capabilities/openai-responses",
-                "en/api-capabilities/vision-understanding",
-                "en/api-capabilities/audio-transcription"
+                "en/api-capabilities/openai-responses"
               ]
             },
             {
-              "group": "Image & Video APIs",
+              "group": "Video Generation APIs",
               "pages": [
                 {
                   "group": "Sora 2 Video Generation",
@@ -235,15 +280,6 @@
                     "en/api-capabilities/sora2/troubleshooting"
                   ]
                 },
-                "en/api-capabilities/sora-image-generation",
-                "en/api-capabilities/sora-image-edit",
-                "en/api-capabilities/nano-banana-image",
-                "en/api-capabilities/nano-banana-image-edit",
-                "en/api-capabilities/flux-image-generation",
-                "en/api-capabilities/flux-image-edit",
-                "en/api-capabilities/gpt-image-1",
-                "en/api-capabilities/seedream-image",
-                "en/api-capabilities/image-edit",
                 {
                   "group": "VEO Video Generation",
                   "icon": "video",
@@ -260,14 +296,56 @@
               ]
             },
             {
-              "group": "Essentials",
+              "group": "Image Generation APIs",
               "pages": [
-                "en/essentials/markdown",
-                "en/essentials/code",
-                "en/essentials/images",
-                "en/essentials/settings",
-                "en/essentials/navigation",
-                "en/essentials/reusable-snippets"
+                {
+                  "group": "Sora Image",
+                  "icon": "image",
+                  "pages": [
+                    "en/api-capabilities/sora-image-generation",
+                    "en/api-capabilities/sora-image-edit"
+                  ]
+                },
+                {
+                  "group": "Gemini Flash Image",
+                  "icon": "sparkles",
+                  "pages": [
+                    "en/api-capabilities/gemini-flash-image",
+                    "en/api-capabilities/gemini-flash-image-edit"
+                  ]
+                },
+                {
+                  "group": "Nano Banana (Preview)",
+                  "icon": "sparkles",
+                  "pages": [
+                    "en/api-capabilities/nano-banana-image",
+                    "en/api-capabilities/nano-banana-image-edit"
+                  ]
+                },
+                {
+                  "group": "Flux Image Generation",
+                  "icon": "zap",
+                  "pages": [
+                    "en/api-capabilities/flux-image-generation",
+                    "en/api-capabilities/flux-image-edit"
+                  ]
+                },
+                {
+                  "group": "GPT-Image-1",
+                  "icon": "palette",
+                  "pages": [
+                    "en/api-capabilities/gpt-image-1",
+                    "en/api-capabilities/image-edit"
+                  ]
+                },
+                "en/api-capabilities/seedream-image"
+              ]
+            },
+            {
+              "group": "AI Understanding",
+              "pages": [
+                "en/api-capabilities/vision-understanding",
+                "en/api-capabilities/audio-transcription"
               ]
             }
           ]
@@ -389,16 +467,16 @@
   },
   "navbar": {
     "zh": {
-      "links": [
-        {
-          "label": "首页",
-          "href": "https://api.laozhang.ai"
-        }
-      ],
-      "primary": {
-        "type": "button",
-        "label": "控制台",
-        "href": "https://api.laozhang.ai/account/profile"
+    "links": [
+      {
+        "label": "首页",
+        "href": "https://api.laozhang.ai"
+      }
+    ],
+    "primary": {
+      "type": "button",
+      "label": "控制台",
+      "href": "https://api.laozhang.ai/account/profile"
       }
     },
     "en": {
@@ -417,10 +495,10 @@
   },
   "footer": {
     "zh": {
-      "socials": {
-        "website": "https://api.laozhang.ai"
-      }
-    },
+    "socials": {
+      "website": "https://api.laozhang.ai"
+    }
+  },
     "en": {
       "socials": {
         "website": "https://api.laozhang.ai"
@@ -436,13 +514,13 @@
   },
   "metadata": {
     "zh": {
-      "og:type": "website",
-      "og:title": "老张API - 企业级AI大模型API中转站",
+    "og:type": "website",
+    "og:title": "老张API - 企业级AI大模型API中转站",
       "og:description": "国内访问ChatGPT、Claude、Gemini等200+AI模型API。完全兼容OpenAI接口,支持支付宝微信付款,提供中文技术支持。",
-      "og:image": "/logo/logo-default.webp",
-      "og:url": "https://docs.laozhang.ai",
-      "twitter:card": "summary_large_image",
-      "twitter:title": "老张API - 企业级AI大模型API中转站",
+    "og:image": "/logo/logo-default.webp",
+    "og:url": "https://docs.laozhang.ai",
+    "twitter:card": "summary_large_image",
+    "twitter:title": "老张API - 企业级AI大模型API中转站",
       "twitter:description": "国内访问ChatGPT、Claude、Gemini等200+AI模型API。OpenAI兼容接口,支付宝微信付款。",
       "twitter:image": "/logo/logo-default.webp"
     },
@@ -455,7 +533,7 @@
       "twitter:card": "summary_large_image",
       "twitter:title": "LaoZhang API - Unified AI API Gateway",
       "twitter:description": "200+ AI models, one API. OpenAI compatible. Pay-as-you-go pricing, no subscription.",
-      "twitter:image": "/logo/logo-default.webp"
+    "twitter:image": "/logo/logo-default.webp"
     }
   },
   "api": {
