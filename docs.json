@@ -256,6 +256,17 @@
                   ]
                 }
               ]
+            },
+            {
+              "group": "Essentials",
+              "pages": [
+                "en/essentials/markdown",
+                "en/essentials/code",
+                "en/essentials/images",
+                "en/essentials/settings",
+                "en/essentials/navigation",
+                "en/essentials/reusable-snippets"
+              ]
             }
           ]
         },
