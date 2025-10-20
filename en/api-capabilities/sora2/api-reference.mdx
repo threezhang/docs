@@ -9,12 +9,20 @@ icon: "book"
 <Info>
 **Endpoint:** `https://api.laozhang.ai/v1/chat/completions`
 
+**With Watermark Endpoint:** `https://api.laozhang.ai/v1/chat/completions?watermark=true`
+
 **Method:** `POST`
 
 **Authentication:** Bearer Token (API Key)
 
 **Content Type:** `application/json`
 </Info>
+
+<Note>
+**10/18 New Feature: Watermark Option**
+
+By default, generated videos have **no watermark**. To generate videos with Sora native watermark, add the parameter `?watermark=true` to the URL.
+</Note>
 
 ## Authentication
 

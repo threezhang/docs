@@ -304,6 +304,71 @@ data: [DONE]
 设置超时时间时，建议不少于 **5 分钟**（300秒），以确保视频生成完成。
 </Warning>
 
+## 带水印视频生成
+
+<Note>
+**10/18 新增功能**
+
+默认生成的视频**无水印**。如需生成带 Sora 原生水印的视频，在 URL 添加参数 `?watermark=true`。
+</Note>
+
+<CodeGroup>
+
+```bash cURL (带水印)
+curl -X POST "https://api.laozhang.ai/v1/chat/completions?watermark=true" \
+  -H "Authorization: Bearer YOUR_API_KEY" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "model": "sora_video2",
+    "messages": [
+      {
+        "role": "user",
+        "content": [
+          {
+            "type": "text",
+            "text": "一只可爱的猫咪在阳光明媚的花园里玩球"
+          }
+        ]
+      }
+    ]
+  }'
+```
+
+```python Python (带水印)
+import openai
+
+client = openai.OpenAI(
+    api_key="YOUR_API_KEY",
+    # 注意这里使用带 watermark 参数的 URL
+    base_url="https://api.laozhang.ai/v1?watermark=true"
+)
+
+response = client.chat.completions.create(
+    model="sora_video2",
+    messages=[
+        {
+            "role": "user",
+            "content": [
+                {
+                    "type": "text",
+                    "text": "一只可爱的猫咪在阳光明媚的花园里玩球"
+                }
+            ]
+        }
+    ]
+)
+
+print(response.choices[0].message.content)
+```
+
+</CodeGroup>
+
+<Tip>
+**使用场景：**
+- 默认无水印：适合商业使用、品牌宣传等需要无水印的场景
+- 带水印：适合测试、学习、展示 Sora 生成效果等场景
+</Tip>
+
 ## 视频下载
 
 <Steps>

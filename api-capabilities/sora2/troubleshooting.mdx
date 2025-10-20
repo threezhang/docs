@@ -26,13 +26,24 @@ icon: "circle-question"
   </Accordion>
 
   <Accordion title="生成的视频有水印吗？" icon="droplet">
-    **没有水印！**
+    **默认无水印，可选带水印（10/18 新增）**
 
-    本站提供的 Sora 2 API 生成的视频**无水印**，而官网生成的视频仍然带有 Sora 水印。
+    - **默认情况：** 生成的视频**无水印**
+    - **带水印选项：** 在 URL 添加 `?watermark=true` 生成带 Sora 原生水印的视频
 
-    <Note>
-    原先的无水印方案因 OpenAI 升级已失效，现已更新为新的无水印方案。
-    </Note>
+    **无水印示例：**
+    ```bash
+    https://api.laozhang.ai/v1/chat/completions
+    ```
+
+    **带水印示例：**
+    ```bash
+    https://api.laozhang.ai/v1/chat/completions?watermark=true
+    ```
+
+    <Tip>
+    官网生成的视频仍然带有 Sora 水印。选择 laozhang.ai 可以自由选择是否需要水印！
+    </Tip>
   </Accordion>
 
   <Accordion title="为什么生成人物视频失败？" icon="user-xmark">
@@ -43,6 +54,16 @@ icon: "circle-question"
 
     **可用的授权真人：**
     - `@sama` - OpenAI CEO Sam Altman
+    - 其他已通过 Cameo 认证的用户
+
+    **如何让真人出镜？**
+
+    需要在 Sora iOS 应用中完成 Cameo 认证：
+    1. 使用美区 Apple ID 下载 Sora iOS 应用
+    2. 在应用中进入设置
+    3. 找到 Cameo 认证功能
+    4. 按照指引完成人脸认证
+    5. 认证后即可在提示词中使用 `@您的ID`
 
     **正确示例：**
     ```python
@@ -54,6 +75,10 @@ icon: "circle-question"
     # ✗ 不可以 - 上传真人照片会被拒绝
     # 上传了一张真人照片 + 提示词
     ```
+
+    <Warning>
+    未经 Cameo 认证的真人照片会被 OpenAI 拒绝，这是平台政策，非 API 限制。
+    </Warning>
   </Accordion>
 
   <Accordion title="生成时间太长怎么办？" icon="hourglass">
@@ -292,11 +317,28 @@ icon: "circle-question"
     - ✓ 仅在视频**成功生成**时收费
     - ✗ 失败、超时、报错**不计费**
 
-    **价格：**
-    - 10秒视频（竖屏/横屏）：$0.15/次
+    **价格（10/20 更新）：**
+    - 10秒/15秒视频（竖屏/横屏）：**$0.15/次**（统一定价）
+    - 高清视频（sora-2-pro-all）：$0.4/次
 
     **充值优惠：**
-    - 单次充值 $100，约 ¥1.0/次
+    - 单次充值 $100，约 ¥1.0/次（基础模型）
+
+    <Note>
+    **重大降价！** 15秒模型已从 $0.25 降至 $0.15/次，与10秒模型同价。建议优先选择15秒版本获得更好效果！
+    </Note>
+
+    **关于内容违规扣费：**
+
+    如果因**内容违规**（content violation）导致生成失败，会计费。原因：
+    - 请求已成功提交到 OpenAI 平台
+    - 平台已消耗资源进行内容审核
+    - HTTP 状态码 200（请求成功）
+
+    **建议：**
+    1. 先在 [sora.chatgpt.com](https://sora.chatgpt.com) 测试提示词和图片
+    2. 确认通过后再通过 API 批量生成
+    3. 避免使用真人照片、版权内容
   </Accordion>
 
   <Accordion title="官方价格对比" icon="scale-balanced">
@@ -327,6 +369,114 @@ icon: "circle-question"
     **支持支付方式：**
     - 支付宝
     - 微信支付
+  </Accordion>
+</AccordionGroup>
+
+## 高级功能
+
+<AccordionGroup>
+  <Accordion title="支持高并发吗？" icon="gauge-high">
+    **支持！基础模型稳定性极高**
+
+    **基础模型（sora_video2 系列）：**
+    - 稳定性：⭐⭐⭐⭐⭐ 极高
+    - 建议并发数：30 以内
+    - 大量并发需求（>50）：可联系我们单独保障
+
+    **高清模型（sora-2-pro-all）：**
+    - 稳定性：⭐⭐⭐ 一般
+    - 受官方风控限制较严
+    - 不建议高并发使用
+
+    **最佳实践：**
+    ```python
+    import asyncio
+    from openai import AsyncOpenAI
+
+    client = AsyncOpenAI(
+        api_key="YOUR_API_KEY",
+        base_url="https://api.laozhang.ai/v1"
+    )
+
+    async def generate_video(prompt):
+        response = await client.chat.completions.create(
+            model="sora_video2",
+            messages=[{"role": "user", "content": [{"type": "text", "text": prompt}]}]
+        )
+        return response
+
+    # 并发生成（建议 10-30 个）
+    prompts = ["提示词1", "提示词2", "提示词3", ...]
+    tasks = [generate_video(p) for p in prompts]
+    results = await asyncio.gather(*tasks)
+    ```
+
+    **联系我们：**
+    - 邮箱：feedback@laozhang.ai
+    - 微信：laozhangdaichong
+  </Accordion>
+
+  <Accordion title="什么是原始错误日志？" icon="file-lines">
+    **10/20 新增功能**
+
+    当视频生成失败时，API 会返回详细的原始错误信息，帮助开发者和用户明确具体问题。
+
+    **错误类型示例：**
+
+    1. **内容违规（Content Violation）**
+    ```json
+    {
+      "error": {
+        "message": "Your request was rejected due to content policy violation",
+        "type": "content_violation",
+        "code": "content_policy_violation"
+      }
+    }
+    ```
+
+    2. **服务过载（Heavy Load）**
+    ```json
+    {
+      "error": {
+        "message": "We're under heavy load, please try again later",
+        "type": "server_error",
+        "code": "heavy_load"
+      }
+    }
+    ```
+
+    3. **余额不足**
+    ```json
+    {
+      "error": {
+        "message": "Insufficient credits",
+        "type": "insufficient_quota",
+        "code": "insufficient_credits"
+      }
+    }
+    ```
+
+    **如何处理错误：**
+    ```python
+    try:
+        response = client.chat.completions.create(...)
+    except Exception as e:
+        error_message = str(e)
+        print(f"生成失败：{error_message}")
+
+        # 根据错误类型处理
+        if "content policy" in error_message:
+            print("内容违规，请调整提示词或图片")
+        elif "heavy load" in error_message:
+            print("服务繁忙，30秒后重试")
+            time.sleep(30)
+        elif "insufficient" in error_message:
+            print("余额不足，请充值")
+    ```
+
+    <Tip>
+    有疑问欢迎联系我们交流：feedback@laozhang.ai
+    </Tip>
   </Accordion>
 </AccordionGroup>
 
@@ -402,9 +552,11 @@ icon: "circle-question"
 </Card>
 
 <Card title="模型选择建议" icon="layer-group">
-  - 竖屏视频：`sora_video2`（手机短视频、社交媒体）
-  - 横屏视频：`sora_video2-landscape`（宽屏展示、电脑播放）
-  - 两个模型稳定性都极高，可放心选择
+  - **推荐：** `sora_video2-15s` / `sora_video2-landscape-15s`（与10秒同价，效果更好）
+  - 竖屏视频：`sora_video2` 系列（手机短视频、社交媒体）
+  - 横屏视频：`sora_video2-landscape` 系列（宽屏展示、电脑播放）
+  - 高清需求：`sora-2-pro-all`（HD 1080P，但不稳定且较贵）
+  - 基础模型稳定性都极高，可放心选择
 </Card>
 
 <Card title="错误处理建议" icon="shield-check">
@@ -415,10 +567,12 @@ icon: "circle-question"
 </Card>
 
 <Card title="成本优化建议" icon="coins">
-  - 两个模型稳定性都极高，减少重试成本
-  - 批量生成时控制并发数
+  - **优先选择15秒版本**（10/20 降价后与10秒同价）
+  - 基础模型稳定性极高，减少重试成本
+  - 批量生成时控制并发数（建议30以内）
   - 失败不计费，可放心重试
   - 及时下载视频（存储时效 1 天）
+  - 先用基础模型测试，再考虑高清版
 </Card>
 
 ## 相关链接

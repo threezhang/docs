@@ -9,12 +9,20 @@ icon: "book"
 <Info>
 **端点：** `https://api.laozhang.ai/v1/chat/completions`
 
+**带水印端点：** `https://api.laozhang.ai/v1/chat/completions?watermark=true`
+
 **方法：** `POST`
 
 **认证：** Bearer Token（API Key）
 
 **内容类型：** `application/json`
 </Info>
+
+<Note>
+**10/18 新增：带水印功能**
+
+默认生成的视频**无水印**。如需生成带 Sora 原生水印的视频，请在 URL 添加参数 `?watermark=true`。
+</Note>
 
 ## 认证
 
@@ -106,9 +114,14 @@ Authorization: Bearer YOUR_API_KEY
 |--------|--------|------|------|
 | `sora_video2` | 704×1280（竖屏） | 10s | $0.15 |
 | `sora_video2-landscape` | 1280×704（横屏） | 10s | $0.15 |
+| `sora_video2-15s` | 704×1280（竖屏） | 15s | $0.15 |
+| `sora_video2-landscape-15s` | 1280×704（横屏） | 15s | $0.15 |
+| `sora-2-pro-all` | 1024×1792（HD） | 15s | $0.4 |
 
 <Note>
-由于官方 OpenAI 算力限制，-hd 和 -15s 版本暂时不开放。
+**价格更新（10/20）**
+
+15秒模型已降价至 $0.15/次，与10秒模型同价！新增高清模型 sora-2-pro-all（$0.4/次）。
 </Note>
 
 ## 响应格式
