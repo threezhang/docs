@@ -57,6 +57,7 @@
                   "api-capabilities/sora2/quick-start",
                     "api-capabilities/sora2/models-pricing",
                   "api-capabilities/sora2/api-reference",
+                  "api-capabilities/sora2/async-api",
                   "api-capabilities/sora2/examples",
                   "api-capabilities/sora2/troubleshooting"
                 ]
@@ -276,6 +277,7 @@
                     "en/api-capabilities/sora2/quick-start",
                     "en/api-capabilities/sora2/models-pricing",
                     "en/api-capabilities/sora2/api-reference",
+                    "en/api-capabilities/sora2/async-api",
                     "en/api-capabilities/sora2/examples",
                     "en/api-capabilities/sora2/troubleshooting"
                   ]
@@ -465,43 +467,19 @@
     "light": "/logo/light.svg",
     "dark": "/logo/dark.svg"
   },
-  "navbar": {
-    "zh": {
-    "links": [
-      {
-        "label": "首页",
-        "href": "https://api.laozhang.ai"
-      }
-    ],
-    "primary": {
-      "type": "button",
-      "label": "控制台",
-      "href": "https://api.laozhang.ai/account/profile"
-      }
-    },
-    "en": {
-      "links": [
-        {
-          "label": "Home",
-          "href": "https://api.laozhang.ai"
-        }
-      ],
-      "primary": {
-        "type": "button",
-        "label": "Console",
-        "href": "https://api.laozhang.ai/account/profile"
-      }
-    }
-  },
   "footer": {
     "zh": {
     "socials": {
-      "website": "https://api.laozhang.ai"
+      "website": "https://api.laozhang.ai",
+      "telegram": "https://t.me/laozhang_cn",
+      "email": "mailto:threezhang.cn@gmail.com"
     }
   },
     "en": {
       "socials": {
-        "website": "https://api.laozhang.ai"
+        "website": "https://api.laozhang.ai",
+        "telegram": "https://t.me/laozhang_cn",
+        "email": "mailto:threezhang.cn@gmail.com"
       }
     }
   },

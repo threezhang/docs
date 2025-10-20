@@ -58,17 +58,17 @@ OpenAI 突然发布 Sora 2 新版本（The New Sora），本站第一时间接�
   <Card title="图生视频" icon="image">
     支持参考图片（最多 1 张）
   </Card>
-  <Card title="流式输出" icon="stream">
-    实时查看生成进度
+  <Card title="同步调用" icon="bolt">
+    快速测试、实时流式输出进度
+  </Card>
+  <Card title="异步调用" icon="refresh-cw">
+    更稳定的任务队列方式（推荐生产环境）
   </Card>
   <Card title="多规格支持" icon="grid">
     横屏、竖屏两种方向选择
   </Card>
   <Card title="按次计费" icon="badge-dollar">
     仅按生成次数收费
-  </Card>
-  <Card title="快速接入" icon="bolt">
-    完全兼容 OpenAI 接口格式
   </Card>
 </CardGroup>
 
@@ -120,11 +120,26 @@ OpenAI 突然发布 Sora 2 新版本（The New Sora），本站第一时间接�
 - **音频：** 支持音视频同步
 </Info>
 
+## 调用方式选择
+
+<Tip>
+**推荐使用异步 API**，特别是在生产环境或需要批量生成视频时，稳定性更有保障。
+</Tip>
+
+| 特性 | 同步 API | 异步 API（推荐）|
+|------|----------|-----------------|
+| **端点** | `/v1/chat/completions` | `/v1/videos` |
+| **稳定性** | 依赖长连接 | ⭐⭐⭐⭐⭐ 更稳定 |
+| **适用场景** | 快速测试、实时反馈 | 生产环境、批量生成 |
+
 ## 开始使用
 
 <CardGroup cols={2}>
-  <Card title="快速开始" icon="rocket" href="/api-capabilities/sora2/quick-start">
-    查看完整示例代码和使用方法
+  <Card title="同步调用" icon="bolt" href="/api-capabilities/sora2/quick-start">
+    快速开始、流式输出（适合测试）
+  </Card>
+  <Card title="异步调用" icon="refresh-cw" href="/api-capabilities/sora2/async-api">
+    任务队列、更稳定（推荐生产环境）
   </Card>
   <Card title="模型定价" icon="tag" href="/api-capabilities/sora2/models-pricing">
     了解详细的模型对比和价格
@@ -132,7 +147,10 @@ OpenAI 突然发布 Sora 2 新版本（The New Sora），本站第一时间接�
   <Card title="代码示例" icon="code" href="/api-capabilities/sora2/examples">
     查看多语言示例代码
   </Card>
-  <Card title="常见问题" icon="circle-question" href="/api-capabilities/sora2/troubleshooting">
+  <Card title="API 参考" icon="book" href="/api-capabilities/sora2/api-reference">
+    查看完整的 API 文档
+  </Card>
+  <Card title="常见问题" icon="help-circle" href="/api-capabilities/sora2/troubleshooting">
     解决使用中的常见问题
   </Card>
 </CardGroup>

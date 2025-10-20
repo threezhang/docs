@@ -1,0 +1,666 @@
+---
+title: "Async API"
+description: "Sora 2 asynchronous video generation API with more stable task queue approach"
+icon: "refresh-cw"
+---
+
+<Info>
+**Async Endpoint:** `https://api.laozhang.ai/v1/videos`
+
+**Call Method:** Three steps (Create Task → Query Status → Get Video)
+
+**Advantages:** More Stable | Task Queue | Long-running Tasks Support
+</Info>
+
+## Why Choose Async API?
+
+<CardGroup cols={2}>
+  <Card title="Higher Stability" icon="shield-check">
+    Task queue based, avoiding long connection timeout issues
+  </Card>
+  <Card title="Flexible Polling" icon="refresh-ccw">
+    Query task status and progress anytime
+  </Card>
+  <Card title="Parameterized Control" icon="sliders">
+    Specify resolution and duration via parameters, more flexible
+  </Card>
+  <Card title="Same Pricing" icon="badge-dollar">
+    Exactly the same pricing as sync API
+  </Card>
+</CardGroup>
+
+## Sync vs Async Comparison
+
+| Feature | Sync API | Async API (Recommended) |
+|---------|----------|-------------------------|
+| **Call Method** | Single request, wait for completion | Create task then poll for results |
+| **Endpoint** | `/v1/chat/completions` | `/v1/videos` |
+| **Resolution** | Model name (`sora_video2-landscape`) | Parameter (`size: "1280x720"`) |
+| **Duration** | Model name (`sora_video2-15s`) | Parameter (`seconds: "15"`) |
+| **Stability** | Depends on long connection | ⭐⭐⭐⭐⭐ More Stable |
+| **Progress** | Stream output | Poll for progress percentage |
+| **Timeout** | Needs long timeout setting | Task runs independently, no timeout limit |
+| **Use Cases** | Quick testing, real-time feedback | Production environment, batch generation |
+
+<Tip>
+**Recommended to use Async API**, especially in production environments or when batch generating videos, for better stability.
+</Tip>
+
+## Quick Start
+
+Async calling consists of three steps:
+
+<Steps>
+  <Step title="Create Video Task">
+    POST request to create task, get task ID
+  </Step>
+  <Step title="Query Task Status">
+    Periodically poll to check generation progress
+  </Step>
+  <Step title="Download Video">
+    Retrieve video file after task completes
+  </Step>
+</Steps>
+
+### Complete Example
+
+<CodeGroup>
+
+```bash Step 1: Create Task
+curl -X POST "https://api.laozhang.ai/v1/videos" \
+  -H "Authorization: Bearer YOUR_API_KEY" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "model": "sora-2",
+    "prompt": "A cute cat playing with a ball in a sunny garden",
+    "size": "1280x720",
+    "seconds": "15"
+  }'
+
+# Response example
+{
+  "id": "video_abc123",
+  "object": "task",
+  "model": "sora-2",
+  "status": "submitted",
+  "created_at": 1760945092,
+  "expires_at": 1761031492
+}
+```
+
+```bash Step 2: Query Status
+curl -X GET "https://api.laozhang.ai/v1/videos/video_abc123" \
+  -H "Authorization: Bearer YOUR_API_KEY"
+
+# In-progress response
+{
+  "id": "video_abc123",
+  "object": "video",
+  "model": "sora-2",
+  "status": "in_progress",
+  "progress": 65,
+  "created_at": 1760945092
+}
+
+# Completed response
+{
+  "id": "video_abc123",
+  "object": "video",
+  "model": "sora-2",
+  "status": "completed",
+  "progress": 100,
+  "url": "/v1/videos/video_abc123/content",
+  "created_at": 1760945092,
+  "completed_at": 1760945379
+}
+```
+
+```bash Step 3: Download Video
+curl -X GET "https://api.laozhang.ai/v1/videos/video_abc123/content" \
+  -H "Authorization: Bearer YOUR_API_KEY" \
+  --output video.mp4
+```
+
+</CodeGroup>
+
+## API Endpoints
+
+### 1. Create Video Task
+
+<Info>
+**POST** `https://api.laozhang.ai/v1/videos`
+
+Create a new video generation task
+</Info>
+
+#### Request Parameters
+
+| Parameter | Type | Required | Options | Description |
+|-----------|------|----------|---------|-------------|
+| `model` | string | ✓ | `"sora-2"` | Model name (fixed value) |
+| `prompt` | string | ✓ | - | Video generation prompt |
+| `size` | string | ✓ | `"1280x720"`, `"720x1280"` | Video resolution (landscape/portrait) |
+| `seconds` | string | ✓ | `"10"`, `"15"` | Video duration (seconds) |
+
+#### Response Fields
+
+| Field | Type | Description |
+|-------|------|-------------|
+| `id` | string | Unique task identifier for subsequent queries |
+| `object` | string | Fixed as `"task"` |
+| `model` | string | Model used |
+| `status` | string | Task status: `"submitted"` |
+| `created_at` | integer | Creation timestamp |
+| `expires_at` | integer | Expiration timestamp (24 hours later) |
+
+### 2. Query Task Status
+
+<Info>
+**GET** `https://api.laozhang.ai/v1/videos/{video_id}`
+
+Query current status and progress of video generation task
+</Info>
+
+#### Path Parameters
+
+| Parameter | Type | Required | Description |
+|-----------|------|----------|-------------|
+| `video_id` | string | ✓ | Task ID returned when creating task |
+
+#### Response Fields
+
+| Field | Type | Description |
+|-------|------|-------------|
+| `id` | string | Task ID |
+| `object` | string | Fixed as `"video"` |
+| `model` | string | Model used |
+| `status` | string | Task status (see below) |
+| `progress` | integer | Progress percentage (0-100) |
+| `url` | string | Video download path (completed status only) |
+| `created_at` | integer | Creation timestamp |
+| `completed_at` | integer | Completion timestamp (completed status only) |
+| `error` | object | Error information (failed status only) |
+
+#### Task Status
+
+| Status | Description | Progress |
+|--------|-------------|----------|
+| `submitted` | Submitted, waiting for processing | 0% |
+| `in_progress` | Generating | 1-99% |
+| `completed` | Generation completed | 100% |
+| `failed` | Generation failed | - |
+
+### 3. Get Video Content
+
+<Info>
+**GET** `https://api.laozhang.ai/v1/videos/{video_id}/content`
+
+Download completed video file
+</Info>
+
+#### Path Parameters
+
+| Parameter | Type | Required | Description |
+|-----------|------|----------|-------------|
+| `video_id` | string | ✓ | Task ID |
+
+#### Response
+
+Returns binary stream of video file (MP4 format)
+
+<Warning>
+**Important Notice**
+
+Video files are stored for **24 hours** only. Please download and save to local storage promptly!
+</Warning>
+
+## Complete Code Examples
+
+### Python Example (with Polling Logic)
+
+```python
+import openai
+import time
+import requests
+
+client = openai.OpenAI(
+    api_key="YOUR_API_KEY",
+    base_url="https://api.laozhang.ai/v1"
+)
+
+# Step 1: Create video task
+def create_video_task(prompt, size="1280x720", seconds="15"):
+    """Create video generation task"""
+    response = client.post(
+        "/videos",
+        json={
+            "model": "sora-2",
+            "prompt": prompt,
+            "size": size,
+            "seconds": seconds
+        }
+    )
+    return response.json()
+
+# Step 2: Poll for status
+def wait_for_video(video_id, poll_interval=5, timeout=600):
+    """Wait for video generation to complete"""
+    start_time = time.time()
+
+    while True:
+        # Check timeout
+        if time.time() - start_time > timeout:
+            raise TimeoutError(f"Video generation timeout ({timeout}s)")
+
+        # Query status
+        response = client.get(f"/videos/{video_id}")
+        task = response.json()
+
+        status = task["status"]
+        progress = task.get("progress", 0)
+
+        print(f"Status: {status}, Progress: {progress}%")
+
+        if status == "completed":
+            return task
+        elif status == "failed":
+            error = task.get("error", {})
+            raise Exception(f"Generation failed: {error.get('message', 'Unknown error')}")
+
+        # Wait before retry
+        time.sleep(poll_interval)
+
+# Step 3: Download video
+def download_video(video_id, save_path="video.mp4"):
+    """Download generated video"""
+    url = f"https://api.laozhang.ai/v1/videos/{video_id}/content"
+    headers = {"Authorization": f"Bearer YOUR_API_KEY"}
+
+    response = requests.get(url, headers=headers, stream=True)
+    response.raise_for_status()
+
+    with open(save_path, 'wb') as f:
+        for chunk in response.iter_content(chunk_size=8192):
+            f.write(chunk)
+
+    print(f"Video saved to: {save_path}")
+
+# Complete workflow
+def generate_video_async(prompt, size="1280x720", seconds="15"):
+    """Complete async video generation workflow"""
+    print("1. Creating video task...")
+    task = create_video_task(prompt, size, seconds)
+    video_id = task["id"]
+    print(f"   Task ID: {video_id}")
+
+    print("\n2. Waiting for video generation...")
+    completed_task = wait_for_video(video_id)
+    duration = completed_task['completed_at'] - completed_task['created_at']
+    print(f"   Completed! Duration: {duration}s")
+
+    print("\n3. Downloading video...")
+    download_video(video_id)
+    print("\n✅ Done!")
+
+# Usage example
+if __name__ == "__main__":
+    generate_video_async(
+        prompt="A cute cat playing with a ball in a sunny garden",
+        size="1280x720",  # Landscape
+        seconds="15"       # 15 seconds
+    )
+```
+
+### JavaScript/Node.js Example
+
+```javascript
+const axios = require('axios');
+const fs = require('fs');
+
+const API_KEY = 'YOUR_API_KEY';
+const BASE_URL = 'https://api.laozhang.ai/v1';
+
+// Create video task
+async function createVideoTask(prompt, size = '1280x720', seconds = '15') {
+  const response = await axios.post(`${BASE_URL}/videos`, {
+    model: 'sora-2',
+    prompt,
+    size,
+    seconds
+  }, {
+    headers: { 'Authorization': `Bearer ${API_KEY}` }
+  });
+
+  return response.data;
+}
+
+// Poll for status
+async function waitForVideo(videoId, pollInterval = 5000, timeout = 600000) {
+  const startTime = Date.now();
+
+  while (true) {
+    // Check timeout
+    if (Date.now() - startTime > timeout) {
+      throw new Error(`Video generation timeout (${timeout/1000}s)`);
+    }
+
+    // Query status
+    const response = await axios.get(`${BASE_URL}/videos/${videoId}`, {
+      headers: { 'Authorization': `Bearer ${API_KEY}` }
+    });
+
+    const task = response.data;
+    const { status, progress = 0 } = task;
+
+    console.log(`Status: ${status}, Progress: ${progress}%`);
+
+    if (status === 'completed') {
+      return task;
+    } else if (status === 'failed') {
+      const error = task.error || {};
+      throw new Error(`Generation failed: ${error.message || 'Unknown error'}`);
+    }
+
+    // Wait before retry
+    await new Promise(resolve => setTimeout(resolve, pollInterval));
+  }
+}
+
+// Download video
+async function downloadVideo(videoId, savePath = 'video.mp4') {
+  const response = await axios.get(
+    `${BASE_URL}/videos/${videoId}/content`,
+    {
+      headers: { 'Authorization': `Bearer ${API_KEY}` },
+      responseType: 'stream'
+    }
+  );
+
+  const writer = fs.createWriteStream(savePath);
+  response.data.pipe(writer);
+
+  return new Promise((resolve, reject) => {
+    writer.on('finish', () => {
+      console.log(`Video saved to: ${savePath}`);
+      resolve();
+    });
+    writer.on('error', reject);
+  });
+}
+
+// Complete workflow
+async function generateVideoAsync(prompt, size = '1280x720', seconds = '15') {
+  try {
+    console.log('1. Creating video task...');
+    const task = await createVideoTask(prompt, size, seconds);
+    const videoId = task.id;
+    console.log(`   Task ID: ${videoId}`);
+
+    console.log('\n2. Waiting for video generation...');
+    const completedTask = await waitForVideo(videoId);
+    const duration = completedTask.completed_at - completedTask.created_at;
+    console.log(`   Completed! Duration: ${duration}s`);
+
+    console.log('\n3. Downloading video...');
+    await downloadVideo(videoId);
+    console.log('\n✅ Done!');
+
+  } catch (error) {
+    console.error('Error:', error.message);
+  }
+}
+
+// Usage example
+generateVideoAsync(
+  'A cute cat playing with a ball in a sunny garden',
+  '1280x720',  // Landscape
+  '15'         // 15 seconds
+);
+```
+
+## Best Practices
+
+<AccordionGroup>
+  <Accordion title="Polling Interval" icon="clock">
+    **Recommended polling interval: 3-5 seconds**
+
+    ```python
+    # Recommended
+    poll_interval = 5  # Query every 5 seconds
+
+    # Not recommended
+    poll_interval = 1  # Too frequent, wastes requests
+    poll_interval = 30 # Too slow, poor user experience
+    ```
+
+    **Reasoning:**
+    - Video generation typically takes 2-5 minutes
+    - 3-5 seconds provides timely progress feedback
+    - Avoids excessive requests
+  </Accordion>
+
+  <Accordion title="Timeout Handling" icon="timer">
+    **Recommended timeout: 10 minutes (600 seconds)**
+
+    ```python
+    def wait_for_video(video_id, timeout=600):
+        start_time = time.time()
+
+        while True:
+            if time.time() - start_time > timeout:
+                # Timeout handling
+                print(f"Task {video_id} timeout, can continue querying later")
+                break
+
+            # Query logic...
+    ```
+
+    **Note:**
+    - Task timeout doesn't auto-cancel
+    - Can continue querying same video_id later
+    - Task validity period is 24 hours
+  </Accordion>
+
+  <Accordion title="Retry Strategy" icon="refresh-cw">
+    **Suggested retry logic:**
+
+    ```python
+    def create_video_with_retry(prompt, max_retries=3):
+        for i in range(max_retries):
+            try:
+                return create_video_task(prompt)
+            except Exception as e:
+                if i < max_retries - 1:
+                    print(f"Failed, retrying in 5s... ({i+1}/{max_retries})")
+                    time.sleep(5)
+                else:
+                    raise
+    ```
+
+    **Retry scenarios:**
+    - ✓ Network errors → Retry
+    - ✓ Service busy (503) → Retry
+    - ✗ Content violation → Don't retry, modify prompt
+    - ✗ Insufficient balance → Don't retry, recharge first
+  </Accordion>
+
+  <Accordion title="Batch Generation" icon="list">
+    **Concurrency control recommendations:**
+
+    ```python
+    import concurrent.futures
+
+    def batch_generate_videos(prompts, max_workers=5):
+        """Batch generate videos with concurrency control"""
+        with concurrent.futures.ThreadPoolExecutor(max_workers=max_workers) as executor:
+            # Create all tasks
+            future_to_prompt = {
+                executor.submit(create_video_task, prompt): prompt
+                for prompt in prompts
+            }
+
+            video_ids = []
+            for future in concurrent.futures.as_completed(future_to_prompt):
+                task = future.result()
+                video_ids.append(task['id'])
+
+            # Concurrently wait for all tasks
+            futures = [executor.submit(wait_for_video, vid) for vid in video_ids]
+            results = [f.result() for f in concurrent.futures.as_completed(futures)]
+
+            return results
+    ```
+
+    **Recommendations:**
+    - Creating tasks: High concurrency OK (10-30)
+    - Querying status: Recommended concurrency ≤ 10
+    - Downloading videos: Recommended concurrency ≤ 5
+  </Accordion>
+</AccordionGroup>
+
+## Pricing
+
+<Info>
+Async API has **exactly the same pricing** as Sync API, billed per call.
+</Info>
+
+| Parameter Combination | Price | $100 Top-up Rate |
+|----------------------|-------|------------------|
+| 10s video (landscape/portrait) | $0.15/call | ≈ ¥1.0/call |
+| 15s video (landscape/portrait) | $0.15/call | ≈ ¥1.0/call |
+
+**Billing Rules:**
+- ✓ Charged only when video **successfully generated** (status = "completed")
+- ✗ Failed, timeout, cancelled **not charged**
+- ✗ Status queries not charged
+
+## FAQ
+
+<AccordionGroup>
+  <Accordion title="How long is task validity?" icon="calendar">
+    **Task validity: 24 hours**
+
+    - After creating task, `expires_at` field shows expiration time
+    - Can query task status anytime within 24 hours
+    - After video generation completes, file is stored for 24 hours
+    - After 24 hours, task and video will be automatically cleaned
+
+    **Recommendations:**
+    - Download video immediately after completion
+    - Don't rely on server for long-term storage
+  </Accordion>
+
+  <Accordion title="How to cancel a running task?" icon="ban">
+    **Manual task cancellation not currently supported**
+
+    - Once created, task will auto-queue for execution
+    - If no longer needed, simply ignore it
+    - Incomplete tasks won't be charged
+
+    **Alternatives:**
+    - Wait for task to naturally complete or fail
+    - Task auto-expires after 24 hours
+  </Accordion>
+
+  <Accordion title="Why do I get 404 when querying?" icon="search">
+    **Possible reasons:**
+
+    1. **Incorrect video_id** - Check if fully copied
+    2. **Task expired** - Over 24 hours
+    3. **Network issues** - Retry request
+
+    **Solution:**
+    ```python
+    try:
+        response = client.get(f"/videos/{video_id}")
+        task = response.json()
+    except requests.exceptions.HTTPError as e:
+        if e.response.status_code == 404:
+            print("Task doesn't exist or expired")
+        else:
+            raise
+    ```
+  </Accordion>
+
+  <Accordion title="Can async and sync APIs be mixed?" icon="git-merge">
+    **Yes, they're completely independent**
+
+    Two API systems are completely independent:
+    - Different endpoints
+    - Different calling methods
+    - Same pricing
+    - Share same API Key and balance
+
+    **Usage recommendations:**
+    - Quick testing → Use sync API
+    - Production environment → Use async API (more stable)
+    - Batch generation → Use async API
+  </Accordion>
+
+  <Accordion title="Why isn't progress field updating?" icon="activity">
+    **Possible reasons:**
+
+    1. **Normal** - Some processing stages update slowly
+    2. **Queue waiting** - May be queued during peak hours
+    3. **Task stuck** - Rare cases where task may get stuck
+
+    **Handling:**
+    - Continue waiting 5-10 minutes
+    - If no change after 10 minutes, contact support
+    - Provide video_id for troubleshooting
+  </Accordion>
+</AccordionGroup>
+
+## Error Handling
+
+### Common Error Codes
+
+| HTTP Status | Error Type | Description | Action |
+|------------|-----------|-------------|--------|
+| 400 | Bad Request | Invalid request parameters | Check parameter format and values |
+| 401 | Unauthorized | Invalid API Key | Check Authorization header |
+| 402 | Payment Required | Insufficient balance | Recharge and retry |
+| 404 | Not Found | Task doesn't exist | Check video_id or task expired |
+| 429 | Too Many Requests | Requests too frequent | Reduce polling frequency |
+| 500 | Internal Server Error | Server error | Retry later |
+| 503 | Service Unavailable | Service temporarily unavailable | Wait and retry |
+
+### Error Response Format
+
+```json
+{
+  "error": {
+    "message": "Error description",
+    "type": "invalid_request_error",
+    "code": "invalid_parameter"
+  }
+}
+```
+
+## Technical Support
+
+<Card title="Need Help?" icon="headset">
+  Contact us if you have any questions:
+
+  - **Email:** threezhang.cn@gmail.com
+  - **WeChat:** laozhangdaichong
+  - **Telegram:** https://t.me/laozhang_cn
+  - **Documentation:** https://docs.laozhang.ai
+</Card>
+
+## Next Steps
+
+<CardGroup cols={2}>
+  <Card title="Sync API" icon="bolt" href="/en/api-capabilities/sora2/quick-start">
+    Check out sync API approach
+  </Card>
+  <Card title="Examples" icon="code" href="/en/api-capabilities/sora2/examples">
+    View more usage examples
+  </Card>
+  <Card title="Pricing" icon="tag" href="/en/api-capabilities/sora2/models-pricing">
+    Learn about detailed pricing
+  </Card>
+  <Card title="FAQ" icon="circle-question" href="/en/api-capabilities/sora2/troubleshooting">
+    View more Q&A
+  </Card>
+</CardGroup>

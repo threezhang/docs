@@ -58,17 +58,17 @@ OpenAI suddenly released Sora 2 new version (The New Sora), and we integrated of
   <Card title="Image-to-Video" icon="image">
     Supports reference images (up to 1 image)
   </Card>
-  <Card title="Streaming Output" icon="stream">
-    Real-time generation progress viewing
+  <Card title="Sync API" icon="bolt">
+    Quick testing with real-time streaming progress
+  </Card>
+  <Card title="Async API" icon="refresh-cw">
+    More stable task queue approach (recommended for production)
   </Card>
   <Card title="Multi-Spec Support" icon="grid">
     Horizontal and vertical orientation options
   </Card>
   <Card title="Pay-per-Use" icon="badge-dollar">
     Charged only by generation count
-  </Card>
-  <Card title="Quick Integration" icon="bolt">
-    Fully compatible with OpenAI interface format
   </Card>
 </CardGroup>
 
@@ -120,11 +120,26 @@ Due to official OpenAI's computing power limitations, -hd (high definition) vers
 - **Audio:** Supports audio-video synchronization
 </Info>
 
+## API Method Selection
+
+<Tip>
+**Recommended to use Async API**, especially in production environments or when batch generating videos, for better stability.
+</Tip>
+
+| Feature | Sync API | Async API (Recommended) |
+|---------|----------|-------------------------|
+| **Endpoint** | `/v1/chat/completions` | `/v1/videos` |
+| **Stability** | Depends on long connection | ⭐⭐⭐⭐⭐ More Stable |
+| **Use Cases** | Quick testing, real-time feedback | Production environment, batch generation |
+
 ## Getting Started
 
 <CardGroup cols={2}>
-  <Card title="Quick Start" icon="rocket" href="/en/api-capabilities/sora2/quick-start">
-    View complete example code and usage methods
+  <Card title="Sync API" icon="bolt" href="/en/api-capabilities/sora2/quick-start">
+    Quick start with streaming output (for testing)
+  </Card>
+  <Card title="Async API" icon="refresh-cw" href="/en/api-capabilities/sora2/async-api">
+    Task queue, more stable (recommended for production)
   </Card>
   <Card title="Model Pricing" icon="tag" href="/en/api-capabilities/sora2/models-pricing">
     Learn detailed model comparison and pricing
@@ -132,7 +147,10 @@ Due to official OpenAI's computing power limitations, -hd (high definition) vers
   <Card title="Code Examples" icon="code" href="/en/api-capabilities/sora2/examples">
     View multi-language example code
   </Card>
-  <Card title="FAQ" icon="circle-question" href="/en/api-capabilities/sora2/troubleshooting">
+  <Card title="API Reference" icon="book" href="/en/api-capabilities/sora2/api-reference">
+    View complete API documentation
+  </Card>
+  <Card title="FAQ" icon="help-circle" href="/en/api-capabilities/sora2/troubleshooting">
     Solve common issues
   </Card>
 </CardGroup>
