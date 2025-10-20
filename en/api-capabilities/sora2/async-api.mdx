@@ -219,32 +219,36 @@ Video files are stored for **24 hours** only. Please download and save to local 
 ### Python Example (with Polling Logic)
 
 ```python
-import openai
-import time
 import requests
+import time
 
-client = openai.OpenAI(
-    api_key="YOUR_API_KEY",
-    base_url="https://api.laozhang.ai/v1"
-)
+API_KEY = "YOUR_API_KEY"
+BASE_URL = "https://api.laozhang.ai/v1"
 
 # Step 1: Create video task
 def create_video_task(prompt, size="1280x720", seconds="15"):
     """Create video generation task"""
-    response = client.post(
-        "/videos",
-        json={
-            "model": "sora-2",
-            "prompt": prompt,
-            "size": size,
-            "seconds": seconds
-        }
-    )
+    url = f"{BASE_URL}/videos"
+    headers = {
+        "Authorization": f"Bearer {API_KEY}",
+        "Content-Type": "application/json"
+    }
+    data = {
+        "model": "sora-2",
+        "prompt": prompt,
+        "size": size,
+        "seconds": seconds
+    }
+
+    response = requests.post(url, headers=headers, json=data)
+    response.raise_for_status()
     return response.json()
 
 # Step 2: Poll for status
 def wait_for_video(video_id, poll_interval=5, timeout=600):
     """Wait for video generation to complete"""
+    url = f"{BASE_URL}/videos/{video_id}"
+    headers = {"Authorization": f"Bearer {API_KEY}"}
     start_time = time.time()
 
     while True:
@@ -253,7 +257,8 @@ def wait_for_video(video_id, poll_interval=5, timeout=600):
             raise TimeoutError(f"Video generation timeout ({timeout}s)")
 
         # Query status
-        response = client.get(f"/videos/{video_id}")
+        response = requests.get(url, headers=headers)
+        response.raise_for_status()
         task = response.json()
 
         status = task["status"]
@@ -273,15 +278,16 @@ def wait_for_video(video_id, poll_interval=5, timeout=600):
 # Step 3: Download video
 def download_video(video_id, save_path="video.mp4"):
     """Download generated video"""
-    url = f"https://api.laozhang.ai/v1/videos/{video_id}/content"
-    headers = {"Authorization": f"Bearer YOUR_API_KEY"}
+    url = f"{BASE_URL}/videos/{video_id}/content"
+    headers = {"Authorization": f"Bearer {API_KEY}"}
 
     response = requests.get(url, headers=headers, stream=True)
     response.raise_for_status()
 
     with open(save_path, 'wb') as f:
         for chunk in response.iter_content(chunk_size=8192):
-            f.write(chunk)
+            if chunk:
+                f.write(chunk)
 
     print(f"Video saved to: {save_path}")
 
