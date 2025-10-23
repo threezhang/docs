@@ -17,13 +17,37 @@ This page introduces the **Sync API** (suitable for quick testing). For a more s
     Login to [laozhang.ai console](https://api.laozhang.ai) to get your API key
   </Step>
   <Step title="Configure Billing Mode">
-    Edit token settings, select **pay-as-you-go** or **pay-per-use** mode
+    Edit token settings, choose either billing mode (both have same price):
 
-    <img src="/images/sora2-token-setting.png" alt="Token Settings" />
+    - **Pay-as-you-go** (Recommended): Uses balance first, auto-switches when low. Suitable for most users
+    - **Pay-per-call**: Direct charge per call. Suitable for strict budget control
+
+    <Note>
+    Both modes have **exactly the same price**: $0.15/call (10s or 15s), only billing method differs.
+    </Note>
+
+    <img src="/images/sora2-token-setting.png" alt="Token settings" />
+
+    <Warning>
+    API calls will fail if billing mode is not set. Must complete this configuration first!
+    </Warning>
   </Step>
 </Steps>
 
 ## Text-to-Video Example
+
+<Note>
+**About `@sama` in Examples**
+
+You may notice `@sama` used in examples. This is OpenAI CEO Sam Altman's authorized ID, allowing his likeness to appear in videos.
+
+**This is optional**:
+- ✓ Can use `@sama` or other verified IDs
+- ✓ Can skip it and use normal scene descriptions (e.g., "a cat in a garden")
+- ✗ Cannot upload real person photos (will be rejected and charged)
+
+**Want yourself in the video?** Requires Cameo certification in Sora iOS app. See [FAQ](/en/api-capabilities/sora2/troubleshooting)
+</Note>
 
 The simplest usage method - generate videos using only text descriptions.
 
@@ -207,6 +231,7 @@ Enable streaming output to view generation progress in real-time.
 
 ```python Python (Streaming)
 import openai
+import re
 
 client = openai.OpenAI(
     api_key="YOUR_API_KEY",
@@ -229,9 +254,26 @@ stream = client.chat.completions.create(
     stream=True
 )
 
+# Store full content to extract video link
+full_content = ""
+
+print("Generation progress:\n")
 for chunk in stream:
     if chunk.choices[0].delta.content:
-        print(chunk.choices[0].delta.content, end='', flush=True)
+        content = chunk.choices[0].delta.content
+        print(content, end='', flush=True)
+        full_content += content
+
+print("\n")
+
+# Extract video link
+video_url_match = re.search(r'https://[^\s\)]+\.mp4', full_content)
+if video_url_match:
+    video_url = video_url_match.group(0)
+    print(f"\n✅ Video link: {video_url}")
+    print("⚠️  Video valid for 1 day, download immediately!")
+else:
+    print("\n❌ Video link not found, generation may have failed")
 ```
 
 ```javascript JavaScript (Streaming)

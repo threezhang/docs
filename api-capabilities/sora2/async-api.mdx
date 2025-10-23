@@ -12,20 +12,48 @@ icon: "refresh-cw"
 **优势：** 更稳定 | 任务队列 | 支持长时任务
 </Info>
 
+<Warning>
+**重要差异 - 图生视频方式不同**
+
+异步API的图生视频与同步API有重大区别：
+
+| 特性 | 同步API | 异步API |
+|------|--------|---------|
+| 图片上传 | 支持URL或Base64 | **仅支持本地文件** |
+| 请求格式 | JSON | multipart/form-data |
+
+**如果您有图片URL**：需要先下载到本地，再用异步API上传。
+
+**示例对比**：
+```python
+{/* 同步API - 支持URL */}
+"image_url": {"url": "https://example.com/image.png"}
+
+{/* 异步API - 仅支持本地文件 */}
+files = {'input_reference': open('/path/to/image.png', 'rb')}
+```
+</Warning>
+
 ## 为什么选择异步 API？
 
 <CardGroup cols={2}>
   <Card title="更高稳定性" icon="shield-check">
     基于任务队列，避免长连接超时问题
   </Card>
+  <Card title="失败不扣费 ⭐" icon="badge-dollar">
+    **重大优势**：任何原因失败都不扣费
+
+    - ✓ 内容违规 → 不扣费
+    - ✓ 队列超时 → 不扣费
+    - ✓ 生成失败 → 不扣费
+
+    同步API只要请求成功（HTTP 200）就扣费，即使最终生成失败！
+  </Card>
   <Card title="灵活轮询" icon="refresh-ccw">
     可随时查询任务状态和进度
   </Card>
   <Card title="参数化控制" icon="sliders">
     分辨率和时长通过参数指定，更灵活
-  </Card>
-  <Card title="同样价格" icon="badge-dollar">
-    与同步 API 完全相同的定价
   </Card>
 </CardGroup>
 
@@ -273,9 +301,11 @@ def create_video_task_with_image(prompt, image_path, size="1280x720", seconds="1
     url = f"{BASE_URL}/videos"
     headers = {"Authorization": f"Bearer {API_KEY}"}
 
+    # 确保文件在请求时保持打开状态
     with open(image_path, 'rb') as image_file:
         files = {
-            'input_reference': image_file,
+            # 指定filename和MIME类型确保正确上传
+            'input_reference': ('image.png', image_file, 'image/png')
         }
         data = {
             'model': 'sora-2',
@@ -284,6 +314,7 @@ def create_video_task_with_image(prompt, image_path, size="1280x720", seconds="1
             'seconds': seconds
         }
 
+        # 在with块内发送请求，确保文件句柄有效
         response = requests.post(url, headers=headers, files=files, data=data)
         response.raise_for_status()
         return response.json()

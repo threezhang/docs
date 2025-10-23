@@ -1,0 +1,279 @@
+---
+title: "图像生成API选择指南"
+description: "对比所有图像生成服务，帮助您选择最适合的API"
+icon: "compass"
+---
+
+## 🎯 30秒快速选择
+
+<CardGroup cols={2}>
+  <Card title="追求性价比" icon="badge-dollar">
+    **Sora Image** - $0.01/张
+    - 价格最低，质量中上
+    - 适合批量生成
+    - 中文友好
+
+    [查看文档 →](/api-capabilities/sora-image-generation)
+  </Card>
+
+  <Card title="需要高质量" icon="sparkles">
+    **Flux Kontext Max** - $0.07/张
+    - 最高质量
+    - 灵活宽高比（3:7到7:3）
+    - 专业设计首选
+
+    [查看文档 →](/api-capabilities/flux-image-generation)
+  </Card>
+
+  <Card title="需要特定尺寸" icon="expand">
+    **Gemini Flash Image** - $0.025/张
+    - 10种纵横比选择
+    - Google技术
+    - 极速生成（~10秒）
+
+    [查看文档 →](/api-capabilities/gemini-flash-image)
+  </Card>
+
+  <Card title="需要编辑功能" icon="paintbrush">
+    **Gemini Flash 编辑** - $0.025/次
+    - 多图合成
+    - 风格转换
+    - 自定义尺寸
+
+    [查看文档 →](/api-capabilities/gemini-flash-image-edit)
+  </Card>
+</CardGroup>
+
+## 📊 完整对比表
+
+| 服务 | 价格 | 速度 | 质量 | 特点 | 适用场景 |
+|------|------|------|------|------|----------|
+| **Sora Image** | $0.01/张 | ~10-15秒 | ⭐⭐⭐⭐ | 中文友好、按次计费 | 批量内容生成、快速原型 |
+| **Flux Pro** | $0.035/张 | 快速 | ⭐⭐⭐⭐ | 灵活比例（3:7-7:3）| 专业设计、社交媒体 |
+| **Flux Max** | $0.07/张 | 快速 | ⭐⭐⭐⭐⭐ | 最高质量 | 商业作品、高端设计 |
+| **Gemini Flash** | $0.025/张 | ~10秒 | ⭐⭐⭐⭐ | 10种比例、极速 | 快速原型、移动应用 |
+| **Nano Banana** | $0.025/张 | ~10秒 | ⭐⭐⭐⭐ | Base64输出 | Web应用直接嵌入 |
+| **GPT-Image-1** | 按Token | 中等 | ⭐⭐⭐⭐⭐ | OpenAI标准 | 企业集成 |
+| **Seedream** | $0.025/张 | 中等 | ⭐⭐⭐⭐ | 图改图、多图 | 创意编辑、风格迁移 |
+
+<Tip>
+**成本对比**：生成100张图片
+- Sora: $1.00
+- Gemini/Nano Banana/Seedream: $2.50
+- Flux Pro: $3.50
+- Flux Max: $7.00
+
+**性价比之王**: Sora Image（便宜2.5-7倍）
+</Tip>
+
+## 🎨 按场景选择
+
+### 社交媒体内容
+<Tabs>
+  <Tab title="正方形(1:1)">
+    **推荐**：Sora Image、Gemini Flash、Nano Banana
+
+    - **预算有限**: Sora ($0.01/张)
+    - **质量优先**: Gemini Flash ($0.025/张)
+    - **Web嵌入**: Nano Banana (Base64格式)
+  </Tab>
+
+  <Tab title="竖屏(9:16)">
+    **推荐**：Gemini Flash、Flux Pro
+
+    - **标准竖屏**: Gemini Flash 9:16 ($0.025/张)
+    - **超宽竖屏**: Flux (3:7比例, $0.035/张)
+  </Tab>
+
+  <Tab title="横幅">
+    **推荐**：Flux Pro
+
+    - **超宽横幅**: Flux 7:3比例 ($0.035/张)
+    - **标准横屏**: Gemini Flash 16:9 ($0.025/张)
+  </Tab>
+</Tabs>
+
+### 专业设计
+
+<CardGroup cols={2}>
+  <Card title="高质量需求" icon="crown">
+    **推荐**: Flux Max ($0.07/张)
+
+    - 细节最丰富
+    - 支持复杂提示词
+    - 适合商业作品
+  </Card>
+
+  <Card title="灵活尺寸" icon="maximize">
+    **推荐**: Gemini Flash ($0.025/张)
+
+    - 10种纵横比
+    - 快速迭代
+    - 性价比高
+  </Card>
+
+  <Card title="特殊比例" icon="aspect-ratio">
+    **推荐**: Flux Pro ($0.035/张)
+
+    - 3:7 到 7:3 自由选择
+    - 专业排版需求
+  </Card>
+
+  <Card title="批量生成" icon="layers">
+    **推荐**: Sora Image ($0.01/张)
+
+    - 成本最低
+    - 质量稳定
+    - 适合大批量
+  </Card>
+</CardGroup>
+
+### 图像编辑
+
+| 需求 | 推荐服务 | 价格 | 特点 |
+|------|---------|------|------|
+| 多图合成 | Gemini Flash 编辑 | $0.025/次 | 最多4张图片融合 |
+| 精确控制 | Flux 编辑 | $0.035/次 | 蒙版控制，局部编辑 |
+| 风格转换 | Sora 编辑、Seedream | $0.01-0.025/次 | 艺术风格迁移 |
+| 图改图 | Seedream | $0.025/次 | 保持结构，改变细节 |
+
+## 💰 成本优化策略
+
+### 混合使用方案
+
+<Steps>
+  <Step title="用Sora快速测试">
+    花$0.01测试10个不同的提示词
+
+    ```python
+    test_prompts = [
+        "sunset over mountains",
+        "sunset over snowy mountains",
+        "dramatic sunset over mountain peaks",
+        # ... 7 more variations
+    ]
+
+    for prompt in test_prompts:
+        # 使用Sora测试 ($0.01/张)
+        url = generate_with_sora(prompt)
+        evaluate(url)
+
+    # 测试成本: $0.10 (10次测试)
+    ```
+  </Step>
+
+  <Step title="用Flux生成最终版">
+    选择最佳提示词，用Flux Max生成高质量版本
+
+    ```python
+    best_prompt = "dramatic sunset over mountain peaks"
+
+    # 使用Flux Max生成最终版 ($0.07/张)
+    final_image = generate_with_flux_max(best_prompt)
+
+    # 最终成本: $0.07 (1次)
+    # 总成本: $0.17
+    ```
+  </Step>
+
+  <Step title="成本对比">
+    **混合方案**: 10次测试 + 1次最终 = $0.17
+
+    **vs 直接用Flux Max测试**: 10次 × $0.07 = $0.70
+
+    **节省**: $0.53（76%）
+  </Step>
+</Steps>
+
+## 🔄 决策流程图
+
+```
+需要生成图片
+    │
+    ├─ 预算充足（>$0.05/张）？
+    │   ├─ 是 → 需要特殊比例？
+    │   │   ├─ 是 → Flux Pro/Max
+    │   │   └─ 否 → Gemini Flash（10种比例）
+    │   └─ 否 → Sora Image（$0.01/张）
+    │
+    ├─ 需要编辑功能？
+    │   └─ 是 → 多图合成？
+    │       ├─ 是 → Gemini Flash 编辑
+    │       └─ 否 → Flux 编辑（蒙版控制）
+    │
+    ├─ 追求极致质量？
+    │   └─ 是 → Flux Max（$0.07/张）
+    │
+    ├─ 需要Base64格式？
+    │   └─ 是 → Nano Banana或Gemini Flash
+    │
+    └─ 批量生成（>100张）？
+        └─ 是 → Sora Image（成本最低）
+```
+
+## 📱 按行业推荐
+
+### 电商产品图
+- **推荐**: Flux Pro（$0.035/张）
+- **原因**: 质量稳定，支持多种商品展示角度
+- **备选**: Gemini Flash（更便宜，适合大批量）
+
+### 社交媒体配图
+- **推荐**: Sora Image（$0.01/张）
+- **原因**: 性价比高，适合每日更新
+- **备选**: Gemini Flash（10种比例适配不同平台）
+
+### 专业设计/品牌
+- **推荐**: Flux Max（$0.07/张）
+- **原因**: 细节丰富，符合商业标准
+- **备选**: Flux Pro（质量接近，价格减半）
+
+### 移动应用开发
+- **推荐**: Gemini Flash（$0.025/张）
+- **原因**: 支持各种移动端比例，速度快
+- **备选**: Nano Banana（Base64直接嵌入代码）
+
+## 🚀 开始使用
+
+选好了？点击下方卡片查看详细文档：
+
+<CardGroup cols={2}>
+  <Card title="Sora Image" icon="wand-sparkles" href="/api-capabilities/sora-image-generation">
+    $0.01/张 - 性价比之王
+  </Card>
+  <Card title="Flux" icon="zap" href="/api-capabilities/flux-image-generation">
+    $0.035-0.07/张 - 专业首选
+  </Card>
+  <Card title="Gemini Flash" icon="sparkles" href="/api-capabilities/gemini-flash-image">
+    $0.025/张 - 10种比例
+  </Card>
+  <Card title="查看所有服务" icon="grid" href="/api-reference/images">
+    完整图像API列表
+  </Card>
+</CardGroup>
+
+## ❓ 还不确定？
+
+<Accordion title="我应该选哪个？快速问答">
+  **Q: 我的预算是每张$0.02以内**
+  A: 选择 **Sora Image** ($0.01/张)
+
+  **Q: 我需要生成竖屏海报（9:16）**
+  A: 选择 **Gemini Flash** (支持9:16比例)
+
+  **Q: 我需要最高质量，预算充足**
+  A: 选择 **Flux Max** ($0.07/张)
+
+  **Q: 我需要特殊比例（如7:3超宽横幅）**
+  A: 选择 **Flux Pro** (3:7到7:3自由选择)
+
+  **Q: 我需要编辑图片或多图合成**
+  A: 选择 **Gemini Flash 编辑** 或 **Flux 编辑**
+
+  **Q: 我需要Web应用直接嵌入（Base64）**
+  A: 选择 **Nano Banana** 或 **Gemini Flash**
+</Accordion>
+
+<Tip>
+不确定效果？访问 [imagen.laozhang.ai](https://imagen.laozhang.ai/) 在线测试各个模型的实际生成效果。
+</Tip>

@@ -17,13 +17,37 @@ icon: "rocket"
     登录 [laozhang.ai 控制台](https://api.laozhang.ai) 获取 API 密钥
   </Step>
   <Step title="配置计费模式">
-    编辑令牌设置，选择**按量优先**或**按次计费**模式
+    编辑令牌设置，选择以下任一计费模式（两者价格相同）：
+
+    - **按量优先**（推荐）：优先使用余额计费，余额不足时自动切换。适合大多数用户
+    - **按次计费**：每次调用直接扣费。适合预算控制严格的场景
+
+    <Note>
+    两种模式**价格完全相同**，都是 $0.15/次（10秒或15秒），仅扣费方式不同。
+    </Note>
 
     <img src="/images/sora2-token-setting.png" alt="令牌设置" />
+
+    <Warning>
+    如果未设置计费模式，API调用会失败。必须先完成此配置！
+    </Warning>
   </Step>
 </Steps>
 
 ## 文生视频示例
+
+<Note>
+**关于示例中的 `@sama`**
+
+您可能注意到示例中使用了 `@sama`，这是 OpenAI CEO Sam Altman 的授权真人ID，可以让他的形象出现在视频中。
+
+**这是可选功能**：
+- ✓ 可以使用 `@sama` 或其他已认证的真人ID
+- ✓ 也可以不使用，直接描述普通场景（如"一只猫在花园里"）
+- ✗ 不能上传真人照片（会被拒绝且扣费）
+
+**如何让您自己出镜？** 需要在 Sora iOS 应用中完成 Cameo 认证。详见 [常见问题](/api-capabilities/sora2/troubleshooting#为什么生成人物视频失败)
+</Note>
 
 最简单的使用方式，仅使用文字描述生成视频。
 
@@ -207,6 +231,7 @@ curl -X POST "https://api.laozhang.ai/v1/chat/completions" \
 
 ```python Python (流式)
 import openai
+import re
 
 client = openai.OpenAI(
     api_key="YOUR_API_KEY",
@@ -229,9 +254,26 @@ stream = client.chat.completions.create(
     stream=True
 )
 
+# 存储完整内容以提取视频链接
+full_content = ""
+
+print("生成进度:\n")
 for chunk in stream:
     if chunk.choices[0].delta.content:
-        print(chunk.choices[0].delta.content, end='', flush=True)
+        content = chunk.choices[0].delta.content
+        print(content, end='', flush=True)
+        full_content += content
+
+print("\n")
+
+# 提取视频链接
+video_url_match = re.search(r'https://[^\s\)]+\.mp4', full_content)
+if video_url_match:
+    video_url = video_url_match.group(0)
+    print(f"\n✅ 视频链接: {video_url}")
+    print("⚠️  视频有效期1天，请立即下载！")
+else:
+    print("\n❌ 未找到视频链接，生成可能失败")
 ```
 
 ```javascript JavaScript (流式)

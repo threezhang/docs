@@ -285,18 +285,48 @@ icon: "info"
 ## Billing Related
 
 <AccordionGroup>
-  <Accordion title="How is billing calculated? Are failures charged?" icon="dollar-sign">
-    **Billing method:** Per-call billing
+  <Accordion title="How are charges calculated? Are failed attempts charged?" icon="dollar-sign">
+    **Billing Method:** Pay-per-call
 
-    **Billing rules:**
-    - ✓ Charges only when video is **successfully generated**
-    - ✗ Failures, timeouts, errors are **not charged**
+    **Sync API Billing Rules** (/v1/chat/completions):
+    - ✓ Charged when video **successfully generated**
+    - ⚠️ **Also charged for content violations** - Request succeeded (HTTP 200), resources consumed
+    - ✗ Network errors, timeouts **not charged**
 
-    **Pricing:**
-    - 10-second video (portrait/landscape): $0.15/call
+    **Async API Billing Rules** (/v1/videos) - Recommended:
+    - ✓ Only charged when status = "completed"
+    - ✗ **No charge for any failure**:
+      - Content violation (status = "failed") → Not charged
+      - Queue timeout → Not charged
+      - Generation failure → Not charged
 
-    **Top-up discounts:**
-    - Single top-up of $100, approximately ¥1.0/call
+    **Pricing (10/20 Update):**
+    - 10s/15s videos (portrait/landscape): **$0.15/call** (unified pricing)
+    - HD video (sora-2-pro-all): $0.4/call
+
+    **Top-up Benefits:**
+    - Top-up $100, approximately ¥1.0/call (base models)
+
+    <Note>
+    **Major Price Drop!** 15s models reduced from $0.25 to $0.15/call, same as 10s models. Recommend choosing 15s version for better results!
+    </Note>
+
+    <Tip>
+    **Recommend Async API for production**: No charge on failure, better cost control, higher stability. View [Async API docs](/en/api-capabilities/sora2/async-api)
+    </Tip>
+
+    **About Content Violation Charges (Sync API only):**
+
+    If prompts or images violate OpenAI content policy, Sync API returns success (HTTP 200) with error message, **charges still apply**. Reasons:
+    - Request successfully submitted to OpenAI platform
+    - Platform resources consumed for content review
+    - Async API doesn't charge (status = "failed")
+
+    **Recommendations:**
+    1. Test prompts and images on [sora.chatgpt.com](https://sora.chatgpt.com) first
+    2. Batch generate via API after confirmation
+    3. Or use Async API (no charge on failure)
+    4. Avoid real person photos, copyrighted content
   </Accordion>
 
   <Accordion title="Official price comparison" icon="scale-balanced">

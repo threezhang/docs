@@ -12,20 +12,48 @@ icon: "refresh-cw"
 **Advantages:** More Stable | Task Queue | Long-running Tasks Support
 </Info>
 
+<Warning>
+**Important Difference - Image-to-Video Upload Method**
+
+Async API differs significantly from Sync API for image-to-video:
+
+| Feature | Sync API | Async API |
+|---------|----------|-----------|
+| Image Upload | Supports URL or Base64 | **Local file only** |
+| Request Format | JSON | multipart/form-data |
+
+**If you have an image URL**: Download it locally first, then upload via Async API.
+
+**Example Comparison**:
+```python
+{/* Sync API - Supports URL */}
+"image_url": {"url": "https://example.com/image.png"}
+
+{/* Async API - Local file only */}
+files = {'input_reference': open('/path/to/image.png', 'rb')}
+```
+</Warning>
+
 ## Why Choose Async API?
 
 <CardGroup cols={2}>
   <Card title="Higher Stability" icon="shield-check">
     Task queue based, avoiding long connection timeout issues
   </Card>
+  <Card title="No Charge on Failure ⭐" icon="badge-dollar">
+    **Key Advantage**: No charges for failures of any kind
+
+    - ✓ Content violation → No charge
+    - ✓ Queue timeout → No charge
+    - ✓ Generation failure → No charge
+
+    Sync API charges as long as request succeeds (HTTP 200), even if generation ultimately fails!
+  </Card>
   <Card title="Flexible Polling" icon="refresh-ccw">
     Query task status and progress anytime
   </Card>
   <Card title="Parameterized Control" icon="sliders">
     Specify resolution and duration via parameters, more flexible
-  </Card>
-  <Card title="Same Pricing" icon="badge-dollar">
-    Exactly the same pricing as sync API
   </Card>
 </CardGroup>
 
@@ -273,9 +301,11 @@ def create_video_task_with_image(prompt, image_path, size="1280x720", seconds="1
     url = f"{BASE_URL}/videos"
     headers = {"Authorization": f"Bearer {API_KEY}"}
 
+    # Ensure file remains open during request
     with open(image_path, 'rb') as image_file:
         files = {
-            'input_reference': image_file,
+            # Specify filename and MIME type for proper upload
+            'input_reference': ('image.png', image_file, 'image/png')
         }
         data = {
             'model': 'sora-2',
@@ -284,6 +314,7 @@ def create_video_task_with_image(prompt, image_path, size="1280x720", seconds="1
             'seconds': seconds
         }
 
+        # Send request within with block to keep file handle valid
         response = requests.post(url, headers=headers, files=files, data=data)
         response.raise_for_status()
         return response.json()

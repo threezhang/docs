@@ -1,0 +1,279 @@
+---
+title: "Image Generation API Selection Guide"
+description: "Compare all image generation services to help you choose the best API"
+icon: "compass"
+---
+
+## 🎯 Choose in 30 Seconds
+
+<CardGroup cols={2}>
+  <Card title="Best Value" icon="badge-dollar">
+    **Sora Image** - $0.01/image
+    - Lowest price, good quality
+    - Perfect for batch generation
+    - Chinese-friendly
+
+    [View Docs →](/en/api-capabilities/sora-image-generation)
+  </Card>
+
+  <Card title="Highest Quality" icon="sparkles">
+    **Flux Kontext Max** - $0.07/image
+    - Premium quality
+    - Flexible aspect ratios (3:7 to 7:3)
+    - Professional design choice
+
+    [View Docs →](/en/api-capabilities/flux-image-generation)
+  </Card>
+
+  <Card title="Specific Dimensions" icon="expand">
+    **Gemini Flash Image** - $0.025/image
+    - 10 aspect ratio options
+    - Google technology
+    - Ultra-fast (~10s)
+
+    [View Docs →](/en/api-capabilities/gemini-flash-image)
+  </Card>
+
+  <Card title="Editing Features" icon="paintbrush">
+    **Gemini Flash Edit** - $0.025/call
+    - Multi-image composition
+    - Style transfer
+    - Custom dimensions
+
+    [View Docs →](/en/api-capabilities/gemini-flash-image-edit)
+  </Card>
+</CardGroup>
+
+## 📊 Complete Comparison
+
+| Service | Price | Speed | Quality | Features | Best For |
+|---------|-------|-------|---------|----------|----------|
+| **Sora Image** | $0.01/img | ~10-15s | ⭐⭐⭐⭐ | Chinese-friendly, pay-per-call | Batch content, quick prototyping |
+| **Flux Pro** | $0.035/img | Fast | ⭐⭐⭐⭐ | Flexible ratios (3:7-7:3) | Professional design, social media |
+| **Flux Max** | $0.07/img | Fast | ⭐⭐⭐⭐⭐ | Highest quality | Commercial work, premium design |
+| **Gemini Flash** | $0.025/img | ~10s | ⭐⭐⭐⭐ | 10 ratios, ultra-fast | Quick prototyping, mobile apps |
+| **Nano Banana** | $0.025/img | ~10s | ⭐⭐⭐⭐ | Base64 output | Direct web embedding |
+| **GPT-Image-1** | Per token | Medium | ⭐⭐⭐⭐⭐ | OpenAI standard | Enterprise integration |
+| **Seedream** | $0.025/img | Medium | ⭐⭐⭐⭐ | Image-to-image, multi-image | Creative editing, style transfer |
+
+<Tip>
+**Cost Comparison**: Generating 100 images
+- Sora: $1.00
+- Gemini/Nano Banana/Seedream: $2.50
+- Flux Pro: $3.50
+- Flux Max: $7.00
+
+**Best Value**: Sora Image (2.5-7x cheaper)
+</Tip>
+
+## 🎨 Choose by Scenario
+
+### Social Media Content
+<Tabs>
+  <Tab title="Square (1:1)">
+    **Recommended**: Sora Image, Gemini Flash, Nano Banana
+
+    - **Budget-conscious**: Sora ($0.01/img)
+    - **Quality priority**: Gemini Flash ($0.025/img)
+    - **Web embedding**: Nano Banana (Base64 format)
+  </Tab>
+
+  <Tab title="Portrait (9:16)">
+    **Recommended**: Gemini Flash, Flux Pro
+
+    - **Standard portrait**: Gemini Flash 9:16 ($0.025/img)
+    - **Ultra-tall**: Flux (3:7 ratio, $0.035/img)
+  </Tab>
+
+  <Tab title="Banner">
+    **Recommended**: Flux Pro
+
+    - **Ultra-wide banner**: Flux 7:3 ratio ($0.035/img)
+    - **Standard landscape**: Gemini Flash 16:9 ($0.025/img)
+  </Tab>
+</Tabs>
+
+### Professional Design
+
+<CardGroup cols={2}>
+  <Card title="High Quality" icon="crown">
+    **Recommended**: Flux Max ($0.07/img)
+
+    - Richest details
+    - Handles complex prompts
+    - Perfect for commercial work
+  </Card>
+
+  <Card title="Flexible Sizing" icon="maximize">
+    **Recommended**: Gemini Flash ($0.025/img)
+
+    - 10 aspect ratios
+    - Fast iteration
+    - Great value
+  </Card>
+
+  <Card title="Special Ratios" icon="aspect-ratio">
+    **Recommended**: Flux Pro ($0.035/img)
+
+    - 3:7 to 7:3 freedom
+    - Professional layout needs
+  </Card>
+
+  <Card title="Batch Generation" icon="layers">
+    **Recommended**: Sora Image ($0.01/img)
+
+    - Lowest cost
+    - Stable quality
+    - Perfect for volume
+  </Card>
+</CardGroup>
+
+### Image Editing
+
+| Need | Recommended Service | Price | Features |
+|------|-------------------|-------|----------|
+| Multi-image composition | Gemini Flash Edit | $0.025/call | Up to 4 images fusion |
+| Precise control | Flux Edit | $0.035/call | Mask control, local editing |
+| Style transfer | Sora Edit, Seedream | $0.01-0.025/call | Artistic style migration |
+| Image-to-image | Seedream | $0.025/call | Keep structure, change details |
+
+## 💰 Cost Optimization Strategy
+
+### Hybrid Approach
+
+<Steps>
+  <Step title="Test with Sora">
+    Test 10 different prompts for $0.01 each
+
+    ```python
+    test_prompts = [
+        "sunset over mountains",
+        "sunset over snowy mountains",
+        "dramatic sunset over mountain peaks",
+        # ... 7 more variations
+    ]
+
+    for prompt in test_prompts:
+        # Test with Sora ($0.01/img)
+        url = generate_with_sora(prompt)
+        evaluate(url)
+
+    # Testing cost: $0.10 (10 tests)
+    ```
+  </Step>
+
+  <Step title="Final with Flux">
+    Use best prompt with Flux Max for high-quality final
+
+    ```python
+    best_prompt = "dramatic sunset over mountain peaks"
+
+    # Generate final with Flux Max ($0.07/img)
+    final_image = generate_with_flux_max(best_prompt)
+
+    # Final cost: $0.07 (1 generation)
+    # Total cost: $0.17
+    ```
+  </Step>
+
+  <Step title="Cost Comparison">
+    **Hybrid approach**: 10 tests + 1 final = $0.17
+
+    **vs Direct Flux Max testing**: 10 × $0.07 = $0.70
+
+    **Saved**: $0.53 (76%)
+  </Step>
+</Steps>
+
+## 🔄 Decision Tree
+
+```
+Need to generate images
+    │
+    ├─ Budget sufficient (>$0.05/img)?
+    │   ├─ Yes → Need special ratios?
+    │   │   ├─ Yes → Flux Pro/Max
+    │   │   └─ No → Gemini Flash (10 ratios)
+    │   └─ No → Sora Image ($0.01/img)
+    │
+    ├─ Need editing features?
+    │   └─ Yes → Multi-image composition?
+    │       ├─ Yes → Gemini Flash Edit
+    │       └─ No → Flux Edit (mask control)
+    │
+    ├─ Pursuing ultimate quality?
+    │   └─ Yes → Flux Max ($0.07/img)
+    │
+    ├─ Need Base64 format?
+    │   └─ Yes → Nano Banana or Gemini Flash
+    │
+    └─ Batch generation (>100 images)?
+        └─ Yes → Sora Image (lowest cost)
+```
+
+## 📱 Recommendations by Industry
+
+### E-commerce Product Images
+- **Recommended**: Flux Pro ($0.035/img)
+- **Why**: Stable quality, supports various product angles
+- **Alternative**: Gemini Flash (cheaper, good for bulk)
+
+### Social Media Graphics
+- **Recommended**: Sora Image ($0.01/img)
+- **Why**: Best value, perfect for daily updates
+- **Alternative**: Gemini Flash (10 ratios for different platforms)
+
+### Professional Design/Branding
+- **Recommended**: Flux Max ($0.07/img)
+- **Why**: Rich details, meets commercial standards
+- **Alternative**: Flux Pro (similar quality, half price)
+
+### Mobile App Development
+- **Recommended**: Gemini Flash ($0.025/img)
+- **Why**: Supports all mobile ratios, fast
+- **Alternative**: Nano Banana (Base64 for direct embedding)
+
+## 🚀 Get Started
+
+Ready? Click below to view detailed docs:
+
+<CardGroup cols={2}>
+  <Card title="Sora Image" icon="wand-sparkles" href="/en/api-capabilities/sora-image-generation">
+    $0.01/img - Best Value
+  </Card>
+  <Card title="Flux" icon="zap" href="/en/api-capabilities/flux-image-generation">
+    $0.035-0.07/img - Professional Choice
+  </Card>
+  <Card title="Gemini Flash" icon="sparkles" href="/en/api-capabilities/gemini-flash-image">
+    $0.025/img - 10 Ratios
+  </Card>
+  <Card title="View All Services" icon="grid" href="/en/api-reference/images">
+    Complete image API list
+  </Card>
+</CardGroup>
+
+## ❓ Still Unsure?
+
+<Accordion title="Which should I choose? Quick Q&A">
+  **Q: My budget is under $0.02/image**
+  A: Choose **Sora Image** ($0.01/img)
+
+  **Q: I need portrait posters (9:16)**
+  A: Choose **Gemini Flash** (supports 9:16 ratio)
+
+  **Q: I need highest quality, budget not an issue**
+  A: Choose **Flux Max** ($0.07/img)
+
+  **Q: I need special ratios (e.g., 7:3 ultra-wide banner)**
+  A: Choose **Flux Pro** (3:7 to 7:3 freedom)
+
+  **Q: I need to edit images or compose multiple images**
+  A: Choose **Gemini Flash Edit** or **Flux Edit**
+
+  **Q: I need Base64 for direct web embedding**
+  A: Choose **Nano Banana** or **Gemini Flash**
+</Accordion>
+
+<Tip>
+Want to see actual results? Visit [imagen.laozhang.ai](https://imagen.laozhang.ai/) to test different models online.
+</Tip>
