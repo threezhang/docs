@@ -37,6 +37,8 @@ icon: "refresh-cw"
 | **端点** | `/v1/chat/completions` | `/v1/videos` |
 | **分辨率控制** | 模型名（`sora_video2-landscape`）| 参数（`size: "1280x720"`）|
 | **时长控制** | 模型名（`sora_video2-15s`）| 参数（`seconds: "15"`）|
+| **图生视频** | 支持图片URL | 仅支持本地文件上传 |
+| **失败扣费** | 请求成功但生成失败会扣费 | ⭐ 失败不扣费 |
 | **稳定性** | 依赖长连接 | ⭐⭐⭐⭐⭐ 更稳定 |
 | **进度查看** | 流式输出 | 轮询查询进度百分比 |
 | **超时处理** | 需要设置长超时 | 任务独立运行，无超时限制 |
@@ -66,7 +68,7 @@ icon: "refresh-cw"
 
 <CodeGroup>
 
-```bash 步骤1: 创建任务
+```bash 步骤1: 创建任务（文生视频）
 curl -X POST "https://api.laozhang.ai/v1/videos" \
   -H "Authorization: Bearer YOUR_API_KEY" \
   -H "Content-Type: application/json" \
@@ -80,6 +82,26 @@ curl -X POST "https://api.laozhang.ai/v1/videos" \
 # 响应示例
 {
   "id": "video_abc123",
+  "object": "task",
+  "model": "sora-2",
+  "status": "submitted",
+  "created_at": 1760945092,
+  "expires_at": 1761031492
+}
+```
+
+```bash 步骤1: 创建任务（图生视频）
+curl -X POST "https://api.laozhang.ai/v1/videos" \
+  -H "Authorization: Bearer YOUR_API_KEY" \
+  -F "model=sora-2" \
+  -F "prompt=让这张图片中的场景动起来，增加自然的动态效果" \
+  -F "input_reference=@/path/to/image.png" \
+  -F "size=1280x720" \
+  -F "seconds=10"
+
+# 响应示例
+{
+  "id": "video_def456",
   "object": "task",
   "model": "sora-2",
   "status": "submitted",
@@ -141,6 +163,7 @@ curl -X GET "https://api.laozhang.ai/v1/videos/video_abc123/content" \
 | `prompt` | string | ✓ | - | 视频生成提示词 |
 | `size` | string | ✓ | `"1280x720"`, `"720x1280"` | 视频分辨率（横屏/竖屏）|
 | `seconds` | string | ✓ | `"10"`, `"15"` | 视频时长（秒）|
+| `input_reference` | file | 图生视频时必填 | - | 本地图片文件（仅支持本地上传）<br/>支持格式：JPG, PNG, WebP<br/>建议尺寸：1280x720<br/>建议大小：< 5MB |
 
 #### 响应字段
 
@@ -225,7 +248,7 @@ import time
 API_KEY = "YOUR_API_KEY"
 BASE_URL = "https://api.laozhang.ai/v1"
 
-# 步骤1: 创建视频任务
+# 步骤1: 创建视频任务（文生视频）
 def create_video_task(prompt, size="1280x720", seconds="15"):
     """创建视频生成任务"""
     url = f"{BASE_URL}/videos"
@@ -243,6 +266,27 @@ def create_video_task(prompt, size="1280x720", seconds="15"):
     response = requests.post(url, headers=headers, json=data)
     response.raise_for_status()
     return response.json()
+
+# 步骤1: 创建视频任务（图生视频）
+def create_video_task_with_image(prompt, image_path, size="1280x720", seconds="10"):
+    """创建图生视频任务"""
+    url = f"{BASE_URL}/videos"
+    headers = {"Authorization": f"Bearer {API_KEY}"}
+
+    with open(image_path, 'rb') as image_file:
+        files = {
+            'input_reference': image_file,
+        }
+        data = {
+            'model': 'sora-2',
+            'prompt': prompt,
+            'size': size,
+            'seconds': seconds
+        }
+
+        response = requests.post(url, headers=headers, files=files, data=data)
+        response.raise_for_status()
+        return response.json()
 
 # 步骤2: 轮询查询状态
 def wait_for_video(video_id, poll_interval=5, timeout=600):
@@ -291,7 +335,7 @@ def download_video(video_id, save_path="video.mp4"):
 
     print(f"视频已保存到: {save_path}")
 
-# 完整流程
+# 完整流程（文生视频）
 def generate_video_async(prompt, size="1280x720", seconds="15"):
     """异步生成视频的完整流程"""
     print("1. 创建视频任务...")
@@ -307,12 +351,45 @@ def generate_video_async(prompt, size="1280x720", seconds="15"):
     download_video(video_id)
     print("\n✅ 完成！")
 
+# 完整流程（图生视频）
+def generate_video_from_image_async(image_path, prompt, size="1280x720", seconds="10"):
+    """从本地图片生成视频的完整流程"""
+    import os
+
+    if not os.path.exists(image_path):
+        print(f"错误：图片文件不存在 {image_path}")
+        return None
+
+    print(f"1. 上传图片并创建任务...（{image_path}）")
+    task = create_video_task_with_image(prompt, image_path, size, seconds)
+    video_id = task["id"]
+    print(f"   任务ID: {video_id}")
+
+    print("\n2. 等待视频生成...")
+    completed_task = wait_for_video(video_id)
+    print(f"   生成完成！耗时: {completed_task['completed_at'] - completed_task['created_at']}秒")
+
+    print("\n3. 下载视频...")
+    download_video(video_id, save_path=f"image_to_video_{video_id}.mp4")
+    print("\n✅ 完成！")
+
+    return video_id
+
 # 使用示例
 if __name__ == "__main__":
+    # 文生视频
     generate_video_async(
         prompt="一只可爱的猫咪在阳光明媚的花园里玩球",
         size="1280x720",  # 横屏
         seconds="15"       # 15秒
+    )
+
+    # 图生视频
+    generate_video_from_image_async(
+        image_path="/path/to/your/image.png",
+        prompt="让这张图片中的场景动起来，增加自然的动态效果",
+        size="1280x720",  # 横屏
+        seconds="10"       # 10秒
     )
 ```
 
@@ -321,11 +398,12 @@ if __name__ == "__main__":
 ```javascript
 const axios = require('axios');
 const fs = require('fs');
+const FormData = require('form-data');
 
 const API_KEY = 'YOUR_API_KEY';
 const BASE_URL = 'https://api.laozhang.ai/v1';
 
-// 创建视频任务
+// 创建视频任务（文生视频）
 async function createVideoTask(prompt, size = '1280x720', seconds = '15') {
   const response = await axios.post(`${BASE_URL}/videos`, {
     model: 'sora-2',
@@ -334,6 +412,25 @@ async function createVideoTask(prompt, size = '1280x720', seconds = '15') {
     seconds
   }, {
     headers: { 'Authorization': `Bearer ${API_KEY}` }
+  });
+
+  return response.data;
+}
+
+// 创建视频任务（图生视频）
+async function createVideoTaskWithImage(prompt, imagePath, size = '1280x720', seconds = '10') {
+  const formData = new FormData();
+  formData.append('model', 'sora-2');
+  formData.append('prompt', prompt);
+  formData.append('size', size);
+  formData.append('seconds', seconds);
+  formData.append('input_reference', fs.createReadStream(imagePath));
+
+  const response = await axios.post(`${BASE_URL}/videos`, formData, {
+    headers: {
+      'Authorization': `Bearer ${API_KEY}`,
+      ...formData.getHeaders()
+    }
   });
 
   return response.data;
@@ -393,7 +490,7 @@ async function downloadVideo(videoId, savePath = 'video.mp4') {
   });
 }
 
-// 完整流程
+// 完整流程（文生视频）
 async function generateVideoAsync(prompt, size = '1280x720', seconds = '15') {
   try {
     console.log('1. 创建视频任务...');
@@ -415,11 +512,50 @@ async function generateVideoAsync(prompt, size = '1280x720', seconds = '15') {
   }
 }
 
+// 完整流程（图生视频）
+async function generateVideoFromImageAsync(imagePath, prompt, size = '1280x720', seconds = '10') {
+  try {
+    if (!fs.existsSync(imagePath)) {
+      console.error(`错误：图片文件不存在 ${imagePath}`);
+      return null;
+    }
+
+    console.log(`1. 上传图片并创建任务...（${imagePath}）`);
+    const task = await createVideoTaskWithImage(prompt, imagePath, size, seconds);
+    const videoId = task.id;
+    console.log(`   任务ID: ${videoId}`);
+
+    console.log('\n2. 等待视频生成...');
+    const completedTask = await waitForVideo(videoId);
+    const duration = completedTask.completed_at - completedTask.created_at;
+    console.log(`   生成完成！耗时: ${duration}秒`);
+
+    console.log('\n3. 下载视频...');
+    await downloadVideo(videoId, `image_to_video_${videoId}.mp4`);
+    console.log('\n✅ 完成！');
+
+    return videoId;
+
+  } catch (error) {
+    console.error('错误:', error.message);
+    return null;
+  }
+}
+
 // 使用示例
+// 文生视频
 generateVideoAsync(
   '一只可爱的猫咪在阳光明媚的花园里玩球',
   '1280x720',  // 横屏
   '15'         // 15秒
+);
+
+// 图生视频
+generateVideoFromImageAsync(
+  '/path/to/your/image.png',
+  '让这张图片中的场景动起来，增加自然的动态效果',
+  '1280x720',  // 横屏
+  '10'         // 10秒
 );
 ```
 
@@ -537,7 +673,12 @@ generateVideoAsync(
 **计费规则：**
 - ✓ 仅在视频**成功生成**时收费（status = "completed"）
 - ✗ 失败、超时、取消**不计费**
+- ✗ 内容安全问题失败**也不扣费**（与同步API的重要区别⭐）
 - ✗ 查询状态不计费
+
+<Tip>
+**异步API的重要优势**：任何原因导致的失败都不会扣费，包括内容安全审核未通过。而同步API只要请求成功就会扣费，即使最终生成失败。
+</Tip>
 
 ## 常见问题
 
@@ -613,6 +754,98 @@ generateVideoAsync(
     - 继续等待 5-10 分钟
     - 如果超过 10 分钟无变化，联系技术支持
     - 提供 video_id 以便排查
+  </Accordion>
+
+  <Accordion title="图生视频支持图片URL吗？" icon="image">
+    **不支持！仅支持本地图片文件上传。**
+
+    **正确做法：**
+    ```python
+    # ✓ 正确：上传本地文件
+    with open('/path/to/image.png', 'rb') as f:
+        files = {'input_reference': f}
+        response = requests.post(url, files=files, data=data)
+    ```
+
+    **不支持：**
+    - ✗ 图片URL
+    - ✗ Base64编码
+    - ✗ 在线图片链接
+
+    **原因：** 异步API通过 `multipart/form-data` 格式上传，仅支持本地文件流。
+  </Accordion>
+
+  <Accordion title="图生视频支持哪些格式？" icon="file-image">
+    **支持的图片格式：**
+    - ✓ JPG / JPEG
+    - ✓ PNG
+    - ✓ WebP
+
+    **图片要求：**
+    - **文件大小：** < 5MB（推荐）
+    - **分辨率：** 建议 1280x720 或相近比例
+    - **来源：** 必须是本地文件
+
+    **自动识别MIME类型：**
+    ```python
+    import os
+
+    def get_mime_type(path):
+        ext = os.path.splitext(path)[1].lower()
+        types = {
+            '.jpg': 'image/jpeg',
+            '.jpeg': 'image/jpeg',
+            '.png': 'image/png',
+            '.webp': 'image/webp'
+        }
+        return types.get(ext, 'image/jpeg')
+    ```
+  </Accordion>
+
+  <Accordion title="图生视频时prompt是必填的吗？" icon="message-square">
+    **是的，prompt 参数必填！**
+
+    即使你只是想让图片"自然地动起来"，也需要提供描述：
+
+    **推荐的简单prompt：**
+    ```
+    "让图片中的场景自然地动起来"
+    "保持原有风格，增加动态效果"
+    "让这个场景动起来，加入微风效果"
+    ```
+
+    **更具体的prompt效果更好：**
+    ```
+    "让湖面泛起涟漪，树叶随风摇曳，云层缓慢移动"
+    "让小猫从左侧跳到右侧，尾巴摇动"
+    "360度缓慢旋转展示产品，加上光影效果"
+    ```
+  </Accordion>
+
+  <Accordion title="图生视频比文生视频贵吗？" icon="coins">
+    **价格完全相同！**
+
+    | 视频时长 | 价格 |
+    |---------|------|
+    | 10秒（横屏/竖屏）| $0.15/次 ≈ ¥1.0/次 |
+    | 15秒（横屏/竖屏）| $0.15/次 ≈ ¥1.0/次 |
+
+    **计费说明：**
+    - 图生视频和文生视频价格一样
+    - 仅成功生成时收费
+    - 失败不扣费（包括图片格式错误、内容违规等）
+  </Accordion>
+
+  <Accordion title="图片会影响视频生成时间吗？" icon="clock">
+    **几乎没有影响。**
+
+    图生视频和文生视频的生成时间基本相同：
+    - **通常时间：** 2-5 分钟
+    - **影响因素：** 视频时长、队列长度、复杂度
+
+    **图片大小影响：**
+    - 建议 < 5MB：上传快，处理快
+    - 过大图片：仅影响上传时间（几秒），对生成时间无明显影响
   </Accordion>
 </AccordionGroup>
 

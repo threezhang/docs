@@ -54,11 +54,21 @@
                 "icon": "clapperboard",
                 "pages": [
                   "api-capabilities/sora2/overview",
-                  "api-capabilities/sora2/quick-start",
-                    "api-capabilities/sora2/models-pricing",
-                  "api-capabilities/sora2/api-reference",
-                  "api-capabilities/sora2/async-api",
-                  "api-capabilities/sora2/examples",
+                  "api-capabilities/sora2/models-pricing",
+                  {
+                    "group": "同步 API（兼容 OpenAI）",
+                    "pages": [
+                      "api-capabilities/sora2/quick-start",
+                      "api-capabilities/sora2/api-reference",
+                      "api-capabilities/sora2/examples"
+                    ]
+                  },
+                  {
+                    "group": "异步 API（任务队列）",
+                    "pages": [
+                      "api-capabilities/sora2/async-api"
+                    ]
+                  },
                   "api-capabilities/sora2/troubleshooting"
                 ]
               },
@@ -274,11 +284,21 @@
                   "icon": "clapperboard",
                   "pages": [
                     "en/api-capabilities/sora2/overview",
-                    "en/api-capabilities/sora2/quick-start",
                     "en/api-capabilities/sora2/models-pricing",
-                    "en/api-capabilities/sora2/api-reference",
-                    "en/api-capabilities/sora2/async-api",
-                    "en/api-capabilities/sora2/examples",
+                    {
+                      "group": "Sync API (OpenAI Compatible)",
+                      "pages": [
+                        "en/api-capabilities/sora2/quick-start",
+                        "en/api-capabilities/sora2/api-reference",
+                        "en/api-capabilities/sora2/examples"
+                      ]
+                    },
+                    {
+                      "group": "Async API (Task Queue)",
+                      "pages": [
+                        "en/api-capabilities/sora2/async-api"
+                      ]
+                    },
                     "en/api-capabilities/sora2/troubleshooting"
                   ]
                 },
