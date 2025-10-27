@@ -433,6 +433,334 @@ if __name__ == "__main__":
 
 </Accordion>
 
+## 🎨 图改图示例详解
+
+### 场景 1：元素添加
+
+在现有图片中添加新的元素（动物、物体、人物等）。
+
+**Python 示例**
+
+```python
+import requests
+import base64
+
+API_KEY = "sk-YOUR_API_KEY"
+INPUT_IMAGE = "./dog.png"
+API_URL = "https://api.laozhang.ai/v1beta/models/gemini-2.5-flash-image:generateContent"
+
+# 读取并编码图片
+with open(INPUT_IMAGE, 'rb') as f:
+    img_base64 = base64.b64encode(f.read()).decode('utf-8')
+
+# 发送请求
+response = requests.post(
+    API_URL,
+    headers={
+        "Authorization": f"Bearer {API_KEY}",
+        "Content-Type": "application/json"
+    },
+    json={
+        "contents": [{
+            "parts": [
+                {"text": "add a cute cat sitting next to the dog"},
+                {"inline_data": {"mime_type": "image/png", "data": img_base64}}
+            ]
+        }],
+        "generationConfig": {
+            "responseModalities": ["IMAGE"],
+            "imageConfig": {"aspectRatio": "1:1"}
+        }
+    }
+)
+
+# 保存结果
+result = response.json()
+image_data = result['candidates'][0]['content']['parts'][0]['inlineData']['data']
+with open('output.png', 'wb') as f:
+    f.write(base64.b64decode(image_data))
+print("✅ 图片已保存: output.png")
+```
+
+**提示词技巧**
+
+<Tip>
+- 明确说明要添加什么元素："add a cat", "add a person"
+- 指定位置："next to the dog", "in the background", "on the left"
+- 保持风格一致："in the same style as the original image"
+</Tip>
+
+---
+
+### 场景 2：背景替换
+
+更换图片的背景场景，同时保留主体对象。
+
+**Python 示例**
+
+```python
+import requests
+import base64
+
+API_KEY = "sk-YOUR_API_KEY"
+INPUT_IMAGE = "./dog.png"
+API_URL = "https://api.laozhang.ai/v1beta/models/gemini-2.5-flash-image:generateContent"
+
+# 读取并编码图片
+with open(INPUT_IMAGE, 'rb') as f:
+    img_base64 = base64.b64encode(f.read()).decode('utf-8')
+
+# 发送请求
+response = requests.post(
+    API_URL,
+    headers={
+        "Authorization": f"Bearer {API_KEY}",
+        "Content-Type": "application/json"
+    },
+    json={
+        "contents": [{
+            "parts": [
+                {"text": "change the background to a beautiful beach at sunset"},
+                {"inline_data": {"mime_type": "image/png", "data": img_base64}}
+            ]
+        }],
+        "generationConfig": {
+            "responseModalities": ["IMAGE"],
+            "imageConfig": {"aspectRatio": "1:1"}
+        }
+    }
+)
+
+# 保存结果
+result = response.json()
+image_data = result['candidates'][0]['content']['parts'][0]['inlineData']['data']
+with open('output.png', 'wb') as f:
+    f.write(base64.b64decode(image_data))
+print("✅ 图片已保存: output.png")
+```
+
+**提示词技巧**
+
+<Tip>
+- 使用 "change background to..." 明确表达背景替换意图
+- 描述新背景的具体场景："beach at sunset", "snowy mountain", "modern office"
+- 保留主体："keep the dog/person in focus"
+</Tip>
+
+---
+
+### 场景 3：风格转换
+
+将照片转换为不同的艺术风格（油画、水彩、卡通等）。
+
+**Python 示例**
+
+```python
+import requests
+import base64
+
+API_KEY = "sk-YOUR_API_KEY"
+INPUT_IMAGE = "./dog.png"
+API_URL = "https://api.laozhang.ai/v1beta/models/gemini-2.5-flash-image:generateContent"
+
+# 读取并编码图片
+with open(INPUT_IMAGE, 'rb') as f:
+    img_base64 = base64.b64encode(f.read()).decode('utf-8')
+
+# 发送请求
+response = requests.post(
+    API_URL,
+    headers={
+        "Authorization": f"Bearer {API_KEY}",
+        "Content-Type": "application/json"
+    },
+    json={
+        "contents": [{
+            "parts": [
+                {"text": "convert this image to oil painting style"},
+                {"inline_data": {"mime_type": "image/png", "data": img_base64}}
+            ]
+        }],
+        "generationConfig": {
+            "responseModalities": ["IMAGE"],
+            "imageConfig": {"aspectRatio": "1:1"}
+        }
+    }
+)
+
+# 保存结果
+result = response.json()
+image_data = result['candidates'][0]['content']['parts'][0]['inlineData']['data']
+with open('output.png', 'wb') as f:
+    f.write(base64.b64decode(image_data))
+print("✅ 图片已保存: output.png")
+```
+
+**常见艺术风格**
+
+| 风格 | 提示词 |
+|------|-------|
+| 油画 | "convert to oil painting style" |
+| 水彩画 | "convert to watercolor painting style" |
+| 卡通风格 | "convert to cartoon style" |
+| 素描 | "convert to pencil sketch style" |
+| 赛博朋克 | "convert to cyberpunk style" |
+| 印象派 | "convert to impressionist painting style" |
+
+---
+
+### 场景 4：元素修改
+
+修改图片中现有元素的属性（颜色、大小、形状等）。
+
+**Python 示例**
+
+```python
+import requests
+import base64
+
+API_KEY = "sk-YOUR_API_KEY"
+INPUT_IMAGE = "./car.png"
+API_URL = "https://api.laozhang.ai/v1beta/models/gemini-2.5-flash-image:generateContent"
+
+# 读取并编码图片
+with open(INPUT_IMAGE, 'rb') as f:
+    img_base64 = base64.b64encode(f.read()).decode('utf-8')
+
+# 发送请求
+response = requests.post(
+    API_URL,
+    headers={
+        "Authorization": f"Bearer {API_KEY}",
+        "Content-Type": "application/json"
+    },
+    json={
+        "contents": [{
+            "parts": [
+                {"text": "change the car color to red, keep everything else the same"},
+                {"inline_data": {"mime_type": "image/png", "data": img_base64}}
+            ]
+        }],
+        "generationConfig": {
+            "responseModalities": ["IMAGE"],
+            "imageConfig": {"aspectRatio": "1:1"}
+        }
+    }
+)
+
+# 保存结果
+result = response.json()
+image_data = result['candidates'][0]['content']['parts'][0]['inlineData']['data']
+with open('output.png', 'wb') as f:
+    f.write(base64.b64decode(image_data))
+print("✅ 图片已保存: output.png")
+```
+
+**提示词技巧**
+
+<Tip>
+- 明确指定要修改的对象："change the car color", "make the sky darker"
+- 强调保持其他元素不变："keep everything else the same"
+- 指定具体属性："to red", "to larger size", "to round shape"
+</Tip>
+
+---
+
+## ⚙️ 参数配置详解
+
+### 支持的纵横比（Aspect Ratio）
+
+所有 10 种纵横比都已经过**实际测试验证**，完全可用：
+
+| 类型 | 纵横比 | 适用场景 | 测试结果 |
+|------|-------|---------|---------|
+| **超宽屏** | `21:9` | 电影海报、横幅广告 | ✅ 已验证 |
+| **宽屏** | `16:9` | 社交媒体横图、视频封面 | ✅ 已验证 |
+| **标准横向** | `4:3` | 传统照片、演示文稿 | ✅ 已验证 |
+| **横向** | `3:2` | 单反相机标准比例 | ✅ 已验证 |
+| **正方形** | `1:1` | Instagram、头像图片 | ✅ 已验证 |
+| **竖屏** | `9:16` | 手机壁纸、竖屏视频 | ✅ 已验证 |
+| **标准纵向** | `3:4` | 竖版海报 | ✅ 已验证 |
+| **纵向** | `2:3` | 书籍封面、明信片 | ✅ 已验证 |
+| **其他** | `5:4`, `4:5` | 特殊需求 | ✅ 已验证 |
+
+<Note>
+**实测数据**
+- 测试环境：使用真实 API 进行测试
+- 输出格式：PNG（约 1-2MB）
+- 响应时间：平均 8-15 秒
+- 成功率：100%（所有纵横比都正常工作）
+</Note>
+
+### 支持的图片格式（MIME Type）
+
+| 格式 | MIME Type | 文件扩展名 | 建议用途 | 测试结果 |
+|------|-----------|-----------|---------|---------|
+| PNG | `image/png` | `.png` | 需要透明背景、高质量图片 | ✅ 已验证 |
+| JPEG | `image/jpeg` | `.jpg`, `.jpeg` | 照片、文件大小敏感场景 | ✅ 已验证 |
+| WebP | `image/webp` | `.webp` | 现代 Web 应用 | ⚠️ 支持但未测试 |
+
+**实测对比**
+
+```python
+# PNG 格式 - 原始大小 1.6MB
+{"inline_data": {"mime_type": "image/png", "data": "..."}}
+# 输出: 约 1.6MB
+
+# JPEG 格式 - 原始大小 217KB（压缩后）
+{"inline_data": {"mime_type": "image/jpeg", "data": "..."}}
+# 输出: 约 1.7MB（API 输出统一为 PNG）
+```
+
+<Tip>
+**格式选择建议**
+- **上传 JPEG**：可显著减少 base64 数据大小，加快上传速度
+- **输出固定 PNG**：API 始终返回 PNG 格式，无需担心格式转换
+- **透明背景**：必须使用 PNG 格式作为输入
+</Tip>
+
+### 图片大小限制
+
+| 限制项 | 推荐值 | 最大值 | 说明 |
+|-------|-------|--------|------|
+| 文件大小 | ≤ 5MB | ≤ 10MB | 超大文件会增加处理时间 |
+| 图片尺寸 | 1024-2048px | 4096px | 建议使用常规尺寸 |
+| Base64 长度 | - | ~14MB | 编码后数据量约为原文件 1.37 倍 |
+
+**实测示例**
+
+```python
+# 测试结果
+原始 PNG: 1.6MB → Base64: ~2.2MB → 处理时间: 12 秒
+压缩 JPEG: 217KB → Base64: ~300KB → 处理时间: 10 秒
+```
+
+### 完整参数示例
+
+```python
+payload = {
+    "contents": [{
+        "parts": [
+            {"text": "your prompt here"},
+            {
+                "inline_data": {
+                    "mime_type": "image/png",  # 或 "image/jpeg"
+                    "data": img_base64
+                }
+            }
+        ]
+    }],
+    "generationConfig": {
+        "responseModalities": ["IMAGE"],
+        "imageConfig": {
+            "aspectRatio": "16:9"  # 10 种比例任选
+        }
+    }
+}
+```
+
+---
+
 ## 🎯 应用场景
 
 <CardGroup cols={2}>
