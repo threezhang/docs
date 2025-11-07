@@ -1,0 +1,304 @@
+---
+title: "Veo-3.1 模型概览"
+description: "Google Veo-3.1 系列视频生成模型介绍和功能说明"
+icon: "play"
+---
+
+## 简介
+
+Veo-3.1 是 Google 推出的最新一代视频生成模型系列,支持通过文本描述或图片输入生成高质量视频内容。该系列模型完全兼容 OpenAI Chat Completions API 格式,方便开发者快速集成。
+
+## 核心特性
+
+<CardGroup cols={2}>
+  <Card title="文生视频" icon="wand-sparkles">
+    纯文本描述生成视频,支持复杂场景和动作描述
+  </Card>
+  <Card title="图生视频" icon="image">
+    基于1-2张参考图片生成过渡视频或动画效果
+  </Card>
+  <Card title="OpenAI 兼容" icon="plug">
+    使用标准 Chat Completions API 格式,无需学习新接口
+  </Card>
+  <Card title="流式响应" icon="waves">
+    支持流式返回,实时获取生成进度和结果
+  </Card>
+</CardGroup>
+
+## 模型系列
+
+Veo-3.1 提供多个变体模型,满足不同场景需求:
+
+### 标准模型
+
+<AccordionGroup>
+  <Accordion title="veo-3.1 - 标准版" icon="circle">
+    **价格:** $0.25 / 次
+
+    **特点:**
+    - 综合性能优秀
+    - 适合大多数场景
+    - 生成质量稳定
+
+    **推荐场景:** 通用视频生成、内容创作
+  </Accordion>
+
+  <Accordion title="veo-3.1-fast - 快速版" icon="bolt">
+    **价格:** $0.15 / 次
+
+    **特点:**
+    - 生成速度更快
+    - 性价比高
+    - 适合快速迭代
+
+    **推荐场景:** 批量生成、快速测试
+  </Accordion>
+</AccordionGroup>
+
+### 图生视频模型(支持图片输入)
+
+<AccordionGroup>
+  <Accordion title="veo-3.1-fl - 图生视频标准版" icon="image">
+    **价格:** $0.25 / 次
+
+    **特点:**
+    - 支持1-2张图片输入
+    - 可生成图片过渡动画
+    - 让静态图片动起来
+
+    **推荐场景:** 图片动画化、图片过渡视频
+  </Accordion>
+
+  <Accordion title="veo-3.1-fast-fl - 图生视频快速版" icon="bolt">
+    **价格:** $0.15 / 次
+
+    **特点:**
+    - 快速生成图生视频
+    - 支持图片输入
+    - 高性价比
+
+    **推荐场景:** 批量图片动画制作
+  </Accordion>
+</AccordionGroup>
+
+### 横屏模型（Landscape）
+
+<AccordionGroup>
+  <Accordion title="veo-3.1-landscape - 横屏标准版" icon="rectangle-horizontal">
+    **价格:** $0.25 / 次
+
+    **特点:**
+    - 专为横屏场景优化
+    - 16:9 或更宽画幅
+    - 适合专业制作
+
+    **推荐场景:** 影视制作、商业视频
+  </Accordion>
+
+  <Accordion title="veo-3.1-landscape-fast - 横屏快速版" icon="gauge">
+    **价格:** $0.15 / 次
+
+    **特点:**
+    - 快速生成横屏视频
+    - 保持画面质量
+    - 高效批量处理
+
+    **推荐场景:** 批量横屏内容制作
+  </Accordion>
+
+  <Accordion title="veo-3.1-landscape-fl - 横屏图生视频版" icon="monitor">
+    **价格:** $0.25 / 次
+
+    **特点:**
+    - 横屏+图片输入支持
+    - 专业级输出
+    - 细节保留优秀
+
+    **推荐场景:** 横屏图片动画、专业横屏制作
+  </Accordion>
+
+  <Accordion title="veo-3.1-landscape-fast-fl - 横屏图生视频快速版" icon="rocket">
+    **价格:** $0.15 / 次
+
+    **特点:**
+    - 快速+图片输入+横屏
+    - 三重功能组合
+    - 极高性价比
+
+    **推荐场景:** 大规模横屏图片动画生产
+  </Accordion>
+</AccordionGroup>
+
+## 价格对比
+
+| 模型名称 | 价格 | 速度 | 画幅 | 图片支持 | 推荐用途 |
+|---------|------|------|------|---------|----------|
+| veo-3.1 | $0.25 | 标准 | 通用 | ❌ | 文生视频通用场景 |
+| veo-3.1-fast | $0.15 | 快速 | 通用 | ❌ | 文生视频快速测试 |
+| veo-3.1-fl | $0.25 | 标准 | 通用 | ✅ | 图生视频标准质量 |
+| veo-3.1-fast-fl | $0.15 | 快速 | 通用 | ✅ | 图生视频快速处理 |
+| veo-3.1-landscape | $0.25 | 标准 | 横屏 | ❌ | 横屏文生视频 |
+| veo-3.1-landscape-fast | $0.15 | 快速 | 横屏 | ❌ | 横屏文生快速 |
+| veo-3.1-landscape-fl | $0.25 | 标准 | 横屏 | ✅ | 横屏图生视频 |
+| veo-3.1-landscape-fast-fl | $0.15 | 快速 | 横屏 | ✅ | 横屏图生快速 |
+
+## 生成方式
+
+### 文生视频（Text-to-Video）
+
+通过自然语言描述生成视频内容:
+
+```json
+{
+  "messages": [{
+    "role": "user",
+    "content": [
+      {
+        "type": "text",
+        "text": "生成两只猫和一只狗打架的视频"
+      }
+    ]
+  }],
+  "model": "veo-3.1",
+  "stream": true,
+  "n": 2
+}
+```
+
+### 图生视频（Image-to-Video）
+
+基于参考图片生成视频内容:
+
+```json
+{
+  "messages": [{
+    "role": "user",
+    "content": [
+      {
+        "type": "text",
+        "text": "根据两张图片生成一个完整的过渡视频"
+      },
+      {
+        "type": "image_url",
+        "image_url": {
+          "url": "开始帧图片URL或base64"
+        }
+      },
+      {
+        "type": "image_url",
+        "image_url": {
+          "url": "结束帧图片URL或base64（可选）"
+        }
+      }
+    ]
+  }],
+  "model": "veo-3.1-fl",
+  "stream": true
+}
+```
+
+## 核心参数说明
+
+<ParamField path="model" type="string" required>
+  选择使用的 Veo-3.1 模型变体
+</ParamField>
+
+<ParamField path="messages" type="array" required>
+  包含用户输入的消息数组,支持文本和图片类型
+</ParamField>
+
+<ParamField path="stream" type="boolean" default="false">
+  是否启用流式响应,建议设置为 `true` 以实时获取进度
+</ParamField>
+
+<ParamField path="n" type="integer" default="1">
+  生成视频的数量,范围 1-4,可同时生成多个不同结果
+</ParamField>
+
+## 计费说明
+
+<Warning>
+**重要提示:** Veo-3.1 模型需要使用**按次付费令牌**,不支持按量付费令牌。请在 [老张API控制台](https://api.laozhang.ai/token) 创建"按次付费"类型的令牌。
+</Warning>
+
+<Info>
+**按次计费：** 每次成功的 API 调用按所选模型的单价计费,失败不收费
+</Info>
+
+### 计费规则
+
+- **单次调用：** 按模型价格计费（$0.15 或 $0.25）
+- **多结果生成：** 设置 `n=2` 会生成 2 个视频,按 2 次计费
+- **失败重试：** 生成失败不收费,可免费重试
+- **流式响应：** 不额外收费
+
+## 技术优势
+
+<CardGroup cols={3}>
+  <Card title="高质量输出" icon="star">
+    先进的视频生成算法,确保画面流畅自然
+  </Card>
+  <Card title="快速响应" icon="clock">
+    Fast 系列模型可在数秒内返回结果
+  </Card>
+  <Card title="灵活控制" icon="sliders">
+    支持文本和图片组合输入,精确控制生成内容
+  </Card>
+  <Card title="标准接口" icon="code">
+    完全兼容 OpenAI API,零学习成本
+  </Card>
+  <Card title="批量处理" icon="layers">
+    支持通过 n 参数同时生成多个结果
+  </Card>
+  <Card title="实时进度" icon="spinner">
+    流式响应实时反馈生成状态
+  </Card>
+</CardGroup>
+
+## 快速开始
+
+<Card title="快速开始指南" icon="rocket" href="/api-capabilities/veo/veo-31-quick-start">
+  查看完整的快速开始教程,包含详细的代码示例
+</Card>
+
+## 使用场景
+
+<Tabs>
+  <Tab title="内容创作">
+    - 社交媒体短视频
+    - 营销宣传片段
+    - 产品展示动画
+    - 教育培训内容
+  </Tab>
+
+  <Tab title="专业制作">
+    - 影视特效预览
+    - 广告创意测试
+    - 动画原型制作
+    - 概念验证视频
+  </Tab>
+
+  <Tab title="批量生成">
+    - 自动化内容生产
+    - A/B 测试素材
+    - 多版本快速迭代
+    - 数据集生成
+  </Tab>
+</Tabs>
+
+## 下一步
+
+<CardGroup cols={2}>
+  <Card title="快速开始" icon="play" href="/api-capabilities/veo/veo-31-quick-start">
+    5分钟快速上手 Veo-3.1 API
+  </Card>
+  <Card title="代码示例" icon="code" href="/api-capabilities/veo/veo-31-examples">
+    查看各语言完整示例代码
+  </Card>
+  <Card title="最佳实践" icon="lightbulb" href="/api-capabilities/veo/veo-31-best-practices">
+    学习如何写出更好的提示词
+  </Card>
+  <Card title="常见问题" icon="circle-help" href="/api-capabilities/veo/veo-31-troubleshooting">
+    排查常见问题和错误
+  </Card>
+</CardGroup>

@@ -1,0 +1,670 @@
+---
+title: "Veo-3.1 问题排查"
+description: "Veo-3.1 API 常见问题及解决方案"
+icon: "wrench"
+---
+
+## 认证问题
+
+### API Key 无效
+
+<AccordionGroup>
+  <Accordion title="错误: 401 Unauthorized" icon="lock">
+    **错误信息:**
+    ```json
+    {
+      "error": {
+        "message": "Incorrect API key provided",
+        "type": "invalid_request_error",
+        "code": "invalid_api_key"
+      }
+    }
+    ```
+
+    **可能原因:**
+    - API Key 格式错误
+    - API Key 已过期或被删除
+    - Authorization header 格式不正确
+
+    **解决方案:**
+    1. 检查 API Key 格式是否以 `sk-` 开头
+    2. 确认 Authorization header 格式: `Bearer sk-YOUR_API_KEY`
+    3. 在[控制台](https://api.laozhang.ai/token)重新生成 API Key
+
+    **正确示例:**
+    ```python
+    client = OpenAI(
+        api_key="sk-YOUR_VALID_API_KEY",  # 确保以 sk- 开头
+        base_url="https://api.laozhang.ai/v1"
+    )
+    ```
+  </Accordion>
+
+  <Accordion title="错误: 余额不足" icon="credit-card">
+    **错误信息:**
+    ```json
+    {
+      "error": {
+        "message": "Insufficient balance",
+        "type": "insufficient_quota",
+        "code": "insufficient_balance"
+      }
+    }
+    ```
+
+    **解决方案:**
+    1. 登录[控制台](https://api.laozhang.ai/account/profile)查看余额
+    2. 充值账户余额
+    3. Veo-3.1 按次计费: $0.15-$0.25/次
+
+    **费用说明:**
+    - `veo-3.1-fast*`: $0.15/次
+    - `veo-3.1`(其他): $0.25/次
+    - 使用 `n=2` 会生成2个视频,计费2次
+  </Accordion>
+</AccordionGroup>
+
+## 请求参数问题
+
+### 模型名称错误
+
+<AccordionGroup>
+  <Accordion title="错误: 模型不存在" icon="alert-triangle">
+    **错误信息:**
+    ```json
+    {
+      "error": {
+        "message": "The model 'veo-31' does not exist",
+        "type": "invalid_request_error",
+        "code": "model_not_found"
+      }
+    }
+    ```
+
+    **常见错误写法:**
+    ```python
+    model="veo-31"       # ❌ 错误: 应该是 veo-3.1
+    model="veo_3_1"      # ❌ 错误: 应该用连字符
+    model="veo3.1"       # ❌ 错误: 缺少连字符
+    ```
+
+    **正确写法:**
+    ```python
+    model="veo-3.1"              # ✅ 正确
+    model="veo-3.1-fast"         # ✅ 正确
+    model="veo-3.1-fl"           # ✅ 正确
+    model="veo-3.1-landscape"    # ✅ 正确
+    ```
+
+    **所有可用模型:**
+    - `veo-3.1`
+    - `veo-3.1-fast`
+    - `veo-3.1-fl`
+    - `veo-3.1-fast-fl`
+    - `veo-3.1-landscape`
+    - `veo-3.1-landscape-fast`
+    - `veo-3.1-landscape-fl`
+    - `veo-3.1-landscape-fast-fl`
+  </Accordion>
+
+  <Accordion title="错误: 消息格式不正确" icon="message-square">
+    **错误信息:**
+    ```json
+    {
+      "error": {
+        "message": "Invalid message format",
+        "type": "invalid_request_error"
+      }
+    }
+    ```
+
+    **错误示例:**
+    ```python
+    # ❌ 错误: content 应该是数组
+    messages=[{
+        "role": "user",
+        "content": "生成视频"
+    }]
+
+    # ❌ 错误: 缺少 type 字段
+    messages=[{
+        "role": "user",
+        "content": [{
+            "text": "生成视频"
+        }]
+    }]
+    ```
+
+    **正确示例:**
+    ```python
+    # ✅ 正确: content 是包含对象的数组
+    messages=[{
+        "role": "user",
+        "content": [
+            {
+                "type": "text",
+                "text": "生成视频"
+            }
+        ]
+    }]
+    ```
+  </Accordion>
+</AccordionGroup>
+
+### 图片相关问题
+
+<AccordionGroup>
+  <Accordion title="错误: 图片无法访问" icon="image">
+    **错误信息:**
+    ```json
+    {
+      "error": {
+        "message": "Failed to fetch image",
+        "code": "image_fetch_failed"
+      }
+    }
+    ```
+
+    **可能原因:**
+    - 图片 URL 无效或已过期
+    - 图片需要认证才能访问
+    - 图片服务器响应慢或超时
+    - 网络连接问题
+
+    **解决方案:**
+    1. 使用公开可访问的图片 URL
+    2. 使用 Base64 编码图片
+    3. 确保图片 URL 支持 HTTPS
+
+    **使用 Base64 方案:**
+    ```python
+    import base64
+
+    def encode_image(image_path):
+        with open(image_path, "rb") as f:
+            return base64.b64encode(f.read()).decode()
+
+    image_base64 = encode_image("./image.jpg")
+
+    content = [
+        {"type": "text", "text": "生成视频"},
+        {
+            "type": "image_url",
+            "image_url": {
+                "url": f"data:image/jpeg;base64,{image_base64}"
+            }
+        }
+    ]
+    ```
+  </Accordion>
+
+  <Accordion title="错误: 图片格式不支持" icon="file-image">
+    **错误信息:**
+    ```json
+    {
+      "error": {
+        "message": "Unsupported image format",
+        "code": "invalid_image_format"
+      }
+    }
+    ```
+
+    **支持的格式:**
+    - ✅ JPEG (.jpg, .jpeg)
+    - ✅ PNG (.png)
+    - ✅ WebP (.webp)
+    - ❌ GIF (不支持动图)
+    - ❌ BMP
+    - ❌ TIFF
+
+    **解决方案:**
+    使用 PIL/Pillow 转换图片格式:
+    ```python
+    from PIL import Image
+    import io
+    import base64
+
+    # 打开图片
+    img = Image.open("image.bmp")
+
+    # 转换为 JPEG
+    buffer = io.BytesIO()
+    img.convert('RGB').save(buffer, format='JPEG')
+    img_base64 = base64.b64encode(buffer.getvalue()).decode()
+
+    # 使用转换后的图片
+    url = f"data:image/jpeg;base64,{img_base64}"
+    ```
+  </Accordion>
+
+  <Accordion title="错误: 图片太大" icon="alert-circle">
+    **错误信息:**
+    ```json
+    {
+      "error": {
+        "message": "Image size exceeds limit",
+        "code": "image_too_large"
+      }
+    }
+    ```
+
+    **限制说明:**
+    - 最大文件大小: 10MB
+    - 推荐分辨率: 1024x1024 或更高
+    - 最多图片数: 2张
+
+    **解决方案:**
+    压缩图片:
+    ```python
+    from PIL import Image
+
+    def compress_image(input_path, output_path, max_size_mb=10):
+        img = Image.open(input_path)
+
+        # 如果图片太大,等比缩放
+        max_dimension = 2048
+        if max(img.size) > max_dimension:
+            img.thumbnail((max_dimension, max_dimension), Image.Resampling.LANCZOS)
+
+        # 保存并调整质量
+        quality = 95
+        while True:
+            img.save(output_path, 'JPEG', quality=quality, optimize=True)
+            size_mb = os.path.getsize(output_path) / (1024 * 1024)
+
+            if size_mb <= max_size_mb or quality <= 50:
+                break
+
+            quality -= 5
+
+    compress_image("large_image.jpg", "compressed.jpg")
+    ```
+  </Accordion>
+
+  <Accordion title="错误: 使用非 fl 模型传图" icon="ban">
+    **错误信息:**
+    ```json
+    {
+      "error": {
+        "message": "This model does not support image input",
+        "code": "model_not_support_image"
+      }
+    }
+    ```
+
+    **原因:**
+    只有带 `fl` 后缀的模型支持图片输入
+
+    **支持图片的模型:**
+    - ✅ `veo-3.1-fl`
+    - ✅ `veo-3.1-fast-fl`
+    - ✅ `veo-3.1-landscape-fl`
+    - ✅ `veo-3.1-landscape-fast-fl`
+
+    **不支持图片的模型:**
+    - ❌ `veo-3.1`
+    - ❌ `veo-3.1-fast`
+    - ❌ `veo-3.1-landscape`
+    - ❌ `veo-3.1-landscape-fast`
+
+    **解决方案:**
+    ```python
+    # ❌ 错误: veo-3.1 不支持图片
+    response = client.chat.completions.create(
+        model="veo-3.1",
+        messages=[{
+            "role": "user",
+            "content": [
+                {"type": "text", "text": "生成视频"},
+                {"type": "image_url", "image_url": {"url": "..."}}
+            ]
+        }]
+    )
+
+    # ✅ 正确: 使用 veo-3.1-fl
+    response = client.chat.completions.create(
+        model="veo-3.1-fl",
+        messages=[{
+            "role": "user",
+            "content": [
+                {"type": "text", "text": "生成视频"},
+                {"type": "image_url", "image_url": {"url": "..."}}
+            ]
+        }]
+    )
+    ```
+  </Accordion>
+</AccordionGroup>
+
+## 连接和超时问题
+
+### 连接超时
+
+<AccordionGroup>
+  <Accordion title="错误: Connection timeout" icon="clock">
+    **错误信息:**
+    ```
+    ReadTimeout: The read operation timed out
+    ```
+
+    **原因:**
+    - 网络连接不稳定
+    - 服务器负载高
+    - 默认超时时间太短
+
+    **解决方案:**
+    增加超时时间:
+
+    ```python
+    import httpx
+    from openai import OpenAI
+
+    client = OpenAI(
+        api_key="sk-YOUR_API_KEY",
+        base_url="https://api.laozhang.ai/v1",
+        http_client=httpx.Client(
+            timeout=httpx.Timeout(
+                connect=30.0,   # 连接超时: 30秒
+                read=300.0,     # 读取超时: 5分钟
+                write=30.0,     # 写入超时: 30秒
+                pool=30.0       # 连接池超时: 30秒
+            )
+        )
+    )
+    ```
+
+    **Node.js:**
+    ```javascript
+    import OpenAI from 'openai';
+
+    const client = new OpenAI({
+      apiKey: 'sk-YOUR_API_KEY',
+      baseURL: 'https://api.laozhang.ai/v1',
+      timeout: 300000,  // 5分钟
+      maxRetries: 3
+    });
+    ```
+  </Accordion>
+
+  <Accordion title="错误: Stream interrupted" icon="activity">
+    **错误信息:**
+    ```
+    Stream interrupted: connection closed
+    ```
+
+    **原因:**
+    - 网络不稳定导致流中断
+    - 服务器端处理异常
+
+    **解决方案:**
+    实现重试机制:
+
+    ```python
+    from openai import OpenAI
+    import time
+
+    def generate_with_retry(client, **kwargs):
+        max_retries = 3
+        retry_delay = 5
+
+        for attempt in range(max_retries):
+            try:
+                response = client.chat.completions.create(**kwargs)
+
+                for chunk in response:
+                    if chunk.choices[0].delta.content:
+                        yield chunk.choices[0].delta.content
+
+                break  # 成功,退出循环
+
+            except Exception as e:
+                if attempt < max_retries - 1:
+                    print(f"尝试 {attempt + 1} 失败,{retry_delay}秒后重试...")
+                    time.sleep(retry_delay)
+                    retry_delay *= 2  # 指数退避
+                else:
+                    raise e
+
+    # 使用
+    client = OpenAI(
+        api_key="sk-YOUR_API_KEY",
+        base_url="https://api.laozhang.ai/v1"
+    )
+
+    for content in generate_with_retry(
+        client,
+        model="veo-3.1",
+        messages=[...],
+        stream=True
+    ):
+        print(content, end='')
+    ```
+  </Accordion>
+</AccordionGroup>
+
+## 内容生成问题
+
+### 生成结果不理想
+
+<AccordionGroup>
+  <Accordion title="视频质量不符合预期" icon="star-half">
+    **可能原因:**
+    - 提示词描述不够详细
+    - 使用了 fast 模型但期望高质量
+    - 参考图片质量较低
+
+    **解决方案:**
+    1. **优化提示词:**
+    ```python
+    # ❌ 不够详细
+    prompt = "猫走路"
+
+    # ✅ 详细描述
+    prompt = "一只橙色的波斯猫在铺满落叶的林间小道上优雅地漫步,阳光透过树叶洒下斑驳光影,秋风轻拂,电影感画质,浅景深"
+    ```
+
+    2. **选择合适模型:**
+    ```python
+    # 测试: veo-3.1-fast ($0.15)
+    # 生产: veo-3.1 ($0.25)
+    ```
+
+    3. **使用高质量参考图:**
+    - 分辨率 ≥ 1024x1024
+    - 清晰不模糊
+    - 光照良好
+  </Accordion>
+
+  <Accordion title="生成内容与描述不符" icon="x-circle">
+    **可能原因:**
+    - 提示词包含矛盾信息
+    - 描述过于复杂或抽象
+    - 期望超出模型能力范围
+
+    **解决方案:**
+    1. **简化并明确需求:**
+    ```python
+    # ❌ 过于复杂
+    prompt = "一只会飞的猫在水下追逐发光的机械蝴蝶同时下着彩虹雨"
+
+    # ✅ 简化合理
+    prompt = "一只猫在花园里追逐蝴蝶,阳光明媚,花朵摇曳"
+    ```
+
+    2. **避免矛盾:**
+    ```python
+    # ❌ 矛盾: 水下不能有火焰
+    prompt = "水下燃烧的火焰"
+
+    # ✅ 合理
+    prompt = "水下气泡缓缓上升,光线穿透水面"
+    ```
+
+    3. **分步骤描述:**
+    - 主体 → 动作 → 环境 → 风格
+  </Accordion>
+
+  <Accordion title="图片过渡不自然" icon="shuffle">
+    **可能原因:**
+    - 两张图片差异太大
+    - 光照、角度、色调不一致
+    - 提示词没有指导过渡方式
+
+    **解决方案:**
+    1. **选择相似图片:**
+    - 相同场景不同角度
+    - 相同主体不同姿态
+    - 统一的光照和色调
+
+    2. **明确过渡方式:**
+    ```python
+    # ❌ 没有过渡指导
+    prompt = "两张图片"
+
+    # ✅ 明确过渡
+    prompt = "从第一张图平滑过渡到第二张图,采用淡入淡出效果,保持连贯性"
+    ```
+
+    3. **使用中间帧:**
+    如果两张图差异大,考虑分步骤:
+    - 图A → 图B (中间帧)
+    - 图B → 图C (最终帧)
+  </Accordion>
+</AccordionGroup>
+
+## SDK 相关问题
+
+### Python SDK 问题
+
+```python
+# 常见错误1: 版本不兼容
+# 解决: 升级到最新版本
+pip install --upgrade openai
+
+# 常见错误2: 导入错误
+# 错误: from openai import Client
+# 正确: from openai import OpenAI
+
+# 常见错误3: 异步客户端使用
+from openai import AsyncOpenAI  # 异步需要 AsyncOpenAI
+
+# 常见错误4: 流式处理
+# 必须设置 stream=True
+response = client.chat.completions.create(
+    model="veo-3.1",
+    messages=[...],
+    stream=True  # 不要忘记
+)
+```
+
+### Node.js SDK 问题
+
+```javascript
+// 常见错误1: 版本过旧
+// 解决: npm install --save openai@latest
+
+// 常见错误2: 导入方式
+// 错误: const openai = require('openai')
+// 正确: import OpenAI from 'openai'
+
+// 常见错误3: 异步处理
+// 必须使用 await 或 .then()
+const stream = await client.chat.completions.create({...});
+
+// 常见错误4: 流式处理
+for await (const chunk of stream) {  // 不要忘记 await
+  console.log(chunk.choices[0]?.delta?.content);
+}
+```
+
+## 费用相关问题
+
+<AccordionGroup>
+  <Accordion title="费用超出预期" icon="dollar-sign">
+    **可能原因:**
+    - 使用了 `n > 1` 参数生成多个结果
+    - 频繁重试失败的请求
+    - 误用了标准模型($0.25)而非 fast 模型($0.15)
+
+    **解决方案:**
+    1. **检查 n 参数:**
+    ```python
+    # 注意: n=4 会生成4个视频,计费4次
+    response = client.chat.completions.create(
+        model="veo-3.1",
+        messages=[...],
+        n=4  # 费用: $0.25 × 4 = $1.00
+    )
+    ```
+
+    2. **使用 fast 模型测试:**
+    ```python
+    # 测试阶段使用 fast 模型
+    model = "veo-3.1-fast"  # $0.15/次
+
+    # 生产阶段再用标准模型
+    model = "veo-3.1"  # $0.25/次
+    ```
+
+    3. **在控制台查看详细账单:**
+    [查看调用日志](https://api.laozhang.ai/logs)
+  </Accordion>
+
+  <Accordion title="失败请求是否计费" icon="circle-help">
+    **答案: 不计费**
+
+    只有成功返回视频结果的请求才会计费。以下情况不会扣费:
+    - API 错误(4xx, 5xx)
+    - 参数验证失败
+    - 余额不足
+    - 网络超时
+    - 生成失败
+
+    **如何确认:**
+    登录[调用日志](https://api.laozhang.ai/logs)查看:
+    - ✅ 成功请求: 显示费用
+    - ❌ 失败请求: 无费用记录
+  </Accordion>
+</AccordionGroup>
+
+## 获取帮助
+
+<CardGroup cols={2}>
+  <Card title="技术支持" icon="headset" href="mailto:threezhang.cn@gmail.com">
+    邮件联系技术支持团队
+
+    threezhang.cn@gmail.com
+  </Card>
+
+  <Card title="Telegram 社区" icon="send" href="https://t.me/laozhang_cn">
+    加入官方 Telegram 群组
+
+    实时交流和问题讨论
+  </Card>
+
+  <Card title="调用日志" icon="list-check" href="https://api.laozhang.ai/logs">
+    查看详细的 API 调用记录
+
+    诊断问题和追踪费用
+  </Card>
+
+  <Card title="控制台" icon="gauge" href="https://api.laozhang.ai/account/profile">
+    管理账户和查看余额
+
+    充值和配置 API Key
+  </Card>
+</CardGroup>
+
+## 更多资源
+
+<CardGroup cols={3}>
+  <Card title="快速开始" icon="rocket" href="/api-capabilities/veo/veo-31-quick-start">
+    从零开始使用 Veo-3.1
+  </Card>
+  <Card title="代码示例" icon="code" href="/api-capabilities/veo/veo-31-examples">
+    各语言完整示例代码
+  </Card>
+  <Card title="最佳实践" icon="lightbulb" href="/api-capabilities/veo/veo-31-best-practices">
+    提升视频生成质量
+  </Card>
+</CardGroup>

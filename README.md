@@ -30,3 +30,8 @@ Install our Github App to auto propagate changes from your repo to your deployme
 
 - Mintlify dev isn't running - Run `mintlify install` it'll re-install dependencies.
 - Page loads as a 404 - Make sure you are running in a folder with `docs.json`
+curl -X POST "https://api.laozhang.ai/v1/audio/transcriptions" \
+  -H "Authorization: Bearer sk-y5wQnXUmacMfrpLU3b067992Ce3e47E5A35aAe6288F6Ff20" \
+  -H "Content-Type: multipart/form-data" \
+  -F "file=@1.wav" \
+  -F "model=whisper-1"

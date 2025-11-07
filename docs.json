@@ -76,13 +76,28 @@
                 "group": "VEO 视频生成",
                 "icon": "video",
                 "pages": [
-                  "api-capabilities/veo/overview",
-                  "api-capabilities/veo/quick-start",
-                    "api-capabilities/veo/models-pricing",
-                  "api-capabilities/veo/api-reference",
-                  "api-capabilities/veo/examples",
-                  "api-capabilities/veo/best-practices",
-                  "api-capabilities/veo/troubleshooting"
+                  {
+                    "group": "Veo-3.1 (OpenAI 兼容)",
+                    "pages": [
+                      "api-capabilities/veo/veo-31-overview",
+                      "api-capabilities/veo/veo-31-quick-start",
+                      "api-capabilities/veo/veo-31-examples",
+                      "api-capabilities/veo/veo-31-best-practices",
+                      "api-capabilities/veo/veo-31-troubleshooting"
+                    ]
+                  },
+                  {
+                    "group": "VEO (自定义 API)",
+                    "pages": [
+                      "api-capabilities/veo/overview",
+                      "api-capabilities/veo/quick-start",
+                      "api-capabilities/veo/models-pricing",
+                      "api-capabilities/veo/api-reference",
+                      "api-capabilities/veo/examples",
+                      "api-capabilities/veo/best-practices",
+                      "api-capabilities/veo/troubleshooting"
+                    ]
+                  }
                 ]
               }
             ]
@@ -307,13 +322,28 @@
                   "group": "VEO Video Generation",
                   "icon": "video",
                   "pages": [
-                    "en/api-capabilities/veo/overview",
-                    "en/api-capabilities/veo/quick-start",
-                    "en/api-capabilities/veo/models-pricing",
-                    "en/api-capabilities/veo/api-reference",
-                    "en/api-capabilities/veo/examples",
-                    "en/api-capabilities/veo/best-practices",
-                    "en/api-capabilities/veo/troubleshooting"
+                    {
+                      "group": "Veo-3.1 (OpenAI Compatible)",
+                      "pages": [
+                        "api-capabilities/veo/veo-31-overview",
+                        "api-capabilities/veo/veo-31-quick-start",
+                        "api-capabilities/veo/veo-31-examples",
+                        "api-capabilities/veo/veo-31-best-practices",
+                        "api-capabilities/veo/veo-31-troubleshooting"
+                      ]
+                    },
+                    {
+                      "group": "VEO (Custom API)",
+                      "pages": [
+                        "en/api-capabilities/veo/overview",
+                        "en/api-capabilities/veo/quick-start",
+                        "en/api-capabilities/veo/models-pricing",
+                        "en/api-capabilities/veo/api-reference",
+                        "en/api-capabilities/veo/examples",
+                        "en/api-capabilities/veo/best-practices",
+                        "en/api-capabilities/veo/troubleshooting"
+                      ]
+                    }
                   ]
                 }
               ]

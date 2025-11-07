@@ -1,0 +1,524 @@
+---
+title: "Veo-3.1 最佳实践"
+description: "优化 Veo-3.1 视频生成效果的技巧和建议"
+icon: "lightbulb"
+---
+
+## 提示词编写技巧
+
+### 基本原则
+
+<CardGroup cols={2}>
+  <Card title="具体明确" icon="target">
+    详细描述场景、动作、光影等细节
+  </Card>
+  <Card title="结构清晰" icon="list">
+    按照"主体→动作→环境→风格"的顺序组织
+  </Card>
+  <Card title="避免歧义" icon="ban">
+    使用明确的词汇,避免模糊或多义词
+  </Card>
+  <Card title="控制长度" icon="ruler">
+    保持在50-200字之间,不要太简短或冗长
+  </Card>
+</CardGroup>
+
+### 优秀提示词示例
+
+<Tabs>
+  <Tab title="自然场景">
+**推荐写法:**
+```
+一只橙色的小猫在绿色草地上追逐蝴蝶,阳光透过树叶洒下斑驳光影,微风吹动草叶,背景是模糊的森林,电影般的景深效果
+```
+
+**避免:**
+```
+猫玩耍
+```
+
+**要点:**
+- 描述了主体(橙色小猫)
+- 具体动作(追逐蝴蝶)
+- 环境细节(草地、阳光、树叶)
+- 视觉效果(景深、光影)
+  </Tab>
+
+  <Tab title="人物场景">
+**推荐写法:**
+```
+一位年轻女性在雨中漫步,穿着红色雨衣,手持透明雨伞,雨滴在伞面上跳动,霓虹灯光倒映在湿润的街道上,夜晚都市背景,电影感慢镜头
+```
+
+**避免:**
+```
+女人走路
+```
+
+**要点:**
+- 人物特征(年轻女性)
+- 服装道具(红色雨衣、透明雨伞)
+- 环境氛围(雨夜、霓虹灯)
+- 艺术风格(电影感、慢镜头)
+  </Tab>
+
+  <Tab title="抽象概念">
+**推荐写法:**
+```
+金色能量波纹从中心向外扩散,粒子随着波纹旋转上升,深蓝色渐变背景,流体动画风格,柔和的光晕效果
+```
+
+**避免:**
+```
+能量波动
+```
+
+**要点:**
+- 颜色描述(金色、深蓝色)
+- 运动方式(向外扩散、旋转上升)
+- 艺术风格(流体动画)
+- 视觉效果(光晕)
+  </Tab>
+</Tabs>
+
+## 图生视频最佳实践
+
+### 图片选择要求
+
+<Warning>
+**图片质量要求:**
+- 分辨率: 建议 1024x1024 或更高
+- 格式: JPEG、PNG、WebP
+- 大小: 每张不超过 10MB
+- 清晰度: 避免模糊或低质量图片
+</Warning>
+
+### 单图生成
+
+使用单张图片作为起始帧生成视频:
+
+```python
+response = client.chat.completions.create(
+    model="veo-3.1-fl",
+    messages=[{
+        "role": "user",
+        "content": [
+            {
+                "type": "text",
+                "text": "让这张图片中的场景动起来,微风吹动树叶,云彩缓缓移动"
+            },
+            {
+                "type": "image_url",
+                "image_url": {
+                    "url": "https://example.com/scene.jpg"
+                }
+            }
+        ]
+    }],
+    stream=True
+)
+```
+
+<Tip>
+**单图提示词技巧:**
+- 描述希望产生的动作和变化
+- 指定动作的幅度和速度
+- 说明哪些元素应该保持静止
+</Tip>
+
+### 双图过渡
+
+使用两张图片生成平滑过渡视频:
+
+```python
+response = client.chat.completions.create(
+    model="veo-3.1-fl",
+    messages=[{
+        "role": "user",
+        "content": [
+            {
+                "type": "text",
+                "text": "创建从第一张图到第二张图的平滑过渡,保持自然流畅的运动"
+            },
+            {
+                "type": "image_url",
+                "image_url": {"url": "https://example.com/start.jpg"}
+            },
+            {
+                "type": "image_url",
+                "image_url": {"url": "https://example.com/end.jpg"}
+            }
+        ]
+    }],
+    stream=True
+)
+```
+
+<Tip>
+**双图过渡技巧:**
+- 选择相似度较高的两张图片
+- 在提示词中说明过渡方式(淡入淡出、滑动、变形等)
+- 保持两张图片的光照和色调一致
+</Tip>
+
+## 模型选择策略
+
+### 根据场景选择
+
+<AccordionGroup>
+  <Accordion title="文本生成场景" icon="wand-sparkles">
+    **不需要图片参考的场景**
+
+    推荐模型:
+    - `veo-3.1`: 标准质量,适合大多数场景
+    - `veo-3.1-fast`: 快速测试,降低成本
+
+    示例场景:
+    - 完全创意性的内容
+    - 抽象概念可视化
+    - 不需要特定视觉参考
+  </Accordion>
+
+  <Accordion title="图片参考场景" icon="image">
+    **需要基于图片生成的场景**
+
+    推荐模型:
+    - `veo-3.1-fl`: 标准图生视频(支持1-2张图片输入)
+    - `veo-3.1-fast-fl`: 快速图生视频(支持1-2张图片输入)
+
+    示例场景:
+    - 让静态图片动起来
+    - 两张图片间的平滑过渡
+    - 基于参考图生成动画
+
+    <Warning>
+    **重要:** 只有带 `fl` 后缀的模型支持图片输入功能
+    </Warning>
+  </Accordion>
+
+  <Accordion title="横屏专业制作" icon="monitor">
+    **专业横屏格式需求**
+
+    推荐模型:
+    - `veo-3.1-landscape`: 横屏文生视频
+    - `veo-3.1-landscape-fast`: 快速横屏
+    - `veo-3.1-landscape-fl`: 横屏图生视频
+    - `veo-3.1-landscape-fast-fl`: 快速横屏图生
+
+    示例场景:
+    - 影视制作预览
+    - 商业广告
+    - 宽屏内容
+  </Accordion>
+</AccordionGroup>
+
+### 成本优化策略
+
+<Tabs>
+  <Tab title="测试阶段">
+    **目标:** 快速验证想法,降低成本
+
+    **策略:**
+    ```python
+    model = "veo-3.1-fast"  # 使用 fast 系列
+    n = 1  # 单次生成
+    ```
+
+    **适用:**
+    - 提示词测试
+    - 概念验证
+    - 快速迭代
+  </Tab>
+
+  <Tab title="生产阶段">
+    **目标:** 获得高质量结果
+
+    **策略:**
+    ```python
+    model = "veo-3.1"  # 使用标准模型
+    n = 2-3  # 生成多个备选
+    ```
+
+    **适用:**
+    - 最终交付
+    - 客户演示
+    - 正式发布
+  </Tab>
+
+  <Tab title="批量处理">
+    **目标:** 平衡质量和成本
+
+    **策略:**
+    ```python
+    # 70% 使用 fast 模型
+    fast_tasks = tasks[:int(len(tasks) * 0.7)]
+    # 30% 使用标准模型
+    standard_tasks = tasks[int(len(tasks) * 0.7):]
+    ```
+
+    **适用:**
+    - 大规模内容生产
+    - A/B 测试
+    - 数据集构建
+  </Tab>
+</Tabs>
+
+## 常见场景优化
+
+### 动作描述
+
+<CardGroup cols={2}>
+  <Card title="清晰的动词" icon="move">
+    使用具体的动词: "奔跑"、"跳跃"、"旋转"
+
+    避免: "移动"、"变化"等模糊词汇
+  </Card>
+
+  <Card title="速度控制" icon="gauge">
+    指定速度: "快速"、"缓慢"、"匀速"
+
+    示例: "小鸟快速扇动翅膀"
+  </Card>
+
+  <Card title="方向说明" icon="compass">
+    明确方向: "向左"、"向上"、"顺时针"
+
+    示例: "相机从左向右平移"
+  </Card>
+
+  <Card title="幅度描述" icon="move-vertical">
+    说明幅度: "轻微"、"剧烈"、"大幅度"
+
+    示例: "树叶轻微摇摆"
+  </Card>
+</CardGroup>
+
+### 光影效果
+
+```text
+优秀示例:
+"黄昏时分,金色阳光从右侧斜照,在地面投下长长的影子,光线穿过薄雾形成丁达尔效应"
+
+要点:
+✓ 时间(黄昏时分)
+✓ 光源方向(从右侧斜照)
+✓ 光影效果(长影子、丁达尔效应)
+✓ 环境因素(薄雾)
+```
+
+### 相机运动
+
+<Tabs>
+  <Tab title="固定机位">
+```
+相机固定,主体在画面中央,背景略微失焦
+```
+  </Tab>
+
+  <Tab title="推拉镜头">
+```
+相机缓慢向前推进,逐渐接近主体,保持平稳运动
+```
+  </Tab>
+
+  <Tab title="环绕运动">
+```
+相机围绕主体顺时针旋转,保持固定距离,展示360度全貌
+```
+  </Tab>
+
+  <Tab title="跟随拍摄">
+```
+相机跟随主体移动,保持主体在画面中心,背景流动
+```
+  </Tab>
+</Tabs>
+
+## 批量生成策略
+
+### 使用 n 参数
+
+生成多个变体供选择:
+
+```python
+response = client.chat.completions.create(
+    model="veo-3.1-fast",
+    messages=[{
+        "role": "user",
+        "content": [{"type": "text", "text": "日落海滩场景"}]
+    }],
+    n=4,  # 同时生成4个不同结果
+    stream=True
+)
+```
+
+<Info>
+**n 参数建议:**
+- 测试阶段: n=1-2
+- 重要项目: n=2-4
+- 成本敏感: n=1
+</Info>
+
+### 并发请求
+
+```python
+import asyncio
+from openai import AsyncOpenAI
+
+client = AsyncOpenAI(
+    api_key="sk-YOUR_API_KEY",
+    base_url="https://api.laozhang.ai/v1"
+)
+
+async def generate_video(prompt, model="veo-3.1-fast"):
+    response = await client.chat.completions.create(
+        model=model,
+        messages=[{
+            "role": "user",
+            "content": [{"type": "text", "text": prompt}]
+        }],
+        stream=True
+    )
+
+    async for chunk in response:
+        if chunk.choices[0].delta.content:
+            print(f"{prompt[:20]}: {chunk.choices[0].delta.content}")
+
+# 并发生成多个视频
+prompts = [
+    "日落海滩",
+    "城市夜景",
+    "森林晨光",
+    "雨中街道"
+]
+
+await asyncio.gather(*[generate_video(p) for p in prompts])
+```
+
+## 质量提升技巧
+
+### 提高细节层次
+
+<Steps>
+  <Step title="基础描述">
+    先描述核心主体和动作
+
+    示例: "一只猫在走路"
+  </Step>
+
+  <Step title="添加环境">
+    加入场景和背景信息
+
+    示例: "一只猫在草地上走路,背景是森林"
+  </Step>
+
+  <Step title="丰富细节">
+    添加光影、色彩、质感
+
+    示例: "一只橙色的猫在绿色草地上优雅地走路,阳光透过树叶洒下斑驳光影,背景是模糊的森林"
+  </Step>
+
+  <Step title="艺术风格">
+    指定视觉风格和效果
+
+    示例: "一只橙色的猫在绿色草地上优雅地走路,阳光透过树叶洒下斑驳光影,背景是模糊的森林,电影感色调,浅景深效果"
+  </Step>
+</Steps>
+
+### 风格参考
+
+```text
+常用风格关键词:
+
+视觉效果:
+- 电影感、纪录片风格、MV质感
+- 慢镜头、延时摄影、超慢速
+- 高清、4K质感、胶片感
+
+色调:
+- 暖色调、冷色调、复古色调
+- 高对比、低饱和、莫兰迪色系
+- 赛博朋克、蒸汽波、油画风格
+
+光影:
+- 伦勃朗光、侧光、逆光
+- 柔光、硬光、霓虹灯光
+- 金色时刻、蓝调时刻、魔法时刻
+```
+
+## 错误避免
+
+<Warning>
+**常见错误:**
+
+❌ 提示词过于简短
+```
+"猫"
+```
+
+❌ 包含矛盾信息
+```
+"一只猫在水下飞行"
+```
+
+❌ 过度复杂
+```
+"一只橙色的波斯猫穿着维多利亚时期的华丽服装在19世纪的伦敦街头追逐一只会说话的机械蝴蝶同时天空出现了北极光和彩虹..."
+```
+
+❌ 使用模糊词汇
+```
+"好看的场景"
+```
+</Warning>
+
+## 性能优化
+
+### 流式处理最佳实践
+
+```python
+import sys
+
+response = client.chat.completions.create(
+    model="veo-3.1",
+    messages=[...],
+    stream=True
+)
+
+# 实时输出,不缓冲
+for chunk in response:
+    if chunk.choices[0].delta.content:
+        print(chunk.choices[0].delta.content, end='', flush=True)
+        sys.stdout.flush()
+```
+
+### 超时处理
+
+```python
+from openai import OpenAI
+import httpx
+
+client = OpenAI(
+    api_key="sk-YOUR_API_KEY",
+    base_url="https://api.laozhang.ai/v1",
+    http_client=httpx.Client(
+        timeout=httpx.Timeout(
+            connect=10.0,  # 连接超时
+            read=300.0,    # 读取超时(5分钟)
+            write=10.0,    # 写入超时
+            pool=10.0      # 连接池超时
+        )
+    )
+)
+```
+
+## 下一步
+
+<CardGroup cols={2}>
+  <Card title="代码示例" icon="code" href="/api-capabilities/veo/veo-31-examples">
+    查看完整的实现代码
+  </Card>
+  <Card title="常见问题" icon="circle-help" href="/api-capabilities/veo/veo-31-troubleshooting">
+    遇到问题?查看解决方案
+  </Card>
+</CardGroup>

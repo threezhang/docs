@@ -1,0 +1,429 @@
+---
+title: "Veo-3.1 快速开始"
+description: "5分钟快速上手 Veo-3.1 视频生成 API"
+icon: "rocket"
+---
+
+## 开始之前
+
+<Steps>
+  <Step title="获取 API Key">
+    登录 [老张API控制台](https://api.laozhang.ai/token) 创建 API Key
+
+    <Warning>
+    **重要:** Veo-3.1 模型需要使用**按次付费令牌**,不支持按量付费令牌。创建令牌时请选择"按次付费"类型。
+    </Warning>
+  </Step>
+  <Step title="确保账户余额">
+    确保账户有足够余额,Veo-3.1 模型按次计费($0.15-$0.25/次)
+  </Step>
+</Steps>
+
+## 第一个请求
+
+### 文生视频示例
+
+使用 cURL 快速测试文生视频功能:
+
+```bash
+curl --location --request POST 'https://api.laozhang.ai/v1/chat/completions' \
+--header 'Content-Type: application/json' \
+--header 'Authorization: Bearer sk-YOUR_API_KEY' \
+--data-raw '{
+    "messages": [{
+        "role": "user",
+        "content": [
+            {
+                "type": "text",
+                "text": "生成两只猫和一只狗打架的视频"
+            }
+        ]
+    }],
+    "model": "veo-3.1",
+    "stream": true,
+    "n": 2
+}'
+```
+
+<Info>
+**参数说明:**
+- `model`: 选择 veo-3.1 系列模型
+- `stream`: 设置为 true 启用流式响应
+- `n`: 生成结果数量,这里设置为 2 会生成 2 个不同的视频
+</Info>
+
+### 图生视频示例
+
+使用图片作为参考生成视频:
+
+```bash
+curl --location --request POST 'https://api.laozhang.ai/v1/chat/completions' \
+--header 'Content-Type: application/json' \
+--header 'Authorization: Bearer sk-YOUR_API_KEY' \
+--data-raw '{
+    "messages": [{
+        "role": "user",
+        "content": [
+            {
+                "type": "text",
+                "text": "根据两张图片生成一个完整的过渡视频"
+            },
+            {
+                "type": "image_url",
+                "image_url": {
+                    "url": "https://example.com/start-frame.jpg"
+                }
+            },
+            {
+                "type": "image_url",
+                "image_url": {
+                    "url": "https://example.com/end-frame.jpg"
+                }
+            }
+        ]
+    }],
+    "model": "veo-3.1-fl",
+    "stream": true,
+    "n": 2
+}'
+```
+
+## Python 快速示例
+
+### 安装 OpenAI SDK
+
+```bash
+pip install openai
+```
+
+### 文生视频代码
+
+```python
+from openai import OpenAI
+
+client = OpenAI(
+    api_key="sk-YOUR_API_KEY",
+    base_url="https://api.laozhang.ai/v1"
+)
+
+response = client.chat.completions.create(
+    model="veo-3.1",
+    messages=[{
+        "role": "user",
+        "content": [
+            {
+                "type": "text",
+                "text": "生成一只可爱的小猫在草地上玩耍的视频"
+            }
+        ]
+    }],
+    stream=True,
+    n=1
+)
+
+{-# JSX注释: 处理流式响应 #-}
+for chunk in response:
+    if chunk.choices[0].delta.content:
+        print(chunk.choices[0].delta.content, end='')
+```
+
+### 图生视频代码
+
+```python
+from openai import OpenAI
+
+client = OpenAI(
+    api_key="sk-YOUR_API_KEY",
+    base_url="https://api.laozhang.ai/v1"
+)
+
+response = client.chat.completions.create(
+    model="veo-3.1-fl",
+    messages=[{
+        "role": "user",
+        "content": [
+            {
+                "type": "text",
+                "text": "根据图片生成平滑的过渡动画"
+            },
+            {
+                "type": "image_url",
+                "image_url": {
+                    "url": "https://example.com/image1.jpg"
+                }
+            },
+            {
+                "type": "image_url",
+                "image_url": {
+                    "url": "https://example.com/image2.jpg"
+                }
+            }
+        ]
+    }],
+    stream=True
+)
+
+for chunk in response:
+    if chunk.choices[0].delta.content:
+        print(chunk.choices[0].delta.content, end='')
+```
+
+## Node.js 快速示例
+
+### 安装 OpenAI SDK
+
+```bash
+npm install openai
+```
+
+### 基本用法
+
+```javascript
+import OpenAI from 'openai';
+
+const client = new OpenAI({
+  apiKey: 'sk-YOUR_API_KEY',
+  baseURL: 'https://api.laozhang.ai/v1'
+});
+
+async function generateVideo() {
+  const stream = await client.chat.completions.create({
+    model: 'veo-3.1',
+    messages: [{
+      role: 'user',
+      content: [
+        {
+          type: 'text',
+          text: '生成一个日落时分海边的视频'
+        }
+      ]
+    }],
+    stream: true,
+    n: 1
+  });
+
+  for await (const chunk of stream) {
+    const content = chunk.choices[0]?.delta?.content;
+    if (content) {
+      process.stdout.write(content);
+    }
+  }
+}
+
+generateVideo().catch(console.error);
+```
+
+## 流式响应处理
+
+Veo-3.1 支持流式响应,可以实时获取生成进度和结果:
+
+<Tabs>
+  <Tab title="Python">
+```python
+response = client.chat.completions.create(
+    model="veo-3.1",
+    messages=[...],
+    stream=True
+)
+
+for chunk in response:
+    if chunk.choices[0].delta.content:
+        content = chunk.choices[0].delta.content
+        {-# JSX注释: 这里会收到视频URL或进度信息 #-}
+        print(f"收到数据: {content}")
+```
+  </Tab>
+
+  <Tab title="Node.js">
+```javascript
+const stream = await client.chat.completions.create({
+  model: 'veo-3.1',
+  messages: [...],
+  stream: true
+});
+
+for await (const chunk of stream) {
+  const content = chunk.choices[0]?.delta?.content;
+  if (content) {
+    console.log('收到数据:', content);
+  }
+}
+```
+  </Tab>
+
+  <Tab title="cURL">
+```bash
+curl --location --request POST 'https://api.laozhang.ai/v1/chat/completions' \
+--header 'Content-Type: application/json' \
+--header 'Authorization: Bearer sk-YOUR_API_KEY' \
+--data-raw '{
+    "messages": [{"role": "user", "content": [{"type": "text", "text": "生成视频"}]}],
+    "model": "veo-3.1",
+    "stream": true
+}' \
+--no-buffer
+```
+  </Tab>
+</Tabs>
+
+## 图片格式支持
+
+Veo-3.1 支持多种图片输入格式:
+
+<Tabs>
+  <Tab title="URL 引用">
+```json
+{
+  "type": "image_url",
+  "image_url": {
+    "url": "https://example.com/image.jpg"
+  }
+}
+```
+  </Tab>
+
+  <Tab title="Base64 编码">
+```json
+{
+  "type": "image_url",
+  "image_url": {
+    "url": "data:image/jpeg;base64,/9j/4AAQSkZJRg..."
+  }
+}
+```
+  </Tab>
+</Tabs>
+
+<Warning>
+**图片要求:**
+- 支持格式: JPEG, PNG, WebP
+- 最大尺寸: 10MB
+- 推荐分辨率: 1024x1024 或更高
+- 最多支持: 2张图片(开始帧+结束帧)
+</Warning>
+
+## 常用模型选择
+
+根据你的需求选择合适的模型:
+
+<CardGroup cols={2}>
+  <Card title="快速测试" icon="bolt">
+    **推荐:** `veo-3.1-fast`
+
+    适合快速验证想法,价格便宜($0.15/次)
+  </Card>
+
+  <Card title="标准质量" icon="star">
+    **推荐:** `veo-3.1`
+
+    平衡质量和成本,适合大多数场景($0.25/次)
+  </Card>
+
+  <Card title="图生视频" icon="image">
+    **推荐:** `veo-3.1-fl`
+
+    基于图片生成视频或过渡动画($0.25/次)
+  </Card>
+
+  <Card title="横屏视频" icon="monitor">
+    **推荐:** `veo-3.1-landscape`
+
+    专业横屏格式,适合影视制作($0.25/次)
+  </Card>
+</CardGroup>
+
+## 错误处理
+
+<CodeGroup>
+```python Python
+from openai import OpenAI, OpenAIError
+
+client = OpenAI(
+    api_key="sk-YOUR_API_KEY",
+    base_url="https://api.laozhang.ai/v1"
+)
+
+try:
+    response = client.chat.completions.create(
+        model="veo-3.1",
+        messages=[{
+            "role": "user",
+            "content": [{"type": "text", "text": "生成视频"}]
+        }],
+        stream=True
+    )
+
+    for chunk in response:
+        if chunk.choices[0].delta.content:
+            print(chunk.choices[0].delta.content)
+
+except OpenAIError as e:
+    print(f"API错误: {e}")
+except Exception as e:
+    print(f"其他错误: {e}")
+```
+
+```javascript Node.js
+import OpenAI from 'openai';
+
+const client = new OpenAI({
+  apiKey: 'sk-YOUR_API_KEY',
+  baseURL: 'https://api.laozhang.ai/v1'
+});
+
+try {
+  const stream = await client.chat.completions.create({
+    model: 'veo-3.1',
+    messages: [{
+      role: 'user',
+      content: [{ type: 'text', text: '生成视频' }]
+    }],
+    stream: true
+  });
+
+  for await (const chunk of stream) {
+    const content = chunk.choices[0]?.delta?.content;
+    if (content) {
+      console.log(content);
+    }
+  }
+} catch (error) {
+  if (error instanceof OpenAI.APIError) {
+    console.error('API错误:', error.message);
+  } else {
+    console.error('其他错误:', error);
+  }
+}
+```
+</CodeGroup>
+
+## 完整示例
+
+<Card title="查看完整代码示例" icon="code" href="/api-capabilities/veo/veo-31-examples">
+  包含 Python、Node.js、Go、Java 等多种语言的完整示例代码
+</Card>
+
+## 下一步
+
+<CardGroup cols={3}>
+  <Card title="代码示例" icon="code" href="/api-capabilities/veo/veo-31-examples">
+    查看更多编程语言的完整示例
+  </Card>
+  <Card title="最佳实践" icon="lightbulb" href="/api-capabilities/veo/veo-31-best-practices">
+    学习如何写出更好的提示词
+  </Card>
+  <Card title="常见问题" icon="circle-help" href="/api-capabilities/veo/veo-31-troubleshooting">
+    遇到问题?查看解决方案
+  </Card>
+</CardGroup>
+
+## 获取帮助
+
+<CardGroup cols={2}>
+  <Card title="技术支持" icon="headset" href="mailto:threezhang.cn@gmail.com">
+    遇到问题?联系技术支持
+  </Card>
+  <Card title="Telegram 社区" icon="send" href="https://t.me/laozhang_cn">
+    加入社区讨论和交流
+  </Card>
+</CardGroup>
