@@ -1,0 +1,304 @@
+---
+title: "Veo-3.1 Overview"
+description: "Google Veo-3.1 video generation models introduction and features"
+icon: "play"
+---
+
+## Introduction
+
+Veo-3.1 is Google's latest generation video generation model series, supporting high-quality video content generation through text descriptions or image inputs. The entire series is fully compatible with OpenAI Chat Completions API format, making it easy for developers to integrate quickly.
+
+## Core Features
+
+<CardGroup cols={2}>
+  <Card title="Text-to-Video" icon="wand-sparkles">
+    Generate videos from pure text descriptions, supporting complex scenes and action descriptions
+  </Card>
+  <Card title="Image-to-Video" icon="image">
+    Generate transition videos or animation effects based on 1-2 reference images
+  </Card>
+  <Card title="OpenAI Compatible" icon="plug">
+    Uses standard Chat Completions API format, no need to learn new interfaces
+  </Card>
+  <Card title="Streaming Response" icon="waves">
+    Supports streaming returns for real-time generation progress and results
+  </Card>
+</CardGroup>
+
+## Model Series
+
+Veo-3.1 provides multiple model variants to meet different scenario requirements:
+
+### Standard Models
+
+<AccordionGroup>
+  <Accordion title="veo-3.1 - Standard" icon="circle">
+    **Price:** $0.25 / request
+
+    **Features:**
+    - Excellent overall performance
+    - Suitable for most scenarios
+    - Stable generation quality
+
+    **Use Cases:** General video generation, content creation
+  </Accordion>
+
+  <Accordion title="veo-3.1-fast - Fast" icon="bolt">
+    **Price:** $0.15 / request
+
+    **Features:**
+    - Faster generation speed
+    - High cost-effectiveness
+    - Suitable for rapid iteration
+
+    **Use Cases:** Batch generation, quick testing
+  </Accordion>
+</AccordionGroup>
+
+### Image-to-Video Models (Support Image Input)
+
+<AccordionGroup>
+  <Accordion title="veo-3.1-fl - Image-to-Video Standard" icon="image">
+    **Price:** $0.25 / request
+
+    **Features:**
+    - Supports 1-2 image inputs
+    - Can generate image transition animations
+    - Bring static images to life
+
+    **Use Cases:** Image animation, image transition videos
+  </Accordion>
+
+  <Accordion title="veo-3.1-fast-fl - Image-to-Video Fast" icon="bolt">
+    **Price:** $0.15 / request
+
+    **Features:**
+    - Fast image-to-video generation
+    - Supports image input
+    - High cost-effectiveness
+
+    **Use Cases:** Batch image animation production
+  </Accordion>
+</AccordionGroup>
+
+### Landscape Models
+
+<AccordionGroup>
+  <Accordion title="veo-3.1-landscape - Landscape Standard" icon="rectangle-horizontal">
+    **Price:** $0.25 / request
+
+    **Features:**
+    - Optimized for landscape scenarios
+    - 16:9 or wider aspect ratio
+    - Suitable for professional production
+
+    **Use Cases:** Film production, commercial videos
+  </Accordion>
+
+  <Accordion title="veo-3.1-landscape-fast - Landscape Fast" icon="gauge">
+    **Price:** $0.15 / request
+
+    **Features:**
+    - Fast landscape video generation
+    - Maintains picture quality
+    - Efficient batch processing
+
+    **Use Cases:** Batch landscape content production
+  </Accordion>
+
+  <Accordion title="veo-3.1-landscape-fl - Landscape Image-to-Video" icon="monitor">
+    **Price:** $0.25 / request
+
+    **Features:**
+    - Landscape + image input support
+    - Professional-grade output
+    - Excellent detail preservation
+
+    **Use Cases:** Landscape image animation, professional landscape production
+  </Accordion>
+
+  <Accordion title="veo-3.1-landscape-fast-fl - Landscape Image-to-Video Fast" icon="rocket">
+    **Price:** $0.15 / request
+
+    **Features:**
+    - Fast + image input + landscape
+    - Triple feature combination
+    - Extremely high cost-effectiveness
+
+    **Use Cases:** Large-scale landscape image animation production
+  </Accordion>
+</AccordionGroup>
+
+## Price Comparison
+
+| Model Name | Price | Speed | Aspect Ratio | Image Support | Recommended Use |
+|---------|------|------|------|---------|----------|
+| veo-3.1 | $0.25 | Standard | General | ❌ | Text-to-video general scenarios |
+| veo-3.1-fast | $0.15 | Fast | General | ❌ | Text-to-video quick testing |
+| veo-3.1-fl | $0.25 | Standard | General | ✅ | Image-to-video standard quality |
+| veo-3.1-fast-fl | $0.15 | Fast | General | ✅ | Image-to-video fast processing |
+| veo-3.1-landscape | $0.25 | Standard | Landscape | ❌ | Landscape text-to-video |
+| veo-3.1-landscape-fast | $0.15 | Fast | Landscape | ❌ | Landscape text-to-video fast |
+| veo-3.1-landscape-fl | $0.25 | Standard | Landscape | ✅ | Landscape image-to-video |
+| veo-3.1-landscape-fast-fl | $0.15 | Fast | Landscape | ✅ | Landscape image-to-video fast |
+
+## Generation Methods
+
+### Text-to-Video
+
+Generate video content through natural language descriptions:
+
+```json
+{
+  "messages": [{
+    "role": "user",
+    "content": [
+      {
+        "type": "text",
+        "text": "Generate a video of two cats and a dog fighting"
+      }
+    ]
+  }],
+  "model": "veo-3.1",
+  "stream": true,
+  "n": 2
+}
+```
+
+### Image-to-Video
+
+Generate video content based on reference images:
+
+```json
+{
+  "messages": [{
+    "role": "user",
+    "content": [
+      {
+        "type": "text",
+        "text": "Generate a smooth transition video based on two images"
+      },
+      {
+        "type": "image_url",
+        "image_url": {
+          "url": "Start frame image URL or base64"
+        }
+      },
+      {
+        "type": "image_url",
+        "image_url": {
+          "url": "End frame image URL or base64 (optional)"
+        }
+      }
+    ]
+  }],
+  "model": "veo-3.1-fl",
+  "stream": true
+}
+```
+
+## Core Parameters
+
+<ParamField path="model" type="string" required>
+  Select the Veo-3.1 model variant to use
+</ParamField>
+
+<ParamField path="messages" type="array" required>
+  Message array containing user input, supporting text and image types
+</ParamField>
+
+<ParamField path="stream" type="boolean" default="false">
+  Whether to enable streaming response, recommended to set to `true` for real-time progress
+</ParamField>
+
+<ParamField path="n" type="integer" default="1">
+  Number of videos to generate, range 1-4, can generate multiple different results simultaneously
+</ParamField>
+
+## Billing Information
+
+<Warning>
+**Important:** Veo-3.1 models require **pay-per-use tokens**, not pay-as-you-go tokens. Please create a "pay-per-use" type token in the [Console](https://api.laozhang.ai/token).
+</Warning>
+
+<Info>
+**Pay-per-request:** Each successful API call is charged at the selected model's unit price, failed requests are not charged
+</Info>
+
+### Billing Rules
+
+- **Single Request:** Charged at model price ($0.15 or $0.25)
+- **Multiple Results:** Setting `n=2` generates 2 videos, charged for 2 requests
+- **Failed Retries:** Failed generations are not charged, can retry for free
+- **Streaming Response:** No additional charge
+
+## Technical Advantages
+
+<CardGroup cols={3}>
+  <Card title="High-Quality Output" icon="star">
+    Advanced video generation algorithms ensure smooth and natural footage
+  </Card>
+  <Card title="Fast Response" icon="clock">
+    Fast series models can return results in seconds
+  </Card>
+  <Card title="Flexible Control" icon="sliders">
+    Supports text and image combination input for precise content control
+  </Card>
+  <Card title="Standard Interface" icon="code">
+    Fully compatible with OpenAI API, zero learning curve
+  </Card>
+  <Card title="Batch Processing" icon="layers">
+    Supports generating multiple results simultaneously through n parameter
+  </Card>
+  <Card title="Real-time Progress" icon="spinner">
+    Streaming response provides real-time generation status feedback
+  </Card>
+</CardGroup>
+
+## Quick Start
+
+<Card title="Quick Start Guide" icon="rocket" href="/en/api-capabilities/veo/veo-31-quick-start">
+  View complete quick start tutorial with detailed code examples
+</Card>
+
+## Use Cases
+
+<Tabs>
+  <Tab title="Content Creation">
+    - Social media short videos
+    - Marketing clips
+    - Product showcase animations
+    - Educational training content
+  </Tab>
+
+  <Tab title="Professional Production">
+    - Film visual effects preview
+    - Ad creative testing
+    - Animation prototyping
+    - Concept validation videos
+  </Tab>
+
+  <Tab title="Batch Generation">
+    - Automated content production
+    - A/B testing materials
+    - Multi-version rapid iteration
+    - Dataset generation
+  </Tab>
+</Tabs>
+
+## Next Steps
+
+<CardGroup cols={2}>
+  <Card title="Quick Start" icon="play" href="/en/api-capabilities/veo/veo-31-quick-start">
+    Get started with Veo-3.1 API in 5 minutes
+  </Card>
+  <Card title="Code Examples" icon="code" href="/en/api-capabilities/veo/veo-31-examples">
+    View complete example code in various languages
+  </Card>
+  <Card title="Best Practices" icon="lightbulb" href="/en/api-capabilities/veo/veo-31-best-practices">
+    Learn how to write better prompts
+  </Card>
+  <Card title="Troubleshooting" icon="circle-help" href="/en/api-capabilities/veo/veo-31-troubleshooting">
+    Check common issues and errors
+  </Card>
+</CardGroup>

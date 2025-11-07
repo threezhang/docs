@@ -1,0 +1,670 @@
+---
+title: "Veo-3.1 Troubleshooting"
+description: "Common issues and solutions for Veo-3.1 API"
+icon: "wrench"
+---
+
+## Authentication Issues
+
+### Invalid API Key
+
+<AccordionGroup>
+  <Accordion title="Error: 401 Unauthorized" icon="lock">
+    **Error Message:**
+    ```json
+    {
+      "error": {
+        "message": "Incorrect API key provided",
+        "type": "invalid_request_error",
+        "code": "invalid_api_key"
+      }
+    }
+    ```
+
+    **Possible Causes:**
+    - Incorrect API Key format
+    - API Key expired or deleted
+    - Incorrect Authorization header format
+
+    **Solutions:**
+    1. Check if API Key format starts with `sk-`
+    2. Verify Authorization header format: `Bearer sk-YOUR_API_KEY`
+    3. Regenerate API Key in [Console](https://api.laozhang.ai/token)
+
+    **Correct Example:**
+    ```python
+    client = OpenAI(
+        api_key="sk-YOUR_VALID_API_KEY",  # Must start with sk-
+        base_url="https://api.laozhang.ai/v1"
+    )
+    ```
+  </Accordion>
+
+  <Accordion title="Error: Insufficient Balance" icon="credit-card">
+    **Error Message:**
+    ```json
+    {
+      "error": {
+        "message": "Insufficient balance",
+        "type": "insufficient_quota",
+        "code": "insufficient_balance"
+      }
+    }
+    ```
+
+    **Solutions:**
+    1. Log in to [Console](https://api.laozhang.ai/account/profile) to check balance
+    2. Recharge account balance
+    3. Veo-3.1 charges per request: $0.15-$0.25/request
+
+    **Fee Information:**
+    - `veo-3.1-fast*`: $0.15/request
+    - `veo-3.1` (others): $0.25/request
+    - Using `n=2` generates 2 videos, charged for 2 requests
+  </Accordion>
+</AccordionGroup>
+
+## Request Parameter Issues
+
+### Model Name Error
+
+<AccordionGroup>
+  <Accordion title="Error: Model Does Not Exist" icon="alert-triangle">
+    **Error Message:**
+    ```json
+    {
+      "error": {
+        "message": "The model 'veo-31' does not exist",
+        "type": "invalid_request_error",
+        "code": "model_not_found"
+      }
+    }
+    ```
+
+    **Common Incorrect Usage:**
+    ```python
+    model="veo-31"       # ❌ Wrong: should be veo-3.1
+    model="veo_3_1"      # ❌ Wrong: should use hyphens
+    model="veo3.1"       # ❌ Wrong: missing hyphen
+    ```
+
+    **Correct Usage:**
+    ```python
+    model="veo-3.1"              # ✅ Correct
+    model="veo-3.1-fast"         # ✅ Correct
+    model="veo-3.1-fl"           # ✅ Correct
+    model="veo-3.1-landscape"    # ✅ Correct
+    ```
+
+    **All Available Models:**
+    - `veo-3.1`
+    - `veo-3.1-fast`
+    - `veo-3.1-fl`
+    - `veo-3.1-fast-fl`
+    - `veo-3.1-landscape`
+    - `veo-3.1-landscape-fast`
+    - `veo-3.1-landscape-fl`
+    - `veo-3.1-landscape-fast-fl`
+  </Accordion>
+
+  <Accordion title="Error: Incorrect Message Format" icon="message-square">
+    **Error Message:**
+    ```json
+    {
+      "error": {
+        "message": "Invalid message format",
+        "type": "invalid_request_error"
+      }
+    }
+    ```
+
+    **Incorrect Examples:**
+    ```python
+    # ❌ Wrong: content should be an array
+    messages=[{
+        "role": "user",
+        "content": "Generate video"
+    }]
+
+    # ❌ Wrong: missing type field
+    messages=[{
+        "role": "user",
+        "content": [{
+            "text": "Generate video"
+        }]
+    }]
+    ```
+
+    **Correct Example:**
+    ```python
+    # ✅ Correct: content is an array containing objects
+    messages=[{
+        "role": "user",
+        "content": [
+            {
+                "type": "text",
+                "text": "Generate video"
+            }
+        ]
+    }]
+    ```
+  </Accordion>
+</AccordionGroup>
+
+### Image-Related Issues
+
+<AccordionGroup>
+  <Accordion title="Error: Image Inaccessible" icon="image">
+    **Error Message:**
+    ```json
+    {
+      "error": {
+        "message": "Failed to fetch image",
+        "code": "image_fetch_failed"
+      }
+    }
+    ```
+
+    **Possible Causes:**
+    - Invalid or expired image URL
+    - Image requires authentication
+    - Slow image server response or timeout
+    - Network connection issues
+
+    **Solutions:**
+    1. Use publicly accessible image URLs
+    2. Use Base64 encoded images
+    3. Ensure image URLs support HTTPS
+
+    **Using Base64 Solution:**
+    ```python
+    import base64
+
+    def encode_image(image_path):
+        with open(image_path, "rb") as f:
+            return base64.b64encode(f.read()).decode()
+
+    image_base64 = encode_image("./image.jpg")
+
+    content = [
+        {"type": "text", "text": "Generate video"},
+        {
+            "type": "image_url",
+            "image_url": {
+                "url": f"data:image/jpeg;base64,{image_base64}"
+            }
+        }
+    ]
+    ```
+  </Accordion>
+
+  <Accordion title="Error: Unsupported Image Format" icon="file-image">
+    **Error Message:**
+    ```json
+    {
+      "error": {
+        "message": "Unsupported image format",
+        "code": "invalid_image_format"
+      }
+    }
+    ```
+
+    **Supported Formats:**
+    - ✅ JPEG (.jpg, .jpeg)
+    - ✅ PNG (.png)
+    - ✅ WebP (.webp)
+    - ❌ GIF (animated not supported)
+    - ❌ BMP
+    - ❌ TIFF
+
+    **Solution:**
+    Use PIL/Pillow to convert image format:
+    ```python
+    from PIL import Image
+    import io
+    import base64
+
+    # Open image
+    img = Image.open("image.bmp")
+
+    # Convert to JPEG
+    buffer = io.BytesIO()
+    img.convert('RGB').save(buffer, format='JPEG')
+    img_base64 = base64.b64encode(buffer.getvalue()).decode()
+
+    # Use converted image
+    url = f"data:image/jpeg;base64,{img_base64}"
+    ```
+  </Accordion>
+
+  <Accordion title="Error: Image Too Large" icon="alert-circle">
+    **Error Message:**
+    ```json
+    {
+      "error": {
+        "message": "Image size exceeds limit",
+        "code": "image_too_large"
+      }
+    }
+    ```
+
+    **Limitations:**
+    - Maximum file size: 10MB
+    - Recommended resolution: 1024x1024 or higher
+    - Maximum images: 2
+
+    **Solution:**
+    Compress image:
+    ```python
+    from PIL import Image
+
+    def compress_image(input_path, output_path, max_size_mb=10):
+        img = Image.open(input_path)
+
+        # If image too large, scale proportionally
+        max_dimension = 2048
+        if max(img.size) > max_dimension:
+            img.thumbnail((max_dimension, max_dimension), Image.Resampling.LANCZOS)
+
+        # Save and adjust quality
+        quality = 95
+        while True:
+            img.save(output_path, 'JPEG', quality=quality, optimize=True)
+            size_mb = os.path.getsize(output_path) / (1024 * 1024)
+
+            if size_mb <= max_size_mb or quality <= 50:
+                break
+
+            quality -= 5
+
+    compress_image("large_image.jpg", "compressed.jpg")
+    ```
+  </Accordion>
+
+  <Accordion title="Error: Using Non-fl Model with Images" icon="ban">
+    **Error Message:**
+    ```json
+    {
+      "error": {
+        "message": "This model does not support image input",
+        "code": "model_not_support_image"
+      }
+    }
+    ```
+
+    **Reason:**
+    Only models with `fl` suffix support image input
+
+    **Models Supporting Images:**
+    - ✅ `veo-3.1-fl`
+    - ✅ `veo-3.1-fast-fl`
+    - ✅ `veo-3.1-landscape-fl`
+    - ✅ `veo-3.1-landscape-fast-fl`
+
+    **Models Not Supporting Images:**
+    - ❌ `veo-3.1`
+    - ❌ `veo-3.1-fast`
+    - ❌ `veo-3.1-landscape`
+    - ❌ `veo-3.1-landscape-fast`
+
+    **Solution:**
+    ```python
+    # ❌ Wrong: veo-3.1 does not support images
+    response = client.chat.completions.create(
+        model="veo-3.1",
+        messages=[{
+            "role": "user",
+            "content": [
+                {"type": "text", "text": "Generate video"},
+                {"type": "image_url", "image_url": {"url": "..."}}
+            ]
+        }]
+    )
+
+    # ✅ Correct: use veo-3.1-fl
+    response = client.chat.completions.create(
+        model="veo-3.1-fl",
+        messages=[{
+            "role": "user",
+            "content": [
+                {"type": "text", "text": "Generate video"},
+                {"type": "image_url", "image_url": {"url": "..."}}
+            ]
+        }]
+    )
+    ```
+  </Accordion>
+</AccordionGroup>
+
+## Connection and Timeout Issues
+
+### Connection Timeout
+
+<AccordionGroup>
+  <Accordion title="Error: Connection timeout" icon="clock">
+    **Error Message:**
+    ```
+    ReadTimeout: The read operation timed out
+    ```
+
+    **Reasons:**
+    - Unstable network connection
+    - High server load
+    - Default timeout too short
+
+    **Solution:**
+    Increase timeout:
+
+    ```python
+    import httpx
+    from openai import OpenAI
+
+    client = OpenAI(
+        api_key="sk-YOUR_API_KEY",
+        base_url="https://api.laozhang.ai/v1",
+        http_client=httpx.Client(
+            timeout=httpx.Timeout(
+                connect=30.0,   # Connection timeout: 30s
+                read=300.0,     # Read timeout: 5 minutes
+                write=30.0,     # Write timeout: 30s
+                pool=30.0       # Pool timeout: 30s
+            )
+        )
+    )
+    ```
+
+    **Node.js:**
+    ```javascript
+    import OpenAI from 'openai';
+
+    const client = new OpenAI({
+      apiKey: 'sk-YOUR_API_KEY',
+      baseURL: 'https://api.laozhang.ai/v1',
+      timeout: 300000,  # 5 minutes
+      maxRetries: 3
+    });
+    ```
+  </Accordion>
+
+  <Accordion title="Error: Stream interrupted" icon="activity">
+    **Error Message:**
+    ```
+    Stream interrupted: connection closed
+    ```
+
+    **Reasons:**
+    - Stream interrupted due to unstable network
+    - Server-side processing exception
+
+    **Solution:**
+    Implement retry mechanism:
+
+    ```python
+    from openai import OpenAI
+    import time
+
+    def generate_with_retry(client, **kwargs):
+        max_retries = 3
+        retry_delay = 5
+
+        for attempt in range(max_retries):
+            try:
+                response = client.chat.completions.create(**kwargs)
+
+                for chunk in response:
+                    if chunk.choices[0].delta.content:
+                        yield chunk.choices[0].delta.content
+
+                break  # Success, exit loop
+
+            except Exception as e:
+                if attempt < max_retries - 1:
+                    print(f"Attempt {attempt + 1} failed, retrying in {retry_delay} seconds...")
+                    time.sleep(retry_delay)
+                    retry_delay *= 2  # Exponential backoff
+                else:
+                    raise e
+
+    # Usage
+    client = OpenAI(
+        api_key="sk-YOUR_API_KEY",
+        base_url="https://api.laozhang.ai/v1"
+    )
+
+    for content in generate_with_retry(
+        client,
+        model="veo-3.1",
+        messages=[...],
+        stream=True
+    ):
+        print(content, end='')
+    ```
+  </Accordion>
+</AccordionGroup>
+
+## Content Generation Issues
+
+### Unsatisfactory Results
+
+<AccordionGroup>
+  <Accordion title="Video Quality Below Expectations" icon="star-half">
+    **Possible Causes:**
+    - Prompt description insufficient
+    - Used fast model but expected high quality
+    - Low-quality reference images
+
+    **Solutions:**
+    1. **Optimize prompt:**
+    ```python
+    # ❌ Insufficient detail
+    prompt = "cat walking"
+
+    # ✅ Detailed description
+    prompt = "An orange Persian cat elegantly walking on a forest path covered with fallen leaves, sunlight filtering through trees creating dappled shadows, autumn breeze, cinematic quality, shallow depth of field"
+    ```
+
+    2. **Choose appropriate model:**
+    ```python
+    # Testing: veo-3.1-fast ($0.15)
+    # Production: veo-3.1 ($0.25)
+    ```
+
+    3. **Use high-quality reference images:**
+    - Resolution ≥ 1024x1024
+    - Clear, not blurry
+    - Good lighting
+  </Accordion>
+
+  <Accordion title="Generated Content Doesn't Match Description" icon="x-circle">
+    **Possible Causes:**
+    - Prompt contains contradictory information
+    - Description too complex or abstract
+    - Expectations exceed model capabilities
+
+    **Solutions:**
+    1. **Simplify and clarify requirements:**
+    ```python
+    # ❌ Too complex
+    prompt = "A flying cat chasing a glowing mechanical butterfly underwater while rainbow rain falls"
+
+    # ✅ Simplified reasonable
+    prompt = "A cat chasing a butterfly in a garden, sunny weather, flowers swaying"
+    ```
+
+    2. **Avoid contradictions:**
+    ```python
+    # ❌ Contradiction: can't have fire underwater
+    prompt = "Burning flames underwater"
+
+    # ✅ Reasonable
+    prompt = "Bubbles slowly rising underwater, light penetrating water surface"
+    ```
+
+    3. **Step-by-step description:**
+    - Subject → Action → Environment → Style
+  </Accordion>
+
+  <Accordion title="Unnatural Image Transition" icon="shuffle">
+    **Possible Causes:**
+    - Two images too different
+    - Inconsistent lighting, angle, color tone
+    - Prompt doesn't guide transition method
+
+    **Solutions:**
+    1. **Choose similar images:**
+    - Same scene, different angles
+    - Same subject, different poses
+    - Unified lighting and color tone
+
+    2. **Specify transition method:**
+    ```python
+    # ❌ No transition guidance
+    prompt = "Two images"
+
+    # ✅ Clear transition
+    prompt = "Smooth transition from first image to second using fade effect, maintaining continuity"
+    ```
+
+    3. **Use intermediate frames:**
+    If two images differ greatly, consider step-by-step:
+    - Image A → Image B (intermediate frame)
+    - Image B → Image C (final frame)
+  </Accordion>
+</AccordionGroup>
+
+## SDK-Related Issues
+
+### Python SDK Issues
+
+```python
+# Common error 1: Version incompatibility
+# Solution: Upgrade to latest version
+pip install --upgrade openai
+
+# Common error 2: Import error
+# Wrong: from openai import Client
+# Correct: from openai import OpenAI
+
+# Common error 3: Async client usage
+from openai import AsyncOpenAI  # Async requires AsyncOpenAI
+
+# Common error 4: Streaming processing
+# Must set stream=True
+response = client.chat.completions.create(
+    model="veo-3.1",
+    messages=[...],
+    stream=True  # Don't forget
+)
+```
+
+### Node.js SDK Issues
+
+```javascript
+// Common error 1: Outdated version
+// Solution: npm install --save openai@latest
+
+// Common error 2: Import method
+// Wrong: const openai = require('openai')
+// Correct: import OpenAI from 'openai'
+
+// Common error 3: Async handling
+// Must use await or .then()
+const stream = await client.chat.completions.create({...});
+
+// Common error 4: Stream processing
+for await (const chunk of stream) {  // Don't forget await
+  console.log(chunk.choices[0]?.delta?.content);
+}
+```
+
+## Billing-Related Issues
+
+<AccordionGroup>
+  <Accordion title="Costs Exceed Expectations" icon="dollar-sign">
+    **Possible Causes:**
+    - Used `n > 1` parameter to generate multiple results
+    - Frequent retries of failed requests
+    - Mistakenly used standard model ($0.25) instead of fast model ($0.15)
+
+    **Solutions:**
+    1. **Check n parameter:**
+    ```python
+    # Note: n=4 generates 4 videos, charged for 4 requests
+    response = client.chat.completions.create(
+        model="veo-3.1",
+        messages=[...],
+        n=4  # Cost: $0.25 × 4 = $1.00
+    )
+    ```
+
+    2. **Use fast model for testing:**
+    ```python
+    # Testing phase use fast model
+    model = "veo-3.1-fast"  # $0.15/request
+
+    # Production phase use standard model
+    model = "veo-3.1"  # $0.25/request
+    ```
+
+    3. **View detailed billing in console:**
+    [View Call Logs](https://api.laozhang.ai/logs)
+  </Accordion>
+
+  <Accordion title="Are Failed Requests Charged" icon="circle-help">
+    **Answer: No**
+
+    Only requests that successfully return video results are charged. The following situations are not charged:
+    - API errors (4xx, 5xx)
+    - Parameter validation failures
+    - Insufficient balance
+    - Network timeouts
+    - Generation failures
+
+    **How to Confirm:**
+    Log in to [Call Logs](https://api.laozhang.ai/logs) to check:
+    - ✅ Successful requests: Show charges
+    - ❌ Failed requests: No charge record
+  </Accordion>
+</AccordionGroup>
+
+## Get Help
+
+<CardGroup cols={2}>
+  <Card title="Technical Support" icon="headset" href="mailto:threezhang.cn@gmail.com">
+    Email technical support team
+
+    threezhang.cn@gmail.com
+  </Card>
+
+  <Card title="Telegram Community" icon="send" href="https://t.me/laozhang_cn">
+    Join official Telegram group
+
+    Real-time communication and Q&A
+  </Card>
+
+  <Card title="Call Logs" icon="list-check" href="https://api.laozhang.ai/logs">
+    View detailed API call records
+
+    Diagnose issues and track costs
+  </Card>
+
+  <Card title="Console" icon="gauge" href="https://api.laozhang.ai/account/profile">
+    Manage account and view balance
+
+    Recharge and configure API Keys
+  </Card>
+</CardGroup>
+
+## More Resources
+
+<CardGroup cols={3}>
+  <Card title="Quick Start" icon="rocket" href="/en/api-capabilities/veo/veo-31-quick-start">
+    Get started with Veo-3.1 from scratch
+  </Card>
+  <Card title="Code Examples" icon="code" href="/en/api-capabilities/veo/veo-31-examples">
+    Complete example code in various languages
+  </Card>
+  <Card title="Best Practices" icon="lightbulb" href="/en/api-capabilities/veo/veo-31-best-practices">
+    Improve video generation quality
+  </Card>
+</CardGroup>

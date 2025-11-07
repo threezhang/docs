@@ -325,11 +325,11 @@
                     {
                       "group": "Veo-3.1 (OpenAI Compatible)",
                       "pages": [
-                        "api-capabilities/veo/veo-31-overview",
-                        "api-capabilities/veo/veo-31-quick-start",
-                        "api-capabilities/veo/veo-31-examples",
-                        "api-capabilities/veo/veo-31-best-practices",
-                        "api-capabilities/veo/veo-31-troubleshooting"
+                        "en/api-capabilities/veo/veo-31-overview",
+                        "en/api-capabilities/veo/veo-31-quick-start",
+                        "en/api-capabilities/veo/veo-31-examples",
+                        "en/api-capabilities/veo/veo-31-best-practices",
+                        "en/api-capabilities/veo/veo-31-troubleshooting"
                       ]
                     },
                     {

@@ -1,0 +1,761 @@
+---
+title: "Veo-3.1 Code Examples"
+description: "Complete Veo-3.1 API example code in various programming languages"
+icon: "code"
+---
+
+## Python Complete Example
+
+### Using OpenAI SDK
+
+```bash
+pip install openai
+```
+
+### Complete Text-to-Video Example
+
+```python
+from openai import OpenAI
+import time
+
+class Veo31Client:
+    def __init__(self, api_key):
+        self.client = OpenAI(
+            api_key=api_key,
+            base_url="https://api.laozhang.ai/v1"
+        )
+
+    def generate_video_from_text(self, prompt, model="veo-3.1", n=1):
+        """Text-to-video generation"""
+        try:
+            response = self.client.chat.completions.create(
+                model=model,
+                messages=[{
+                    "role": "user",
+                    "content": [
+                        {
+                            "type": "text",
+                            "text": prompt
+                        }
+                    ]
+                }],
+                stream=True,
+                n=n
+            )
+
+            print(f"Starting video generation... (model: {model})")
+
+            for chunk in response:
+                if chunk.choices[0].delta.content:
+                    content = chunk.choices[0].delta.content
+                    print(f"Received data: {content}")
+
+            print("Video generation complete!")
+
+        except Exception as e:
+            print(f"Error: {e}")
+
+    def generate_video_from_images(self, prompt, image_urls, model="veo-3.1-fl"):
+        """Image-to-video generation"""
+        try:
+            content = [
+                {
+                    "type": "text",
+                    "text": prompt
+                }
+            ]
+
+            # Add images
+            for url in image_urls:
+                content.append({
+                    "type": "image_url",
+                    "image_url": {
+                        "url": url
+                    }
+                })
+
+            response = self.client.chat.completions.create(
+                model=model,
+                messages=[{
+                    "role": "user",
+                    "content": content
+                }],
+                stream=True
+            )
+
+            print(f"Starting video generation... (model: {model}, images: {len(image_urls)})")
+
+            for chunk in response:
+                if chunk.choices[0].delta.content:
+                    content = chunk.choices[0].delta.content
+                    print(f"Received data: {content}")
+
+            print("Video generation complete!")
+
+        except Exception as e:
+            print(f"Error: {e}")
+
+# Usage examples
+if __name__ == "__main__":
+    client = Veo31Client("sk-YOUR_API_KEY")
+
+    # Example 1: Text-to-video
+    print("=== Example 1: Text-to-Video ===")
+    client.generate_video_from_text(
+        prompt="Generate a video of a cute kitten playing on the grass",
+        model="veo-3.1",
+        n=2
+    )
+
+    # Example 2: Image-to-video
+    print("\n=== Example 2: Image-to-Video ===")
+    client.generate_video_from_images(
+        prompt="Generate a smooth transition video based on two images",
+        image_urls=[
+            "https://example.com/start.jpg",
+            "https://example.com/end.jpg"
+        ],
+        model="veo-3.1-fl"
+    )
+```
+
+### Using Base64 Images
+
+```python
+import base64
+from openai import OpenAI
+
+def encode_image_to_base64(image_path):
+    """Encode local image to base64"""
+    with open(image_path, "rb") as image_file:
+        return base64.b64encode(image_file.read()).decode('utf-8')
+
+client = OpenAI(
+    api_key="sk-YOUR_API_KEY",
+    base_url="https://api.laozhang.ai/v1"
+)
+
+# Read local images
+image1_base64 = encode_image_to_base64("./images/start.jpg")
+image2_base64 = encode_image_to_base64("./images/end.jpg")
+
+response = client.chat.completions.create(
+    model="veo-3.1-fl",
+    messages=[{
+        "role": "user",
+        "content": [
+            {
+                "type": "text",
+                "text": "Generate transition animation based on these two images"
+            },
+            {
+                "type": "image_url",
+                "image_url": {
+                    "url": f"data:image/jpeg;base64,{image1_base64}"
+                }
+            },
+            {
+                "type": "image_url",
+                "image_url": {
+                    "url": f"data:image/jpeg;base64,{image2_base64}"
+                }
+            }
+        ]
+    }],
+    stream=True
+)
+
+for chunk in response:
+    if chunk.choices[0].delta.content:
+        print(chunk.choices[0].delta.content, end='', flush=True)
+```
+
+## Node.js Complete Example
+
+### Install Dependencies
+
+```bash
+npm install openai
+```
+
+### TypeScript Complete Implementation
+
+```typescript
+import OpenAI from 'openai';
+import * as fs from 'fs';
+
+class Veo31Client {
+  private client: OpenAI;
+
+  constructor(apiKey: string) {
+    this.client = new OpenAI({
+      apiKey: apiKey,
+      baseURL: 'https://api.laozhang.ai/v1'
+    });
+  }
+
+  async generateVideoFromText(
+    prompt: string,
+    model: string = 'veo-3.1',
+    n: number = 1
+  ): Promise<void> {
+    try {
+      const stream = await this.client.chat.completions.create({
+        model: model,
+        messages: [{
+          role: 'user',
+          content: [
+            {
+              type: 'text',
+              text: prompt
+            }
+          ]
+        }],
+        stream: true,
+        n: n
+      });
+
+      console.log(`Starting video generation... (model: ${model})`);
+
+      for await (const chunk of stream) {
+        const content = chunk.choices[0]?.delta?.content;
+        if (content) {
+          console.log(`Received data: ${content}`);
+        }
+      }
+
+      console.log('Video generation complete!');
+
+    } catch (error) {
+      console.error('Error:', error);
+    }
+  }
+
+  async generateVideoFromImages(
+    prompt: string,
+    imageUrls: string[],
+    model: string = 'veo-3.1-fl'
+  ): Promise<void> {
+    try {
+      const content: any[] = [
+        {
+          type: 'text',
+          text: prompt
+        }
+      ];
+
+      // Add images
+      for (const url of imageUrls) {
+        content.push({
+          type: 'image_url',
+          image_url: {
+            url: url
+          }
+        });
+      }
+
+      const stream = await this.client.chat.completions.create({
+        model: model,
+        messages: [{
+          role: 'user',
+          content: content
+        }],
+        stream: true
+      });
+
+      console.log(`Starting video generation... (model: ${model}, images: ${imageUrls.length})`);
+
+      for await (const chunk of stream) {
+        const content = chunk.choices[0]?.delta?.content;
+        if (content) {
+          console.log(`Received data: ${content}`);
+        }
+      }
+
+      console.log('Video generation complete!');
+
+    } catch (error) {
+      console.error('Error:', error);
+    }
+  }
+
+  encodeImageToBase64(imagePath: string): string {
+    const imageBuffer = fs.readFileSync(imagePath);
+    return imageBuffer.toString('base64');
+  }
+}
+
+// Usage examples
+async function main() {
+  const client = new Veo31Client('sk-YOUR_API_KEY');
+
+  // Example 1: Text-to-video
+  console.log('=== Example 1: Text-to-Video ===');
+  await client.generateVideoFromText(
+    'Generate a romantic sunset scene by the sea',
+    'veo-3.1',
+    2
+  );
+
+  // Example 2: Image-to-video
+  console.log('\n=== Example 2: Image-to-Video ===');
+  await client.generateVideoFromImages(
+    'Generate smooth transition animation based on these two images',
+    [
+      'https://example.com/image1.jpg',
+      'https://example.com/image2.jpg'
+    ],
+    'veo-3.1-fl'
+  );
+}
+
+main().catch(console.error);
+```
+
+### JavaScript Simplified Version
+
+```javascript
+const OpenAI = require('openai');
+
+const client = new OpenAI({
+  apiKey: 'sk-YOUR_API_KEY',
+  baseURL: 'https://api.laozhang.ai/v1'
+});
+
+async function generateVideo() {
+  const stream = await client.chat.completions.create({
+    model: 'veo-3.1-fast',
+    messages: [{
+      role: 'user',
+      content: [
+        {
+          type: 'text',
+          text: 'Generate a video of a cat walking in the rain'
+        }
+      ]
+    }],
+    stream: true,
+    n: 1
+  });
+
+  for await (const chunk of stream) {
+    const content = chunk.choices[0]?.delta?.content;
+    if (content) {
+      process.stdout.write(content);
+    }
+  }
+}
+
+generateVideo().catch(console.error);
+```
+
+## cURL Examples
+
+### Text-to-Video
+
+```bash
+curl --location --request POST 'https://api.laozhang.ai/v1/chat/completions' \
+--header 'Content-Type: application/json' \
+--header 'Authorization: Bearer sk-YOUR_API_KEY' \
+--data-raw '{
+    "messages": [{
+        "role": "user",
+        "content": [
+            {
+                "type": "text",
+                "text": "Generate a video of two cats and a dog fighting"
+            }
+        ]
+    }],
+    "model": "veo-3.1",
+    "stream": true,
+    "n": 2
+}'
+```
+
+### Image-to-Video (URL)
+
+```bash
+curl --location --request POST 'https://api.laozhang.ai/v1/chat/completions' \
+--header 'Content-Type: application/json' \
+--header 'Authorization: Bearer sk-YOUR_API_KEY' \
+--data-raw '{
+    "messages": [{
+        "role": "user",
+        "content": [
+            {
+                "type": "text",
+                "text": "Generate a complete transition video based on two images"
+            },
+            {
+                "type": "image_url",
+                "image_url": {
+                    "url": "https://example.com/start-frame.jpg"
+                }
+            },
+            {
+                "type": "image_url",
+                "image_url": {
+                    "url": "https://example.com/end-frame.jpg"
+                }
+            }
+        ]
+    }],
+    "model": "veo-3.1-fl",
+    "stream": true,
+    "n": 1
+}'
+```
+
+### Image-to-Video (Base64)
+
+```bash
+curl --location --request POST 'https://api.laozhang.ai/v1/chat/completions' \
+--header 'Content-Type: application/json' \
+--header 'Authorization: Bearer sk-YOUR_API_KEY' \
+--data-raw '{
+    "messages": [{
+        "role": "user",
+        "content": [
+            {
+                "type": "text",
+                "text": "Generate animation based on image"
+            },
+            {
+                "type": "image_url",
+                "image_url": {
+                    "url": "data:image/jpeg;base64,/9j/4AAQSkZJRg..."
+                }
+            }
+        ]
+    }],
+    "model": "veo-3.1-landscape",
+    "stream": true
+}'
+```
+
+## Go Example
+
+```go
+package main
+
+import (
+    "context"
+    "fmt"
+    "io"
+    "os"
+
+    "github.com/sashabaranov/go-openai"
+)
+
+func main() {
+    config := openai.DefaultConfig("sk-YOUR_API_KEY")
+    config.BaseURL = "https://api.laozhang.ai/v1"
+    client := openai.NewClientWithConfig(config)
+
+    req := openai.ChatCompletionRequest{
+        Model: "veo-3.1",
+        Messages: []openai.ChatCompletionMessage{
+            {
+                Role: openai.ChatMessageRoleUser,
+                MultiContent: []openai.ChatMessagePart{
+                    {
+                        Type: openai.ChatMessagePartTypeText,
+                        Text: "Generate a video of a cute kitten playing with a ball of yarn",
+                    },
+                },
+            },
+        },
+        Stream: true,
+        N:      1,
+    }
+
+    stream, err := client.CreateChatCompletionStream(context.Background(), req)
+    if err != nil {
+        fmt.Printf("Stream error: %v\n", err)
+        return
+    }
+    defer stream.Close()
+
+    fmt.Println("Starting video generation...")
+    for {
+        response, err := stream.Recv()
+        if err == io.EOF {
+            fmt.Println("\nVideo generation complete!")
+            break
+        }
+        if err != nil {
+            fmt.Printf("Stream error: %v\n", err)
+            return
+        }
+
+        if len(response.Choices) > 0 {
+            content := response.Choices[0].Delta.Content
+            if content != "" {
+                fmt.Print(content)
+            }
+        }
+    }
+}
+```
+
+### Image-to-Video Go Example
+
+```go
+package main
+
+import (
+    "context"
+    "encoding/base64"
+    "fmt"
+    "io"
+    "os"
+
+    "github.com/sashabaranov/go-openai"
+)
+
+func encodeImageToBase64(imagePath string) (string, error) {
+    imageData, err := os.ReadFile(imagePath)
+    if err != nil {
+        return "", err
+    }
+    return base64.StdEncoding.EncodeToString(imageData), nil
+}
+
+func main() {
+    config := openai.DefaultConfig("sk-YOUR_API_KEY")
+    config.BaseURL = "https://api.laozhang.ai/v1"
+    client := openai.NewClientWithConfig(config)
+
+    // Encode images
+    image1Base64, _ := encodeImageToBase64("./start.jpg")
+    image2Base64, _ := encodeImageToBase64("./end.jpg")
+
+    req := openai.ChatCompletionRequest{
+        Model: "veo-3.1-fl",
+        Messages: []openai.ChatCompletionMessage{
+            {
+                Role: openai.ChatMessageRoleUser,
+                MultiContent: []openai.ChatMessagePart{
+                    {
+                        Type: openai.ChatMessagePartTypeText,
+                        Text: "Generate transition video based on these two images",
+                    },
+                    {
+                        Type: openai.ChatMessagePartTypeImageURL,
+                        ImageURL: &openai.ChatMessageImageURL{
+                            URL: fmt.Sprintf("data:image/jpeg;base64,%s", image1Base64),
+                        },
+                    },
+                    {
+                        Type: openai.ChatMessagePartTypeImageURL,
+                        ImageURL: &openai.ChatMessageImageURL{
+                            URL: fmt.Sprintf("data:image/jpeg;base64,%s", image2Base64),
+                        },
+                    },
+                },
+            },
+        },
+        Stream: true,
+    }
+
+    stream, err := client.CreateChatCompletionStream(context.Background(), req)
+    if err != nil {
+        fmt.Printf("Error: %v\n", err)
+        return
+    }
+    defer stream.Close()
+
+    fmt.Println("Starting video generation...")
+    for {
+        response, err := stream.Recv()
+        if err == io.EOF {
+            fmt.Println("\nComplete!")
+            break
+        }
+        if err != nil {
+            fmt.Printf("Error: %v\n", err)
+            return
+        }
+
+        if len(response.Choices) > 0 {
+            fmt.Print(response.Choices[0].Delta.Content)
+        }
+    }
+}
+```
+
+## Java Example
+
+### Using OkHttp
+
+```java
+import com.google.gson.Gson;
+import com.google.gson.JsonObject;
+import okhttp3.*;
+import okio.BufferedSource;
+
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.concurrent.TimeUnit;
+
+public class Veo31Client {
+    private final OkHttpClient client;
+    private final String apiKey;
+    private final Gson gson;
+    private static final String BASE_URL = "https://api.laozhang.ai/v1";
+
+    public Veo31Client(String apiKey) {
+        this.apiKey = apiKey;
+        this.client = new OkHttpClient.Builder()
+                .connectTimeout(30, TimeUnit.SECONDS)
+                .readTimeout(60, TimeUnit.SECONDS)
+                .build();
+        this.gson = new Gson();
+    }
+
+    public void generateVideoFromText(String prompt, String model, int n) throws IOException {
+        Map<String, Object> content = new HashMap<>();
+        content.put("type", "text");
+        content.put("text", prompt);
+
+        List<Map<String, Object>> contents = new ArrayList<>();
+        contents.add(content);
+
+        Map<String, Object> message = new HashMap<>();
+        message.put("role", "user");
+        message.put("content", contents);
+
+        List<Map<String, Object>> messages = new ArrayList<>();
+        messages.add(message);
+
+        Map<String, Object> requestBody = new HashMap<>();
+        requestBody.put("model", model);
+        requestBody.put("messages", messages);
+        requestBody.put("stream", true);
+        requestBody.put("n", n);
+
+        String json = gson.toJson(requestBody);
+
+        Request request = new Request.Builder()
+                .url(BASE_URL + "/chat/completions")
+                .post(RequestBody.create(json, MediaType.parse("application/json")))
+                .addHeader("Authorization", "Bearer " + apiKey)
+                .addHeader("Content-Type", "application/json")
+                .build();
+
+        try (Response response = client.newCall(request).execute()) {
+            if (!response.isSuccessful()) {
+                throw new IOException("Request failed: " + response);
+            }
+
+            System.out.println("Starting video generation...");
+
+            BufferedSource source = response.body().source();
+            while (!source.exhausted()) {
+                String line = source.readUtf8Line();
+                if (line != null && line.startsWith("data: ")) {
+                    String data = line.substring(6);
+                    if (!data.equals("[DONE]")) {
+                        System.out.print(data);
+                    }
+                }
+            }
+
+            System.out.println("\nVideo generation complete!");
+        }
+    }
+
+    public static void main(String[] args) throws IOException {
+        Veo31Client client = new Veo31Client("sk-YOUR_API_KEY");
+
+        // Generate video
+        client.generateVideoFromText(
+            "Generate a video of a cute panda playing in a bamboo forest",
+            "veo-3.1",
+            1
+        );
+    }
+}
+```
+
+## Response Format
+
+### Streaming Response Example
+
+```json
+data: {"id":"chatcmpl-xxx","object":"chat.completion.chunk","created":1234567890,"model":"veo-3.1","choices":[{"index":0,"delta":{"content":"Video generating..."},"finish_reason":null}]}
+
+data: {"id":"chatcmpl-xxx","object":"chat.completion.chunk","created":1234567890,"model":"veo-3.1","choices":[{"index":0,"delta":{"content":"Video URL: https://..."},"finish_reason":"stop"}]}
+
+data: [DONE]
+```
+
+## Advanced Usage
+
+### Batch Generate Multiple Results
+
+```python
+from openai import OpenAI
+
+client = OpenAI(
+    api_key="sk-YOUR_API_KEY",
+    base_url="https://api.laozhang.ai/v1"
+)
+
+response = client.chat.completions.create(
+    model="veo-3.1-fast",
+    messages=[{
+        "role": "user",
+        "content": [{"type": "text", "text": "Generate a sunset scene"}]
+    }],
+    stream=True,
+    n=4  # Generate 4 different videos simultaneously
+)
+
+for chunk in response:
+    if chunk.choices[0].delta.content:
+        print(chunk.choices[0].delta.content)
+```
+
+### Compare Different Models
+
+```python
+models = [
+    "veo-3.1",
+    "veo-3.1-fast",
+    "veo-3.1-fl",
+    "veo-3.1-landscape"
+]
+
+prompt = "Generate a beautiful mountain landscape video"
+
+for model in models:
+    print(f"\n=== Testing model: {model} ===")
+    response = client.chat.completions.create(
+        model=model,
+        messages=[{
+            "role": "user",
+            "content": [{"type": "text", "text": prompt}]
+        }],
+        stream=True
+    )
+
+    for chunk in response:
+        if chunk.choices[0].delta.content:
+            print(chunk.choices[0].delta.content, end='')
+```
+
+## Next Steps
+
+<CardGroup cols={2}>
+  <Card title="Best Practices" icon="lightbulb" href="/en/api-capabilities/veo/veo-31-best-practices">
+    Learn how to optimize prompts for better results
+  </Card>
+  <Card title="Troubleshooting" icon="circle-help" href="/en/api-capabilities/veo/veo-31-troubleshooting">
+    View common issues and solutions
+  </Card>
+</CardGroup>

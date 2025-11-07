@@ -1,0 +1,524 @@
+---
+title: "Veo-3.1 Best Practices"
+description: "Tips and recommendations for optimizing Veo-3.1 video generation results"
+icon: "lightbulb"
+---
+
+## Prompt Writing Techniques
+
+### Basic Principles
+
+<CardGroup cols={2}>
+  <Card title="Be Specific" icon="target">
+    Describe scenes, actions, lighting and other details in detail
+  </Card>
+  <Card title="Clear Structure" icon="list">
+    Organize in the order of "subject → action → environment → style"
+  </Card>
+  <Card title="Avoid Ambiguity" icon="ban">
+    Use clear vocabulary, avoid vague or ambiguous words
+  </Card>
+  <Card title="Control Length" icon="ruler">
+    Keep between 50-200 characters, not too short or verbose
+  </Card>
+</CardGroup>
+
+### Excellent Prompt Examples
+
+<Tabs>
+  <Tab title="Natural Scenes">
+**Recommended:**
+```
+An orange kitten chasing butterflies on green grass, sunlight filtering through leaves creating dappled shadows, gentle breeze moving the grass blades, blurred forest background, cinematic depth of field effect
+```
+
+**Avoid:**
+```
+Cat playing
+```
+
+**Key Points:**
+- Described subject (orange kitten)
+- Specific action (chasing butterflies)
+- Environmental details (grass, sunlight, leaves)
+- Visual effects (depth of field, lighting)
+  </Tab>
+
+  <Tab title="Character Scenes">
+**Recommended:**
+```
+A young woman walking in the rain, wearing a red raincoat, holding a transparent umbrella, raindrops bouncing on the umbrella surface, neon lights reflecting on the wet street, night urban background, cinematic slow motion
+```
+
+**Avoid:**
+```
+Woman walking
+```
+
+**Key Points:**
+- Character features (young woman)
+- Clothing and props (red raincoat, transparent umbrella)
+- Environmental atmosphere (rainy night, neon lights)
+- Artistic style (cinematic feel, slow motion)
+  </Tab>
+
+  <Tab title="Abstract Concepts">
+**Recommended:**
+```
+Golden energy ripples spreading outward from the center, particles rotating and rising with the ripples, deep blue gradient background, fluid animation style, soft glow effects
+```
+
+**Avoid:**
+```
+Energy fluctuation
+```
+
+**Key Points:**
+- Color description (golden, deep blue)
+- Movement pattern (spreading outward, rotating and rising)
+- Artistic style (fluid animation)
+- Visual effects (glow)
+  </Tab>
+</Tabs>
+
+## Image-to-Video Best Practices
+
+### Image Selection Requirements
+
+<Warning>
+**Image Quality Requirements:**
+- Resolution: Recommended 1024x1024 or higher
+- Format: JPEG, PNG, WebP
+- Size: Not exceeding 10MB per image
+- Clarity: Avoid blurry or low-quality images
+</Warning>
+
+### Single Image Generation
+
+Use a single image as the starting frame to generate video:
+
+```python
+response = client.chat.completions.create(
+    model="veo-3.1-fl",
+    messages=[{
+        "role": "user",
+        "content": [
+            {
+                "type": "text",
+                "text": "Bring this scene to life, gentle breeze moving leaves, clouds slowly drifting"
+            },
+            {
+                "type": "image_url",
+                "image_url": {
+                    "url": "https://example.com/scene.jpg"
+                }
+            }
+        ]
+    }],
+    stream=True
+)
+```
+
+<Tip>
+**Single Image Prompt Tips:**
+- Describe desired actions and changes
+- Specify magnitude and speed of movements
+- Indicate which elements should remain static
+</Tip>
+
+### Two-Image Transition
+
+Use two images to generate smooth transition video:
+
+```python
+response = client.chat.completions.create(
+    model="veo-3.1-fl",
+    messages=[{
+        "role": "user",
+        "content": [
+            {
+                "type": "text",
+                "text": "Create a smooth transition from the first image to the second, maintaining natural and fluid motion"
+            },
+            {
+                "type": "image_url",
+                "image_url": {"url": "https://example.com/start.jpg"}
+            },
+            {
+                "type": "image_url",
+                "image_url": {"url": "https://example.com/end.jpg"}
+            }
+        ]
+    }],
+    stream=True
+)
+```
+
+<Tip>
+**Two-Image Transition Tips:**
+- Choose two images with similar characteristics
+- Specify transition method in prompt (fade, slide, morph, etc.)
+- Keep lighting and color tone consistent between images
+</Tip>
+
+## Model Selection Strategy
+
+### Choose Based on Scenario
+
+<AccordionGroup>
+  <Accordion title="Text Generation Scenarios" icon="wand-sparkles">
+    **Scenarios without image reference**
+
+    Recommended models:
+    - `veo-3.1`: Standard quality, suitable for most scenarios
+    - `veo-3.1-fast`: Quick testing, reduce costs
+
+    Example scenarios:
+    - Fully creative content
+    - Abstract concept visualization
+    - No specific visual reference needed
+  </Accordion>
+
+  <Accordion title="Image Reference Scenarios" icon="image">
+    **Scenarios requiring image-based generation**
+
+    Recommended models:
+    - `veo-3.1-fl`: Standard image-to-video (supports 1-2 image inputs)
+    - `veo-3.1-fast-fl`: Fast image-to-video (supports 1-2 image inputs)
+
+    Example scenarios:
+    - Bring static images to life
+    - Smooth transitions between two images
+    - Generate animations based on reference images
+
+    <Warning>
+    **Important:** Only models with `fl` suffix support image input functionality
+    </Warning>
+  </Accordion>
+
+  <Accordion title="Landscape Professional Production" icon="monitor">
+    **Professional landscape format requirements**
+
+    Recommended models:
+    - `veo-3.1-landscape`: Landscape text-to-video
+    - `veo-3.1-landscape-fast`: Fast landscape
+    - `veo-3.1-landscape-fl`: Landscape image-to-video
+    - `veo-3.1-landscape-fast-fl`: Fast landscape image-to-video
+
+    Example scenarios:
+    - Film production preview
+    - Commercial advertisements
+    - Widescreen content
+  </Accordion>
+</AccordionGroup>
+
+### Cost Optimization Strategy
+
+<Tabs>
+  <Tab title="Testing Phase">
+    **Goal:** Quickly validate ideas, reduce costs
+
+    **Strategy:**
+    ```python
+    model = "veo-3.1-fast"  # Use fast series
+    n = 1  # Single generation
+    ```
+
+    **Applicable:**
+    - Prompt testing
+    - Concept validation
+    - Rapid iteration
+  </Tab>
+
+  <Tab title="Production Phase">
+    **Goal:** Obtain high-quality results
+
+    **Strategy:**
+    ```python
+    model = "veo-3.1"  # Use standard model
+    n = 2-3  # Generate multiple alternatives
+    ```
+
+    **Applicable:**
+    - Final delivery
+    - Client presentations
+    - Official release
+  </Tab>
+
+  <Tab title="Batch Processing">
+    **Goal:** Balance quality and cost
+
+    **Strategy:**
+    ```python
+    # 70% use fast model
+    fast_tasks = tasks[:int(len(tasks) * 0.7)]
+    # 30% use standard model
+    standard_tasks = tasks[int(len(tasks) * 0.7):]
+    ```
+
+    **Applicable:**
+    - Large-scale content production
+    - A/B testing
+    - Dataset construction
+  </Tab>
+</Tabs>
+
+## Common Scenario Optimization
+
+### Action Description
+
+<CardGroup cols={2}>
+  <Card title="Clear Verbs" icon="move">
+    Use specific verbs: "run", "jump", "rotate"
+
+    Avoid: "move", "change" and other vague words
+  </Card>
+
+  <Card title="Speed Control" icon="gauge">
+    Specify speed: "fast", "slow", "constant speed"
+
+    Example: "Bird rapidly flapping wings"
+  </Card>
+
+  <Card title="Direction Indication" icon="compass">
+    Clear direction: "leftward", "upward", "clockwise"
+
+    Example: "Camera panning from left to right"
+  </Card>
+
+  <Card title="Magnitude Description" icon="move-vertical">
+    Specify magnitude: "slight", "intense", "large amplitude"
+
+    Example: "Leaves swaying gently"
+  </Card>
+</CardGroup>
+
+### Lighting Effects
+
+```text
+Excellent example:
+"At dusk, golden sunlight slanting from the right, casting long shadows on the ground, light penetrating through mist creating Tyndall effect"
+
+Key points:
+✓ Time (dusk)
+✓ Light source direction (slanting from the right)
+✓ Lighting effects (long shadows, Tyndall effect)
+✓ Environmental factors (mist)
+```
+
+### Camera Movement
+
+<Tabs>
+  <Tab title="Fixed Position">
+```
+Camera fixed, subject in center of frame, background slightly out of focus
+```
+  </Tab>
+
+  <Tab title="Push/Pull">
+```
+Camera slowly pushing forward, gradually approaching subject, maintaining smooth movement
+```
+  </Tab>
+
+  <Tab title="Orbit">
+```
+Camera rotating clockwise around subject, maintaining fixed distance, showing 360-degree view
+```
+  </Tab>
+
+  <Tab title="Follow Shot">
+```
+Camera following subject movement, keeping subject centered in frame, flowing background
+```
+  </Tab>
+</Tabs>
+
+## Batch Generation Strategy
+
+### Using n Parameter
+
+Generate multiple variants for selection:
+
+```python
+response = client.chat.completions.create(
+    model="veo-3.1-fast",
+    messages=[{
+        "role": "user",
+        "content": [{"type": "text", "text": "Sunset beach scene"}]
+    }],
+    n=4,  # Generate 4 different results simultaneously
+    stream=True
+)
+```
+
+<Info>
+**n parameter recommendations:**
+- Testing phase: n=1-2
+- Important projects: n=2-4
+- Cost-sensitive: n=1
+</Info>
+
+### Concurrent Requests
+
+```python
+import asyncio
+from openai import AsyncOpenAI
+
+client = AsyncOpenAI(
+    api_key="sk-YOUR_API_KEY",
+    base_url="https://api.laozhang.ai/v1"
+)
+
+async def generate_video(prompt, model="veo-3.1-fast"):
+    response = await client.chat.completions.create(
+        model=model,
+        messages=[{
+            "role": "user",
+            "content": [{"type": "text", "text": prompt}]
+        }],
+        stream=True
+    )
+
+    async for chunk in response:
+        if chunk.choices[0].delta.content:
+            print(f"{prompt[:20]}: {chunk.choices[0].delta.content}")
+
+# Generate multiple videos concurrently
+prompts = [
+    "Sunset beach",
+    "City night scene",
+    "Forest morning light",
+    "Rainy street"
+]
+
+await asyncio.gather(*[generate_video(p) for p in prompts])
+```
+
+## Quality Improvement Tips
+
+### Increase Detail Levels
+
+<Steps>
+  <Step title="Basic Description">
+    First describe core subject and action
+
+    Example: "A cat walking"
+  </Step>
+
+  <Step title="Add Environment">
+    Include scene and background information
+
+    Example: "A cat walking on grass, forest background"
+  </Step>
+
+  <Step title="Enrich Details">
+    Add lighting, color, texture
+
+    Example: "An orange cat elegantly walking on green grass, sunlight filtering through leaves creating dappled shadows, blurred forest background"
+  </Step>
+
+  <Step title="Artistic Style">
+    Specify visual style and effects
+
+    Example: "An orange cat elegantly walking on green grass, sunlight filtering through leaves creating dappled shadows, blurred forest background, cinematic color grading, shallow depth of field effect"
+  </Step>
+</Steps>
+
+### Style Reference
+
+```text
+Common style keywords:
+
+Visual effects:
+- Cinematic, documentary style, MV quality
+- Slow motion, time-lapse, super slow-mo
+- HD, 4K quality, film grain
+
+Color tone:
+- Warm tones, cool tones, vintage color
+- High contrast, low saturation, Morandi palette
+- Cyberpunk, vaporwave, oil painting style
+
+Lighting:
+- Rembrandt lighting, side light, backlight
+- Soft light, hard light, neon lighting
+- Golden hour, blue hour, magic hour
+```
+
+## Common Mistakes to Avoid
+
+<Warning>
+**Common errors:**
+
+❌ Prompt too brief
+```
+"cat"
+```
+
+❌ Contains contradictory information
+```
+"a cat flying underwater"
+```
+
+❌ Overly complex
+```
+"An orange Persian cat wearing elaborate Victorian clothing chasing a talking mechanical butterfly on 19th century London streets while aurora and rainbow appear in the sky..."
+```
+
+❌ Using vague vocabulary
+```
+"nice scene"
+```
+</Warning>
+
+## Performance Optimization
+
+### Streaming Processing Best Practices
+
+```python
+import sys
+
+response = client.chat.completions.create(
+    model="veo-3.1",
+    messages=[...],
+    stream=True
+)
+
+# Real-time output, no buffering
+for chunk in response:
+    if chunk.choices[0].delta.content:
+        print(chunk.choices[0].delta.content, end='', flush=True)
+        sys.stdout.flush()
+```
+
+### Timeout Handling
+
+```python
+from openai import OpenAI
+import httpx
+
+client = OpenAI(
+    api_key="sk-YOUR_API_KEY",
+    base_url="https://api.laozhang.ai/v1",
+    http_client=httpx.Client(
+        timeout=httpx.Timeout(
+            connect=10.0,  # Connection timeout
+            read=300.0,    # Read timeout (5 minutes)
+            write=10.0,    # Write timeout
+            pool=10.0      # Pool timeout
+        )
+    )
+)
+```
+
+## Next Steps
+
+<CardGroup cols={2}>
+  <Card title="Code Examples" icon="code" href="/en/api-capabilities/veo/veo-31-examples">
+    View complete implementation code
+  </Card>
+  <Card title="Troubleshooting" icon="circle-help" href="/en/api-capabilities/veo/veo-31-troubleshooting">
+    Having issues? Check solutions
+  </Card>
+</CardGroup>
