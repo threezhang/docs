@@ -1,17 +1,54 @@
 ---
-title: Gemini 2.5 Flash Image 图像生成
-sidebarTitle: Gemini Flash Image
-description: Google 最新正式版图像生成模型，支持自定义纵横比，兼容 OpenAI 格式，按次计费 $0.025/张
+title: Gemini Image 图像生成（Nano Banana 系列）
+sidebarTitle: Gemini Image 生成
+description: Google 图像生成模型系列，包括最新的 Nano Banana 2（Gemini 3 Pro Image）和稳定版 Nano Banana（Gemini 2.5 Flash Image）
 icon: "sparkles"
 ---
 
+<Note>
+**🚀 Nano Banana 2 现已上线！**
+Google 最新一代图像生成模型 **Nano Banana 2**（内部代号）正式发布！
+
+- 🆕 **模型名称**：`gemini-3-pro-image-preview`
+- 🧠 **基于 Gemini 3**：更强大的推理能力和图像质量
+- 🔄 **无缝切换**：调用方式与旧版完全相同，只需更换模型名
+- ✅ **旧版继续可用**：`gemini-2.5-flash-image` 仍然稳定服务
+- 💰 **价格不变**：依然是 $0.025/张
+</Note>
+
 ## 模型简介
 
-Gemini 2.5 Flash Image（`gemini-2.5-flash-image`）是 Google 推出的**正式版**图像生成模型，相比预览版（`gemini-2.5-flash-image-preview`）更稳定可靠。支持 OpenAI 兼容格式和 Google 原生格式两种调用方式。
+Google 的 **Nano Banana** 系列是其图像生成技术的内部代号，目前提供两代模型：
+
+### 🆕 Nano Banana 2（最新）
+- **模型名称**：`gemini-3-pro-image-preview`
+- **版本**：Preview（预览版）
+- **技术基础**：基于 Gemini 3 架构，具备更强的推理能力
+- **特点**：最新技术，图像质量和细节表现更优秀
+- **适用场景**：追求最佳效果、愿意尝试新特性的用户
+
+### 🛡️ Nano Banana（稳定版）
+- **模型名称**：`gemini-2.5-flash-image`
+- **版本**：Stable（正式版）
+- **技术基础**：基于 Gemini 2.5 架构
+- **特点**：稳定可靠，生产环境推荐
+- **适用场景**：需要稳定性保障的生产环境
+
+<Tip>
+💡 **名称对照表**
+- **Nano Banana** = `gemini-2.5-flash-image`（稳定版）
+- **Nano Banana 2** = `gemini-3-pro-image-preview`（最新版）
+
+两个模型调用方式完全相同，只需修改 `model` 参数即可切换！
+</Tip>
+
+## 🌟 共同特性
+
+两代模型均支持以下核心能力：
 
 <Note>
-**🎉 正式版发布**  
-- ✅ 稳定可靠，生产环境推荐使用
+**🎉 核心特性**
+- ✅ 支持 OpenAI 兼容格式和 Google 原生格式
 - 🎨 支持自定义纵横比（16:9、9:16 等 10 种比例）
 - ⚡ 平均 10 秒生成高质量图片
 - 💰 超值价格：$0.025/张（比官方便宜 37.5%）
@@ -46,11 +83,23 @@ Gemini Flash Image 支持两种调用端点，各有优势：
 - **📦 Base64 输出**：直接返回 base64 编码图片数据，无需二次下载
 - **🎨 Google 技术**：基于 Google 最新图像生成技术，质量出众
 
-## 📋 模型对比
+## 📋 Nano Banana 系列对比
+
+### 同系列模型对比
+
+| 模型 | 代号 | 模型 ID | 版本 | 技术基础 | 推荐场景 |
+|------|------|---------|------|----------|----------|
+| **Nano Banana 2** | 🆕 最新 | `gemini-3-pro-image-preview` | Preview | Gemini 3 | 追求最佳效果 |
+| **Nano Banana** | 🛡️ 稳定 | `gemini-2.5-flash-image` | Stable | Gemini 2.5 | 生产环境 |
+
+**共同特点**：价格相同（$0.025/张）、速度相同（~10秒）、调用方式相同
+
+### 与其他图像模型对比
 
 | 模型 | 模型 ID | 计费方式 | 老张API价格 | 官方价格 | 节省比例 | 速度 |
 |------|---------|----------|-----------|----------|----------|------|
-| **Gemini Flash Image** | `gemini-2.5-flash-image` | 按次计费 | $0.025/张 | $0.04/张 | 37.5% | ~10秒 |
+| **Nano Banana 2** | `gemini-3-pro-image-preview` | 按次计费 | $0.025/张 | $0.04/张 | 37.5% | ~10秒 |
+| **Nano Banana** | `gemini-2.5-flash-image` | 按次计费 | $0.025/张 | $0.04/张 | 37.5% | ~10秒 |
 | **GPT-Image-1** | `gpt-image-1` | 按Token | $10输入/$40输出 per M | - | - | 中等 |
 | **Flux Kontext Pro** | `flux-kontext-pro` | 按次计费 | $0.035/张 | $0.04/张 | 12.5% | 快速 |
 | **Sora Image** | `sora_image` | 按次计费 | $0.01/张 | - | - | 较慢 |
@@ -90,6 +139,14 @@ Gemini Flash Image 支持两种调用端点，各有优势：
 
 ## 方式一：OpenAI 兼容模式（1:1 图片）
 
+<Tip>
+**🔄 模型切换说明**
+- 使用 **Nano Banana 2**（最新）：`"model": "gemini-3-pro-image-preview"`
+- 使用 **Nano Banana**（稳定）：`"model": "gemini-2.5-flash-image"`
+
+两个模型调用方式完全相同，只需修改 `model` 字段即可！
+</Tip>
+
 ### 基础示例 - Curl
 
 ```bash
@@ -97,7 +154,7 @@ curl -X POST "https://api.laozhang.ai/v1/chat/completions" \
      -H "Authorization: Bearer $API_KEY" \
      -H "Content-Type: application/json" \
      -d '{
-    "model": "gemini-2.5-flash-image",
+    "model": "gemini-3-pro-image-preview",
     "stream": false,
     "messages": [
         {
@@ -107,6 +164,12 @@ curl -X POST "https://api.laozhang.ai/v1/chat/completions" \
     ]
 }'
 ```
+
+<Note>
+💡 **模型选择**
+- 上面示例使用的是 **Nano Banana 2**（`gemini-3-pro-image-preview`）
+- 如需使用稳定版，将 `model` 改为 `gemini-2.5-flash-image` 即可
+</Note>
 
 ### Python SDK 示例
 
@@ -120,8 +183,14 @@ client = OpenAI(
     base_url="https://api.laozhang.ai/v1"
 )
 
+{/*  模型选择：
+    - Nano Banana 2 (最新): "gemini-3-pro-image-preview"
+    - Nano Banana (稳定): "gemini-2.5-flash-image"
+*/}
+
 response = client.chat.completions.create(
-    model="gemini-2.5-flash-image",
+    model="gemini-3-pro-image-preview",  # 使用 Nano Banana 2 最新模型
+    # model="gemini-2.5-flash-image",     # 或使用稳定版
     messages=[
         {
             "role": "user",
@@ -137,13 +206,20 @@ match = re.search(r'!\[.*?\]\((data:image/png;base64,.*?)\)', content)
 if match:
     base64_data = match.group(1).split(',')[1]
     image_data = base64.b64decode(base64_data)
-    
+
     with open('output.png', 'wb') as f:
         f.write(image_data)
     print("✅ 图片已保存: output.png")
 ```
 
 ## 方式二：Google 原生格式（支持自定义纵横比）
+
+<Tip>
+**🔄 模型切换说明**
+在 Google 原生格式中，模型名称在 URL 路径中指定：
+- **Nano Banana 2**（最新）：`/v1beta/models/gemini-3-pro-image-preview:generateContent`
+- **Nano Banana**（稳定）：`/v1beta/models/gemini-2.5-flash-image:generateContent`
+</Tip>
 
 ### 支持的纵横比
 
@@ -157,7 +233,8 @@ if match:
 ### 简单 Curl 示例
 
 ```bash
-curl -s -X POST "https://api.laozhang.ai/v1beta/models/gemini-2.5-flash-image:generateContent" \
+{/*  使用 Nano Banana 2 (最新)  */}
+curl -s -X POST "https://api.laozhang.ai/v1beta/models/gemini-3-pro-image-preview:generateContent" \
   -H "Authorization: Bearer $API_KEY" \
   -H "Content-Type: application/json" \
   -d '{
@@ -175,7 +252,18 @@ curl -s -X POST "https://api.laozhang.ai/v1beta/models/gemini-2.5-flash-image:ge
   }' \
   | jq -r '.candidates[0].content.parts[0].inlineData.data' \
   | base64 --decode > output.png
+
+{/*  如需使用稳定版 Nano Banana，将 URL 改为：
+curl -s -X POST "https://api.laozhang.ai/v1beta/models/gemini-2.5-flash-image:generateContent" \
+  ...（其他参数相同）
+*/}
 ```
+
+<Note>
+💡 **模型选择**
+- 上面示例使用的是 **Nano Banana 2**（URL 中的 `gemini-3-pro-image-preview`）
+- 如需使用稳定版，将 URL 中的模型名改为 `gemini-2.5-flash-image` 即可
+</Note>
 
 ### Python 完整工具脚本
 
@@ -211,13 +299,15 @@ class GeminiImageGenerator:
         "9:16", "3:4", "2:3", "5:4", "4:5"
     ]
 
-    def __init__(self, api_key: str, api_url: str = "https://api.laozhang.ai/v1beta/models/gemini-2.5-flash-image:generateContent"):
+    def __init__(self, api_key: str, api_url: str = "https://api.laozhang.ai/v1beta/models/gemini-3-pro-image-preview:generateContent"):
         """
         初始化图片生成器
 
         参数:
             api_key: API密钥
-            api_url: API地址（默认使用 Google 原生 Gemini API）
+            api_url: API地址（默认使用 Nano Banana 2 最新模型）
+                    - Nano Banana 2: https://api.laozhang.ai/v1beta/models/gemini-3-pro-image-preview:generateContent
+                    - Nano Banana: https://api.laozhang.ai/v1beta/models/gemini-2.5-flash-image:generateContent
         """
         self.api_key = api_key
         self.api_url = api_url
@@ -409,8 +499,11 @@ ASPECT_RATIO="16:9"  # 宽屏
 # 4. 设置输出文件名
 OUTPUT_FILE="gemini_generated_$(date +%Y%m%d_%H%M%S).png"
 
-# 5. API 端点
-API_URL="https://api.laozhang.ai/v1beta/models/gemini-2.5-flash-image:generateContent"
+# 5. API 端点（模型选择）
+# Nano Banana 2 (最新)
+API_URL="https://api.laozhang.ai/v1beta/models/gemini-3-pro-image-preview:generateContent"
+# Nano Banana (稳定)
+# API_URL="https://api.laozhang.ai/v1beta/models/gemini-2.5-flash-image:generateContent"
 # ============================
 
 # 检查依赖
@@ -535,6 +628,55 @@ fi
 ## ❓ 常见问题
 
 <AccordionGroup>
+  <Accordion title="什么是 Nano Banana 和 Nano Banana 2？">
+    **Nano Banana** 是 Google 图像生成技术的内部代号：
+
+    - **Nano Banana**（一代）= `gemini-2.5-flash-image`（稳定版）
+    - **Nano Banana 2**（二代）= `gemini-3-pro-image-preview`（最新版）
+
+    **主要区别**：
+    - Nano Banana 2 基于最新的 Gemini 3 架构，推理能力和图像质量更优
+    - Nano Banana 是正式稳定版本，适合生产环境
+    - 两者价格相同（$0.025/张），调用方式完全相同
+  </Accordion>
+
+  <Accordion title="如何从 Nano Banana 升级到 Nano Banana 2？">
+    升级非常简单，只需修改模型名称：
+
+    **OpenAI 兼容模式**：
+    ```json
+    {
+      "model": "gemini-3-pro-image-preview"  // 原来是 gemini-2.5-flash-image
+    }
+    ```
+
+    **Google 原生格式**：
+    ```
+    将 URL 中的模型名从：
+    /v1beta/models/gemini-2.5-flash-image:generateContent
+    改为：
+    /v1beta/models/gemini-3-pro-image-preview:generateContent
+    ```
+
+    ✅ 其他参数完全不变，无需修改代码逻辑！
+  </Accordion>
+
+  <Accordion title="Nano Banana 2 和 Nano Banana 哪个更好？">
+    **推荐场景**：
+
+    - **Nano Banana 2**（`gemini-3-pro-image-preview`）：
+      - ✅ 追求最佳图像质量和最新技术
+      - ✅ 愿意尝试新特性
+      - ⚠️ 作为 Preview 版本，可能会有功能迭代
+
+    - **Nano Banana**（`gemini-2.5-flash-image`）：
+      - ✅ 生产环境，需要稳定性保障
+      - ✅ 已有成熟业务流程
+      - ✅ 正式版本，稳定可靠
+
+    **价格和速度完全相同**，可根据需求自由选择！
+  </Accordion>
+
   <Accordion title="如何选择调用方式？">
     - 如果只需要 1:1 正方形图片，使用 **OpenAI 兼容模式**更简单，完美兼容现有代码
     - 如果需要特定纵横比（如 16:9 宽屏），使用 **Google 原生格式**
@@ -547,12 +689,6 @@ fi
     - 正方形：1:1
     - 纵向：9:16, 3:4, 2:3
     - 其他：5:4, 4:5
-  </Accordion>
-
-  <Accordion title="与 Preview 版本有什么区别？">
-    - **正式版** (`gemini-2.5-flash-image`)：稳定可靠，生产环境推荐
-    - **预览版** (`gemini-2.5-flash-image-preview`)：即将下线，建议迁移
-    - 价格、速度、质量完全相同，只需更新模型名称即可迁移
   </Accordion>
 
   <Accordion title="如何获取更好的生成效果？">
@@ -587,4 +723,21 @@ fi
     查看详细的价格表和计费说明
   </Card>
 </CardGroup>
+
+---
+
+## 📝 更新日志
+
+<AccordionGroup>
+  <Accordion title="2025-11-20：Nano Banana 2 上线">
+    **🚀 新增 Nano Banana 2（Gemini 3 Pro Image）**
+    - ✅ 新增 `gemini-3-pro-image-preview` 模型支持
+    - 🧠 基于最新 Gemini 3 架构，更强的推理能力和图像质量
+    - 🔄 完全兼容现有调用方式，只需修改模型名称
+    - 📚 完善文档，添加 Nano Banana 系列名称对照说明
+    - 💡 新增模型选择指南和迁移说明
+
+    **注意**：`gemini-2.5-flash-image` 继续稳定服务，可放心使用
+  </Accordion>
+</AccordionGroup>
 
