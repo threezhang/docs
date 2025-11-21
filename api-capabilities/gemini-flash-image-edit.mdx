@@ -1,17 +1,64 @@
 ---
-title: Gemini 2.5 Flash Image 图像编辑
-sidebarTitle: Gemini 编辑
-description: Google 正式版图像编辑模型，支持单图/多图智能编辑，自定义输出纵横比，按次计费 $0.025/次
+title: Gemini 图像编辑（Nano Banana 系列）
+sidebarTitle: Gemini 图像编辑
+description: Google 图像编辑模型，包括最新 Nano Banana 2（Gemini 3 Pro Image）和稳定版 Nano Banana（Gemini 2.5 Flash Image）
 icon: "paintbrush"
 ---
 
-## 模型简介
+<Note>
+**🚀 Nano Banana 2 现已上线！**
+Google 最新一代图像模型 **Nano Banana 2**（内部代号）正式发布！
 
-Gemini 2.5 Flash Image（`gemini-2.5-flash-image`）图像编辑功能支持对现有图片进行智能编辑和改造。可以上传单张或多张图片，通过文字描述实现元素添加、风格转换、图像合成等高级功能。
+- 🆕 **模型名称**：`gemini-3-pro-image-preview`
+- 🧠 **基于 Gemini 3**：更强的推理能力和图像质量
+- 🔄 **无缝切换**：与旧版本调用方式完全相同，只需更换模型名称
+- ✅ **旧版继续服务**：`gemini-2.5-flash-image` 继续稳定服务
+- 📐 **高分辨率支持**：支持 1K、2K、4K 分辨率（仅 Nano Banana 2）
+- 💰 **价格**：Nano Banana $0.025/次（便宜 37.5%），Nano Banana 2 $0.05/次（便宜 79%，官网 $0.24）
+</Note>
+
+## 模型概览
+
+Google 的 **Nano Banana** 系列是其图像生成技术的内部代号，目前提供两代产品：
+
+### 🆕 Nano Banana 2（最新）
+- **模型名称**：`gemini-3-pro-image-preview`
+- **版本**：Preview
+- **技术**：基于 Gemini 3 架构，推理能力更强
+- **特点**：最新技术，图像质量和细节更优
+- **分辨率**：支持 1K、2K、4K 分辨率
+- **价格**：$0.05/次（比官网 $0.24 便宜 79%）
+- **适用场景**：追求最佳质量、需要高分辨率、愿意尝试新功能
+
+### 🛡️ Nano Banana（稳定版）
+- **模型名称**：`gemini-2.5-flash-image`
+- **版本**：Stable
+- **技术**：基于 Gemini 2.5 架构
+- **特点**：稳定可靠，推荐生产环境使用
+- **分辨率**：固定 1K（1024px），不支持 imageSize 参数
+- **价格**：$0.025/次（比官网 $0.04 便宜 37.5%）
+- **适用场景**：生产环境、追求稳定性
+
+<Tip>
+💡 **名称对应关系**
+- **Nano Banana** = `gemini-2.5-flash-image`（稳定版）
+- **Nano Banana 2** = `gemini-3-pro-image-preview`（最新版）
+
+两代模型使用完全相同的调用方式，只需修改 `model` 参数即可切换！
+</Tip>
+
+## 🌟 共同特性
+
+两代模型都支持以下核心能力：
 
 <Note>
-**🎨 智能图像编辑**  
-上传图片 + 文字描述 = 精准编辑！支持多图合成、元素修改、风格转换等高级功能。
+**🎨 核心功能**
+- ✅ 支持 OpenAI 兼容格式和 Google 原生格式
+- 🎭 支持单图/多图智能编辑
+- 📐 支持自定义纵横比（16:9、9:16 等 10 种比例）
+- 🖼️ **Nano Banana 2 独享**：支持 1K、2K、4K 分辨率
+- ⚡ 平均 10 秒完成编辑
+- 💰 超值价格：Nano Banana $0.025/次（便宜 37.5%），Nano Banana 2 $0.05/次（便宜 79%）
 </Note>
 
 ## 🔀 两种调用方式
@@ -20,58 +67,57 @@ Gemini 2.5 Flash Image（`gemini-2.5-flash-image`）图像编辑功能支持对�
 |------|----------------|----------------|
 | **端点** | `/v1/chat/completions` | `/v1beta/models/gemini-2.5-flash-image:generateContent` |
 | **输出尺寸** | 默认比例 | 支持 10 种纵横比 |
+| **分辨率** | 固定 1K | Nano Banana 2 支持 1K/2K/4K，Nano Banana 固定 1K |
 | **多图支持** | ✅ 支持 | ✅ 支持 |
 | **兼容性** | 完美兼容 OpenAI SDK | 需要原生调用 |
 | **返回格式** | Base64 | Base64 |
 | **图片输入** | URL 或 Base64 | Base64（inline_data） |
 
-## 🌟 核心特性
+<Tip>
+💡 **如何选择？**
+- 如果只需要默认比例的图片，使用 **OpenAI 兼容模式**，简单快捷
+- 如果需要自定义纵横比（如 16:9、9:16）或高分辨率（2K/4K），使用 **Google 原生格式**
+</Tip>
 
-- **🔄 灵活编辑**：支持元素添加/删除、风格转换、图像合成等
-- **🎭 多图处理**：可同时处理多张图片，实现融合、拼接等效果
-- **📐 自定义尺寸**：Google 原生格式支持 10 种纵横比输出
-- **💰 超值价格**：$0.025/次，按次计费，价格透明
-- **🚀 快速处理**：平均 10 秒完成编辑
-- **📦 Base64 输出**：直接返回编辑后的 base64 图片数据
+## 📋 Nano Banana 系列对比
 
-## 📋 功能对比
+### 系列模型对比
 
-| 功能 | Gemini Flash Image | GPT-4o 编辑 | DALL·E 2 编辑 | Flux 编辑 |
-|------|-------------------|-------------|---------------|-----------|
-| 价格 | $0.025/次 | Token计费 | $0.018/张 | $0.035/次 |
-| 多图输入 | ✅ 支持 | ✅ 支持 | ❌ 不支持 | ❌ 原生不支持 |
-| 自定义尺寸 | ✅ 10种纵横比 | ❌ 固定 | ❌ 固定 | ✅ 部分支持 |
-| 响应速度 | ~10秒 | ~20秒 | 较慢 | 中等 |
-| 返回格式 | Base64 | Base64 | URL | URL |
-| 中文支持 | ✅ 完美 | ✅ 完美 | ❌ 需翻译 | ❌ 需翻译 |
+| 模型 | 代号 | 模型 ID | 版本 | 技术基础 | 分辨率 | 价格 | 推荐场景 |
+|------|------|---------|------|----------|--------|------|----------|
+| **Nano Banana 2** | 🆕 最新 | `gemini-3-pro-image-preview` | Preview | Gemini 3 | 1K/2K/4K | $0.05/次 | 追求最佳质量、需要高分辨率 |
+| **Nano Banana** | 🛡️ 稳定 | `gemini-2.5-flash-image` | Stable | Gemini 2.5 | 1K（固定） | $0.025/次 | 生产环境 |
 
-## 🚀 快速开始
+**共同特点**：速度相同（~10秒）、调用方式相同
 
-### 准备工作
+### 与其他模型对比
 
-<Steps>
-  <Step title="创建令牌">
-    登录 [老张API令牌管理](https://api.laozhang.ai/token) 创建**按次计费**类型的令牌
-    
-    ![令牌创建界面](/images/token-create-per-request.png)
-  </Step>
-  <Step title="选择计费方式">
-    **重要**：必须选择"按次计费"类型，不要选择"按量计费"
-  </Step>
-  <Step title="保存令牌">
-    复制生成的令牌，格式为 `sk-xxxxxx`
-  </Step>
-</Steps>
+| 模型 | 模型 ID | 计费方式 | 老张价格 | 官网价格 | 节省 | 分辨率 | 速度 |
+|------|---------|---------|---------|---------|------|--------|------|
+| **Nano Banana 2** | `gemini-3-pro-image-preview` | 按次 | $0.05/次 | $0.24/次 | 79% | 1K/2K/4K | ~10秒 |
+| **Nano Banana** | `gemini-2.5-flash-image` | 按次 | $0.025/次 | $0.04/次 | 37.5% | 1K（固定） | ~10秒 |
+| **GPT-4o 编辑** | `gpt-4o` | Token | - | - | - | - | ~20秒 |
+| **DALL·E 2 编辑** | `dall-e-2` | 按次 | - | $0.018/张 | - | 固定 | 较慢 |
 
 <Tip>
-💰 **超值价格优势**  
-- **老张API**：$0.025/次（比官网便宜 37.5%）
-- **官网价格**：$0.04/次  
+💰 **价格优势**  
+- **Nano Banana 2**：$0.05/次（老张API）vs $0.24/次（官网），便宜 79%
+- **Nano Banana**：$0.025/次（老张API）vs $0.04/次（官网），便宜 37.5%
 - **充值福利**：充值 100 美金 +10% 赠送
-- **汇率优势**：总体相当于官网 **7.3 折**
+- **汇率优势**：人民币支付更划算
+
+**Nano Banana 2 在老张 API 性价比超高！**
 </Tip>
 
 ## 方式一：OpenAI 兼容模式
+
+<Tip>
+**🔄 模型切换说明**
+- 使用 **Nano Banana 2**（最新）：`"model": "gemini-3-pro-image-preview"`
+- 使用 **Nano Banana**（稳定）：`"model": "gemini-2.5-flash-image"`
+
+两个模型使用完全相同的调用方式，只需修改 `model` 字段即可！
+</Tip>
 
 ### 单图编辑 - Curl
 
@@ -80,7 +126,7 @@ curl -X POST "https://api.laozhang.ai/v1/chat/completions" \
      -H "Authorization: Bearer sk-YOUR_API_KEY" \
      -H "Content-Type: application/json" \
      -d '{
-    "model": "gemini-2.5-flash-image",
+    "model": "gemini-3-pro-image-preview",
     "stream": false,
     "messages": [
         {
@@ -196,7 +242,22 @@ if match:
     print("✅ 合成图片已保存: merged.png")
 ```
 
-## 方式二：Google 原生格式（支持自定义纵横比）
+## 方式二：Google 原生格式（支持自定义纵横比 + 高分辨率）
+
+<Tip>
+**🔄 原生格式模型切换**
+在 Google 原生格式中，模型名称在 URL 路径中指定：
+- **Nano Banana 2**（最新）：`/v1beta/models/gemini-3-pro-image-preview:generateContent`
+- **Nano Banana**（稳定）：`/v1beta/models/gemini-2.5-flash-image:generateContent`
+</Tip>
+
+### 支持的分辨率
+
+<Tip>
+💡 **分辨率支持说明**
+- **Nano Banana 2**（`gemini-3-pro-image-preview`）：支持 1K、2K、4K 三种分辨率
+- **Nano Banana**（`gemini-2.5-flash-image`）：固定 1K（1024px），不支持 `imageSize` 参数
+</Tip>
 
 ### Python 完整工具脚本
 
