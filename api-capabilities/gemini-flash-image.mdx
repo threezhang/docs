@@ -480,6 +480,172 @@ print("✅ 图片已保存: output_mixed.png")
 
 </Accordion>
 
+<Note>
+💡 **完整演示脚本**
+
+想要一个串起来的完整脚本？我们准备了一个包含所有三个场景的完整 Python 脚本：
+
+<Accordion title="展开查看完整演示脚本（三个场景串联）">
+
+```python
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+"""
+Gemini Image Generation - 完整演示脚本
+包含三个场景：文生图、单图生图、多图混合
+"""
+
+import requests
+import base64
+import os
+from datetime import datetime
+
+# ========== 配置区 ==========
+API_KEY = "sk-YOUR_API_KEY"
+
+# 选择模型
+USE_NANO_BANANA_2 = True  # True=Nano Banana 2 (4K), False=Nano Banana (1K)
+
+if USE_NANO_BANANA_2:
+    API_URL = "https://api.laozhang.ai/v1beta/models/gemini-3-pro-image-preview:generateContent"
+else:
+    API_URL = "https://api.laozhang.ai/v1beta/models/gemini-2.5-flash-image:generateContent"
+# ============================
+
+
+def generate_text_to_image(prompt, aspect_ratio="16:9", image_size="2K"):
+    """场景1: 文生图"""
+    print(f"\n📸 文生图: {prompt}")
+    
+    payload = {
+        "contents": [{"parts": [{"text": prompt}]}],
+        "generationConfig": {
+            "responseModalities": ["IMAGE"],
+            "imageConfig": {"aspectRatio": aspect_ratio}
+        }
+    }
+    
+    if USE_NANO_BANANA_2 and image_size:
+        payload["generationConfig"]["imageConfig"]["imageSize"] = image_size
+    
+    return call_api(payload, f"text_{image_size or '1K'}")
+
+
+def generate_image_to_image(input_image, prompt, aspect_ratio="1:1", image_size="2K"):
+    """场景2: 单图生图"""
+    print(f"\n🎨 单图生图: {input_image}")
+    
+    with open(input_image, "rb") as f:
+        img_b64 = base64.b64encode(f.read()).decode("utf-8")
+    
+    payload = {
+        "contents": [{
+            "parts": [
+                {"text": prompt},
+                {"inline_data": {"mime_type": "image/jpeg", "data": img_b64}}
+            ]
+        }],
+        "generationConfig": {
+            "responseModalities": ["IMAGE"],
+            "imageConfig": {"aspectRatio": aspect_ratio}
+        }
+    }
+    
+    if USE_NANO_BANANA_2 and image_size:
+        payload["generationConfig"]["imageConfig"]["imageSize"] = image_size
+    
+    return call_api(payload, f"styled_{image_size or '1K'}")
+
+
+def generate_multi_image_mix(images, prompt, aspect_ratio="16:9", image_size="2K"):
+    """场景3: 多图混合"""
+    print(f"\n🖼️  多图混合: {len(images)} 张图片")
+    
+    parts = [{"text": prompt}]
+    for img in images:
+        with open(img, "rb") as f:
+            parts.append({"inline_data": {"mime_type": "image/jpeg", "data": base64.b64encode(f.read()).decode()}})
+    
+    payload = {
+        "contents": [{"parts": parts}],
+        "generationConfig": {
+            "responseModalities": ["IMAGE"],
+            "imageConfig": {"aspectRatio": aspect_ratio}
+        }
+    }
+    
+    if USE_NANO_BANANA_2 and image_size:
+        payload["generationConfig"]["imageConfig"]["imageSize"] = image_size
+    
+    return call_api(payload, f"mixed_{image_size or '1K'}")
+
+
+def call_api(payload, prefix):
+    """调用 API"""
+    headers = {"Authorization": f"Bearer {API_KEY}", "Content-Type": "application/json"}
+    
+    try:
+        response = requests.post(API_URL, headers=headers, json=payload, timeout=180)
+        result = response.json()
+        
+        image_data = result["candidates"][0]["content"]["parts"][0]["inlineData"]["data"]
+        filename = f"{prefix}_{datetime.now().strftime('%Y%m%d_%H%M%S')}.png"
+        
+        with open(filename, "wb") as f:
+            f.write(base64.b64decode(image_data))
+        
+        print(f"✅ 已保存: {filename}")
+        return True
+    except Exception as e:
+        print(f"❌ 错误: {e}")
+        return False
+
+
+# ========== 主程序 ==========
+def main():
+    print("🎨 Gemini 图片生成 - 完整演示")
+    
+    # 场景 1: 文生图
+    generate_text_to_image(
+        "A futuristic cyberpunk city at night, 4k",
+        aspect_ratio="16:9",
+        image_size="4K" if USE_NANO_BANANA_2 else None
+    )
+    
+    # 场景 2: 单图生图 (需要 test_cat.jpg)
+    if os.path.exists("test_cat.jpg"):
+        generate_image_to_image(
+            "test_cat.jpg",
+            "Van Gogh Starry Night style",
+            aspect_ratio="1:1",
+            image_size="2K" if USE_NANO_BANANA_2 else None
+        )
+    
+    # 场景 3: 多图混合 (需要 test_cat.jpg, test_apple.jpg)
+    if os.path.exists("test_cat.jpg") and os.path.exists("test_apple.jpg"):
+        generate_multi_image_mix(
+            ["test_cat.jpg", "test_apple.jpg"],
+            "A cat eating an apple",
+            aspect_ratio="16:9",
+            image_size="2K" if USE_NANO_BANANA_2 else None
+        )
+    
+    print("\n✅ 演示完成！")
+
+
+if __name__ == "__main__":
+    main()
+```
+
+**特点**：
+- ✅ 一个脚本包含所有三个场景
+- ✅ 自动处理 Nano Banana 和 Nano Banana 2 的差异
+- ✅ 简洁易读，只有 ~120 行代码
+- ✅ 修改 `USE_NANO_BANANA_2` 即可切换模型
+
+</Accordion>
+</Note>
+
 ### Bash 脚本示例
 
 <Accordion title="展开查看完整 Bash 脚本（支持纵横比配置）">
