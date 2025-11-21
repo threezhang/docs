@@ -14,11 +14,11 @@ Thumbs.db
 *.swo
 *~
 
-# Code Demo - 忽略生成的图片，但保留代码
-code-demo/**/*.png
-code-demo/**/*.jpg
-code-demo/**/*.jpeg
+# Code Demo - 忽略生成的图片，但保留测试图片和代码
+code-demo/**/result_*.png
 code-demo/**/__pycache__/
+!code-demo/**/test_*.jpg
+!code-demo/**/test_*.png
 
 # Node
 node_modules/

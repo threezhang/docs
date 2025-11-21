@@ -19,7 +19,7 @@ from datetime import datetime
 # 配置区
 # ============================================================
 
-API_KEY = "sk-9SOAt1Bkvcv97WDXE0464d8b0712406f86594f4968524fBd"  # 替换为你的 API Key
+API_KEY = "sk-"  # 替换为你的 API Key
 
 # 选择模型
 USE_NANO_BANANA_2 = True  # True=Nano Banana 2 (4K), False=Nano Banana (1K)
