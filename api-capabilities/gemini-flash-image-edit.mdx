@@ -259,6 +259,167 @@ if match:
 - **Nano Banana**（`gemini-2.5-flash-image`）：固定 1K（1024px），不支持 `imageSize` 参数
 </Tip>
 
+### Python 代码示例
+
+<Note>
+💡 **三个示例递进关系**  
+示例1编辑图片 → 示例2用它变换风格 → 示例3融合前两张图。逻辑清晰！
+</Note>
+
+<Accordion title="示例 1：单图编辑 → 添加元素生成第一张图">
+
+```python
+import requests
+import base64
+
+# ========== 配置 ==========
+API_KEY = "sk-YOUR_API_KEY"
+
+# Nano Banana 2 (支持 2K/4K)
+API_URL = "https://api.laozhang.ai/v1beta/models/gemini-3-pro-image-preview:generateContent"
+INPUT_IMAGE = "cat.jpg"  # 准备一张猫的图片
+PROMPT = "add a cute wizard hat on this cat's head"
+ASPECT_RATIO = "1:1"
+IMAGE_SIZE = "2K"  # Nano Banana 2: 1K, 2K, 4K
+# ============================
+
+# 读取并编码图片
+with open(INPUT_IMAGE, "rb") as f:
+    image_b64 = base64.b64encode(f.read()).decode("utf-8")
+
+headers = {"Authorization": f"Bearer {API_KEY}", "Content-Type": "application/json"}
+
+payload = {
+    "contents": [{
+        "parts": [
+            {"text": PROMPT},
+            {"inline_data": {"mime_type": "image/jpeg", "data": image_b64}}
+        ]
+    }],
+    "generationConfig": {
+        "responseModalities": ["IMAGE"],
+        "imageConfig": {
+            "aspectRatio": ASPECT_RATIO,
+            "imageSize": IMAGE_SIZE
+        }
+    }
+}
+
+response = requests.post(API_URL, headers=headers, json=payload, timeout=180)
+result = response.json()
+
+# 保存图片
+output_data = result["candidates"][0]["content"]["parts"][0]["inlineData"]["data"]
+with open("output.png", "wb") as f:
+    f.write(base64.b64decode(output_data))
+
+print("✅ 图片已保存: output.png")
+```
+
+</Accordion>
+
+<Accordion title="示例 2：风格转换 → 用第一张图生成第二张图">
+
+```python
+import requests
+import base64
+
+# ========== 配置 ==========
+API_KEY = "sk-YOUR_API_KEY"
+API_URL = "https://api.laozhang.ai/v1beta/models/gemini-3-pro-image-preview:generateContent"
+
+INPUT_IMAGE = "output.png"  # 使用示例1生成的图片
+PROMPT = "Transform this cat into Van Gogh Starry Night style oil painting"
+ASPECT_RATIO = "1:1"
+IMAGE_SIZE = "2K"  # Nano Banana 2: 1K, 2K, 4K
+# ============================
+
+# 读取并编码图片
+with open(INPUT_IMAGE, "rb") as f:
+    image_b64 = base64.b64encode(f.read()).decode("utf-8")
+
+headers = {"Authorization": f"Bearer {API_KEY}", "Content-Type": "application/json"}
+
+payload = {
+    "contents": [{
+        "parts": [
+            {"text": PROMPT},
+            {"inline_data": {"mime_type": "image/png", "data": image_b64}}
+        ]
+    }],
+    "generationConfig": {
+        "responseModalities": ["IMAGE"],
+        "imageConfig": {
+            "aspectRatio": ASPECT_RATIO,
+            "imageSize": IMAGE_SIZE
+        }
+    }
+}
+
+response = requests.post(API_URL, headers=headers, json=payload, timeout=180)
+result = response.json()
+
+# 保存图片
+output_data = result["candidates"][0]["content"]["parts"][0]["inlineData"]["data"]
+with open("output_styled.png", "wb") as f:
+    f.write(base64.b64decode(output_data))
+
+print("✅ 图片已保存: output_styled.png")
+```
+
+</Accordion>
+
+<Accordion title="示例 3：多图融合 → 用第一张和第二张生成第三张图">
+
+```python
+import requests
+import base64
+
+# ========== 配置 ==========
+API_KEY = "sk-YOUR_API_KEY"
+API_URL = "https://api.laozhang.ai/v1beta/models/gemini-3-pro-image-preview:generateContent"
+
+# 使用前面生成的两张图（示例1和示例2的输出）
+IMAGES = ["output.png", "output_styled.png"]
+PROMPT = "Combine these two cat images into a single artistic composition"
+ASPECT_RATIO = "16:9"
+IMAGE_SIZE = "2K"  # Nano Banana 2: 1K, 2K, 4K
+# ============================
+
+# 构建 parts: 文本 + 多张图片
+parts = [{"text": PROMPT}]
+
+for img_path in IMAGES:
+    with open(img_path, "rb") as f:
+        img_b64 = base64.b64encode(f.read()).decode("utf-8")
+    parts.append({"inline_data": {"mime_type": "image/png", "data": img_b64}})
+
+headers = {"Authorization": f"Bearer {API_KEY}", "Content-Type": "application/json"}
+
+payload = {
+    "contents": [{"parts": parts}],
+    "generationConfig": {
+        "responseModalities": ["IMAGE"],
+        "imageConfig": {
+            "aspectRatio": ASPECT_RATIO,
+            "imageSize": IMAGE_SIZE
+        }
+    }
+}
+
+response = requests.post(API_URL, headers=headers, json=payload, timeout=180)
+result = response.json()
+
+# 保存图片
+output_data = result["candidates"][0]["content"]["parts"][0]["inlineData"]["data"]
+with open("output_mixed.png", "wb") as f:
+    f.write(base64.b64decode(output_data))
+
+print("✅ 图片已保存: output_mixed.png")
+```
+
+</Accordion>
+
 ### Python 完整工具脚本
 
 <Accordion title="展开查看完整 Python 脚本（支持纵横比配置）">
@@ -494,397 +655,6 @@ if __name__ == "__main__":
 
 </Accordion>
 
-## 🎨 图改图示例详解
-
-### 场景 1：元素添加
-
-在现有图片中添加新的元素（动物、物体、人物等）。
-
-**Python 示例**
-
-```python
-import requests
-import base64
-
-API_KEY = "sk-YOUR_API_KEY"
-INPUT_IMAGE = "./dog.png"
-API_URL = "https://api.laozhang.ai/v1beta/models/gemini-2.5-flash-image:generateContent"
-
-# 读取并编码图片
-with open(INPUT_IMAGE, 'rb') as f:
-    img_base64 = base64.b64encode(f.read()).decode('utf-8')
-
-# 发送请求
-response = requests.post(
-    API_URL,
-    headers={
-        "Authorization": f"Bearer {API_KEY}",
-        "Content-Type": "application/json"
-    },
-    json={
-        "contents": [{
-            "parts": [
-                {"text": "add a cute cat sitting next to the dog"},
-                {"inline_data": {"mime_type": "image/png", "data": img_base64}}
-            ]
-        }],
-        "generationConfig": {
-            "responseModalities": ["IMAGE"],
-            "imageConfig": {"aspectRatio": "1:1"}
-        }
-    }
-)
-
-# 保存结果
-result = response.json()
-image_data = result['candidates'][0]['content']['parts'][0]['inlineData']['data']
-with open('output.png', 'wb') as f:
-    f.write(base64.b64decode(image_data))
-print("✅ 图片已保存: output.png")
-```
-
-**提示词技巧**
-
-<Tip>
-- 明确说明要添加什么元素："add a cat", "add a person"
-- 指定位置："next to the dog", "in the background", "on the left"
-- 保持风格一致："in the same style as the original image"
-</Tip>
-
----
-
-### 场景 2：背景替换
-
-更换图片的背景场景，同时保留主体对象。
-
-**Python 示例**
-
-```python
-import requests
-import base64
-
-API_KEY = "sk-YOUR_API_KEY"
-INPUT_IMAGE = "./dog.png"
-API_URL = "https://api.laozhang.ai/v1beta/models/gemini-2.5-flash-image:generateContent"
-
-# 读取并编码图片
-with open(INPUT_IMAGE, 'rb') as f:
-    img_base64 = base64.b64encode(f.read()).decode('utf-8')
-
-# 发送请求
-response = requests.post(
-    API_URL,
-    headers={
-        "Authorization": f"Bearer {API_KEY}",
-        "Content-Type": "application/json"
-    },
-    json={
-        "contents": [{
-            "parts": [
-                {"text": "change the background to a beautiful beach at sunset"},
-                {"inline_data": {"mime_type": "image/png", "data": img_base64}}
-            ]
-        }],
-        "generationConfig": {
-            "responseModalities": ["IMAGE"],
-            "imageConfig": {"aspectRatio": "1:1"}
-        }
-    }
-)
-
-# 保存结果
-result = response.json()
-image_data = result['candidates'][0]['content']['parts'][0]['inlineData']['data']
-with open('output.png', 'wb') as f:
-    f.write(base64.b64decode(image_data))
-print("✅ 图片已保存: output.png")
-```
-
-**提示词技巧**
-
-<Tip>
-- 使用 "change background to..." 明确表达背景替换意图
-- 描述新背景的具体场景："beach at sunset", "snowy mountain", "modern office"
-- 保留主体："keep the dog/person in focus"
-</Tip>
-
----
-
-### 场景 3：风格转换
-
-将照片转换为不同的艺术风格（油画、水彩、卡通等）。
-
-**Python 示例**
-
-```python
-import requests
-import base64
-
-API_KEY = "sk-YOUR_API_KEY"
-INPUT_IMAGE = "./dog.png"
-API_URL = "https://api.laozhang.ai/v1beta/models/gemini-2.5-flash-image:generateContent"
-
-# 读取并编码图片
-with open(INPUT_IMAGE, 'rb') as f:
-    img_base64 = base64.b64encode(f.read()).decode('utf-8')
-
-# 发送请求
-response = requests.post(
-    API_URL,
-    headers={
-        "Authorization": f"Bearer {API_KEY}",
-        "Content-Type": "application/json"
-    },
-    json={
-        "contents": [{
-            "parts": [
-                {"text": "convert this image to oil painting style"},
-                {"inline_data": {"mime_type": "image/png", "data": img_base64}}
-            ]
-        }],
-        "generationConfig": {
-            "responseModalities": ["IMAGE"],
-            "imageConfig": {"aspectRatio": "1:1"}
-        }
-    }
-)
-
-# 保存结果
-result = response.json()
-image_data = result['candidates'][0]['content']['parts'][0]['inlineData']['data']
-with open('output.png', 'wb') as f:
-    f.write(base64.b64decode(image_data))
-print("✅ 图片已保存: output.png")
-```
-
-**常见艺术风格**
-
-| 风格 | 提示词 |
-|------|-------|
-| 油画 | "convert to oil painting style" |
-| 水彩画 | "convert to watercolor painting style" |
-| 卡通风格 | "convert to cartoon style" |
-| 素描 | "convert to pencil sketch style" |
-| 赛博朋克 | "convert to cyberpunk style" |
-| 印象派 | "convert to impressionist painting style" |
-
----
-
-### 场景 4：元素修改
-
-修改图片中现有元素的属性（颜色、大小、形状等）。
-
-**Python 示例**
-
-```python
-import requests
-import base64
-
-API_KEY = "sk-YOUR_API_KEY"
-INPUT_IMAGE = "./car.png"
-API_URL = "https://api.laozhang.ai/v1beta/models/gemini-2.5-flash-image:generateContent"
-
-# 读取并编码图片
-with open(INPUT_IMAGE, 'rb') as f:
-    img_base64 = base64.b64encode(f.read()).decode('utf-8')
-
-# 发送请求
-response = requests.post(
-    API_URL,
-    headers={
-        "Authorization": f"Bearer {API_KEY}",
-        "Content-Type": "application/json"
-    },
-    json={
-        "contents": [{
-            "parts": [
-                {"text": "change the car color to red, keep everything else the same"},
-                {"inline_data": {"mime_type": "image/png", "data": img_base64}}
-            ]
-        }],
-        "generationConfig": {
-            "responseModalities": ["IMAGE"],
-            "imageConfig": {"aspectRatio": "1:1"}
-        }
-    }
-)
-
-# 保存结果
-result = response.json()
-image_data = result['candidates'][0]['content']['parts'][0]['inlineData']['data']
-with open('output.png', 'wb') as f:
-    f.write(base64.b64decode(image_data))
-print("✅ 图片已保存: output.png")
-```
-
-**提示词技巧**
-
-<Tip>
-- 明确指定要修改的对象："change the car color", "make the sky darker"
-- 强调保持其他元素不变："keep everything else the same"
-- 指定具体属性："to red", "to larger size", "to round shape"
-</Tip>
-
----
-
-## ⚙️ 参数配置详解
-
-### 支持的纵横比（Aspect Ratio）
-
-所有 10 种纵横比都已经过**实际测试验证**，完全可用：
-
-| 类型 | 纵横比 | 适用场景 | 测试结果 |
-|------|-------|---------|---------|
-| **超宽屏** | `21:9` | 电影海报、横幅广告 | ✅ 已验证 |
-| **宽屏** | `16:9` | 社交媒体横图、视频封面 | ✅ 已验证 |
-| **标准横向** | `4:3` | 传统照片、演示文稿 | ✅ 已验证 |
-| **横向** | `3:2` | 单反相机标准比例 | ✅ 已验证 |
-| **正方形** | `1:1` | Instagram、头像图片 | ✅ 已验证 |
-| **竖屏** | `9:16` | 手机壁纸、竖屏视频 | ✅ 已验证 |
-| **标准纵向** | `3:4` | 竖版海报 | ✅ 已验证 |
-| **纵向** | `2:3` | 书籍封面、明信片 | ✅ 已验证 |
-| **其他** | `5:4`, `4:5` | 特殊需求 | ✅ 已验证 |
-
-<Note>
-**实测数据**
-- 测试环境：使用真实 API 进行测试
-- 输出格式：PNG（约 1-2MB）
-- 响应时间：平均 8-15 秒
-- 成功率：100%（所有纵横比都正常工作）
-</Note>
-
-### 支持的图片格式（MIME Type）
-
-| 格式 | MIME Type | 文件扩展名 | 建议用途 | 测试结果 |
-|------|-----------|-----------|---------|---------|
-| PNG | `image/png` | `.png` | 需要透明背景、高质量图片 | ✅ 已验证 |
-| JPEG | `image/jpeg` | `.jpg`, `.jpeg` | 照片、文件大小敏感场景 | ✅ 已验证 |
-| WebP | `image/webp` | `.webp` | 现代 Web 应用 | ⚠️ 支持但未测试 |
-
-**实测对比**
-
-```python
-# PNG 格式 - 原始大小 1.6MB
-{"inline_data": {"mime_type": "image/png", "data": "..."}}
-# 输出: 约 1.6MB
-
-# JPEG 格式 - 原始大小 217KB（压缩后）
-{"inline_data": {"mime_type": "image/jpeg", "data": "..."}}
-# 输出: 约 1.7MB（API 输出统一为 PNG）
-```
-
-<Tip>
-**格式选择建议**
-- **上传 JPEG**：可显著减少 base64 数据大小，加快上传速度
-- **输出固定 PNG**：API 始终返回 PNG 格式，无需担心格式转换
-- **透明背景**：必须使用 PNG 格式作为输入
-</Tip>
-
-### 图片大小限制
-
-| 限制项 | 推荐值 | 最大值 | 说明 |
-|-------|-------|--------|------|
-| 文件大小 | ≤ 5MB | ≤ 10MB | 超大文件会增加处理时间 |
-| 图片尺寸 | 1024-2048px | 4096px | 建议使用常规尺寸 |
-| Base64 长度 | - | ~14MB | 编码后数据量约为原文件 1.37 倍 |
-
-**实测示例**
-
-```python
-# 测试结果
-原始 PNG: 1.6MB → Base64: ~2.2MB → 处理时间: 12 秒
-压缩 JPEG: 217KB → Base64: ~300KB → 处理时间: 10 秒
-```
-
-### 完整参数示例
-
-```python
-payload = {
-    "contents": [{
-        "parts": [
-            {"text": "your prompt here"},
-            {
-                "inline_data": {
-                    "mime_type": "image/png",  # 或 "image/jpeg"
-                    "data": img_base64
-                }
-            }
-        ]
-    }],
-    "generationConfig": {
-        "responseModalities": ["IMAGE"],
-        "imageConfig": {
-            "aspectRatio": "16:9"  # 10 种比例任选
-        }
-    }
-}
-```
-
----
-
-## 🎯 应用场景
-
-<CardGroup cols={2}>
-  <Card title="元素添加" icon="plus">
-    在现有图片中添加新元素（人物、动物、物体等）
-  </Card>
-  <Card title="风格转换" icon="wand-magic-sparkles">
-    将图片转换为不同艺术风格（油画、水彩、卡通等）
-  </Card>
-  <Card title="多图合成" icon="layer-group">
-    将多张图片融合成一张创意作品
-  </Card>
-  <Card title="场景改造" icon="landscape">
-    改变图片背景、光线、季节等环境因素
-  </Card>
-  <Card title="商品展示" icon="shopping-bag">
-    将商品图片放入不同场景中展示
-  </Card>
-  <Card title="创意设计" icon="lightbulb">
-    为设计师提供快速原型和创意灵感
-  </Card>
-</CardGroup>
-
-## 💡 最佳实践
-
-### 编辑提示词技巧
-
-<Steps>
-  <Step title="保留原图">
-    如果想保留原图大部分内容，明确说明"keep the original composition"或"保持原有结构"
-  </Step>
-  <Step title="具体描述">
-    详细描述要添加或修改的元素，包括位置、大小、风格等
-  </Step>
-  <Step title="风格一致">
-    如果需要保持风格一致，说明"in the same style as the original image"
-  </Step>
-  <Step title="多图处理">
-    处理多图时，清楚说明如何组合（"merge"、"combine"、"place side by side"等）
-  </Step>
-</Steps>
-
-### 纵横比选择建议
-
-| 原图比例 | 建议输出比例 | 说明 |
-|---------|-------------|------|
-| 横向照片 | 16:9 或 4:3 | 适合横向展示场景 |
-| 竖向照片 | 9:16 或 3:4 | 适合手机壁纸、海报 |
-| 正方形 | 1:1 | 适合社交媒体 |
-| 不确定 | 1:1 | 通用选择 |
-
-## ❓ 常见问题
-
-### Q1: Nano Banana 和 Nano Banana 2 有什么区别？
-
-| 特性 | Nano Banana | Nano Banana 2 |
-|------|-------------|---------------|
-| **模型 ID** | `gemini-2.5-flash-image` | `gemini-3-pro-image-preview` |
-| **版本** | Stable | Preview |
-| **技术基础** | Gemini 2.5 | Gemini 3 |
-| **分辨率** | 固定 1K（1024px） | 1K/2K/4K |
-| **价格** | \$0.025/次 | \$0.05/次 |
-| **Thinking Mode** | ❌ 无 | ✅ 有（内置推理） |
 | **Search Grounding** | ❌ 无 | ✅ 有 |
 | **多图支持** | ✅ 有（最多3张） | ✅ 有（最多14张） |
 | **速度** | ~10秒 | ~10秒 |
