@@ -1,17 +1,64 @@
 ---
-title: Gemini 2.5 Flash Image Editing
-sidebarTitle: Gemini Edit
-description: Google's official image editing model supporting single/multi-image editing with custom aspect ratios, $0.025 per edit
+title: Gemini Image Editing (Nano Banana Series)
+sidebarTitle: Gemini Image Editing
+description: Google image editing models, including the latest Nano Banana 2 (Gemini 3 Pro Image) and stable Nano Banana (Gemini 2.5 Flash Image)
 icon: "paintbrush"
 ---
 
+<Note>
+**🚀 Nano Banana 2 is Now Live!**
+Google's latest generation image model **Nano Banana 2** (internal code name) is officially released!
+
+- 🆕 **Model Name**: `gemini-3-pro-image-preview`
+- 🧠 **Powered by Gemini 3**: Stronger reasoning capabilities and image quality
+- 🔄 **Seamless Switch**: Same calling method as the old version, just change the model name
+- ✅ **Legacy Supported**: `gemini-2.5-flash-image` continues to serve stably
+- 📐 **High-Res Support**: Supports 1K, 2K, 4K resolutions (Nano Banana 2 only)
+- 💰 **Pricing**: Nano Banana $0.025/edit (37.5% off), Nano Banana 2 $0.05/edit (79% off official $0.24)
+</Note>
+
 ## Model Overview
 
-Gemini 2.5 Flash Image (`gemini-2.5-flash-image`) editing feature supports intelligent editing and transformation of existing images. Upload single or multiple images and use text descriptions to achieve advanced functions like element addition, style conversion, and image composition.
+Google's **Nano Banana** series is the internal code name for its image generation technology, currently offering two generations:
+
+### 🆕 Nano Banana 2 (Latest)
+- **Model Name**: `gemini-3-pro-image-preview`
+- **Version**: Preview
+- **Technology**: Based on Gemini 3 architecture, stronger reasoning
+- **Features**: Latest technology, superior image quality and details
+- **Resolution**: Supports 1K, 2K, 4K resolutions
+- **Price**: $0.05/edit (79% cheaper than official $0.24)
+- **Use Case**: Best quality, high resolution, willing to try new features
+
+### 🛡️ Nano Banana (Stable)
+- **Model Name**: `gemini-2.5-flash-image`
+- **Version**: Stable
+- **Technology**: Based on Gemini 2.5 architecture
+- **Features**: Stable and reliable, production recommended
+- **Resolution**: Fixed 1K (1024px), does not support imageSize parameter
+- **Price**: $0.025/edit (37.5% cheaper than official $0.04)
+- **Use Case**: Production environments requiring stability
+
+<Tip>
+💡 **Name Mapping**
+- **Nano Banana** = `gemini-2.5-flash-image` (Stable)
+- **Nano Banana 2** = `gemini-3-pro-image-preview` (Latest)
+
+Both models use the exact same calling method, just change the `model` parameter to switch!
+</Tip>
+
+## 🌟 Common Features
+
+Both generations support the following core capabilities:
 
 <Note>
-**🎨 Intelligent Image Editing**  
-Upload image + text description = precise editing! Supports multi-image composition, element modification, style conversion, and more.
+**🎨 Core Functions**
+- ✅ Supports both OpenAI-compatible format and Google native format
+- 🎭 Supports single/multi-image intelligent editing
+- 📐 Supports custom aspect ratios (16:9, 9:16, and 10 ratios)
+- 🖼️ **Nano Banana 2 Exclusive**: Supports 1K, 2K, 4K resolutions
+- ⚡ Completes editing in ~10 seconds on average
+- 💰 Great value: Nano Banana $0.025/edit (37.5% off), Nano Banana 2 $0.05/edit (79% off)
 </Note>
 
 ## 🔀 Two Calling Methods
@@ -20,30 +67,47 @@ Upload image + text description = precise editing! Supports multi-image composit
 |---------|------------------------|---------------------|
 | **Endpoint** | `/v1/chat/completions` | `/v1beta/models/gemini-2.5-flash-image:generateContent` |
 | **Output Size** | Default ratio | Supports 10 aspect ratios |
+| **Resolution** | Fixed 1K | Nano Banana 2 supports 1K/2K/4K, Nano Banana fixed 1K |
 | **Multi-image** | ✅ Supported | ✅ Supported |
 | **Compatibility** | Perfect OpenAI SDK compatibility | Requires native calling |
 | **Return Format** | Base64 | Base64 |
 | **Image Input** | URL or Base64 | Base64 (inline_data) |
 
-## 🌟 Key Features
+<Tip>
+💡 **How to Choose?**
+- If you only need default ratio images, use **OpenAI Compatible Mode** for simplicity
+- If you need custom aspect ratios (like 16:9, 9:16) or high resolution (2K/4K), use **Google Native Format**
+</Tip>
 
-- **🔄 Flexible Editing**: Supports element addition/removal, style conversion, image composition, etc.
-- **🎭 Multi-image Processing**: Can process multiple images simultaneously for fusion, splicing, and other effects
-- **📐 Custom Dimensions**: Google native format supports 10 aspect ratio outputs
-- **💰 Great Value**: $0.025/edit, per-request billing, transparent pricing
-- **🚀 Fast Processing**: Completes editing in ~10 seconds on average
-- **📦 Base64 Output**: Returns edited base64 image data directly
+## 📋 Nano Banana Series Comparison
 
-## 📋 Feature Comparison
+### Series Model Comparison
 
-| Feature | Gemini Flash Image | GPT-4o Edit | DALL·E 2 Edit | Flux Edit |
-|---------|-------------------|-------------|---------------|-----------|
-| Price | $0.025/edit | Token-based | $0.018/image | $0.035/edit |
-| Multi-image Input | ✅ Supported | ✅ Supported | ❌ Not supported | ❌ Native not supported |
-| Custom Dimensions | ✅ 10 ratios | ❌ Fixed | ❌ Fixed | ✅ Partial support |
-| Response Speed | ~10s | ~20s | Slower | Medium |
-| Return Format | Base64 | Base64 | URL | URL |
-| Chinese Support | ✅ Perfect | ✅ Perfect | ❌ Translation needed | ❌ Translation needed |
+| Model | Code Name | Model ID | Version | Tech Base | Resolution | Price | Recommended Scenario |
+|-------|-----------|----------|---------|-----------|------------|-------|----------------------|
+| **Nano Banana 2** | 🆕 Latest | `gemini-3-pro-image-preview` | Preview | Gemini 3 | 1K/2K/4K | $0.05/edit | Best quality, high resolution needed |
+| **Nano Banana** | 🛡️ Stable | `gemini-2.5-flash-image` | Stable | Gemini 2.5 | 1K (Fixed) | $0.025/edit | Production environment |
+
+**Common Features**: Same speed (~10s), same calling method
+
+### Comparison with Other Models
+
+| Model | Model ID | Billing | LaoZhang Price | Official Price | Savings | Resolution | Speed |
+|-------|----------|---------|---------------|----------------|---------|------------|-------|
+| **Nano Banana 2** | `gemini-3-pro-image-preview` | Per Request | $0.05/edit | $0.24/edit | 79% | 1K/2K/4K | ~10s |
+| **Nano Banana** | `gemini-2.5-flash-image` | Per Request | $0.025/edit | $0.04/edit | 37.5% | 1K (Fixed) | ~10s |
+| **GPT-4o Edit** | `gpt-4o` | Token | - | - | - | - | ~20s |
+| **DALL·E 2 Edit** | `dall-e-2` | Per Request | - | $0.018/image | - | Fixed | Slower |
+
+<Tip>
+💰 **Pricing Advantage**  
+- **Nano Banana 2**: $0.05/edit (LaoZhang API) vs $0.24/edit (Official), 79% cheaper
+- **Nano Banana**: $0.025/edit (LaoZhang API) vs $0.04/edit (Official), 37.5% cheaper
+- **Top-up Bonus**: Top up $100 get +10% bonus
+- **Exchange Rate Advantage**: RMB payment even more cost-effective
+
+**Nano Banana 2 has exceptional value on LaoZhang API!**
+</Tip>
 
 ## 🚀 Quick Start
 
@@ -486,44 +550,130 @@ if __name__ == "__main__":
 
 ## ❓ FAQ
 
-<AccordionGroup>
-  <Accordion title="What image formats are supported?">
-    Supports common image formats:
-    - JPG/JPEG
-    - PNG
-    - WebP
-    - GIF (static)
-    
-    Recommend using JPG or PNG format for best results.
-  </Accordion>
+### Q1: What's the difference between Nano Banana and Nano Banana 2?
 
-  <Accordion title="Is there a size limit?">
-    - **Recommended size**: Single image ≤ 5MB
-    - **Maximum size**: ≤ 10MB
-    - Oversized images increase processing time, recommend compressing before upload
-  </Accordion>
+| Feature | Nano Banana | Nano Banana 2 |
+|---------|-------------|---------------|
+| **Model ID** | `gemini-2.5-flash-image` | `gemini-3-pro-image-preview` |
+| **Version** | Stable | Preview |
+| **Tech Base** | Gemini 2.5 | Gemini 3 |
+| **Resolution** | Fixed 1K (1024px) | 1K/2K/4K |
+| **Price** | $0.025/edit | $0.05/edit |
+| **Thinking Mode** | ❌ No | ✅ Yes (built-in) |
+| **Search Grounding** | ❌ No | ✅ Yes |
+| **Multi-image** | ✅ Yes (up to 3) | ✅ Yes (up to 14) |
+| **Speed** | ~10s | ~10s |
+| **Recommended For** | Production, stability priority | Best quality, high resolution |
 
-  <Accordion title="How many images can be processed at once?">
-    - **OpenAI Compatible Mode**: Supports multiple images (recommend ≤ 4)
-    - **Google Native Format**: Supports multiple images (recommend ≤ 4)
-    - Too many images affect generation quality and processing time
-  </Accordion>
+### Q2: Which model should I choose?
 
-  <Accordion title="What if results are unsatisfactory?">
-    Try:
-    1. **Optimize Prompt**: Provide more detailed, specific descriptions
-    2. **Adjust Aspect Ratio**: Choose more suitable output dimensions
-    3. **Step-by-step Processing**: Complex edits can be done in multiple steps
-    4. **Multiple Attempts**: AI generation has randomness, try multiple times
-  </Accordion>
+**Choose Nano Banana** (`gemini-2.5-flash-image`) if:
+- ✅ You need production stability
+- ✅ 1K resolution is sufficient
+- ✅ You want the lowest cost ($0.025/edit)
 
-  <Accordion title="How to ensure consistent style after editing?">
-    Clearly state in the prompt:
-    - "in the same style as the original image"
-    - "keep the original lighting and color tone"
-    - "seamlessly integrate"
-  </Accordion>
-</AccordionGroup>
+**Choose Nano Banana 2** (`gemini-3-pro-image-preview`) if:
+- ✅ You need high resolution (2K/4K)
+- ✅ You want the best image quality
+- ✅ You need advanced features (Thinking Mode, Search Grounding)
+- ✅ You're willing to use a preview version
+
+### Q3: How do I switch between models?
+
+**Very simple! Just change the model name:**
+
+**OpenAI Compatible Mode**:
+```python
+# Nano Banana (stable)
+model="gemini-2.5-flash-image"
+
+# Nano Banana 2 (latest)
+model="gemini-3-pro-image-preview"
+```
+
+**Google Native Format**:
+```bash
+# Nano Banana (stable)
+https://api.laozhang.ai/v1beta/models/gemini-2.5-flash-image:generateContent
+
+# Nano Banana 2 (latest)
+https://api.laozhang.ai/v1beta/models/gemini-3-pro-image-preview:generateContent
+```
+
+### Q4: How do I use 4K resolution?
+
+**4K is only supported by Nano Banana 2**, use Google native format and add the `imageSize` parameter:
+
+```json
+{
+  "generationConfig": {
+    "responseModalities": ["IMAGE"],
+    "imageConfig": {
+      "aspectRatio": "16:9",
+      "imageSize": "4K"  // Must be uppercase "K"
+    }
+  }
+}
+```
+
+**Important**: Must use uppercase "K" (1K, 2K, 4K), lowercase (1k) will be rejected.
+
+### Q5: What image formats are supported?
+
+Supports common image formats:
+- JPG/JPEG
+- PNG
+- WebP
+- GIF (static)
+
+Recommend using JPG or PNG format for best results.
+
+### Q6: Is there a size limit?
+
+- **Recommended size**: Single image ≤ 5MB
+- **Maximum size**: ≤ 10MB
+- Oversized images increase processing time, recommend compressing before upload
+
+### Q7: How many images can be processed at once?
+
+- **Nano Banana**: Supports multiple images (recommend ≤ 3)
+- **Nano Banana 2**: Supports multiple images (up to 14, recommend ≤ 4)
+- Too many images affect generation quality and processing time
+
+### Q8: Why is Nano Banana 2 so much cheaper on LaoZhang API?
+
+| Model | LaoZhang API | Official | Savings |
+|-------|--------------|----------|---------|
+| **Nano Banana 2** | $0.05/edit | $0.24/edit | **79%** |
+| **Nano Banana** | $0.025/edit | $0.04/edit | 37.5% |
+
+**Nano Banana 2 has exceptional value on LaoZhang API!** 79% cheaper than official pricing, plus top-up bonuses and exchange rate advantages.
+
+## 📝 Changelog
+
+### 2025-01-XX
+- 🆕 Added Nano Banana 2 (`gemini-3-pro-image-preview`) support
+- 🎨 Added 4K resolution support (Nano Banana 2 only)
+- 🧠 Added Thinking Mode (built-in reasoning, enabled by default)
+- 🌐 Added Google Search Grounding support
+- 🖼️ Expanded multi-image support to 14 images (Nano Banana 2)
+- 💰 Updated pricing: Nano Banana 2 $0.05/edit (79% off official $0.24)
+- 📊 Added complete resolution table
+- 🔧 Updated model comparison and switching instructions
+
+### 2024-12-XX
+- 🎉 Initial release of Nano Banana (`gemini-2.5-flash-image`)
+- 🎨 Support for 10 aspect ratios
+- 💰 Pricing: $0.025/edit (37.5% off official)
+
+---
+
+<Tip>
+💡 **Need Help?**  
+- 📖 [View Image Generation Documentation](/en/api-capabilities/gemini-flash-image)
+- 💬 Join our community for support
+- 🔑 [Get your API key](https://api.laozhang.ai/token)
+</Tip>
 
 ## 🔗 Related Resources
 
