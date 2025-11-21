@@ -188,7 +188,14 @@ if match:
     print("✅ Image saved: output.png")
 ```
 
-## Method 2: Google Native Format (Custom Aspect Ratios)
+## Method 2: Google Native Format (Custom Aspect Ratios + High Resolution)
+
+<Tip>
+**🔄 Model Switching in Native Format**
+In Google native format, the model name is specified in the URL path:
+- **Nano Banana 2** (Latest): `/v1beta/models/gemini-3-pro-image-preview:generateContent`
+- **Nano Banana** (Stable): `/v1beta/models/gemini-2.5-flash-image:generateContent`
+</Tip>
 
 ### Supported Aspect Ratios
 
@@ -199,268 +206,370 @@ if match:
 | **Portrait** | 9:16 (vertical), 3:4, 2:3 |
 | **Other** | 5:4, 4:5 |
 
-### Simple Curl Example
+### Supported Resolutions
+
+<Tip>
+💡 **Resolution Support**
+- **Nano Banana 2** (`gemini-3-pro-image-preview`): Supports 1K, 2K, 4K resolutions
+- **Nano Banana** (`gemini-2.5-flash-image`): Fixed 1K (1024px), does not support `imageSize` parameter
+</Tip>
+
+**Nano Banana 2 Resolution Options**:
+
+| Aspect Ratio | 1K Resolution | 2K Resolution | 4K Resolution |
+|--------------|---------------|---------------|---------------|
+| **1:1** | 1024×1024 | 2048×2048 | 4096×4096 |
+| **16:9** | 1376×768 | 2752×1536 | 5504×3072 |
+| **9:16** | 768×1376 | 1536×2752 | 3072×5504 |
+| **4:3** | 1200×896 | 2400×1792 | 4800×3584 |
+| **3:4** | 896×1200 | 1792×2400 | 3584×4800 |
+| **21:9** | 1584×672 | 3168×1344 | 6336×2688 |
+| **3:2** | 1248×832 | 2496×1664 | 4992×3328 |
+| **2:3** | 832×1248 | 1664×2496 | 3328×4992 |
+| **5:4** | 1152×896 | 2304×1792 | 4608×3584 |
+| **4:5** | 896×1152 | 1792×2304 | 3584×4608 |
+
+<Tip>
+💡 **Resolution Selection Guide**
+- **1K**: Suitable for web display, social media, quick preview
+- **2K**: Suitable for high-quality printing, professional display
+- **4K**: Suitable for large-format printing, professional design, ultimate detail
+</Tip>
+
+### Complete Curl Example (Text-to-Image 4K)
 
 ```bash
-curl -s -X POST "https://api.laozhang.ai/v1beta/models/gemini-2.5-flash-image:generateContent" \
+#!/bin/bash
+
+# 1. Set API Key
+export API_KEY="sk-YOUR_API_KEY"
+
+# 2. Send request (Using Nano Banana 2 to generate 4K image)
+curl -s -X POST "https://api.laozhang.ai/v1beta/models/gemini-3-pro-image-preview:generateContent" \
   -H "Authorization: Bearer $API_KEY" \
   -H "Content-Type: application/json" \
   -d '{
     "contents": [{
       "parts": [
-        {"text": "a beautiful sunset over mountains"}
+        {"text": "A futuristic city skyline at sunset, high detailed, 4k"}
       ]
     }],
     "generationConfig": {
       "responseModalities": ["IMAGE"],
       "imageConfig": {
-        "aspectRatio": "16:9"
+        "aspectRatio": "16:9",
+        "imageSize": "4K"
       }
     }
   }' \
   | jq -r '.candidates[0].content.parts[0].inlineData.data' \
-  | base64 --decode > output.png
+  | base64 --decode > output_4k.png
+
+echo "✅ 4K image saved: output_4k.png"
 ```
 
-### Complete Python Tool Script
+<Tip>
+💡 **Model Switching**
+- Use **Nano Banana 2** (supports 4K): Change URL to `gemini-3-pro-image-preview`, add `"imageSize": "4K"`
+- Use **Nano Banana** (stable 1K): Change URL to `gemini-2.5-flash-image`, remove `imageSize` parameter
+</Tip>
 
-<Accordion title="Expand to view complete Python script (with aspect ratio support)">
+### Complete Python Examples
+
+We provide three complete, production-ready Python scripts:
+
+#### 1️⃣ Text-to-Image (Nano Banana 2, 4K)
 
 ```python
-#!/usr/bin/env python3
-# -*- coding: utf-8 -*-
-
-"""
-Gemini Image Generation Tool - Python Version
-Generate images using Google Gemini 2.5 Flash Image model with custom aspect ratios
-
-Supported aspect ratios:
-- Landscape: 21:9, 16:9, 4:3, 3:2
-- Square: 1:1
-- Portrait: 9:16, 3:4, 2:3
-- Other: 5:4, 4:5
-"""
-
 import requests
 import base64
 import os
 import datetime
-from typing import Optional, Tuple
 
-class GeminiImageGenerator:
-    """Gemini Image Generator"""
+# --- API Key Configuration ---
+API_KEY = "sk-YOUR_API_KEY"  # Replace with your API Key
 
-    # Supported aspect ratios
-    SUPPORTED_ASPECT_RATIOS = [
-        "21:9", "16:9", "4:3", "3:2", "1:1",
-        "9:16", "3:4", "2:3", "5:4", "4:5"
-    ]
+# --- Parameters ---
+PROMPT = "A futuristic city skyline at sunset, high detailed, 4k"
+ASPECT_RATIO = "16:9"
+IMAGE_SIZE = "4K"  # Only Nano Banana 2 supports 1K, 2K, 4K
+OUTPUT_DIR = "."  # Image save directory
 
-    def __init__(self, api_key: str, api_url: str = "https://api.laozhang.ai/v1beta/models/gemini-2.5-flash-image:generateContent"):
-        """
-        Initialize image generator
+# --- API Endpoint (Nano Banana 2) ---
+API_URL = "https://api.laozhang.ai/v1beta/models/gemini-3-pro-image-preview:generateContent"
 
-        Args:
-            api_key: API key
-            api_url: API URL (defaults to Google native Gemini API)
-        """
-        self.api_key = api_key
-        self.api_url = api_url
-        self.headers = {
-            "Content-Type": "application/json",
-            "Authorization": f"Bearer {api_key}"
-        }
-
-    def generate_image(self, prompt: str, aspect_ratio: Optional[str] = "1:1",
-                      output_dir: str = ".") -> Tuple[bool, str]:
-        """
-        Generate image and save locally
-
-        Args:
-            prompt: Image description (prompt)
-            aspect_ratio: Aspect ratio like "16:9", "1:1" etc (default 1:1)
-            output_dir: Output directory (default current directory)
-
-        Returns:
-            (success, message)
-        """
-        print(f"🚀 Starting image generation...")
-        print(f"📝 Prompt: {prompt}")
-        print(f"📐 Aspect Ratio: {aspect_ratio}")
-
-        # Validate aspect ratio
-        if aspect_ratio and aspect_ratio not in self.SUPPORTED_ASPECT_RATIOS:
-            return False, f"Unsupported aspect ratio {aspect_ratio}. Supported: {', '.join(self.SUPPORTED_ASPECT_RATIOS)}"
-
-        # Generate filename
-        timestamp = datetime.datetime.now().strftime("%Y%m%d_%H%M%S")
-        output_file = os.path.join(output_dir, f"gemini_{timestamp}.png")
-
-        try:
-            # Build request payload
-            payload = {
-                "contents": [{
-                    "parts": [{"text": prompt}]
-                }]
+def generate_text_to_image(api_key, prompt, aspect_ratio, image_size, output_dir, api_url):
+    headers = {
+        "Content-Type": "application/json",
+        "Authorization": f"Bearer {api_key}"
+    }
+    payload = {
+        "contents": [{"parts": [{"text": prompt}]}],
+        "generationConfig": {
+            "responseModalities": ["IMAGE"],
+            "imageConfig": {
+                "aspectRatio": aspect_ratio,
+                "imageSize": image_size
             }
+        }
+    }
 
-            # Add aspect ratio config
-            if aspect_ratio:
-                payload["generationConfig"] = {
-                    "responseModalities": ["IMAGE"],
-                    "imageConfig": {
-                        "aspectRatio": aspect_ratio
-                    }
-                }
+    print(f"🚀 Starting text-to-image (Nano Banana 2, {image_size})...")
+    print(f"📝 Prompt: {prompt}")
+    print(f"📐 Aspect Ratio: {aspect_ratio}, Resolution: {image_size}")
 
-            print("📡 Sending request to Gemini API...")
-
-            # Send request
-            response = requests.post(
-                self.api_url,
-                headers=self.headers,
-                json=payload,
-                timeout=120
-            )
-
-            if response.status_code != 200:
-                return False, f"API request failed, status code: {response.status_code}"
-
-            # Parse response
-            result = response.json()
-
-            # Extract image data
-            if "candidates" not in result or len(result["candidates"]) == 0:
-                return False, "Image data not found"
-
-            candidate = result["candidates"][0]
-            if "content" not in candidate or "parts" not in candidate["content"]:
-                return False, "Response format error"
-
-            parts = candidate["content"]["parts"]
-            image_data = None
-
-            for part in parts:
-                if "inlineData" in part and "data" in part["inlineData"]:
-                    image_data = part["inlineData"]["data"]
-                    break
-
-            if not image_data:
-                return False, "Image data not found"
-
-            # Decode and save image
-            print("💾 Saving image...")
-            decoded_data = base64.b64decode(image_data)
-
-            os.makedirs(os.path.dirname(output_file) if os.path.dirname(output_file) else ".", exist_ok=True)
-
-            with open(output_file, 'wb') as f:
-                f.write(decoded_data)
-
-            file_size = len(decoded_data) / 1024  # KB
-            print(f"✅ Image saved: {output_file}")
-            print(f"📊 File size: {file_size:.2f} KB")
-
-            return True, f"Successfully saved image: {output_file}"
-
-        except requests.exceptions.Timeout:
-            return False, "Request timeout (120 seconds)"
-        except requests.exceptions.ConnectionError:
-            return False, "Network connection error"
-        except Exception as e:
-            return False, f"Error: {str(e)}"
-
-def main():
-    """Main function - usage example"""
-
-    # ========== Configuration ==========
-    # 1. Set your API key
-    API_KEY = "sk-YOUR_API_KEY"
-
-    # 2. Input image description (prompt)
-    PROMPT = "a beautiful sunset over mountains"
-
-    # 3. Select aspect ratio (optional)
-    # Supported: 21:9, 16:9, 4:3, 3:2, 1:1, 9:16, 3:4, 2:3, 5:4, 4:5
-    ASPECT_RATIO = "16:9"  # Widescreen
-    # ASPECT_RATIO = "1:1"   # Square
-    # ASPECT_RATIO = "9:16"  # Portrait
-
-    # 4. Set output directory (optional)
-    OUTPUT_DIR = "."  # Current directory
-    # ============================
-
-    print("="*60)
-    print("Gemini Image Generation Tool")
-    print("="*60)
-    print(f"⏰ Start time: {datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')}")
-    print("="*60)
-
-    # Create generator and generate image
-    generator = GeminiImageGenerator(API_KEY)
-    success, message = generator.generate_image(
-        prompt=PROMPT,
-        aspect_ratio=ASPECT_RATIO,
-        output_dir=OUTPUT_DIR
-    )
-
-    # Display result
-    print("\n" + "="*60)
-    if success:
-        print("🎉 Generation successful!")
-        print(f"✅ {message}")
-    else:
-        print("❌ Generation failed")
-        print(f"💥 {message}")
-        print("\nSuggestions:")
-        print("  1. Check if API key is correct")
-        print("  2. Check network connection")
-        print("  3. Check if prompt is reasonable")
-
-    print(f"⏰ End time: {datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')}")
-    print("="*60)
+    try:
+        response = requests.post(api_url, headers=headers, json=payload, timeout=180)
+        if response.status_code != 200:
+            print(f"❌ API request failed: {response.status_code} - {response.text}")
+            return False
+        
+        result = response.json()
+        image_data_b64 = result["candidates"][0]["content"]["parts"][0]["inlineData"]["data"]
+        raw_data = base64.b64decode(image_data_b64)
+        
+        timestamp = datetime.datetime.now().strftime("%Y%m%d_%H%M%S")
+        output_path = os.path.join(output_dir, f"text_to_image_4k_{timestamp}.png")
+        with open(output_path, "wb") as f:
+            f.write(raw_data)
+        
+        print(f"✅ Image saved: {output_path}")
+        return True
+    except Exception as e:
+        print(f"❌ Error: {str(e)}")
+        return False
 
 if __name__ == "__main__":
-    main()
+    generate_text_to_image(API_KEY, PROMPT, ASPECT_RATIO, IMAGE_SIZE, OUTPUT_DIR, API_URL)
 ```
 
-</Accordion>
+#### 2️⃣ Single Image-to-Image (Nano Banana)
+
+```python
+import requests
+import base64
+import os
+import datetime
+
+# --- API Key Configuration ---
+API_KEY = "sk-YOUR_API_KEY"  # Replace with your API Key
+
+# --- Parameters ---
+INPUT_IMAGE_PATH = "test_cat.jpg"  # Ensure this image exists in current directory
+PROMPT = "Turn this cat into a Van Gogh Starry Night style oil painting, thick brushstrokes, vibrant colors"
+ASPECT_RATIO = "1:1"
+OUTPUT_DIR = "."
+
+# --- API Endpoint (Nano Banana) ---
+API_URL = "https://api.laozhang.ai/v1beta/models/gemini-2.5-flash-image:generateContent"
+
+def encode_image_to_base64(image_path):
+    with open(image_path, "rb") as f:
+        return base64.b64encode(f.read()).decode("utf-8")
+
+def get_mime_type(image_path):
+    ext = os.path.splitext(image_path)[1].lower()
+    if ext in [".jpg", ".jpeg"]:
+        return "image/jpeg"
+    elif ext == ".png":
+        return "image/png"
+    else:
+        return "application/octet-stream"  # Default type
+
+def generate_image_to_image(api_key, input_image_path, prompt, aspect_ratio, output_dir, api_url):
+    if not os.path.exists(input_image_path):
+        print(f"❌ Error: Input image '{input_image_path}' not found. Please ensure the image is in the current directory.")
+        return False
+
+    encoded_image = encode_image_to_base64(input_image_path)
+    mime_type = get_mime_type(input_image_path)
+
+    headers = {
+        "Content-Type": "application/json",
+        "Authorization": f"Bearer {api_key}"
+    }
+        payload = {
+        "contents": [{
+            "parts": [
+                {"text": prompt},
+                {"inline_data": {"mime_type": mime_type, "data": encoded_image}}
+            ]
+        }],
+            "generationConfig": {
+                "responseModalities": ["IMAGE"],
+                "imageConfig": {
+                    "aspectRatio": aspect_ratio
+                }
+            }
+        }
+        
+    print(f"🚀 Starting single image-to-image (Nano Banana)...")
+    print(f"📝 Prompt: {prompt}")
+    print(f"🖼️ Input image: {input_image_path}")
+
+    try:
+        response = requests.post(api_url, headers=headers, json=payload, timeout=180)
+            if response.status_code != 200:
+            print(f"❌ API request failed: {response.status_code} - {response.text}")
+            return False
+            
+            result = response.json()
+            image_data_b64 = result["candidates"][0]["content"]["parts"][0]["inlineData"]["data"]
+            raw_data = base64.b64decode(image_data_b64)
+            
+            timestamp = datetime.datetime.now().strftime("%Y%m%d_%H%M%S")
+        output_path = os.path.join(output_dir, f"image_to_image_{timestamp}.png")
+            with open(output_path, "wb") as f:
+                f.write(raw_data)
+                
+        print(f"✅ Image saved: {output_path}")
+        return True
+        except Exception as e:
+        print(f"❌ Error: {str(e)}")
+        return False
+
+if __name__ == "__main__":
+    generate_image_to_image(API_KEY, INPUT_IMAGE_PATH, PROMPT, ASPECT_RATIO, OUTPUT_DIR, API_URL)
+```
+
+#### 3️⃣ Multi-Image Mixing (Nano Banana 2)
+
+```python
+import requests
+import base64
+import os
+import datetime
+
+# --- API Key Configuration ---
+    API_KEY = "sk-YOUR_API_KEY"  # Replace with your API Key
+    
+# --- Parameters ---
+INPUT_IMAGE_PATHS = ["test_cat.jpg", "test_apple.jpg"]  # Ensure images exist
+PROMPT = "Combine these images: A realistic scene of this cat eating this red apple on a wooden table"
+ASPECT_RATIO = "16:9"
+IMAGE_SIZE = "2K"  # Nano Banana 2 supports 1K, 2K, 4K
+OUTPUT_DIR = "."
+
+# --- API Endpoint (Nano Banana 2) ---
+API_URL = "https://api.laozhang.ai/v1beta/models/gemini-3-pro-image-preview:generateContent"
+
+def encode_image_to_base64(image_path):
+    with open(image_path, "rb") as f:
+        return base64.b64encode(f.read()).decode("utf-8")
+
+def get_mime_type(image_path):
+    ext = os.path.splitext(image_path)[1].lower()
+    if ext in [".jpg", ".jpeg"]:
+        return "image/jpeg"
+    elif ext == ".png":
+        return "image/png"
+    else:
+        return "application/octet-stream"  # Default type
+
+def generate_multi_image(api_key, input_image_paths, prompt, aspect_ratio, image_size, output_dir, api_url):
+    parts = [{"text": prompt}]
+    for path in input_image_paths:
+        if not os.path.exists(path):
+            print(f"❌ Error: Input image '{path}' not found. Please ensure the image is in the current directory.")
+            return False
+        encoded_image = encode_image_to_base64(path)
+        mime_type = get_mime_type(path)
+        parts.append({"inline_data": {"mime_type": mime_type, "data": encoded_image}})
+
+    headers = {
+        "Content-Type": "application/json",
+        "Authorization": f"Bearer {api_key}"
+    }
+    payload = {
+        "contents": [{"parts": parts}],
+        "generationConfig": {
+            "responseModalities": ["IMAGE"],
+            "imageConfig": {
+                "aspectRatio": aspect_ratio,
+                "imageSize": image_size
+            }
+        }
+    }
+
+    print(f"🚀 Starting multi-image mixing (Nano Banana 2, {image_size})...")
+    print(f"📝 Prompt: {prompt}")
+    print(f"🖼️ Input images: {', '.join(input_image_paths)}")
+
+    try:
+        response = requests.post(api_url, headers=headers, json=payload, timeout=180)
+        if response.status_code != 200:
+            print(f"❌ API request failed: {response.status_code} - {response.text}")
+            return False
+        
+        result = response.json()
+        image_data_b64 = result["candidates"][0]["content"]["parts"][0]["inlineData"]["data"]
+        raw_data = base64.b64decode(image_data_b64)
+        
+        timestamp = datetime.datetime.now().strftime("%Y%m%d_%H%M%S")
+        output_path = os.path.join(output_dir, f"multi_image_mix_{timestamp}.png")
+        with open(output_path, "wb") as f:
+            f.write(raw_data)
+        
+        print(f"✅ Image saved: {output_path}")
+        return True
+    except Exception as e:
+        print(f"❌ Error: {str(e)}")
+        return False
+
+if __name__ == "__main__":
+    generate_multi_image(API_KEY, INPUT_IMAGE_PATHS, PROMPT, ASPECT_RATIO, IMAGE_SIZE, OUTPUT_DIR, API_URL)
+```
+
+**Features**:
+- ✅ Complete, production-ready code
+- ✅ Direct copy-paste usage
+- ✅ Covers all three scenarios: text-to-image, single image-to-image, multi-image mixing
+- ✅ Easy model switching between Nano Banana and Nano Banana 2
+
+<Tip>
+📦 **Complete Demo Script**  
+View the complete demo script that strings together all three scenarios:  
+[code-demo/gemini-image-API/complete_demo.py](https://github.com/threezhang/docs/tree/main/code-demo/gemini-image-API)
+</Tip>
 
 ### Bash Script Example
 
-<Accordion title="Expand to view complete Bash script (with aspect ratio support)">
+<Accordion title="Expand to view complete Bash script (with aspect ratio and resolution support)">
 
 ```bash
 #!/bin/bash
 
 # ============================================================
 # Gemini Image Generation Tool - Bash/Curl Version
-# Generate images using Google Gemini 2.5 Flash Image model
+# Supports Nano Banana (stable) and Nano Banana 2 (preview, 4K support)
 # ============================================================
 
 # ========== Configuration ==========
 # 1. Set your API key
 API_KEY="sk-YOUR_API_KEY"
 
-# 2. Input image description (prompt)
-PROMPT="a beautiful sunset over mountains"
+# 2. Choose model and resolution
+# Option 1: Nano Banana 2 (preview) - Supports 4K
+MODEL="nano_banana2"
+API_URL="https://api.laozhang.ai/v1beta/models/gemini-3-pro-image-preview:generateContent"
+PROMPT="A futuristic cyberpunk city at night, neon lights, flying cars, highly detailed, 4k"
+ASPECT_RATIO="16:9"
+IMAGE_SIZE="4K"  # 1K, 2K, 4K
 
-# 3. Select aspect ratio (optional)
-# Supported: 21:9, 16:9, 4:3, 3:2, 1:1, 9:16, 3:4, 2:3, 5:4, 4:5
-ASPECT_RATIO="16:9"  # Widescreen
-# ASPECT_RATIO="1:1"   # Square
-# ASPECT_RATIO="9:16"  # Portrait
+# Option 2: Nano Banana (stable) - Fixed 1K
+# MODEL="nano_banana"
+# API_URL="https://api.laozhang.ai/v1beta/models/gemini-2.5-flash-image:generateContent"
+# PROMPT="a beautiful sunset over mountains"
+# ASPECT_RATIO="16:9"
+# IMAGE_SIZE=""  # Stable version doesn't support this parameter, leave empty
 
-# 4. Set output filename
-OUTPUT_FILE="gemini_generated_$(date +%Y%m%d_%H%M%S).png"
-
-# 5. API endpoint
-API_URL="https://api.laozhang.ai/v1beta/models/gemini-2.5-flash-image:generateContent"
+# 3. Set output filename
+OUTPUT_FILE="gemini_${IMAGE_SIZE}_$(date +%Y%m%d_%H%M%S).png"
 # ============================
 
 # Check dependencies
 if ! command -v jq &> /dev/null; then
-    echo "❌ Error: jq tool required"
+    echo "❌ Error: jq tool is required"
     echo ""
     echo "Installation:"
     echo "  macOS:   brew install jq"
@@ -481,20 +590,43 @@ echo "📐 Aspect Ratio: ${ASPECT_RATIO}"
 echo "📡 Sending request to Gemini API..."
 
 # Build JSON request
-REQUEST_JSON=$(jq -n \
-  --arg prompt "$PROMPT" \
-  --arg ratio "$ASPECT_RATIO" \
-  '{
-    contents: [{
-      parts: [{text: $prompt}]
-    }],
-    generationConfig: {
-      responseModalities: ["IMAGE"],
-      imageConfig: {
-        aspectRatio: $ratio
+if [ -n "$IMAGE_SIZE" ]; then
+  # Include resolution parameter (Nano Banana 2 only)
+  REQUEST_JSON=$(jq -n \
+    --arg prompt "$PROMPT" \
+    --arg ratio "$ASPECT_RATIO" \
+    --arg size "$IMAGE_SIZE" \
+    '{
+      contents: [{
+        parts: [{text: $prompt}]
+      }],
+      generationConfig: {
+        responseModalities: ["IMAGE"],
+        imageConfig: {
+          aspectRatio: $ratio,
+          imageSize: $size
+        }
       }
-    }
-  }')
+    }')
+  echo "🖼️  Resolution: ${IMAGE_SIZE}"
+else
+  # Without resolution parameter (Nano Banana)
+  REQUEST_JSON=$(jq -n \
+    --arg prompt "$PROMPT" \
+    --arg ratio "$ASPECT_RATIO" \
+    '{
+      contents: [{
+        parts: [{text: $prompt}]
+      }],
+      generationConfig: {
+        responseModalities: ["IMAGE"],
+        imageConfig: {
+          aspectRatio: $ratio
+        }
+      }
+    }')
+  echo "🖼️  Resolution: 1K (fixed)"
+fi
 
 # Send request
 RESPONSE=$(curl -s -X POST "${API_URL}" \
@@ -502,134 +634,201 @@ RESPONSE=$(curl -s -X POST "${API_URL}" \
   -H "Content-Type: application/json" \
   -d "${REQUEST_JSON}")
 
-# Check errors
-if echo "${RESPONSE}" | jq -e '.error' &> /dev/null; then
-    echo "❌ Generation failed"
-    echo "💥 Error message:"
-    echo "${RESPONSE}" | jq -r '.error.message // .error'
-    echo ""
-    echo "Suggestions:"
-    echo "  1. Check if API key is correct"
-    echo "  2. Check network connection"
-    echo "  3. Check if prompt is reasonable"
+# Check for errors
+if echo "$RESPONSE" | jq -e '.error' > /dev/null 2>&1; then
+    echo "❌ API error:"
+    echo "$RESPONSE" | jq -r '.error.message'
     exit 1
 fi
 
-# Extract image data
-echo "💾 Saving image..."
-IMAGE_DATA=$(echo "${RESPONSE}" | jq -r '.candidates[0].content.parts[0].inlineData.data' 2>/dev/null)
+# Extract and decode image
+echo "🖼️  Extracting image data..."
+IMAGE_DATA=$(echo "$RESPONSE" | jq -r '.candidates[0].content.parts[0].inlineData.data')
 
 if [ -z "$IMAGE_DATA" ] || [ "$IMAGE_DATA" = "null" ]; then
-    echo "❌ Image data not found"
-    echo "📋 Response content:"
-    echo "${RESPONSE}" | jq '.' 2>/dev/null || echo "${RESPONSE}"
+    echo "❌ Failed to extract image data"
+    echo "Response: $RESPONSE"
     exit 1
 fi
 
-# Decode and save image
-echo "${IMAGE_DATA}" | base64 --decode > "${OUTPUT_FILE}"
+# Decode base64 and save
+echo "$IMAGE_DATA" | base64 --decode > "$OUTPUT_FILE"
 
-# Check result
-if [ -f "${OUTPUT_FILE}" ]; then
-    FILE_SIZE=$(du -h "${OUTPUT_FILE}" | cut -f1)
-    echo "✅ Image saved: ${OUTPUT_FILE}"
-    echo "📊 File size: ${FILE_SIZE}"
-    echo ""
-    echo "============================================================"
-    echo "🎉 Generation successful!"
-    echo "⏰ End time: $(date '+%Y-%m-%d %H:%M:%S')"
-    echo "============================================================"
-else
-    echo "❌ Failed to save image"
-    exit 1
-fi
+echo "============================================================"
+echo "✅ Image generation complete!"
+echo "📁 Saved to: $OUTPUT_FILE"
+echo "⏰ End time: $(date '+%Y-%m-%d %H:%M:%S')"
+echo "============================================================"
 ```
 
 </Accordion>
 
-## 💡 Best Practices
+## 🎯 Advanced Features (Nano Banana 2 Only)
 
-### Prompt Optimization
+Nano Banana 2 (`gemini-3-pro-image-preview`) offers several advanced features not available in the stable version:
 
-<CardGroup cols={2}>
-  <Card title="Clear Description" icon="pen-fancy">
-    Use specific, detailed descriptions including subject, style, colors, lighting, etc.
-  </Card>
-  <Card title="Reference Styles" icon="palette">
-    Specify art styles: "oil painting style", "watercolor", "cyberpunk style", etc.
-  </Card>
-  <Card title="Avoid Ambiguity" icon="circle-xmark">
-    Avoid overly abstract or vague terms
-  </Card>
-  <Card title="English Preferred" icon="language">
-    English prompts usually work better, though Chinese is also supported
-  </Card>
-</CardGroup>
+### 1️⃣ Thinking Mode (Built-in Reasoning)
 
-### Aspect Ratio Selection Guide
+Nano Banana 2 has a built-in "thinking" process that optimizes composition before generating the final image. This feature is **enabled by default** and cannot be disabled.
 
-| Use Case | Recommended Ratio |
-|----------|------------------|
-| Social media landscape | 16:9 |
-| Phone wallpaper/portrait | 9:16 |
-| Instagram square | 1:1 |
-| Print photos | 4:3 or 3:2 |
-| Movie poster | 2:3 |
-| Banner ads | 21:9 |
+**How it works**:
+- Model generates 1-2 temporary images internally to test composition and logic
+- The last image in the "thinking" process is also the final rendered image
+- Improves image quality and adherence to complex prompts
 
-## ❓ FAQ
+**No code changes needed** - this feature works automatically!
 
-<AccordionGroup>
-  <Accordion title="How to choose calling method?">
-    - If you only need 1:1 square images, use **OpenAI Compatible Mode** for simplicity and perfect compatibility with existing code
-    - If you need specific aspect ratios (like 16:9 widescreen), use **Google Native Format**
-    - Both methods have the same price of $0.025/image
-  </Accordion>
+### 2️⃣ Google Search Grounding
 
-  <Accordion title="What aspect ratios are supported?">
-    Google native format supports 10 aspect ratios:
-    - Landscape: 21:9, 16:9, 4:3, 3:2
-    - Square: 1:1
-    - Portrait: 9:16, 3:4, 2:3
-    - Other: 5:4, 4:5
-  </Accordion>
+Use Google Search to verify facts and generate images based on real-time information (e.g., weather forecasts, stock charts, recent events).
 
-  <Accordion title="What's the difference from Preview version?">
-    - **Official Release** (`gemini-2.5-flash-image`): Stable and reliable, recommended for production
-    - **Preview** (`gemini-2.5-flash-image-preview`): Being deprecated, migration recommended
-    - Price, speed, and quality are identical, just update the model name to migrate
-  </Accordion>
+**Example**: Generate weather forecast visualization
 
-  <Accordion title="How to get better generation results?">
-    1. **Detailed Description**: Provide specific details (colors, style, scene, etc.)
-    2. **English Prompts**: English usually works better
-    3. **Reference Styles**: Specify art styles (e.g., "oil painting style", "watercolor")
-    4. **Multiple Attempts**: Try different prompts, prices are affordable
-  </Accordion>
+```python
+import requests
+import base64
 
-  <Accordion title="How to use returned Base64 data?">
-    Base64 data can be displayed directly in web pages:
-    ```html
-    <img src="data:image/png;base64,iVBORw0KG..." />
-    ```
-    Or decode and save as a file (refer to code examples above)
-  </Accordion>
-</AccordionGroup>
+API_KEY = "sk-YOUR_API_KEY"
+API_URL = "https://api.laozhang.ai/v1beta/models/gemini-3-pro-image-preview:generateContent"
 
-## 🔗 Related Resources
+payload = {
+    "contents": [{
+        "parts": [{"text": "Visualize the current weather forecast for the next 5 days in San Francisco as a clean, modern weather chart"}]
+    }],
+    "tools": [{"google_search": {}}],  # Enable Google Search
+    "generationConfig": {
+        "responseModalities": ["TEXT", "IMAGE"],
+        "imageConfig": {"aspectRatio": "16:9"}
+    }
+}
 
-<CardGroup cols={2}>
-  <Card title="Image Editing" icon="paintbrush" href="/en/api-capabilities/gemini-flash-image-edit">
-    Learn how to edit and transform existing images with Gemini Flash Image
-  </Card>
-  <Card title="API Reference" icon="code" href="/en/api-reference/chat-completions">
-    View complete API interface documentation
-  </Card>
-  <Card title="Token Management" icon="key" href="https://api.laozhang.ai/token">
-    Create and manage your API tokens
-  </Card>
-  <Card title="Pricing Details" icon="dollar-sign" href="/en/pricing">
-    View detailed pricing table and billing information
-  </Card>
-</CardGroup>
+response = requests.post(API_URL, headers={
+    "Authorization": f"Bearer {API_KEY}",
+    "Content-Type": "application/json"
+}, json=payload, timeout=180)
+
+result = response.json()
+image_data = result["candidates"][0]["content"]["parts"][0]["inlineData"]["data"]
+with open("weather_chart.png", "wb") as f:
+    f.write(base64.b64decode(image_data))
+```
+
+### 3️⃣ Multi-Reference Images (Up to 14 Images)
+
+Nano Banana 2 supports mixing up to 14 reference images:
+- Up to 6 high-fidelity object images for inclusion in the final image
+- Up to 5 portrait photos to maintain character consistency
+
+**Example**: Combine multiple images
+
+```python
+# See the "Multi-Image Mixing" example above
+# You can pass up to 14 images in the "parts" array
+```
+
+## 📋 FAQ
+
+### Q1: What's the difference between Nano Banana and Nano Banana 2?
+
+| Feature | Nano Banana | Nano Banana 2 |
+|---------|-------------|---------------|
+| **Model ID** | `gemini-2.5-flash-image` | `gemini-3-pro-image-preview` |
+| **Version** | Stable | Preview |
+| **Tech Base** | Gemini 2.5 | Gemini 3 |
+| **Resolution** | Fixed 1K (1024px) | 1K/2K/4K |
+| **Price** | $0.025/image | $0.05/image |
+| **Thinking Mode** | ❌ No | ✅ Yes (built-in) |
+| **Search Grounding** | ❌ No | ✅ Yes |
+| **Multi-Reference** | ✅ Yes (up to 3) | ✅ Yes (up to 14) |
+| **Speed** | ~10s | ~10s |
+| **Recommended For** | Production, stability priority | Best quality, high resolution |
+
+### Q2: Which model should I choose?
+
+**Choose Nano Banana** (`gemini-2.5-flash-image`) if:
+- ✅ You need production stability
+- ✅ 1K resolution is sufficient
+- ✅ You want the lowest cost ($0.025/image)
+
+**Choose Nano Banana 2** (`gemini-3-pro-image-preview`) if:
+- ✅ You need high resolution (2K/4K)
+- ✅ You want the best image quality
+- ✅ You need advanced features (Thinking Mode, Search Grounding)
+- ✅ You're willing to use a preview version
+
+### Q3: How do I switch between models?
+
+**Very simple! Just change the model name:**
+
+**OpenAI Compatible Mode**:
+```python
+# Nano Banana (stable)
+model="gemini-2.5-flash-image"
+
+# Nano Banana 2 (latest)
+model="gemini-3-pro-image-preview"
+```
+
+**Google Native Format**:
+```bash
+# Nano Banana (stable)
+https://api.laozhang.ai/v1beta/models/gemini-2.5-flash-image:generateContent
+
+# Nano Banana 2 (latest)
+https://api.laozhang.ai/v1beta/models/gemini-3-pro-image-preview:generateContent
+```
+
+### Q4: How do I use 4K resolution?
+
+**4K is only supported by Nano Banana 2**, use Google native format and add the `imageSize` parameter:
+
+```json
+{
+  "generationConfig": {
+    "responseModalities": ["IMAGE"],
+    "imageConfig": {
+      "aspectRatio": "16:9",
+      "imageSize": "4K"  // Must be uppercase "K"
+    }
+  }
+}
+```
+
+**Important**: Must use uppercase "K" (1K, 2K, 4K), lowercase (1k) will be rejected.
+
+### Q5: Why is Nano Banana 2 so much cheaper on LaoZhang API?
+
+| Model | LaoZhang API | Official | Savings |
+|-------|--------------|----------|---------|
+| **Nano Banana 2** | $0.05/image | $0.24/image | **79%** |
+| **Nano Banana** | $0.025/image | $0.04/image | 37.5% |
+
+**Nano Banana 2 has exceptional value on LaoZhang API!** 79% cheaper than official pricing, plus top-up bonuses and exchange rate advantages.
+
+## 📝 Changelog
+
+### 2025-01-XX
+- 🆕 Added Nano Banana 2 (`gemini-3-pro-image-preview`) support
+- 🎨 Added 4K resolution support (Nano Banana 2 only)
+- 🧠 Added Thinking Mode (built-in reasoning, enabled by default)
+- 🌐 Added Google Search Grounding support
+- 🖼️ Expanded multi-reference image support to 14 images
+- 💰 Updated pricing: Nano Banana 2 $0.05/image (79% off official $0.24)
+- 📊 Added complete resolution table (10 aspect ratios × 3 resolutions)
+- 💻 Added complete Python code examples (text-to-image, single image-to-image, multi-image mixing)
+- 🔧 Added Bash script with model switching support
+
+### 2024-12-XX
+- 🎉 Initial release of Nano Banana (`gemini-2.5-flash-image`)
+- 🎨 Support for 10 aspect ratios
+- 💰 Pricing: $0.025/image (37.5% off official)
+
+---
+
+<Tip>
+💡 **Need Help?**  
+- 📖 [View Complete Code Examples](https://github.com/threezhang/docs/tree/main/code-demo/gemini-image-API)
+- 💬 Join our community for support
+- 🔑 [Get your API key](https://api.laozhang.ai/token)
+</Tip>
 
