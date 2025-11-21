@@ -188,48 +188,48 @@ def main():
     print("="*60)
     
     # ============================================================
-    # 场景 1: 文生图 - 生成一张图片
+    # 场景 1: 文生图 → 生成第一张图
     # ============================================================
     
-    print("\n▶️  场景 1: 文生图")
+    print("\n▶️  场景 1: 文生图 → 生成第一张图")
     success1 = generate_text_to_image(
-        prompt="一只可爱的橘猫，坐在窗台上，阳光洒在身上",
-        aspect_ratio="16:9",
+        prompt="一只可爱的橘猫",
+        aspect_ratio="1:1",
         image_size="2K" if USE_NANO_BANANA_2 else None
     )
     
     # ============================================================
-    # 场景 2: 单图生图 - 风格转换
+    # 场景 2: 单图生图 → 用第一张图生成第二张图
     # ============================================================
     
-    print("\n▶️  场景 2: 单图生图（风格转换）")
+    print("\n▶️  场景 2: 单图生图 → 用第一张图生成第二张图")
     
-    if os.path.exists("test_cat.jpg"):
+    if os.path.exists("result_1_text_to_image.png"):
         success2 = generate_image_to_image(
-            input_image="test_cat.jpg",
+            input_image="result_1_text_to_image.png",
             prompt="把这只猫变成梵高星空风格的油画",
             aspect_ratio="1:1",
             image_size="2K" if USE_NANO_BANANA_2 else None
         )
     else:
-        print("⚠️  跳过: 找不到 test_cat.jpg")
+        print("⚠️  跳过: 需要先运行场景 1")
         success2 = None
     
     # ============================================================
-    # 场景 3: 多图混合 - 创意合成
+    # 场景 3: 多图混合 → 用第一张和第二张生成第三张图
     # ============================================================
     
-    print("\n▶️  场景 3: 多图混合（创意合成）")
+    print("\n▶️  场景 3: 多图混合 → 用第一张和第二张生成第三张图")
     
-    if os.path.exists("test_cat.jpg") and os.path.exists("test_apple.jpg"):
+    if os.path.exists("result_1_text_to_image.png") and os.path.exists("result_2_image_style_transfer.png"):
         success3 = generate_multi_image_mix(
-            image_list=["test_cat.jpg", "test_apple.jpg"],
-            prompt="一只猫在木桌上吃苹果的温馨场景",
+            image_list=["result_1_text_to_image.png", "result_2_image_style_transfer.png"],
+            prompt="将这两只猫融合成一个艺术作品",
             aspect_ratio="16:9",
             image_size="2K" if USE_NANO_BANANA_2 else None
         )
     else:
-        print("⚠️  跳过: 找不到测试图片")
+        print("⚠️  跳过: 需要先运行场景 1 和 2")
         success3 = None
     
     # ============================================================
