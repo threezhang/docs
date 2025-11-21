@@ -262,6 +262,167 @@ if match:
 
 ## Method 2: Google Native Format (Custom Aspect Ratios)
 
+### Python Code Examples
+
+<Note>
+💡 **Progressive Relationship of Three Examples**  
+Example 1 edits image → Example 2 uses it for style transfer → Example 3 combines the first two. Clear logic!
+</Note>
+
+<Accordion title="Example 1: Single Image Edit → Add Elements to Generate First Image">
+
+```python
+import requests
+import base64
+
+# ========== Configuration ==========
+API_KEY = "sk-YOUR_API_KEY"
+
+# Nano Banana 2 (supports 2K/4K)
+API_URL = "https://api.laozhang.ai/v1beta/models/gemini-3-pro-image-preview:generateContent"
+INPUT_IMAGE = "cat.jpg"  # Prepare a cat image
+PROMPT = "add a cute wizard hat on this cat's head"
+ASPECT_RATIO = "1:1"
+IMAGE_SIZE = "2K"  # Nano Banana 2: 1K, 2K, 4K
+# ============================
+
+# Read and encode image
+with open(INPUT_IMAGE, "rb") as f:
+    image_b64 = base64.b64encode(f.read()).decode("utf-8")
+
+headers = {"Authorization": f"Bearer {API_KEY}", "Content-Type": "application/json"}
+
+payload = {
+    "contents": [{
+        "parts": [
+            {"text": PROMPT},
+            {"inline_data": {"mime_type": "image/jpeg", "data": image_b64}}
+        ]
+    }],
+    "generationConfig": {
+        "responseModalities": ["IMAGE"],
+        "imageConfig": {
+            "aspectRatio": ASPECT_RATIO,
+            "imageSize": IMAGE_SIZE
+        }
+    }
+}
+
+response = requests.post(API_URL, headers=headers, json=payload, timeout=180)
+result = response.json()
+
+# Save image
+output_data = result["candidates"][0]["content"]["parts"][0]["inlineData"]["data"]
+with open("output.png", "wb") as f:
+    f.write(base64.b64decode(output_data))
+
+print("✅ Image saved: output.png")
+```
+
+</Accordion>
+
+<Accordion title="Example 2: Style Transfer → Use First Image to Generate Second Image">
+
+```python
+import requests
+import base64
+
+# ========== Configuration ==========
+API_KEY = "sk-YOUR_API_KEY"
+API_URL = "https://api.laozhang.ai/v1beta/models/gemini-3-pro-image-preview:generateContent"
+
+INPUT_IMAGE = "output.png"  # Use the image generated from Example 1
+PROMPT = "Transform this cat into Van Gogh Starry Night style oil painting"
+ASPECT_RATIO = "1:1"
+IMAGE_SIZE = "2K"  # Nano Banana 2: 1K, 2K, 4K
+# ============================
+
+# Read and encode image
+with open(INPUT_IMAGE, "rb") as f:
+    image_b64 = base64.b64encode(f.read()).decode("utf-8")
+
+headers = {"Authorization": f"Bearer {API_KEY}", "Content-Type": "application/json"}
+
+payload = {
+    "contents": [{
+        "parts": [
+            {"text": PROMPT},
+            {"inline_data": {"mime_type": "image/png", "data": image_b64}}
+        ]
+    }],
+    "generationConfig": {
+        "responseModalities": ["IMAGE"],
+        "imageConfig": {
+            "aspectRatio": ASPECT_RATIO,
+            "imageSize": IMAGE_SIZE
+        }
+    }
+}
+
+response = requests.post(API_URL, headers=headers, json=payload, timeout=180)
+result = response.json()
+
+# Save image
+output_data = result["candidates"][0]["content"]["parts"][0]["inlineData"]["data"]
+with open("output_styled.png", "wb") as f:
+    f.write(base64.b64decode(output_data))
+
+print("✅ Image saved: output_styled.png")
+```
+
+</Accordion>
+
+<Accordion title="Example 3: Multi-Image Fusion → Combine First and Second Images to Generate Third">
+
+```python
+import requests
+import base64
+
+# ========== Configuration ==========
+API_KEY = "sk-YOUR_API_KEY"
+API_URL = "https://api.laozhang.ai/v1beta/models/gemini-3-pro-image-preview:generateContent"
+
+# Use images generated from previous examples (outputs from Examples 1 and 2)
+IMAGES = ["output.png", "output_styled.png"]
+PROMPT = "Combine these two cat images into a single artistic composition"
+ASPECT_RATIO = "16:9"
+IMAGE_SIZE = "2K"  # Nano Banana 2: 1K, 2K, 4K
+# ============================
+
+# Build parts: text + multiple images
+parts = [{"text": PROMPT}]
+
+for img_path in IMAGES:
+    with open(img_path, "rb") as f:
+        img_b64 = base64.b64encode(f.read()).decode("utf-8")
+    parts.append({"inline_data": {"mime_type": "image/png", "data": img_b64}})
+
+headers = {"Authorization": f"Bearer {API_KEY}", "Content-Type": "application/json"}
+
+payload = {
+    "contents": [{"parts": parts}],
+    "generationConfig": {
+        "responseModalities": ["IMAGE"],
+        "imageConfig": {
+            "aspectRatio": ASPECT_RATIO,
+            "imageSize": IMAGE_SIZE
+        }
+    }
+}
+
+response = requests.post(API_URL, headers=headers, json=payload, timeout=180)
+result = response.json()
+
+# Save image
+output_data = result["candidates"][0]["content"]["parts"][0]["inlineData"]["data"]
+with open("output_mixed.png", "wb") as f:
+    f.write(base64.b64decode(output_data))
+
+print("✅ Image saved: output_mixed.png")
+```
+
+</Accordion>
+
 ### Complete Python Tool Script
 
 <Accordion title="Expand to view complete Python script (with aspect ratio support)">
@@ -295,7 +456,7 @@ class GeminiImageEditor:
                  api_url: str = "https://api.laozhang.ai/v1beta/models/gemini-2.5-flash-image:generateContent"):
         """
         Initialize image editor
-
+        
         Args:
             api_key: API key
             api_url: API URL (using Google native Gemini API)
@@ -312,7 +473,7 @@ class GeminiImageEditor:
                    output_dir: str = ".") -> Tuple[bool, str]:
         """
         Edit image and generate new image
-
+        
         Args:
             image_path: Input image path
             prompt: Edit description (prompt)
@@ -340,13 +501,13 @@ class GeminiImageEditor:
             with open(image_path, 'rb') as f:
                 image_data = f.read()
             image_base64 = base64.b64encode(image_data).decode('utf-8')
-
+            
             # Detect image type
             mime_type, _ = mimetypes.guess_type(image_path)
             if not mime_type or not mime_type.startswith('image/'):
                 mime_type = 'image/jpeg'  # Default
             print(f"🎨 Image type: {mime_type}")
-
+            
         except Exception as e:
             return False, f"Failed to read image: {str(e)}"
 
@@ -376,8 +537,8 @@ class GeminiImageEditor:
                     "responseModalities": ["IMAGE"],
                     "imageConfig": {
                         "aspectRatio": aspect_ratio
-                    }
                 }
+            }
 
             print("📡 Sending request to Gemini API...")
 
@@ -394,7 +555,7 @@ class GeminiImageEditor:
 
             # Parse response
             result = response.json()
-
+            
             # Extract image data
             if "candidates" not in result or len(result["candidates"]) == 0:
                 return False, "Image data not found"
@@ -420,7 +581,7 @@ class GeminiImageEditor:
 
             os.makedirs(os.path.dirname(output_file) if os.path.dirname(output_file) else ".", exist_ok=True)
 
-            with open(output_file, 'wb') as f:
+                 with open(output_file, 'wb') as f:
                 f.write(decoded_data)
 
             file_size = len(decoded_data) / 1024  # KB
@@ -442,7 +603,7 @@ def main():
     # ========== Configuration ==========
     # 1. Set your API key
     API_KEY = "sk-YOUR_API_KEY"
-
+    
     # 2. Input image path
     INPUT_IMAGE = "./input.jpg"  # Replace with your image path
 
