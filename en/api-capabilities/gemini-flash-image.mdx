@@ -1,20 +1,63 @@
 ---
-title: Gemini 2.5 Flash Image Generation
-sidebarTitle: Gemini Flash Image
-description: Google's official image generation model with custom aspect ratios, OpenAI-compatible, $0.025 per image
+title: Gemini Image Generation (Nano Banana Series)
+sidebarTitle: Gemini Image Generation
+description: Google image generation models, including the latest Nano Banana 2 (Gemini 3 Pro Image) and stable Nano Banana (Gemini 2.5 Flash Image)
 icon: "sparkles"
 ---
 
+<Note>
+**🚀 Nano Banana 2 is Now Live!**
+Google's latest generation image model **Nano Banana 2** (internal code name) is officially released!
+
+- 🆕 **Model Name**: `gemini-3-pro-image-preview`
+- 🧠 **Powered by Gemini 3**: Stronger reasoning capabilities and image quality
+- 🔄 **Seamless Switch**: Same calling method as the old version, just change the model name
+- ✅ **Legacy Supported**: `gemini-2.5-flash-image` continues to serve stably
+- 📐 **High-Res Support**: Supports 1K, 2K, 4K resolutions (Nano Banana 2 only)
+- 💰 **Pricing**: Nano Banana $0.025/image (37.5% off), Nano Banana 2 $0.05/image (79% off official $0.24)
+</Note>
+
 ## Model Overview
 
-Gemini 2.5 Flash Image (`gemini-2.5-flash-image`) is Google's **official release** image generation model, more stable and reliable than the preview version (`gemini-2.5-flash-image-preview`). Supports both OpenAI-compatible format and Google native format.
+Google's **Nano Banana** series is the internal code name for its image generation technology, currently offering two generations:
+
+### 🆕 Nano Banana 2 (Latest)
+- **Model Name**: `gemini-3-pro-image-preview`
+- **Version**: Preview
+- **Technology**: Based on Gemini 3 architecture, stronger reasoning
+- **Features**: Latest technology, superior image quality and details
+- **Resolution**: Supports 1K, 2K, 4K resolutions
+- **Price**: $0.05/image (79% cheaper than official $0.24)
+- **Use Case**: Best quality, high resolution, willing to try new features
+
+### 🛡️ Nano Banana (Stable)
+- **Model Name**: `gemini-2.5-flash-image`
+- **Version**: Stable
+- **Technology**: Based on Gemini 2.5 architecture
+- **Features**: Stable and reliable, production recommended
+- **Resolution**: Fixed 1K (1024px), does not support imageSize parameter
+- **Price**: $0.025/image (37.5% cheaper than official $0.04)
+- **Use Case**: Production environments requiring stability
+
+<Tip>
+💡 **Name Mapping**
+- **Nano Banana** = `gemini-2.5-flash-image` (Stable)
+- **Nano Banana 2** = `gemini-3-pro-image-preview` (Latest)
+
+Both models use the exact same calling method, just change the `model` parameter to switch!
+</Tip>
+
+## 🌟 Common Features
+
+Both generations support the following core capabilities:
 
 <Note>
-**🎉 Official Release**  
-- ✅ Stable and reliable, recommended for production
-- 🎨 Supports custom aspect ratios (16:9, 9:16, and 10 other ratios)
+**🎉 Core Features**
+- ✅ Supports both OpenAI-compatible format and Google native format
+- 🎨 Supports custom aspect ratios (16:9, 9:16, and 10 ratios)
+- 📐 **Nano Banana 2 Exclusive**: Supports 1K, 2K, 4K resolutions
 - ⚡ Generates high-quality images in ~10 seconds
-- 💰 Great value: $0.025/image (37.5% cheaper than official)
+- 💰 Great value: Nano Banana $0.025/image (37.5% off), Nano Banana 2 $0.05/image (79% off)
 </Note>
 
 ## 🔀 Two Calling Methods
@@ -26,69 +69,71 @@ Gemini Flash Image supports two API endpoints, each with advantages:
 | **Endpoint** | `/v1/chat/completions` | `/v1beta/models/gemini-2.5-flash-image:generateContent` |
 | **Model Name** | `gemini-2.5-flash-image` | Specified in URL |
 | **Image Size** | Fixed 1:1 | Supports 10 aspect ratios |
+| **Resolution** | Fixed 1K | Nano Banana 2 supports 1K/2K/4K, Nano Banana fixed 1K |
 | **Compatibility** | Perfect OpenAI SDK compatibility | Requires native calling |
 | **Return Format** | Base64 | Base64 |
-| **Use Case** | Quick migration, simple needs | Custom dimensions needed |
+| **Use Case** | Quick migration, simple needs | Custom dimensions or high resolution needed |
 | **Aspect Ratio** | ❌ No | ✅ 21:9, 16:9, 4:3, 3:2, 1:1, 9:16, 3:4, 2:3, 5:4, 4:5 |
 
 <Tip>
 💡 **How to Choose?**
 - If you only need square (1:1) images, use **OpenAI Compatible Mode** for simplicity
-- If you need widescreen (16:9), portrait (9:16), or other specific ratios, use **Google Native Format**
+- If you need widescreen (16:9), portrait (9:16), or other specific ratios/high resolution (2K/4K), use **Google Native Format**
 </Tip>
 
 ## 🌟 Key Features
 
 - **⚡ Fast Response**: ~10 seconds generation, significantly faster than OpenAI series
-- **💰 Great Value**: $0.025/image, 37.5% cheaper than official ($0.04/image)
+- **💰 Great Value**: Nano Banana $0.025/image (37.5% off), Nano Banana 2 $0.05/image (79% off)
 - **🔄 Dual Compatibility**: Supports both OpenAI SDK and Google native format
 - **📐 Flexible Sizes**: Google native format supports 10 aspect ratios
+- **🖼️ High Resolution**: Nano Banana 2 supports 1K, 2K, 4K resolutions
+- **🧠 Thinking Mode**: Nano Banana 2 has built-in reasoning, optimizes composition before generation (enabled by default)
+- **🌐 Search Grounding**: Nano Banana 2 supports using Google Search to verify facts and generate images
+- **🎨 Multi-Reference**: Supports up to 14 reference images (6 objects + 5 people, etc.)
 - **📦 Base64 Output**: Returns base64-encoded image data directly, no secondary download needed
 - **🎨 Google Technology**: Based on Google's latest image generation technology, excellent quality
 
-## 📋 Model Comparison
+## 📋 Nano Banana Series Comparison
 
-| Model | Model ID | Billing | LaoZhang Price | Official Price | Savings | Speed |
-|-------|----------|---------|---------------|----------------|---------|-------|
-| **Gemini Flash Image** | `gemini-2.5-flash-image` | Per Request | $0.025/image | $0.04/image | 37.5% | ~10s |
-| **GPT-Image-1** | `gpt-image-1` | Per Token | $10 input/$40 output per M | - | - | Medium |
-| **Flux Kontext Pro** | `flux-kontext-pro` | Per Request | $0.035/image | $0.04/image | 12.5% | Fast |
-| **Sora Image** | `sora_image` | Per Request | $0.01/image | - | - | Slower |
+### Series Model Comparison
 
-<Tip>
-💡 **Pricing Advantage**  
-- 37.5% cheaper than official price
-- Top up $100 get +10% bonus, combined with exchange rate advantage, total ~73% of official price
-- Transparent and predictable pricing, no need to worry about token consumption
-</Tip>
+| Model | Code Name | Model ID | Version | Tech Base | Resolution | Price | Recommended Scenario |
+|-------|-----------|----------|---------|-----------|------------|-------|----------------------|
+| **Nano Banana 2** | 🆕 Latest | `gemini-3-pro-image-preview` | Preview | Gemini 3 | 1K/2K/4K | $0.05/image | Best quality, high resolution needed |
+| **Nano Banana** | 🛡️ Stable | `gemini-2.5-flash-image` | Stable | Gemini 2.5 | 1K (Fixed) | $0.025/image | Production environment |
 
-## 🚀 Quick Start
+**Common Features**: Same speed (~10s), same calling method
 
-### Prerequisites
+### Comparison with Other Models
 
-<Steps>
-  <Step title="Create Token">
-    Log in to [LaoZhang API Token Management](https://api.laozhang.ai/token) and create a **per-request billing** token
-    
-    ![Token Creation Interface](/images/token-create-per-request.png)
-  </Step>
-  <Step title="Select Billing Method">
-    **Important**: Must select "Per-Request Billing" type, not "Pay-As-You-Go"
-  </Step>
-  <Step title="Save Token">
-    Copy the generated token, format is `sk-xxxxxx`
-  </Step>
-</Steps>
+| Model | Model ID | Billing | LaoZhang Price | Official Price | Savings | Resolution | Speed |
+|-------|----------|---------|---------------|----------------|---------|------------|-------|
+| **Nano Banana 2** | `gemini-3-pro-image-preview` | Per Request | $0.05/image | $0.24/image | 79% | 1K/2K/4K | ~10s |
+| **Nano Banana** | `gemini-2.5-flash-image` | Per Request | $0.025/image | $0.04/image | 37.5% | 1K (Fixed) | ~10s |
+| **GPT-Image-1** | `gpt-image-1` | Per Token | $10 input/$40 output per M | - | - | - | Medium |
+| **Flux Kontext Pro** | `flux-kontext-pro` | Per Request | $0.035/image | $0.04/image | 12.5% | - | Fast |
 
 <Tip>
-💰 **Detailed Pricing Advantage**  
-- **LaoZhang API Price**: $0.025/image (37.5% cheaper than official)
-- **Official Price**: $0.04/image
+💰 **Pricing Advantage**  
+- **Nano Banana 2**: $0.05/image (LaoZhang API) vs $0.24/image (Official), 79% cheaper
+- **Nano Banana**: $0.025/image (LaoZhang API) vs $0.04/image (Official), 37.5% cheaper
 - **Top-up Bonus**: Top up $100 get +10% bonus
-- **Exchange Rate Advantage**: Combined advantage equals **~73% of official price**
+- **Exchange Rate Advantage**: RMB payment even more cost-effective
+
+**Nano Banana 2 has exceptional value on LaoZhang API!**
 </Tip>
+
 
 ## Method 1: OpenAI Compatible Mode (1:1 Images)
+
+<Tip>
+**🔄 Model Switching Guide**
+- Use **Nano Banana 2** (Latest): `"model": "gemini-3-pro-image-preview"`
+- Use **Nano Banana** (Stable): `"model": "gemini-2.5-flash-image"`
+
+Both models use the exact same calling method, just modify the `model` field!
+</Tip>
 
 ### Basic Example - Curl
 
@@ -97,7 +142,7 @@ curl -X POST "https://api.laozhang.ai/v1/chat/completions" \
      -H "Authorization: Bearer $API_KEY" \
      -H "Content-Type: application/json" \
      -d '{
-    "model": "gemini-2.5-flash-image",
+    "model": "gemini-3-pro-image-preview",
     "stream": false,
     "messages": [
         {
