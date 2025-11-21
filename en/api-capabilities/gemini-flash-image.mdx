@@ -276,9 +276,14 @@ echo "✅ 4K image saved: output_4k.png"
 
 ### Complete Python Examples
 
+<Tip>
+💡 **Progressive Logic: Three Connected Examples**  
+Example 1 generates an image → Example 2 uses it for style transfer → Example 3 combines the first two images. Clear and intuitive!
+</Tip>
+
 We provide three complete, production-ready Python scripts:
 
-#### 1️⃣ Text-to-Image (Nano Banana 2, 4K)
+#### 1️⃣ Text-to-Image → Generate First Image
 
 ```python
 import requests
@@ -290,9 +295,9 @@ import datetime
 API_KEY = "sk-YOUR_API_KEY"  # Replace with your API Key
 
 # --- Parameters ---
-PROMPT = "A futuristic city skyline at sunset, high detailed, 4k"
-ASPECT_RATIO = "16:9"
-IMAGE_SIZE = "4K"  # Only Nano Banana 2 supports 1K, 2K, 4K
+PROMPT = "A cute orange cat"
+ASPECT_RATIO = "1:1"
+IMAGE_SIZE = "2K"  # Only Nano Banana 2 supports 1K, 2K, 4K
 OUTPUT_DIR = "."  # Image save directory
 
 # --- API Endpoint (Nano Banana 2) ---
@@ -314,9 +319,9 @@ def generate_text_to_image(api_key, prompt, aspect_ratio, image_size, output_dir
         }
     }
 
-    print(f"🚀 Starting text-to-image (Nano Banana 2, {image_size})...")
+    print(f"🚀 Generating text-to-image (Nano Banana 2, {image_size})...")
     print(f"📝 Prompt: {prompt}")
-    print(f"📐 Aspect Ratio: {aspect_ratio}, Resolution: {image_size}")
+    print(f"📐 {aspect_ratio} | {image_size}")
 
     try:
         response = requests.post(api_url, headers=headers, json=payload, timeout=180)
@@ -328,8 +333,7 @@ def generate_text_to_image(api_key, prompt, aspect_ratio, image_size, output_dir
         image_data_b64 = result["candidates"][0]["content"]["parts"][0]["inlineData"]["data"]
         raw_data = base64.b64decode(image_data_b64)
         
-        timestamp = datetime.datetime.now().strftime("%Y%m%d_%H%M%S")
-        output_path = os.path.join(output_dir, f"text_to_image_4k_{timestamp}.png")
+        output_path = os.path.join(output_dir, "output.png")
         with open(output_path, "wb") as f:
             f.write(raw_data)
         
@@ -343,7 +347,7 @@ if __name__ == "__main__":
     generate_text_to_image(API_KEY, PROMPT, ASPECT_RATIO, IMAGE_SIZE, OUTPUT_DIR, API_URL)
 ```
 
-#### 2️⃣ Single Image-to-Image (Nano Banana)
+#### 2️⃣ Image-to-Image → Use First Image to Generate Second Image
 
 ```python
 import requests
@@ -355,13 +359,14 @@ import datetime
 API_KEY = "sk-YOUR_API_KEY"  # Replace with your API Key
 
 # --- Parameters ---
-INPUT_IMAGE_PATH = "test_cat.jpg"  # Ensure this image exists in current directory
-PROMPT = "Turn this cat into a Van Gogh Starry Night style oil painting, thick brushstrokes, vibrant colors"
+INPUT_IMAGE_PATH = "output.png"  # Use the image generated from Example 1
+PROMPT = "Transform this cat into a Van Gogh Starry Night style oil painting"
 ASPECT_RATIO = "1:1"
+IMAGE_SIZE = "2K"
 OUTPUT_DIR = "."
 
-# --- API Endpoint (Nano Banana) ---
-API_URL = "https://api.laozhang.ai/v1beta/models/gemini-2.5-flash-image:generateContent"
+# --- API Endpoint (Nano Banana 2) ---
+API_URL = "https://api.laozhang.ai/v1beta/models/gemini-3-pro-image-preview:generateContent"
 
 def encode_image_to_base64(image_path):
     with open(image_path, "rb") as f:
@@ -376,63 +381,63 @@ def get_mime_type(image_path):
     else:
         return "application/octet-stream"  # Default type
 
-def generate_image_to_image(api_key, input_image_path, prompt, aspect_ratio, output_dir, api_url):
+def generate_image_to_image(api_key, input_image_path, prompt, aspect_ratio, image_size, output_dir, api_url):
     if not os.path.exists(input_image_path):
-        print(f"❌ Error: Input image '{input_image_path}' not found. Please ensure the image is in the current directory.")
+        print(f"❌ Error: Input image '{input_image_path}' not found.")
         return False
 
     encoded_image = encode_image_to_base64(input_image_path)
     mime_type = get_mime_type(input_image_path)
 
     headers = {
-        "Content-Type": "application/json",
-        "Authorization": f"Bearer {api_key}"
-    }
-        payload = {
+            "Content-Type": "application/json",
+            "Authorization": f"Bearer {api_key}"
+        }
+    payload = {
         "contents": [{
             "parts": [
                 {"text": prompt},
                 {"inline_data": {"mime_type": mime_type, "data": encoded_image}}
             ]
         }],
-            "generationConfig": {
-                "responseModalities": ["IMAGE"],
-                "imageConfig": {
-                    "aspectRatio": aspect_ratio
-                }
+        "generationConfig": {
+            "responseModalities": ["IMAGE"],
+            "imageConfig": {
+                "aspectRatio": aspect_ratio,
+                "imageSize": image_size
             }
         }
-        
-    print(f"🚀 Starting single image-to-image (Nano Banana)...")
-    print(f"📝 Prompt: {prompt}")
-    print(f"🖼️ Input image: {input_image_path}")
+    }
+    
+    print(f"🚀 Generating image-to-image (Nano Banana 2, {image_size})...")
+        print(f"📝 Prompt: {prompt}")
+    print(f"📁 Input: {input_image_path}")
 
     try:
         response = requests.post(api_url, headers=headers, json=payload, timeout=180)
-            if response.status_code != 200:
+        if response.status_code != 200:
             print(f"❌ API request failed: {response.status_code} - {response.text}")
             return False
+        
+        result = response.json()
+        image_data_b64 = result["candidates"][0]["content"]["parts"][0]["inlineData"]["data"]
+        raw_data = base64.b64decode(image_data_b64)
+        
+        output_path = os.path.join(output_dir, "output_styled.png")
+        with open(output_path, "wb") as f:
+            f.write(raw_data)
             
-            result = response.json()
-            image_data_b64 = result["candidates"][0]["content"]["parts"][0]["inlineData"]["data"]
-            raw_data = base64.b64decode(image_data_b64)
-            
-            timestamp = datetime.datetime.now().strftime("%Y%m%d_%H%M%S")
-        output_path = os.path.join(output_dir, f"image_to_image_{timestamp}.png")
-            with open(output_path, "wb") as f:
-                f.write(raw_data)
-                
         print(f"✅ Image saved: {output_path}")
         return True
-        except Exception as e:
+    except Exception as e:
         print(f"❌ Error: {str(e)}")
         return False
 
 if __name__ == "__main__":
-    generate_image_to_image(API_KEY, INPUT_IMAGE_PATH, PROMPT, ASPECT_RATIO, OUTPUT_DIR, API_URL)
+    generate_image_to_image(API_KEY, INPUT_IMAGE_PATH, PROMPT, ASPECT_RATIO, IMAGE_SIZE, OUTPUT_DIR, API_URL)
 ```
 
-#### 3️⃣ Multi-Image Mixing (Nano Banana 2)
+#### 3️⃣ Multi-Image Mixing → Combine First and Second Images to Generate Third
 
 ```python
 import requests
@@ -441,11 +446,11 @@ import os
 import datetime
 
 # --- API Key Configuration ---
-    API_KEY = "sk-YOUR_API_KEY"  # Replace with your API Key
-    
+API_KEY = "sk-YOUR_API_KEY"  # Replace with your API Key
+
 # --- Parameters ---
-INPUT_IMAGE_PATHS = ["test_cat.jpg", "test_apple.jpg"]  # Ensure images exist
-PROMPT = "Combine these images: A realistic scene of this cat eating this red apple on a wooden table"
+INPUT_IMAGE_PATHS = ["output.png", "output_styled.png"]  # Use images from Examples 1 and 2
+PROMPT = "Combine these two cat images into a single artistic composition"
 ASPECT_RATIO = "16:9"
 IMAGE_SIZE = "2K"  # Nano Banana 2 supports 1K, 2K, 4K
 OUTPUT_DIR = "."
@@ -480,39 +485,38 @@ def generate_multi_image(api_key, input_image_paths, prompt, aspect_ratio, image
         "Content-Type": "application/json",
         "Authorization": f"Bearer {api_key}"
     }
-    payload = {
-        "contents": [{"parts": parts}],
-        "generationConfig": {
-            "responseModalities": ["IMAGE"],
-            "imageConfig": {
+        payload = {
+            "contents": [{"parts": parts}],
+            "generationConfig": {
+                "responseModalities": ["IMAGE"],
+                "imageConfig": {
                 "aspectRatio": aspect_ratio,
                 "imageSize": image_size
             }
         }
     }
 
-    print(f"🚀 Starting multi-image mixing (Nano Banana 2, {image_size})...")
+    print(f"🚀 Generating multi-image mix (Nano Banana 2, {image_size})...")
     print(f"📝 Prompt: {prompt}")
-    print(f"🖼️ Input images: {', '.join(input_image_paths)}")
+    print(f"📁 Input: {len(input_image_paths)} images")
 
     try:
         response = requests.post(api_url, headers=headers, json=payload, timeout=180)
-        if response.status_code != 200:
+            if response.status_code != 200:
             print(f"❌ API request failed: {response.status_code} - {response.text}")
             return False
-        
-        result = response.json()
-        image_data_b64 = result["candidates"][0]["content"]["parts"][0]["inlineData"]["data"]
-        raw_data = base64.b64decode(image_data_b64)
-        
-        timestamp = datetime.datetime.now().strftime("%Y%m%d_%H%M%S")
-        output_path = os.path.join(output_dir, f"multi_image_mix_{timestamp}.png")
-        with open(output_path, "wb") as f:
-            f.write(raw_data)
-        
+            
+            result = response.json()
+            image_data_b64 = result["candidates"][0]["content"]["parts"][0]["inlineData"]["data"]
+            raw_data = base64.b64decode(image_data_b64)
+            
+        output_path = os.path.join(output_dir, "output_mixed.png")
+            with open(output_path, "wb") as f:
+                f.write(raw_data)
+                
         print(f"✅ Image saved: {output_path}")
         return True
-    except Exception as e:
+        except Exception as e:
         print(f"❌ Error: {str(e)}")
         return False
 
