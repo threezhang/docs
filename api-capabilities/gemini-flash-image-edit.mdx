@@ -875,44 +875,130 @@ payload = {
 
 ## ❓ 常见问题
 
-<AccordionGroup>
-  <Accordion title="支持哪些图片格式？">
-    支持常见的图片格式：
-    - JPG/JPEG
-    - PNG
-    - WebP
-    - GIF（静态）
-    
-    建议使用 JPG 或 PNG 格式以获得最佳效果。
-  </Accordion>
+### Q1: Nano Banana 和 Nano Banana 2 有什么区别？
 
-  <Accordion title="图片大小有限制吗？">
-    - **推荐大小**：单张图片 ≤ 5MB
-    - **最大大小**：≤ 10MB
-    - 过大的图片会增加处理时间，建议压缩后上传
-  </Accordion>
+| 特性 | Nano Banana | Nano Banana 2 |
+|------|-------------|---------------|
+| **模型 ID** | `gemini-2.5-flash-image` | `gemini-3-pro-image-preview` |
+| **版本** | Stable | Preview |
+| **技术基础** | Gemini 2.5 | Gemini 3 |
+| **分辨率** | 固定 1K（1024px） | 1K/2K/4K |
+| **价格** | $0.025/次 | $0.05/次 |
+| **Thinking Mode** | ❌ 无 | ✅ 有（内置推理） |
+| **Search Grounding** | ❌ 无 | ✅ 有 |
+| **多图支持** | ✅ 有（最多3张） | ✅ 有（最多14张） |
+| **速度** | ~10秒 | ~10秒 |
+| **推荐场景** | 生产环境，追求稳定性 | 追求最佳质量，需要高分辨率 |
 
-  <Accordion title="可以同时处理多少张图片？">
-    - **OpenAI 兼容模式**：支持多张图片（建议 ≤ 4 张）
-    - **Google 原生格式**：支持多张图片（建议 ≤ 4 张）
-    - 图片过多会影响生成质量和处理时间
-  </Accordion>
+### Q2: 应该选择哪个模型？
 
-  <Accordion title="编辑结果不理想怎么办？">
-    可以尝试：
-    1. **优化提示词**：提供更详细、具体的描述
-    2. **调整纵横比**：选择更适合的输出尺寸
-    3. **分步处理**：复杂编辑可以分多次完成
-    4. **多次尝试**：AI 生成有一定随机性，可以多试几次
-  </Accordion>
+**选择 Nano Banana**（`gemini-2.5-flash-image`）如果：
+- ✅ 需要生产环境稳定性
+- ✅ 1K 分辨率足够使用
+- ✅ 希望成本最低（$0.025/次）
 
-  <Accordion title="如何保证编辑后风格一致？">
-    在提示词中明确说明：
-    - "in the same style as the original image"（保持原图风格）
-    - "keep the original lighting and color tone"（保持原图光线和色调）
-    - "seamlessly integrate"（无缝融合）
-  </Accordion>
-</AccordionGroup>
+**选择 Nano Banana 2**（`gemini-3-pro-image-preview`）如果：
+- ✅ 需要高分辨率（2K/4K）
+- ✅ 追求最佳图像质量
+- ✅ 需要高级特性（Thinking Mode、Search Grounding）
+- ✅ 愿意使用预览版本
+
+### Q3: 如何切换模型？
+
+**非常简单！只需更改模型名称：**
+
+**OpenAI 兼容模式**：
+```python
+# Nano Banana（稳定版）
+model="gemini-2.5-flash-image"
+
+# Nano Banana 2（最新版）
+model="gemini-3-pro-image-preview"
+```
+
+**Google 原生格式**：
+```bash
+# Nano Banana（稳定版）
+https://api.laozhang.ai/v1beta/models/gemini-2.5-flash-image:generateContent
+
+# Nano Banana 2（最新版）
+https://api.laozhang.ai/v1beta/models/gemini-3-pro-image-preview:generateContent
+```
+
+### Q4: 如何使用 4K 分辨率？
+
+**4K 仅 Nano Banana 2 支持**，使用 Google 原生格式并添加 `imageSize` 参数：
+
+```json
+{
+  "generationConfig": {
+    "responseModalities": ["IMAGE"],
+    "imageConfig": {
+      "aspectRatio": "16:9",
+      "imageSize": "4K"  // 必须大写 "K"
+    }
+  }
+}
+```
+
+**重要**：必须使用大写 "K"（1K、2K、4K），小写（1k）会被拒绝。
+
+### Q5: 支持哪些图片格式？
+
+支持常见的图片格式：
+- JPG/JPEG
+- PNG
+- WebP
+- GIF（静态）
+
+建议使用 JPG 或 PNG 格式以获得最佳效果。
+
+### Q6: 图片大小有限制吗？
+
+- **推荐大小**：单张图片 ≤ 5MB
+- **最大大小**：≤ 10MB
+- 过大的图片会增加处理时间，建议压缩后上传
+
+### Q7: 可以同时处理多少张图片？
+
+- **Nano Banana**：支持多张图片（建议 ≤ 3 张）
+- **Nano Banana 2**：支持多张图片（最多 14 张，建议 ≤ 4 张）
+- 图片过多会影响生成质量和处理时间
+
+### Q8: 为什么 Nano Banana 2 在老张 API 这么便宜？
+
+| 模型 | 老张 API | 官网 | 节省 |
+|------|---------|------|------|
+| **Nano Banana 2** | $0.05/次 | $0.24/次 | **79%** |
+| **Nano Banana** | $0.025/次 | $0.04/次 | 37.5% |
+
+**Nano Banana 2 在老张 API 性价比超高！** 比官网便宜 79%，还有充值赠送和汇率优势。
+
+## 📝 更新日志
+
+### 2025-01-XX
+- 🆕 添加 Nano Banana 2（`gemini-3-pro-image-preview`）支持
+- 🎨 添加 4K 分辨率支持（仅 Nano Banana 2）
+- 🧠 添加 Thinking Mode（内置推理，默认启用）
+- 🌐 添加 Google Search Grounding 支持
+- 🖼️ 扩展多图支持至 14 张（Nano Banana 2）
+- 💰 更新价格：Nano Banana 2 $0.05/次（比官网 $0.24 便宜 79%）
+- 📊 添加完整分辨率表格
+- 🔧 更新模型对比和切换说明
+
+### 2024-12-XX
+- 🎉 初始发布 Nano Banana（`gemini-2.5-flash-image`）
+- 🎨 支持 10 种纵横比
+- 💰 价格：$0.025/次（比官网便宜 37.5%）
+
+---
+
+<Tip>
+💡 **需要帮助？**  
+- 📖 [查看图像生成文档](/api-capabilities/gemini-flash-image)
+- 💬 加入我们的社区获取支持
+- 🔑 [获取你的 API 密钥](https://api.laozhang.ai/token)
+</Tip>
 
 ## 🔗 相关资源
 
