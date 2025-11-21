@@ -13,7 +13,8 @@ Google 最新一代图像生成模型 **Nano Banana 2**（内部代号）正式�
 - 🧠 **基于 Gemini 3**：更强大的推理能力和图像质量
 - 🔄 **无缝切换**：调用方式与旧版完全相同，只需更换模型名
 - ✅ **旧版继续可用**：`gemini-2.5-flash-image` 仍然稳定服务
-- 💰 **价格不变**：依然是 $0.05/张 11月21号更新-new
+- 📐 **高分辨率支持**：支持 1K、2K、4K 三种分辨率（仅 Nano Banana 2）
+- 💰 **价格**：Nano Banana $0.025/张，Nano Banana 2 $0.05/张
 </Note>
 
 ## 模型简介
@@ -25,13 +26,17 @@ Google 的 **Nano Banana** 系列是其图像生成技术的内部代号，目�
 - **版本**：Preview（预览版）
 - **技术基础**：基于 Gemini 3 架构，具备更强的推理能力
 - **特点**：最新技术，图像质量和细节表现更优秀
-- **适用场景**：追求最佳效果、愿意尝试新特性的用户
+- **分辨率支持**：支持 1K、2K、4K 三种分辨率
+- **价格**：$0.05/张
+- **适用场景**：追求最佳效果、需要高分辨率、愿意尝试新特性的用户
 
 ### 🛡️ Nano Banana（稳定版）
 - **模型名称**：`gemini-2.5-flash-image`
 - **版本**：Stable（正式版）
 - **技术基础**：基于 Gemini 2.5 架构
 - **特点**：稳定可靠，生产环境推荐
+- **分辨率支持**：固定 1K（1024px），不支持 imageSize 参数
+- **价格**：$0.025/张
 - **适用场景**：需要稳定性保障的生产环境
 
 <Tip>
@@ -50,8 +55,9 @@ Google 的 **Nano Banana** 系列是其图像生成技术的内部代号，目�
 **🎉 核心特性**
 - ✅ 支持 OpenAI 兼容格式和 Google 原生格式
 - 🎨 支持自定义纵横比（16:9、9:16 等 10 种比例）
+- 📐 **Nano Banana 2 独有**：支持 1K、2K、4K 三种分辨率
 - ⚡ 平均 10 秒生成高质量图片
-- 💰 超值价格：$0.025/张（比官方便宜 37.5%）
+- 💰 超值价格：Nano Banana 2 $0.05/张，Nano Banana $0.025/张
 </Note>
 
 ## 🔀 两种调用方式
@@ -63,23 +69,28 @@ Gemini Flash Image 支持两种调用端点，各有优势：
 | **端点** | `/v1/chat/completions` | `/v1beta/models/gemini-2.5-flash-image:generateContent` |
 | **模型名** | `gemini-2.5-flash-image` | URL 中指定 |
 | **图片尺寸** | 固定 1:1 | 支持 10 种纵横比 |
+| **分辨率** | 固定 1K | Nano Banana 2 支持 1K/2K/4K，Nano Banana 固定 1K |
 | **兼容性** | 完美兼容 OpenAI SDK | 需要原生调用 |
 | **返回格式** | Base64 | Base64 |
-| **使用场景** | 快速迁移、简单需求 | 需要自定义尺寸 |
+| **使用场景** | 快速迁移、简单需求 | 需要自定义尺寸或高分辨率 |
 | **纵横比支持** | ❌ 否 | ✅ 21:9, 16:9, 4:3, 3:2, 1:1, 9:16, 3:4, 2:3, 5:4, 4:5 |
 
 <Tip>
 💡 **如何选择？**
 - 如果只需要正方形（1:1）图片，使用 **OpenAI 兼容模式**更简单
-- 如果需要宽屏（16:9）、竖屏（9:16）等特定比例，使用 **Google 原生格式**
+- 如果需要宽屏（16:9）、竖屏（9:16）等特定比例或高分辨率（2K/4K），使用 **Google 原生格式**
 </Tip>
 
 ## 🌟 核心特性
 
 - **⚡ 极速响应**：平均 10 秒生成，显著快于 OpenAI 系列
-- **💰 超值价格**：$0.025/张，比官方价格（$0.04/张）便宜 37.5%
+- **💰 超值价格**：Nano Banana 2 $0.05/张，Nano Banana $0.025/张
 - **🔄 双重兼容**：支持 OpenAI SDK 和 Google 原生格式
 - **📐 灵活尺寸**：Google 原生格式支持 10 种纵横比
+- **🖼️ 高分辨率**：Nano Banana 2 支持 1K、2K、4K 三种分辨率
+- **🧠 思考模式**：Nano Banana 2 内置推理过程，生成前优化构图（默认启用）
+- **🌐 搜索接地**：Nano Banana 2 支持使用 Google Search 验证事实并生成图片
+- **🎨 多图参考**：支持最多 14 张参考图片（6 张物体 + 5 张人物等）
 - **📦 Base64 输出**：直接返回 base64 编码图片数据，无需二次下载
 - **🎨 Google 技术**：基于 Google 最新图像生成技术，质量出众
 
@@ -87,21 +98,21 @@ Gemini Flash Image 支持两种调用端点，各有优势：
 
 ### 同系列模型对比
 
-| 模型 | 代号 | 模型 ID | 版本 | 技术基础 | 推荐场景 |
-|------|------|---------|------|----------|----------|
-| **Nano Banana 2** | 🆕 最新 | `gemini-3-pro-image-preview` | Preview | Gemini 3 | 追求最佳效果 |
-| **Nano Banana** | 🛡️ 稳定 | `gemini-2.5-flash-image` | Stable | Gemini 2.5 | 生产环境 |
+| 模型 | 代号 | 模型 ID | 版本 | 技术基础 | 分辨率支持 | 价格 | 推荐场景 |
+|------|------|---------|------|----------|-----------|------|----------|
+| **Nano Banana 2** | 🆕 最新 | `gemini-3-pro-image-preview` | Preview | Gemini 3 | 1K/2K/4K | $0.05/张 | 追求最佳效果、需要高分辨率 |
+| **Nano Banana** | 🛡️ 稳定 | `gemini-2.5-flash-image` | Stable | Gemini 2.5 | 1K（固定） | $0.025/张 | 生产环境 |
 
-**共同特点**：价格相同（$0.025/张）、速度相同（~10秒）、调用方式相同
+**共同特点**：速度相同（~10秒）、调用方式相同
 
 ### 与其他图像模型对比
 
-| 模型 | 模型 ID | 计费方式 | 老张API价格 | 官方价格 | 节省比例 | 速度 |
-|------|---------|----------|-----------|----------|----------|------|
-| **Nano Banana 2** | `gemini-3-pro-image-preview` | 按次计费 | $0.025/张 | $0.04/张 | 37.5% | ~10秒 |
-| **Nano Banana** | `gemini-2.5-flash-image` | 按次计费 | $0.025/张 | $0.04/张 | 37.5% | ~10秒 |
-| **GPT-Image-1** | `gpt-image-1` | 按Token | $10输入/$40输出 per M | - | - | 中等 |
-| **Flux Kontext Pro** | `flux-kontext-pro` | 按次计费 | $0.035/张 | $0.04/张 | 12.5% | 快速 |
+| 模型 | 模型 ID | 计费方式 | 老张API价格 | 官方价格 | 节省比例 | 分辨率 | 速度 |
+|------|---------|----------|-----------|----------|----------|--------|------|
+| **Nano Banana 2** | `gemini-3-pro-image-preview` | 按次计费 | $0.05/张 | $0.04/张 | - | 1K/2K/4K | ~10秒 |
+| **Nano Banana** | `gemini-2.5-flash-image` | 按次计费 | $0.025/张 | $0.04/张 | 37.5% | 1K（固定） | ~10秒 |
+| **GPT-Image-1** | `gpt-image-1` | 按Token | $10输入/$40输出 per M | - | - | - | 中等 |
+| **Flux Kontext Pro** | `flux-kontext-pro` | 按次计费 | $0.035/张 | $0.04/张 | 12.5% | - | 快速 |
 | **Sora Image** | `sora_image` | 按次计费 | $0.01/张 | - | - | 较慢 |
 
 <Tip>
@@ -131,8 +142,8 @@ Gemini Flash Image 支持两种调用端点，各有优势：
 
 <Tip>
 💰 **价格优势详解**  
-- **老张API价格**：$0.025/张（比官网便宜 37.5%）
-- **官网价格**：$0.04/张
+- **Nano Banana 2**：$0.05/张（老张API）vs $0.04/张（官网）
+- **Nano Banana**：$0.025/张（比官网便宜 37.5%）
 - **充值优惠**：充值 100 美金 +10% 赠送
 - **汇率优势**：叠加汇率优势，**总体相当于官网 7.3 折**
 </Tip>
@@ -230,243 +241,465 @@ if match:
 | **纵向** | 9:16（竖屏）, 3:4, 2:3 |
 | **其他** | 5:4, 4:5 |
 
-### 简单 Curl 示例
+### 支持的分辨率
+
+<Tip>
+💡 **分辨率支持说明**
+- **Nano Banana 2**（`gemini-3-pro-image-preview`）：支持 1K、2K、4K 三种分辨率
+- **Nano Banana**（`gemini-2.5-flash-image`）：固定 1K（1024px），不支持 `imageSize` 参数
+</Tip>
+
+**Nano Banana 2 分辨率选项**：
+
+| 纵横比 | 1K 分辨率 | 2K 分辨率 | 4K 分辨率 |
+|--------|-----------|-----------|-----------|
+| **1:1** | 1024×1024 | 2048×2048 | 4096×4096 |
+| **16:9** | 1376×768 | 2752×1536 | 5504×3072 |
+| **9:16** | 768×1376 | 1536×2752 | 3072×5504 |
+| **4:3** | 1200×896 | 2400×1792 | 4800×3584 |
+| **3:4** | 896×1200 | 1792×2400 | 3584×4800 |
+| **21:9** | 1584×672 | 3168×1344 | 6336×2688 |
+| **3:2** | 1248×832 | 2496×1664 | 4992×3328 |
+| **2:3** | 832×1248 | 1664×2496 | 3328×4992 |
+| **5:4** | 1152×896 | 2304×1792 | 4608×3584 |
+| **4:5** | 896×1152 | 1792×2304 | 3584×4608 |
+
+<Tip>
+💡 **分辨率选择建议**
+- **1K**：适合网页展示、社交媒体、快速预览
+- **2K**：适合高质量打印、专业展示
+- **4K**：适合大型打印、专业设计、极致细节
+</Tip>
+
+### 完整 Curl 示例（文生图 4K）
 
 ```bash
-{/*  使用 Nano Banana 2 (最新)  */}
+#!/bin/bash
+
+# 1. 设置 API 密钥
+export API_KEY="sk-YOUR_API_KEY"
+
+# 2. 发送请求（使用 Nano Banana 2 生成 4K 图片）
 curl -s -X POST "https://api.laozhang.ai/v1beta/models/gemini-3-pro-image-preview:generateContent" \
   -H "Authorization: Bearer $API_KEY" \
   -H "Content-Type: application/json" \
   -d '{
     "contents": [{
       "parts": [
-        {"text": "a beautiful sunset over mountains"}
+        {"text": "A futuristic city skyline at sunset, high detailed, 4k"}
       ]
     }],
     "generationConfig": {
       "responseModalities": ["IMAGE"],
       "imageConfig": {
-        "aspectRatio": "16:9"
+        "aspectRatio": "16:9",
+        "imageSize": "4K"
       }
     }
   }' \
   | jq -r '.candidates[0].content.parts[0].inlineData.data' \
-  | base64 --decode > output.png
+  | base64 --decode > output_4k.png
 
-{/*  如需使用稳定版 Nano Banana，将 URL 改为：
+echo "✅ 图片已保存: output_4k.png"
+```
+
+### 快速开始 Curl 示例
+
+```bash
+# 使用 Nano Banana（稳定版，1K）
 curl -s -X POST "https://api.laozhang.ai/v1beta/models/gemini-2.5-flash-image:generateContent" \
-  ...（其他参数相同）
-*/}
+  -H "Authorization: Bearer $API_KEY" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "contents": [{
+      "parts": [{"text": "a beautiful sunset over mountains"}]
+    }],
+    "generationConfig": {
+      "responseModalities": ["IMAGE"],
+      "imageConfig": {"aspectRatio": "16:9"}
+    }
+  }' | jq -r '.candidates[0].content.parts[0].inlineData.data' | base64 --decode > output.png
 ```
 
 <Note>
-💡 **模型选择**
-- 上面示例使用的是 **Nano Banana 2**（URL 中的 `gemini-3-pro-image-preview`）
-- 如需使用稳定版，将 URL 中的模型名改为 `gemini-2.5-flash-image` 即可
+💡 **模型切换**
+- 上面使用的是稳定版 `gemini-2.5-flash-image`（固定 1K）
+- 如需使用预览版 `gemini-3-pro-image-preview`（支持 4K），修改 URL 并添加 `"imageSize": "4K"` 参数
 </Note>
 
 ### Python 完整工具脚本
 
-<Accordion title="展开查看完整 Python 脚本（支持纵横比配置）">
+<Accordion title="展开查看完整 Python 脚本（文生图 + 4K 支持）">
 
 ```python
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-
 """
-Gemini 图片生成工具 - Python版本
-使用 Google Gemini 2.5 Flash Image 模型生成图片，支持自定义纵横比
-
-支持的纵横比：
-- 横向: 21:9, 16:9, 4:3, 3:2
-- 正方形: 1:1
-- 纵向: 9:16, 3:4, 2:3
-- 其他: 5:4, 4:5
+Gemini 图片生成工具 - 完整版
+支持 Nano Banana (稳定版) 和 Nano Banana 2 (预览版，支持4K)
 """
 
 import requests
 import base64
 import os
 import datetime
-from typing import Optional, Tuple
 
-class GeminiImageGenerator:
-    """Gemini 图片生成器"""
+# ========== 配置区 ==========
+API_KEY = "sk-YOUR_API_KEY"
 
-    # 支持的纵横比
-    SUPPORTED_ASPECT_RATIOS = [
-        "21:9", "16:9", "4:3", "3:2", "1:1",
-        "9:16", "3:4", "2:3", "5:4", "4:5"
-    ]
+# 选择模型和配置
+# 方案1: Nano Banana 2 (预览版) - 支持 4K
+MODEL = "nano_banana2"
+API_URL = "https://api.laozhang.ai/v1beta/models/gemini-3-pro-image-preview:generateContent"
+PROMPT = "A futuristic cyberpunk city at night, neon lights, flying cars, highly detailed, 4k"
+ASPECT_RATIO = "16:9"
+IMAGE_SIZE = "4K"  # 1K, 2K, 4K
 
-    def __init__(self, api_key: str, api_url: str = "https://api.laozhang.ai/v1beta/models/gemini-3-pro-image-preview:generateContent"):
-        """
-        初始化图片生成器
+# 方案2: Nano Banana (稳定版) - 固定 1K
+# MODEL = "nano_banana"
+# API_URL = "https://api.laozhang.ai/v1beta/models/gemini-2.5-flash-image:generateContent"
+# PROMPT = "a beautiful sunset over mountains"
+# ASPECT_RATIO = "16:9"
+# IMAGE_SIZE = None  # 稳定版不支持此参数
+# ============================
 
-        参数:
-            api_key: API密钥
-            api_url: API地址（默认使用 Nano Banana 2 最新模型）
-                    - Nano Banana 2: https://api.laozhang.ai/v1beta/models/gemini-3-pro-image-preview:generateContent
-                    - Nano Banana: https://api.laozhang.ai/v1beta/models/gemini-2.5-flash-image:generateContent
-        """
-        self.api_key = api_key
-        self.api_url = api_url
-        self.headers = {
-            "Content-Type": "application/json",
-            "Authorization": f"Bearer {api_key}"
-        }
-
-    def generate_image(self, prompt: str, aspect_ratio: Optional[str] = "1:1",
-                      output_dir: str = ".") -> Tuple[bool, str]:
-        """
-        生成图片并保存到本地
-
-        参数:
-            prompt: 图片描述（提示词）
-            aspect_ratio: 纵横比，如 "16:9", "1:1" 等（默认 1:1）
-            output_dir: 保存目录（默认当前目录）
-
-        返回:
-            (是否成功, 结果消息)
-        """
-        print(f"🚀 开始生成图片...")
-        print(f"📝 提示词: {prompt}")
-        print(f"📐 纵横比: {aspect_ratio}")
-
-        # 验证纵横比
-        if aspect_ratio and aspect_ratio not in self.SUPPORTED_ASPECT_RATIOS:
-            return False, f"不支持的纵横比 {aspect_ratio}。支持: {', '.join(self.SUPPORTED_ASPECT_RATIOS)}"
-
-        # 生成文件名
-        timestamp = datetime.datetime.now().strftime("%Y%m%d_%H%M%S")
-        output_file = os.path.join(output_dir, f"gemini_{timestamp}.png")
-
-        try:
-            # 构建请求数据
-            payload = {
-                "contents": [{
-                    "parts": [{"text": prompt}]
-                }]
+def generate_image(api_url, api_key, prompt, aspect_ratio="1:1", image_size=None):
+    """生成图片并保存"""
+    
+    print("="*60)
+    print(f"🎨 Gemini 图片生成")
+    print("="*60)
+    print(f"📝 提示词: {prompt}")
+    print(f"📐 纵横比: {aspect_ratio}")
+    if image_size:
+        print(f"🖼️  分辨率: {image_size}")
+    print("🚀 开始生成...")
+    
+    # 构建请求
+    headers = {
+        "Content-Type": "application/json",
+        "Authorization": f"Bearer {api_key}"
+    }
+    
+    payload = {
+        "contents": [{"parts": [{"text": prompt}]}],
+        "generationConfig": {
+            "responseModalities": ["IMAGE"],
+            "imageConfig": {
+                "aspectRatio": aspect_ratio
             }
+        }
+    }
+    
+    # 添加分辨率参数（仅 Nano Banana 2 支持）
+    if image_size:
+        payload["generationConfig"]["imageConfig"]["imageSize"] = image_size
+    
+    try:
+        # 发送请求
+        timeout = 180 if image_size == "4K" else 120
+        response = requests.post(api_url, headers=headers, json=payload, timeout=timeout)
+        
+        if response.status_code != 200:
+            print(f"❌ API 请求失败，状态码: {response.status_code}")
+            print(f"响应: {response.text}")
+            return False
+        
+        result = response.json()
+        
+        # 提取图片数据
+        if "candidates" not in result or len(result["candidates"]) == 0:
+            print("❌ 未找到图片数据")
+            return False
+        
+        candidate = result["candidates"][0]
+        if "content" not in candidate or "parts" not in candidate["content"]:
+            print("❌ 响应格式错误")
+            return False
+        
+        parts = candidate["content"]["parts"]
+        image_data = None
+        
+        for part in parts:
+            if "inlineData" in part and "data" in part["inlineData"]:
+                image_data = part["inlineData"]["data"]
+                break
+        
+        if not image_data:
+            print("❌ 未找到图片数据")
+            return False
+        
+        # 保存图片
+        print("💾 正在保存...")
+        decoded_data = base64.b64decode(image_data)
+        
+        timestamp = datetime.datetime.now().strftime("%Y%m%d_%H%M%S")
+        size_tag = f"_{image_size}" if image_size else ""
+        filename = f"gemini{size_tag}_{timestamp}.png"
+        
+        with open(filename, 'wb') as f:
+            f.write(decoded_data)
+        
+        file_size = len(decoded_data) / 1024
+        print(f"✅ 图片已保存: {filename}")
+        print(f"📊 文件大小: {file_size:.2f} KB")
+        print("="*60)
+        
+        return True
+        
+    except requests.exceptions.Timeout:
+        print(f"❌ 请求超时（{timeout}秒）")
+        return False
+    except requests.exceptions.ConnectionError:
+        print("❌ 网络连接错误")
+        return False
+    except Exception as e:
+        print(f"❌ 错误: {str(e)}")
+        return False
 
-            # 添加纵横比配置
-            if aspect_ratio:
-                payload["generationConfig"] = {
-                    "responseModalities": ["IMAGE"],
-                    "imageConfig": {
-                        "aspectRatio": aspect_ratio
-                    }
-                }
-
-            print("📡 发送请求到 Gemini API...")
-
-            # 发送请求
-            response = requests.post(
-                self.api_url,
-                headers=self.headers,
-                json=payload,
-                timeout=120
-            )
-
-            if response.status_code != 200:
-                return False, f"API 请求失败，状态码: {response.status_code}"
-
-            # 解析响应
-            result = response.json()
-
-            # 提取图片数据
-            if "candidates" not in result or len(result["candidates"]) == 0:
-                return False, "未找到图片数据"
-
-            candidate = result["candidates"][0]
-            if "content" not in candidate or "parts" not in candidate["content"]:
-                return False, "响应格式错误"
-
-            parts = candidate["content"]["parts"]
-            image_data = None
-
-            for part in parts:
-                if "inlineData" in part and "data" in part["inlineData"]:
-                    image_data = part["inlineData"]["data"]
-                    break
-
-            if not image_data:
-                return False, "未找到图片数据"
-
-            # 解码并保存图片
-            print("💾 正在保存图片...")
-            decoded_data = base64.b64decode(image_data)
-
-            os.makedirs(os.path.dirname(output_file) if os.path.dirname(output_file) else ".", exist_ok=True)
-
-            with open(output_file, 'wb') as f:
-                f.write(decoded_data)
-
-            file_size = len(decoded_data) / 1024  # KB
-            print(f"✅ 图片已保存: {output_file}")
-            print(f"📊 文件大小: {file_size:.2f} KB")
-
-            return True, f"成功保存图片: {output_file}"
-
-        except requests.exceptions.Timeout:
-            return False, "请求超时（120秒）"
-        except requests.exceptions.ConnectionError:
-            return False, "网络连接错误"
-        except Exception as e:
-            return False, f"错误: {str(e)}"
-
-def main():
-    """主函数 - 使用示例"""
-
-    # ========== 配置区 ==========
-    # 1. 设置你的 API 密钥
-    API_KEY = "sk-YOUR_API_KEY"
-
-    # 2. 输入图片描述（提示词）
-    PROMPT = "a beautiful sunset over mountains"
-
-    # 3. 选择纵横比（可选）
-    # 支持: 21:9, 16:9, 4:3, 3:2, 1:1, 9:16, 3:4, 2:3, 5:4, 4:5
-    ASPECT_RATIO = "16:9"  # 宽屏
-    # ASPECT_RATIO = "1:1"   # 正方形
-    # ASPECT_RATIO = "9:16"  # 竖屏
-
-    # 4. 设置保存目录（可选）
-    OUTPUT_DIR = "."  # 当前目录
-    # ============================
-
-    print("="*60)
-    print("Gemini 图片生成工具")
-    print("="*60)
-    print(f"⏰ 开始时间: {datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')}")
-    print("="*60)
-
-    # 创建生成器并生成图片
-    generator = GeminiImageGenerator(API_KEY)
-    success, message = generator.generate_image(
+if __name__ == "__main__":
+    success = generate_image(
+        api_url=API_URL,
+        api_key=API_KEY,
         prompt=PROMPT,
         aspect_ratio=ASPECT_RATIO,
-        output_dir=OUTPUT_DIR
+        image_size=IMAGE_SIZE
     )
-
-    # 显示结果
-    print("\n" + "="*60)
-    if success:
-        print("🎉 生成成功！")
-        print(f"✅ {message}")
-    else:
-        print("❌ 生成失败")
-        print(f"💥 {message}")
-        print("\n建议检查:")
+    
+    if not success:
+        print("\n💡 建议检查:")
         print("  1. API 密钥是否正确")
         print("  2. 网络连接是否正常")
         print("  3. 提示词是否合理")
+```
 
-    print(f"⏰ 结束时间: {datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')}")
+</Accordion>
+
+<Accordion title="展开查看单图生图脚本（图生图 + 风格迁移）">
+
+```python
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+"""
+Gemini 图生图工具 - 风格迁移示例
+需要准备一张图片（如 input.jpg）
+"""
+
+import requests
+import base64
+import os
+
+# ========== 配置区 ==========
+API_KEY = "sk-YOUR_API_KEY"
+API_URL = "https://api.laozhang.ai/v1beta/models/gemini-3-pro-image-preview:generateContent"
+
+INPUT_IMAGE = "input.jpg"  # 输入图片路径
+PROMPT = "Transform this image into Van Gogh's Starry Night style, with swirling brushstrokes and vibrant colors"
+ASPECT_RATIO = "1:1"
+IMAGE_SIZE = "2K"
+# ============================
+
+def encode_image(image_path):
+    """将图片编码为 base64"""
+    with open(image_path, "rb") as f:
+        image_data = base64.b64encode(f.read()).decode("utf-8")
+    
+    ext = os.path.splitext(image_path)[1].lower()
+    mime_type = "image/jpeg" if ext in [".jpg", ".jpeg"] else "image/png"
+    
+    return mime_type, image_data
+
+def image_to_image(api_url, api_key, input_image, prompt, aspect_ratio="1:1", image_size="2K"):
+    """图生图"""
+    
+    if not os.path.exists(input_image):
+        print(f"❌ 找不到图片: {input_image}")
+        return False
+    
     print("="*60)
+    print(f"🎨 Gemini 图生图 - 风格迁移")
+    print("="*60)
+    print(f"📁 输入图片: {input_image}")
+    print(f"📝 提示词: {prompt}")
+    print(f"📐 纵横比: {aspect_ratio}")
+    print(f"🖼️  分辨率: {image_size}")
+    print("🚀 开始处理...")
+    
+    # 编码图片
+    mime_type, image_data = encode_image(input_image)
+    
+    # 构建请求
+    headers = {
+        "Content-Type": "application/json",
+        "Authorization": f"Bearer {api_key}"
+    }
+    
+    payload = {
+        "contents": [{
+            "parts": [
+                {"text": prompt},
+                {
+                    "inline_data": {
+                        "mime_type": mime_type,
+                        "data": image_data
+                    }
+                }
+            ]
+        }],
+        "generationConfig": {
+            "responseModalities": ["IMAGE"],
+            "imageConfig": {
+                "aspectRatio": aspect_ratio,
+                "imageSize": image_size
+            }
+        }
+    }
+    
+    try:
+        response = requests.post(api_url, headers=headers, json=payload, timeout=180)
+        
+        if response.status_code != 200:
+            print(f"❌ API 请求失败: {response.status_code}")
+            return False
+        
+        result = response.json()
+        image_data_out = result["candidates"][0]["content"]["parts"][0]["inlineData"]["data"]
+        
+        # 保存结果
+        output_file = f"output_styled_{os.path.basename(input_image)}"
+        with open(output_file, "wb") as f:
+            f.write(base64.b64decode(image_data_out))
+        
+        print(f"✅ 图片已保存: {output_file}")
+        print("="*60)
+        return True
+        
+    except Exception as e:
+        print(f"❌ 错误: {str(e)}")
+        return False
 
 if __name__ == "__main__":
-    main()
+    image_to_image(
+        api_url=API_URL,
+        api_key=API_KEY,
+        input_image=INPUT_IMAGE,
+        prompt=PROMPT,
+        aspect_ratio=ASPECT_RATIO,
+        image_size=IMAGE_SIZE
+    )
+```
+
+</Accordion>
+
+<Accordion title="展开查看多图混合脚本（创意合成）">
+
+```python
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+"""
+Gemini 多图混合工具 - 最多支持 14 张图片
+"""
+
+import requests
+import base64
+import os
+
+# ========== 配置区 ==========
+API_KEY = "sk-YOUR_API_KEY"
+API_URL = "https://api.laozhang.ai/v1beta/models/gemini-3-pro-image-preview:generateContent"
+
+# 准备多张图片（示例：猫和苹果）
+INPUT_IMAGES = ["cat.jpg", "apple.jpg"]
+PROMPT = "Create a photorealistic scene: this cute cat is curiously sniffing this red apple on a wooden table"
+ASPECT_RATIO = "16:9"
+IMAGE_SIZE = "2K"
+# ============================
+
+def multi_image_mix(api_url, api_key, image_paths, prompt, aspect_ratio="16:9", image_size="2K"):
+    """多图混合生成"""
+    
+    print("="*60)
+    print(f"🎨 Gemini 多图混合")
+    print("="*60)
+    print(f"🖼️  输入图片数量: {len(image_paths)}")
+    
+    # 构建 parts（文本 + 多张图片）
+    parts = [{"text": prompt}]
+    
+    for img_path in image_paths:
+        if not os.path.exists(img_path):
+            print(f"❌ 找不到图片: {img_path}")
+            return False
+        
+        print(f"  📁 加载: {img_path}")
+        
+        with open(img_path, "rb") as f:
+            img_data = base64.b64encode(f.read()).decode("utf-8")
+        
+        ext = os.path.splitext(img_path)[1].lower()
+        mime = "image/jpeg" if ext in [".jpg", ".jpeg"] else "image/png"
+        
+        parts.append({
+            "inline_data": {
+                "mime_type": mime,
+                "data": img_data
+            }
+        })
+    
+    print(f"📝 提示词: {prompt}")
+    print(f"📐 纵横比: {aspect_ratio}")
+    print(f"🖼️  分辨率: {image_size}")
+    print("🚀 开始合成...")
+    
+    # 构建请求
+    headers = {
+        "Content-Type": "application/json",
+        "Authorization": f"Bearer {api_key}"
+    }
+    
+    payload = {
+        "contents": [{"parts": parts}],
+        "generationConfig": {
+            "responseModalities": ["IMAGE"],
+            "imageConfig": {
+                "aspectRatio": aspect_ratio,
+                "imageSize": image_size
+            }
+        }
+    }
+    
+    try:
+        response = requests.post(api_url, headers=headers, json=payload, timeout=180)
+        
+        if response.status_code != 200:
+            print(f"❌ API 请求失败: {response.status_code}")
+            return False
+        
+        result = response.json()
+        image_data = result["candidates"][0]["content"]["parts"][0]["inlineData"]["data"]
+        
+        # 保存结果
+        output_file = "output_mixed.png"
+        with open(output_file, "wb") as f:
+            f.write(base64.b64decode(image_data))
+        
+        print(f"✅ 图片已保存: {output_file}")
+        print("="*60)
+        return True
+        
+    except Exception as e:
+        print(f"❌ 错误: {str(e)}")
+        return False
+
+if __name__ == "__main__":
+    multi_image_mix(
+        api_url=API_URL,
+        api_key=API_KEY,
+        image_paths=INPUT_IMAGES,
+        prompt=PROMPT,
+        aspect_ratio=ASPECT_RATIO,
+        image_size=IMAGE_SIZE
+    )
 ```
 
 </Accordion>
@@ -480,30 +713,30 @@ if __name__ == "__main__":
 
 # ============================================================
 # Gemini 图片生成工具 - Bash/Curl 版本
-# 使用 Google Gemini 2.5 Flash Image 模型生成图片
+# 支持 Nano Banana (稳定版) 和 Nano Banana 2 (预览版，支持4K)
 # ============================================================
 
 # ========== 配置区 ==========
 # 1. 设置你的 API 密钥
 API_KEY="sk-YOUR_API_KEY"
 
-# 2. 输入图片描述（提示词）
-PROMPT="a beautiful sunset over mountains"
-
-# 3. 选择纵横比（可选）
-# 支持: 21:9, 16:9, 4:3, 3:2, 1:1, 9:16, 3:4, 2:3, 5:4, 4:5
-ASPECT_RATIO="16:9"  # 宽屏
-# ASPECT_RATIO="1:1"   # 正方形
-# ASPECT_RATIO="9:16"  # 竖屏
-
-# 4. 设置输出文件名
-OUTPUT_FILE="gemini_generated_$(date +%Y%m%d_%H%M%S).png"
-
-# 5. API 端点（模型选择）
-# Nano Banana 2 (最新)
+# 2. 选择模型和分辨率
+# 方案1: Nano Banana 2 (预览版) - 支持 4K
+MODEL="nano_banana2"
 API_URL="https://api.laozhang.ai/v1beta/models/gemini-3-pro-image-preview:generateContent"
-# Nano Banana (稳定)
+PROMPT="A futuristic cyberpunk city at night, neon lights, flying cars, highly detailed, 4k"
+ASPECT_RATIO="16:9"
+IMAGE_SIZE="4K"  # 1K, 2K, 4K
+
+# 方案2: Nano Banana (稳定版) - 固定 1K
+# MODEL="nano_banana"
 # API_URL="https://api.laozhang.ai/v1beta/models/gemini-2.5-flash-image:generateContent"
+# PROMPT="a beautiful sunset over mountains"
+# ASPECT_RATIO="16:9"
+# IMAGE_SIZE=""  # 稳定版不支持此参数，留空
+
+# 3. 设置输出文件名
+OUTPUT_FILE="gemini_${IMAGE_SIZE}_$(date +%Y%m%d_%H%M%S).png"
 # ============================
 
 # 检查依赖
@@ -529,20 +762,43 @@ echo "📐 纵横比: ${ASPECT_RATIO}"
 echo "📡 发送请求到 Gemini API..."
 
 # 构建 JSON 请求
-REQUEST_JSON=$(jq -n \
-  --arg prompt "$PROMPT" \
-  --arg ratio "$ASPECT_RATIO" \
-  '{
-    contents: [{
-      parts: [{text: $prompt}]
-    }],
-    generationConfig: {
-      responseModalities: ["IMAGE"],
-      imageConfig: {
-        aspectRatio: $ratio
+if [ -n "$IMAGE_SIZE" ]; then
+  # 包含分辨率参数（仅 Nano Banana 2）
+  REQUEST_JSON=$(jq -n \
+    --arg prompt "$PROMPT" \
+    --arg ratio "$ASPECT_RATIO" \
+    --arg size "$IMAGE_SIZE" \
+    '{
+      contents: [{
+        parts: [{text: $prompt}]
+      }],
+      generationConfig: {
+        responseModalities: ["IMAGE"],
+        imageConfig: {
+          aspectRatio: $ratio,
+          imageSize: $size
+        }
       }
-    }
-  }')
+    }')
+  echo "🖼️  分辨率: ${IMAGE_SIZE}"
+else
+  # 不包含分辨率参数（Nano Banana）
+  REQUEST_JSON=$(jq -n \
+    --arg prompt "$PROMPT" \
+    --arg ratio "$ASPECT_RATIO" \
+    '{
+      contents: [{
+        parts: [{text: $prompt}]
+      }],
+      generationConfig: {
+        responseModalities: ["IMAGE"],
+        imageConfig: {
+          aspectRatio: $ratio
+        }
+      }
+    }')
+  echo "🖼️  分辨率: 1K (固定)"
+fi
 
 # 发送请求
 RESPONSE=$(curl -s -X POST "${API_URL}" \
@@ -595,6 +851,101 @@ fi
 
 </Accordion>
 
+## 🚀 Gemini 3 Pro 高级特性（Nano Banana 2 独有）
+
+Gemini 3 Pro Image Preview (Nano Banana 2) 引入了多项突破性功能，专为专业创作设计。
+
+### 🧠 思考模式 (Thinking Mode)
+
+Nano Banana 2 内置了**推理能力**，在生成图片前会自动优化构图和逻辑，以确保更高质量的输出。此功能默认启用，无需额外配置。
+
+<Tip>
+💡 **思考模式的优势**
+- 自动优化构图和布局
+- 理解复杂的多步骤指令
+- 生成过程中会创建临时"思维图像"（在后端，不收费）
+- 最终输出质量更高、更符合预期
+</Tip>
+
+### 🌐 Google 搜索接地 (Grounding)
+
+模型可以使用 Google 搜索作为工具，利用实时数据（如天气、股价、新闻）生成图片。
+
+```bash
+curl -s -X POST "https://api.laozhang.ai/v1beta/models/gemini-3-pro-image-preview:generateContent" \
+  -H "Authorization: Bearer $API_KEY" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "contents": [{"parts": [{"text": "Visualize the current weather forecast for the next 5 days in San Francisco as a clean, modern weather chart."}]}],
+    "tools": [{"google_search": {}}],
+    "generationConfig": {
+      "responseModalities": ["TEXT", "IMAGE"],
+      "imageConfig": {"aspectRatio": "16:9"}
+    }
+  }'
+```
+
+<Note>
+**注意**：使用搜索接地时，`responseModalities` 必须包含 `"TEXT"`（即 `["TEXT", "IMAGE"]`），纯图片模式下无法返回搜索结果。
+</Note>
+
+### 🎨 多图参考 (Reference Images)
+
+Nano Banana 2 支持混合使用最多 **14 张参考图片**：
+- **最多 6 张** 高保真对象图片（用于包含在最终图片中）
+- **最多 5 张** 人物图片（用于保持角色一致性）
+
+这使得复杂的合成、风格迁移和角色保持成为可能。
+
+```python
+# 多图参考示例（Python）
+import requests
+import base64
+
+API_KEY = "sk-YOUR_API_KEY"
+API_URL = "https://api.laozhang.ai/v1beta/models/gemini-3-pro-image-preview:generateContent"
+
+# 准备多张参考图片
+image_paths = ["cat.jpg", "apple.jpg"]
+parts = [{"text": "Combine these images: a cat eating an apple on a table"}]
+
+for path in image_paths:
+    with open(path, "rb") as f:
+        image_data = base64.b64encode(f.read()).decode("utf-8")
+    parts.append({
+        "inline_data": {
+            "mime_type": "image/jpeg",
+            "data": image_data
+        }
+    })
+
+# 发送请求
+response = requests.post(
+    API_URL,
+    headers={
+        "Authorization": f"Bearer {API_KEY}",
+        "Content-Type": "application/json"
+    },
+    json={
+        "contents": [{"parts": parts}],
+        "generationConfig": {
+            "responseModalities": ["IMAGE"],
+            "imageConfig": {
+                "aspectRatio": "16:9",
+                "imageSize": "2K"
+            }
+        }
+    }
+)
+```
+
+<Tip>
+💡 **多图参考最佳实践**
+- 物体图片：用于产品合成、场景构建
+- 人物图片：保持角色外观一致性（如制作系列图片）
+- 组合使用：创建复杂的视觉叙事
+</Tip>
+
 ## 💡 最佳实践
 
 ### 提示词优化
@@ -636,8 +987,10 @@ fi
 
     **主要区别**：
     - Nano Banana 2 基于最新的 Gemini 3 架构，推理能力和图像质量更优
+    - Nano Banana 2 支持 1K、2K、4K 三种分辨率，Nano Banana 固定为 1K
     - Nano Banana 是正式稳定版本，适合生产环境
-    - 两者价格相同（$0.025/张），调用方式完全相同
+    - 价格：Nano Banana 2 $0.05/张，Nano Banana $0.025/张
+    - 调用方式完全相同
   </Accordion>
 
   <Accordion title="如何从 Nano Banana 升级到 Nano Banana 2？">
@@ -666,21 +1019,28 @@ fi
 
     - **Nano Banana 2**（`gemini-3-pro-image-preview`）：
       - ✅ 追求最佳图像质量和最新技术
+      - ✅ 需要 4K 超高清输出
+      - ✅ 需要高级功能（思考模式、搜索接地、多图参考）
       - ✅ 愿意尝试新特性
-      - ⚠️ 作为 Preview 版本，可能会有功能迭代
+      - ⚠️ 作为 Preview 版本，功能可能迭代
 
     - **Nano Banana**（`gemini-2.5-flash-image`）：
       - ✅ 生产环境，需要稳定性保障
-      - ✅ 已有成熟业务流程
+      - ✅ 1K 分辨率足够使用
+      - ✅ 预算有限，追求性价比
       - ✅ 正式版本，稳定可靠
 
-    **价格和速度完全相同**，可根据需求自由选择！
+    **速度相同**，可根据需求自由选择！
+    
+    **价格差异**：
+    - Nano Banana 2：$0.05/张（支持高分辨率）
+    - Nano Banana：$0.025/张（固定 1K）
   </Accordion>
 
   <Accordion title="如何选择调用方式？">
     - 如果只需要 1:1 正方形图片，使用 **OpenAI 兼容模式**更简单，完美兼容现有代码
-    - 如果需要特定纵横比（如 16:9 宽屏），使用 **Google 原生格式**
-    - 两种方式价格相同，都是 $0.025/张
+    - 如果需要特定纵横比（如 16:9 宽屏）或高分辨率（2K/4K），使用 **Google 原生格式**
+    - 价格：Nano Banana 2 $0.05/张，Nano Banana $0.025/张
   </Accordion>
 
   <Accordion title="支持哪些纵横比？">
@@ -689,6 +1049,18 @@ fi
     - 正方形：1:1
     - 纵向：9:16, 3:4, 2:3
     - 其他：5:4, 4:5
+  </Accordion>
+
+  <Accordion title="支持哪些分辨率？">
+    **Nano Banana 2**（`gemini-3-pro-image-preview`）支持三种分辨率：
+    - **1K**：标准分辨率（如 1024×1024，根据纵横比调整）
+    - **2K**：高分辨率（如 2048×2048，根据纵横比调整）
+    - **4K**：超高分辨率（如 4096×4096，根据纵横比调整）
+
+    **Nano Banana**（`gemini-2.5-flash-image`）固定为 1K（1024px），不支持 `imageSize` 参数。
+
+    **使用方法**：
+    在 Google 原生格式的 `imageConfig` 中添加 `"imageSize": "4K"` 参数即可。
   </Accordion>
 
   <Accordion title="如何获取更好的生成效果？">
@@ -729,6 +1101,21 @@ fi
 ## 📝 更新日志
 
 <AccordionGroup>
+  <Accordion title="2025-01-XX：4K 分辨率及高级特性上线">
+    **🚀 Nano Banana 2 (Gemini 3 Pro Image) 重大更新**
+    - **🖼️ 4K 分辨率**：支持 1K、2K、4K 三种分辨率选项
+    - **🧠 思考模式**：默认启用推理能力，自动优化构图
+    - **🌐 搜索接地**：支持结合 Google Search 实时数据生成图片
+    - **🎨 多图参考**：支持最多 14 张参考图片进行复杂合成
+    - **💰 价格更新**：Nano Banana 2 $0.05/张，Nano Banana $0.025/张
+    
+    **📚 文档更新**
+    - 更新分辨率表格，提供精确像素数据
+    - 添加高级特性使用指南（思考模式、搜索接地）
+    - 更新所有示例代码
+    - 新增 code-demo 目录，提供完整可执行脚本
+  </Accordion>
+
   <Accordion title="2025-11-20：Nano Banana 2 上线">
     **🚀 新增 Nano Banana 2（Gemini 3 Pro Image）**
     - ✅ 新增 `gemini-3-pro-image-preview` 模型支持
