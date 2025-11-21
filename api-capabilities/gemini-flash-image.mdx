@@ -334,7 +334,12 @@ curl -s -X POST "https://api.laozhang.ai/v1beta/models/gemini-2.5-flash-image:ge
 
 ### Python 代码示例
 
-<Accordion title="示例 1：文生图（Text-to-Image）">
+<Note>
+💡 **三个示例递进关系**  
+示例1生成图 → 示例2用它变换风格 → 示例3融合前两张图。这样逻辑更清晰！
+</Note>
+
+<Accordion title="示例 1：文生图 → 生成第一张图">
 
 ```python
 import requests
@@ -345,14 +350,14 @@ API_KEY = "sk-YOUR_API_KEY"
 
 # Nano Banana 2 (支持 4K)
 API_URL = "https://api.laozhang.ai/v1beta/models/gemini-3-pro-image-preview:generateContent"
-PROMPT = "A futuristic cyberpunk city at night, neon lights, 4k"
-ASPECT_RATIO = "16:9"
-IMAGE_SIZE = "4K"  # Nano Banana 2 支持: 1K, 2K, 4K
+PROMPT = "一只可爱的橘猫"
+ASPECT_RATIO = "1:1"
+IMAGE_SIZE = "2K"  # Nano Banana 2 支持: 1K, 2K, 4K
 
 # Nano Banana (固定 1K) - 取消注释以使用
 # API_URL = "https://api.laozhang.ai/v1beta/models/gemini-2.5-flash-image:generateContent"
-# PROMPT = "a beautiful sunset over mountains"
-# ASPECT_RATIO = "16:9"
+# PROMPT = "一只可爱的橘猫"
+# ASPECT_RATIO = "1:1"
 # IMAGE_SIZE = None
 # ============================
 
@@ -383,7 +388,7 @@ print("✅ 图片已保存: output.png")
 
 </Accordion>
 
-<Accordion title="示例 2：单图生图（Image-to-Image）">
+<Accordion title="示例 2：单图生图 → 用第一张图生成第二张图">
 
 ```python
 import requests
@@ -393,8 +398,8 @@ import base64
 API_KEY = "sk-YOUR_API_KEY"
 API_URL = "https://api.laozhang.ai/v1beta/models/gemini-3-pro-image-preview:generateContent"
 
-INPUT_IMAGE = "cat.jpg"  # 准备一张图片
-PROMPT = "Transform this into Van Gogh Starry Night style"
+INPUT_IMAGE = "output.png"  # 使用示例1生成的图片
+PROMPT = "把这张图变成梵高星空风格的油画"
 ASPECT_RATIO = "1:1"
 IMAGE_SIZE = "2K"  # Nano Banana 2: 1K, 2K, 4K
 # ============================
@@ -434,7 +439,7 @@ print("✅ 图片已保存: output_styled.png")
 
 </Accordion>
 
-<Accordion title="示例 3：多图混合（Multi-Image）">
+<Accordion title="示例 3：多图混合 → 用第一张和第二张生成第三张图">
 
 ```python
 import requests
@@ -444,9 +449,9 @@ import base64
 API_KEY = "sk-YOUR_API_KEY"
 API_URL = "https://api.laozhang.ai/v1beta/models/gemini-3-pro-image-preview:generateContent"
 
-# 准备多张图片（支持最多 14 张）
-IMAGES = ["cat.jpg", "apple.jpg"]
-PROMPT = "Combine these: a cat eating an apple on a table"
+# 使用前面生成的两张图（示例1和示例2的输出）
+IMAGES = ["output.png", "output_styled.png"]
+PROMPT = "将这两张图融合成一个艺术作品"
 ASPECT_RATIO = "16:9"
 IMAGE_SIZE = "2K"  # Nano Banana 2: 1K, 2K, 4K
 # ============================
@@ -457,7 +462,7 @@ parts = [{"text": PROMPT}]
 for img_path in IMAGES:
     with open(img_path, "rb") as f:
         img_b64 = base64.b64encode(f.read()).decode("utf-8")
-    parts.append({"inline_data": {"mime_type": "image/jpeg", "data": img_b64}})
+    parts.append({"inline_data": {"mime_type": "image/png", "data": img_b64}})
 
 headers = {"Authorization": f"Bearer {API_KEY}", "Content-Type": "application/json"}
 
