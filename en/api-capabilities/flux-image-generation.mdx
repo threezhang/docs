@@ -4,6 +4,30 @@ description: Generate high-quality images using Flux Kontext Pro/Max models, sup
 icon: "sparkles"
 ---
 
+## Prerequisites
+
+<Steps>
+  <Step title="Get API Key">
+    Log in to [laozhang.ai console](https://api.laozhang.ai) to obtain your API key
+  </Step>
+  <Step title="Configure Billing Mode">
+    Edit token settings and choose one of the following billing modes (same price for both):
+
+    - **Volume Priority** (Recommended): Uses balance billing first, automatically switches when balance is insufficient. Suitable for most users
+    - **Pay-per-call**: Direct deduction for each call. Suitable for strict budget control scenarios
+
+    <Note>
+    Both modes have **exactly the same price**, Flux Kontext Pro \$0.035/image, Flux Kontext Max \$0.07/image, only the billing method differs.
+    </Note>
+
+    <img src="/images/sora2-token-setting.png" alt="Token Settings" />
+
+    <Warning>
+    If billing mode is not configured, API calls will fail. You must complete this configuration first!
+    </Warning>
+  </Step>
+</Steps>
+
 ## Flux Image Generation API
 
 Flux is an industry-leading image generation model. Through LaoZhang API's OpenAI-compatible interface, you can easily call Flux Kontext Pro and Max models to generate high-quality images. We offer better pricing than official rates, combined with exchange rate advantages and recharge bonuses to save you more costs.

@@ -5,6 +5,30 @@ description: Generate high-quality images using Sora official reverse-engineered
 icon: "wand-sparkles"
 ---
 
+## Prerequisites
+
+<Steps>
+  <Step title="Get API Key">
+    Log in to [laozhang.ai console](https://api.laozhang.ai) to obtain your API key
+  </Step>
+  <Step title="Configure Billing Mode">
+    Edit token settings and choose one of the following billing modes (same price for both):
+
+    - **Volume Priority** (Recommended): Uses balance billing first, automatically switches when balance is insufficient. Suitable for most users
+    - **Pay-per-call**: Direct deduction for each call. Suitable for strict budget control scenarios
+
+    <Note>
+    Both modes have **exactly the same price** at \$0.01/image, only the billing method differs.
+    </Note>
+
+    <img src="/images/sora2-token-setting.png" alt="Token Settings" />
+
+    <Warning>
+    If billing mode is not configured, API calls will fail. You must complete this configuration first!
+    </Warning>
+  </Step>
+</Steps>
+
 ## Model Overview
 
 Sora Image is an image generation API based on reverse-engineered technology from sora.chatgpt.com, implementing text-to-image functionality through the chat completions interface. Compared to traditional OpenAI Images API, it offers better pricing at only $0.01/image.

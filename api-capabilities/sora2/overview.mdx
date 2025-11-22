@@ -10,6 +10,30 @@ icon: "clapperboard"
   **服务状态:** 运行中 | **无水印** | **无需邀请码**
 </Info>
 
+## 前置要求
+
+<Steps>
+  <Step title="获取 API Key">
+    登录 [laozhang.ai 控制台](https://api.laozhang.ai) 获取 API 密钥
+  </Step>
+  <Step title="配置计费模式">
+    编辑令牌设置，选择以下任一计费模式（两者价格相同）：
+
+    - **按量优先**（推荐）：优先使用余额计费，余额不足时自动切换。适合大多数用户
+    - **按次计费**：每次调用直接扣费。适合预算控制严格的场景
+
+    <Note>
+    两种模式**价格完全相同**，都是 \$0.15/次（10秒或15秒），仅扣费方式不同。
+    </Note>
+
+    <img src="/images/sora2-token-setting.png" alt="令牌设置" />
+
+    <Warning>
+    如果未设置计费模式，API调用会失败。必须先完成此配置！
+    </Warning>
+  </Step>
+</Steps>
+
 ## 重大更新
 
 **发布时间：** 2025年10月1日
