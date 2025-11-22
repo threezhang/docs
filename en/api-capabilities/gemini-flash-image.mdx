@@ -390,8 +390,8 @@ def generate_image_to_image(api_key, input_image_path, prompt, aspect_ratio, ima
     mime_type = get_mime_type(input_image_path)
 
     headers = {
-            "Content-Type": "application/json",
-            "Authorization": f"Bearer {api_key}"
+        "Content-Type": "application/json",
+        "Authorization": f"Bearer {api_key}"
         }
     payload = {
         "contents": [{
@@ -410,7 +410,7 @@ def generate_image_to_image(api_key, input_image_path, prompt, aspect_ratio, ima
     }
     
     print(f"🚀 Generating image-to-image (Nano Banana 2, {image_size})...")
-        print(f"📝 Prompt: {prompt}")
+    print(f"📝 Prompt: {prompt}")
     print(f"📁 Input: {input_image_path}")
 
     try:
@@ -485,13 +485,13 @@ def generate_multi_image(api_key, input_image_paths, prompt, aspect_ratio, image
         "Content-Type": "application/json",
         "Authorization": f"Bearer {api_key}"
     }
-        payload = {
-            "contents": [{"parts": parts}],
-            "generationConfig": {
-                "responseModalities": ["IMAGE"],
-                "imageConfig": {
-                "aspectRatio": aspect_ratio,
-                "imageSize": image_size
+    payload = {
+        "contents": [{"parts": parts}],
+        "generationConfig": {
+            "responseModalities": ["IMAGE"],
+            "imageConfig": {
+            "aspectRatio": aspect_ratio,
+            "imageSize": image_size
             }
         }
     }
@@ -502,21 +502,21 @@ def generate_multi_image(api_key, input_image_paths, prompt, aspect_ratio, image
 
     try:
         response = requests.post(api_url, headers=headers, json=payload, timeout=180)
-            if response.status_code != 200:
+        if response.status_code != 200:
             print(f"❌ API request failed: {response.status_code} - {response.text}")
             return False
-            
-            result = response.json()
-            image_data_b64 = result["candidates"][0]["content"]["parts"][0]["inlineData"]["data"]
-            raw_data = base64.b64decode(image_data_b64)
-            
+        
+        result = response.json()
+        image_data_b64 = result["candidates"][0]["content"]["parts"][0]["inlineData"]["data"]
+        raw_data = base64.b64decode(image_data_b64)
+        
         output_path = os.path.join(output_dir, "output_mixed.png")
-            with open(output_path, "wb") as f:
-                f.write(raw_data)
-                
+        with open(output_path, "wb") as f:
+            f.write(raw_data)
+            
         print(f"✅ Image saved: {output_path}")
         return True
-        except Exception as e:
+    except Exception as e:
         print(f"❌ Error: {str(e)}")
         return False
 
