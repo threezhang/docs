@@ -161,7 +161,7 @@ client = OpenAI(
 )
 
 response = client.chat.completions.create(
-    model="gemini-2.5-flash-image",
+    model="gemini-3-pro-image-preview",  # 最新版，或使用 gemini-2.5-flash-image（稳定版）
     messages=[
         {
             "role": "user",
@@ -207,7 +207,7 @@ client = OpenAI(
 )
 
 response = client.chat.completions.create(
-    model="gemini-2.5-flash-image",
+    model="gemini-3-pro-image-preview",  # 最新版，或使用 gemini-2.5-flash-image（稳定版）
     messages=[
         {
             "role": "user",
@@ -450,7 +450,7 @@ class GeminiImageEditor:
     ]
 
     def __init__(self, api_key: str,
-                 api_url: str = "https://api.laozhang.ai/v1beta/models/gemini-2.5-flash-image:generateContent"):
+                 api_url: str = "https://api.laozhang.ai/v1beta/models/gemini-3-pro-image-preview:generateContent"):
         """
         初始化图片编辑器
 

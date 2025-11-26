@@ -144,7 +144,7 @@ curl -X POST "https://api.laozhang.ai/v1/chat/completions" \
      -H "Authorization: Bearer sk-YOUR_API_KEY" \
      -H "Content-Type: application/json" \
      -d '{
-    "model": "gemini-2.5-flash-image",
+    "model": "gemini-3-pro-image-preview",
     "stream": false,
     "messages": [
         {
@@ -179,7 +179,7 @@ client = OpenAI(
 )
 
 response = client.chat.completions.create(
-    model="gemini-2.5-flash-image",
+    model="gemini-3-pro-image-preview",  # Latest version, or use gemini-2.5-flash-image (stable)
     messages=[
         {
             "role": "user",
@@ -225,7 +225,7 @@ client = OpenAI(
 )
 
 response = client.chat.completions.create(
-    model="gemini-2.5-flash-image",
+    model="gemini-3-pro-image-preview",  # Latest version, or use gemini-2.5-flash-image (stable)
     messages=[
         {
             "role": "user",
@@ -453,7 +453,7 @@ class GeminiImageEditor:
     ]
 
     def __init__(self, api_key: str,
-                 api_url: str = "https://api.laozhang.ai/v1beta/models/gemini-2.5-flash-image:generateContent"):
+                 api_url: str = "https://api.laozhang.ai/v1beta/models/gemini-3-pro-image-preview:generateContent"):
         """
         Initialize image editor
         

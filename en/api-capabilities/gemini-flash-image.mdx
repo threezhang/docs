@@ -190,7 +190,7 @@ client = OpenAI(
 )
 
 response = client.chat.completions.create(
-    model="gemini-2.5-flash-image",
+    model="gemini-3-pro-image-preview",  # Latest version, or use gemini-2.5-flash-image (stable)
     messages=[
         {
             "role": "user",

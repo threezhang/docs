@@ -1,86 +1,83 @@
-# Gemini 图像生成 API - 示例代码
+# Gemini 图像 API - 示例代码
 
-三个场景，一键运行，快速上手 Gemini 图像生成 API。
+完整的 Gemini 图像生成/编辑 API 示例代码，支持两种调用格式。
+
+## 📁 文件说明
+
+### 🎯 快速上手（推荐）
+
+| 文件 | 格式 | 类型 | 说明 |
+|------|------|------|------|
+| `gemini_chat_example.py` | OpenAI Chat | 用户版 | **推荐新手使用**，兼容 OpenAI SDK |
+| `gemini_native_example.py` | Google 原生 | 用户版 | 支持自定义纵横比和 4K |
+
+### 🔬 测试文件（内部）
+
+| 文件 | 格式 | 类型 | 说明 |
+|------|------|------|------|
+| `gemini_chat_demo.py` | OpenAI Chat | 测试版 | 带测试 Key，内部测试用 |
+| `gemini_native_demo.py` | Google 原生 | 测试版 | 带测试 Key，内部测试用 |
+
+### 📦 其他文件
+
+| 文件 | 说明 |
+|------|------|
+| `complete_demo.py` | 完整演示（三个场景串联）|
+| `nano_banana_demo.py` | Nano Banana 稳定版演示 |
+| `nano_banana2_demo.py` | Nano Banana 2 最新版演示 |
+| `config.py` | API Key 配置文件 |
+
+---
 
 ## 🚀 快速开始
 
 ### 1. 安装依赖
+
 ```bash
+# Chat 格式需要
+pip install openai requests
+
+# 原生格式只需要
 pip install requests
 ```
 
 ### 2. 配置 API Key
-编辑 `complete_demo.py`，替换第 22 行的 API Key：
+
+编辑示例文件，修改 `API_KEY` 变量：
 ```python
-API_KEY = "sk-YOUR_API_KEY"  # 改成你的 Key
+API_KEY = "sk-YOUR_API_KEY"  # 替换为您的 API Key
 ```
 
-### 3. 运行演示
+获取 API Key：https://api.laozhang.ai/token
+
+### 3. 运行示例
+
 ```bash
-python3 complete_demo.py
-```
+# Chat 格式（推荐新手）
+python3 gemini_chat_example.py
 
-就这么简单！脚本会自动演示三个场景。
+# 原生格式（更多功能）
+python3 gemini_native_example.py
+```
 
 ---
 
-## 📸 三个演示场景（逐步递进）
+## 🔀 两种调用格式对比
 
-### 场景 1：文生图 → 生成第一张图
-**功能**：从文字描述生成图片  
-**输入**：提示词 "一只可爱的橘猫"  
-**输出**：`result_1_text_to_image.png`
+| 特性 | Chat 格式 | 原生格式 |
+|------|-----------|----------|
+| **端点** | `/v1/chat/completions` | `/v1beta/models/.../generateContent` |
+| **兼容性** | ✅ 完美兼容 OpenAI SDK | 需要原生调用 |
+| **图片输入** | URL 或 Base64 | Base64 |
+| **纵横比** | ❌ 固定 1:1 | ✅ 支持 10 种 |
+| **分辨率** | ❌ 固定 1K | ✅ 1K/2K/4K |
+| **使用场景** | 快速迁移、简单需求 | 自定义尺寸、高分辨率 |
 
-### 场景 2：单图生图 → 用第一张图生成第二张图
-**功能**：图片风格转换  
-**输入**：`result_1_text_to_image.png`（场景1生成的图）  
-**提示词**：把这只猫变成梵高星空风格的油画  
-**输出**：`result_2_image_style_transfer.png`
+### 💡 选择建议
 
-### 场景 3：多图混合 → 用第一张和第二张生成第三张图
-**功能**：创意合成  
-**输入**：第一张图 + 第二张图  
-**提示词**：将这两只猫融合成一个艺术作品  
-**输出**：`result_3_multi_image_mix.png`
-
-**逻辑清晰**：场景1 → 场景2 → 场景3，前后衔接，一气呵成！
-
----
-
-## 🔧 自定义参数
-
-### 切换模型
-```python
-USE_NANO_BANANA_2 = True   # Nano Banana 2 (4K, $0.05/张)
-USE_NANO_BANANA_2 = False  # Nano Banana (1K, $0.025/张)
-```
-
-### 修改提示词
-在 `main()` 函数中找到对应场景，修改 `prompt` 参数：
-```python
-# 场景 1
-prompt="你的提示词"
-
-# 场景 2
-prompt="你的风格转换描述"
-
-# 场景 3
-prompt="你的创意合成描述"
-```
-
-### 调整分辨率（仅 Nano Banana 2）
-```python
-image_size="1K"  # 标准分辨率
-image_size="2K"  # 高清分辨率
-image_size="4K"  # 超高清分辨率
-```
-
-### 修改纵横比
-```python
-aspect_ratio="16:9"  # 横向宽屏
-aspect_ratio="1:1"   # 正方形
-aspect_ratio="9:16"  # 竖屏
-```
+- **新手 / 快速上手**：使用 Chat 格式 (`gemini_chat_example.py`)
+- **需要自定义纵横比**：使用原生格式 (`gemini_native_example.py`)
+- **需要 4K 超高清**：使用原生格式 + Nano Banana 2
 
 ---
 
@@ -89,68 +86,57 @@ aspect_ratio="9:16"  # 竖屏
 | 特性 | Nano Banana | Nano Banana 2 |
 |------|-------------|---------------|
 | **模型** | `gemini-2.5-flash-image` | `gemini-3-pro-image-preview` |
+| **版本** | 稳定版 | 最新版 (Preview) |
 | **分辨率** | 1K (固定) | 1K / 2K / 4K |
 | **价格** | **$0.025/张** | $0.05/张 |
-| **官网** | $0.04/张 | $0.24/张 |
+| **官网价** | $0.04/张 | $0.24/张 |
 | **节省** | 37.5% | **79%** 🔥 |
 | **速度** | ~10秒 | ~10秒 |
 | **推荐** | 生产环境 | 追求质量/4K |
 
 ---
 
-## 💡 选择建议
+## 📸 功能场景
 
-### 用 Nano Banana（稳定版）如果：
-- ✅ 1K 分辨率足够（网页、社交媒体）
-- ✅ 需要最低成本（$0.025/张）
-- ✅ 生产环境，追求稳定
+### ✅ 支持的功能
 
-### 用 Nano Banana 2（最新版）如果：
-- ✅ 需要 4K 超高清
-- ✅ 追求最佳质量
-- ✅ 复杂的图片合成
+1. **文生图** - 从文字描述生成图片
+2. **单图编辑** - 添加元素、风格转换
+3. **多图合成** - 创意融合多张图片
+4. **4K 超高清** - 生成 4K 分辨率图片（仅 Nano Banana 2）
 
----
+### 📐 支持的纵横比（原生格式）
 
-## 📁 其他脚本
-
-### `nano_banana_demo.py`
-纯净版，只用稳定版模型，代码最简洁。
-
-### `nano_banana2_demo.py`
-展示 Nano Banana 2 的所有高级功能。
-
-### `main.py`
-交互式菜单，自动下载测试图片。
+| 类型 | 比例 |
+|------|------|
+| 横向 | 21:9 (超宽屏), 16:9 (宽屏), 4:3, 3:2 |
+| 正方形 | 1:1 |
+| 纵向 | 9:16 (竖屏), 3:4, 2:3 |
+| 其他 | 5:4, 4:5 |
 
 ---
 
 ## ❓ 常见问题
 
-**Q: 三个场景的关系？**  
-A: 逐步递进！场景1生成图 → 场景2用它变换风格 → 场景3融合两张图。
+**Q: Chat 格式和原生格式有什么区别？**  
+A: Chat 格式兼容 OpenAI SDK，更简单；原生格式支持更多参数（纵横比、分辨率）。
 
-**Q: 可以只运行场景1吗？**  
-A: 可以！每个场景独立。但按顺序运行体验最好。
-
-**Q: 输出文件在哪？**  
-A: 当前目录，文件名清晰：
-- `result_1_text_to_image.png` (场景1输出)
-- `result_2_image_style_transfer.png` (场景2输出)
-- `result_3_multi_image_mix.png` (场景3输出)
+**Q: 如何使用 4K 分辨率？**  
+A: 必须使用原生格式 + Nano Banana 2 模型，设置 `image_size="4K"`。
 
 **Q: 提示词用中文还是英文？**  
-A: 都支持，英文效果更好。中文示例让你快速理解。
+A: 都支持，英文效果通常更好。
 
-**Q: 如何获取 API Key？**  
-A: 访问 [api.laozhang.ai](https://api.laozhang.ai)
+**Q: demo 和 example 有什么区别？**  
+A: demo 是内部测试版（带测试 Key），example 是用户版（需要填入自己的 Key）。
 
 ---
 
-## 📚 完整文档
+## 📚 相关文档
 
 - [图像生成文档](https://docs.laozhang.ai/api-capabilities/gemini-flash-image)
 - [图像编辑文档](https://docs.laozhang.ai/api-capabilities/gemini-flash-image-edit)
+- [获取 API Key](https://api.laozhang.ai/token)
 
 ---
 
@@ -160,10 +146,12 @@ A: 访问 [api.laozhang.ai](https://api.laozhang.ai)
 - ✅ 只需改一个 API Key
 - ✅ 运行一个命令
 - ✅ 输出清晰易懂
-- ✅ 用户一眼看懂
+
+**两种格式，按需选择**
+- ✅ Chat 格式：快速上手，兼容性好
+- ✅ 原生格式：功能完整，参数灵活
 
 **生产级质量**
 - ✅ 完善的错误处理
 - ✅ 清晰的参数说明
 - ✅ 可直接集成到项目
-- ✅ 中文注释详尽
