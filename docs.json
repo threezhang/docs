@@ -77,11 +77,22 @@
                 "icon": "video",
                 "pages": [
                   {
-                    "group": "Veo-3.1 (OpenAI 兼容)",
+                    "group": "Veo-3.1 视频生成",
                     "pages": [
                       "api-capabilities/veo/veo-31-overview",
-                      "api-capabilities/veo/veo-31-quick-start",
-                      "api-capabilities/veo/veo-31-examples",
+                      {
+                        "group": "同步 API（兼容 OpenAI）",
+                        "pages": [
+                          "api-capabilities/veo/veo-31-quick-start",
+                          "api-capabilities/veo/veo-31-examples"
+                        ]
+                      },
+                      {
+                        "group": "异步 API（任务队列）",
+                        "pages": [
+                          "api-capabilities/veo/veo-31-async-api"
+                        ]
+                      },
                       "api-capabilities/veo/veo-31-best-practices",
                       "api-capabilities/veo/veo-31-troubleshooting"
                     ]
@@ -331,11 +342,22 @@
                   "icon": "video",
                   "pages": [
                     {
-                      "group": "Veo-3.1 (OpenAI Compatible)",
+                      "group": "Veo-3.1 Video Generation",
                       "pages": [
                         "en/api-capabilities/veo/veo-31-overview",
-                        "en/api-capabilities/veo/veo-31-quick-start",
-                        "en/api-capabilities/veo/veo-31-examples",
+                        {
+                          "group": "Sync API (OpenAI Compatible)",
+                          "pages": [
+                            "en/api-capabilities/veo/veo-31-quick-start",
+                            "en/api-capabilities/veo/veo-31-examples"
+                          ]
+                        },
+                        {
+                          "group": "Async API (Task Queue)",
+                          "pages": [
+                            "en/api-capabilities/veo/veo-31-async-api"
+                          ]
+                        },
                         "en/api-capabilities/veo/veo-31-best-practices",
                         "en/api-capabilities/veo/veo-31-troubleshooting"
                       ]

@@ -1,0 +1,717 @@
+---
+title: "异步调用 API"
+description: "Veo-3.1 异步视频生成 API，更稳定的任务队列方式"
+icon: "refresh-cw"
+---
+
+<Info>
+**异步端点：** `https://api.laozhang.ai/v1/videos`
+
+**调用方式：** 三步骤（创建任务 → 查询状态 → 获取视频）
+
+**优势：** 更稳定 | 任务队列 | 支持长时任务 | 失败不扣费
+</Info>
+
+## 为什么选择异步 API？
+
+<CardGroup cols={2}>
+  <Card title="更高稳定性" icon="shield-check">
+    基于任务队列，避免长连接超时问题
+  </Card>
+  <Card title="失败不扣费 ⭐" icon="badge-dollar">
+    **重大优势**：任何原因失败都不扣费
+
+    - ✓ 内容违规 → 不扣费
+    - ✓ 队列超时 → 不扣费
+    - ✓ 生成失败 → 不扣费
+
+    同步API只要请求成功（HTTP 200）就扣费，即使最终生成失败！
+  </Card>
+  <Card title="灵活轮询" icon="refresh-ccw">
+    可随时查询任务状态和进度
+  </Card>
+  <Card title="批量处理" icon="layers">
+    适合批量生成、后台任务处理
+  </Card>
+</CardGroup>
+
+## 同步 vs 异步对比
+
+| 特性 | 同步 API | 异步 API（推荐）|
+|------|----------|-----------------|
+| **调用方式** | 单次请求等待完成 | 创建任务后轮询查询 |
+| **端点** | `/v1/chat/completions` | `/v1/videos` |
+| **模型选择** | 通过 model 参数指定画幅 | 通过 model 参数指定画幅 |
+| **图生视频** | 支持图片URL和Base64 | 支持图片URL |
+| **失败扣费** | 请求成功但生成失败会扣费 | ⭐ 失败不扣费 |
+| **稳定性** | 依赖长连接 | ⭐⭐⭐⭐⭐ 更稳定 |
+| **进度查看** | 流式输出 | 轮询查询进度百分比 |
+| **超时处理** | 需要设置长超时 | 任务独立运行，无超时限制 |
+| **适用场景** | 快速测试、实时反馈 | 生产环境、批量生成 |
+
+<Tip>
+**推荐使用异步 API**，特别是在生产环境或需要批量生成视频时，稳定性更有保障。
+</Tip>
+
+## 快速开始
+
+异步调用分为三个步骤：
+
+<Steps>
+  <Step title="创建视频任务">
+    POST 请求创建任务，获取任务 ID
+  </Step>
+  <Step title="查询任务状态">
+    定期轮询查询生成进度
+  </Step>
+  <Step title="下载视频">
+    任务完成后获取视频文件
+  </Step>
+</Steps>
+
+### 完整示例
+
+<CodeGroup>
+
+```bash 步骤1: 创建任务（文生视频）
+curl -X POST "https://api.laozhang.ai/v1/videos" \
+  -H "Authorization: Bearer YOUR_API_KEY" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "model": "veo-3.1",
+    "prompt": "一只可爱的猫咪在阳光明媚的花园里玩球"
+  }'
+
+# 响应示例
+{
+  "id": "video_abc123",
+  "object": "video",
+  "created": 1762181811,
+  "status": "queued",
+  "model": "veo-3.1"
+}
+```
+
+```bash 步骤2: 查询状态
+curl -X GET "https://api.laozhang.ai/v1/videos/video_abc123" \
+  -H "Authorization: Bearer YOUR_API_KEY"
+
+# 进行中响应
+{
+  "id": "video_abc123",
+  "object": "video",
+  "model": "veo-3.1",
+  "status": "processing",
+  "created": 1762181811
+}
+
+# 完成响应
+{
+  "id": "video_abc123",
+  "object": "video",
+  "model": "veo-3.1",
+  "status": "completed",
+  "prompt": "一只可爱的猫咪在阳光明媚的花园里玩球",
+  "created": 1762181811
+}
+```
+
+```bash 步骤3: 获取视频
+curl -X GET "https://api.laozhang.ai/v1/videos/video_abc123/content" \
+  -H "Authorization: Bearer YOUR_API_KEY"
+
+# 响应示例
+{
+  "id": "video_abc123",
+  "object": "video",
+  "created": 1762181811,
+  "status": "completed",
+  "model": "veo-3.1",
+  "prompt": "一只可爱的猫咪在阳光明媚的花园里玩球",
+  "url": "https://veo-video.example.com/assets/xxx.mp4",
+  "duration": 8,
+  "resolution": "720x1280"
+}
+```
+
+</CodeGroup>
+
+## API 端点详解
+
+### 1. 创建视频任务
+
+<Info>
+**POST** `https://api.laozhang.ai/v1/videos`
+
+创建一个新的视频生成任务
+</Info>
+
+#### 请求参数
+
+| 参数 | 类型 | 必需 | 说明 |
+|------|------|------|------|
+| `model` | string | ✓ | 模型名称（见下方模型列表）|
+| `prompt` | string | ✓ | 视频生成提示词 |
+
+#### 可用模型
+
+| 模型名称 | 画幅 | 速度 | 图生视频 | 价格 |
+|---------|------|------|---------|------|
+| `veo-3.1` | 竖屏 | 标准 | ❌ | $0.25/次 |
+| `veo-3.1-fl` | 竖屏 | 标准 | ✅ | $0.25/次 |
+| `veo-3.1-fast` | 竖屏 | 快速 | ❌ | $0.15/次 |
+| `veo-3.1-fast-fl` | 竖屏 | 快速 | ✅ | $0.15/次 |
+| `veo-3.1-landscape` | 横屏 | 标准 | ❌ | $0.25/次 |
+| `veo-3.1-landscape-fl` | 横屏 | 标准 | ✅ | $0.25/次 |
+| `veo-3.1-landscape-fast` | 横屏 | 快速 | ❌ | $0.15/次 |
+| `veo-3.1-landscape-fast-fl` | 横屏 | 快速 | ✅ | $0.15/次 |
+
+<Note>
+**模型命名规则：**
+- `landscape` = 横屏（16:9）
+- `fast` = 快速版（更便宜）
+- `fl` = 支持帧转视频（图生视频）
+</Note>
+
+#### 响应字段
+
+| 字段 | 类型 | 说明 |
+|------|------|------|
+| `id` | string | 任务唯一标识，用于后续查询 |
+| `object` | string | 固定为 `"video"` |
+| `model` | string | 使用的模型 |
+| `status` | string | 任务状态：`"queued"` |
+| `created` | integer | 创建时间戳 |
+
+### 2. 查询任务状态
+
+<Info>
+**GET** `https://api.laozhang.ai/v1/videos/{video_id}`
+
+查询视频生成任务的当前状态
+</Info>
+
+#### 路径参数
+
+| 参数 | 类型 | 必需 | 说明 |
+|------|------|------|------|
+| `video_id` | string | ✓ | 创建任务时返回的任务 ID |
+
+#### 响应字段
+
+| 字段 | 类型 | 说明 |
+|------|------|------|
+| `id` | string | 任务 ID |
+| `object` | string | 固定为 `"video"` |
+| `model` | string | 使用的模型 |
+| `status` | string | 任务状态（见下方说明）|
+| `prompt` | string | 原始提示词 |
+| `created` | integer | 创建时间戳 |
+
+#### 任务状态说明
+
+| 状态 | 说明 | 下一步操作 |
+|------|------|------------|
+| `queued` | 任务排队中 | 继续轮询状态 |
+| `processing` | 正在生成中 | 继续轮询状态 |
+| `completed` | 生成完成 | 调用获取内容接口 |
+| `failed` | 生成失败 | 检查错误信息 |
+
+### 3. 获取视频内容
+
+<Info>
+**GET** `https://api.laozhang.ai/v1/videos/{video_id}/content`
+
+获取已完成视频的实际内容
+</Info>
+
+#### 路径参数
+
+| 参数 | 类型 | 必需 | 说明 |
+|------|------|------|------|
+| `video_id` | string | ✓ | 任务 ID |
+
+#### 响应字段
+
+| 字段 | 类型 | 说明 |
+|------|------|------|
+| `id` | string | 任务 ID |
+| `object` | string | 固定为 `"video"` |
+| `status` | string | 任务状态 |
+| `model` | string | 使用的模型 |
+| `prompt` | string | 原始提示词 |
+| `url` | string | 视频下载 URL |
+| `duration` | integer | 视频时长（秒）|
+| `resolution` | string | 视频分辨率 |
+| `created` | integer | 创建时间戳 |
+
+<Warning>
+**重要提示**
+
+视频 URL 有效期通常为 **24 小时**，请及时下载保存到本地！
+</Warning>
+
+## 完整代码示例
+
+### Python 示例（含轮询逻辑）
+
+```python
+import requests
+import time
+
+API_KEY = "YOUR_API_KEY"
+BASE_URL = "https://api.laozhang.ai/v1"
+
+# 步骤1: 创建视频任务
+def create_video_task(prompt, model="veo-3.1"):
+    """创建视频生成任务"""
+    url = f"{BASE_URL}/videos"
+    headers = {
+        "Authorization": f"Bearer {API_KEY}",
+        "Content-Type": "application/json"
+    }
+    data = {
+        "model": model,
+        "prompt": prompt
+    }
+
+    response = requests.post(url, headers=headers, json=data)
+    response.raise_for_status()
+    return response.json()
+
+# 步骤2: 轮询查询状态
+def wait_for_video(video_id, poll_interval=5, timeout=600):
+    """等待视频生成完成"""
+    url = f"{BASE_URL}/videos/{video_id}"
+    headers = {"Authorization": f"Bearer {API_KEY}"}
+    start_time = time.time()
+
+    while True:
+        # 检查超时
+        if time.time() - start_time > timeout:
+            raise TimeoutError(f"视频生成超时（{timeout}秒）")
+
+        # 查询状态
+        response = requests.get(url, headers=headers)
+        response.raise_for_status()
+        task = response.json()
+
+        status = task["status"]
+        print(f"状态: {status}")
+
+        if status == "completed":
+            return task
+        elif status == "failed":
+            raise Exception(f"生成失败")
+
+        # 等待后重试
+        time.sleep(poll_interval)
+
+# 步骤3: 获取视频内容
+def get_video_content(video_id):
+    """获取视频内容和URL"""
+    url = f"{BASE_URL}/videos/{video_id}/content"
+    headers = {"Authorization": f"Bearer {API_KEY}"}
+
+    response = requests.get(url, headers=headers)
+    response.raise_for_status()
+    return response.json()
+
+# 步骤4: 下载视频
+def download_video(video_url, save_path="video.mp4"):
+    """下载视频文件"""
+    response = requests.get(video_url, stream=True)
+    response.raise_for_status()
+
+    with open(save_path, 'wb') as f:
+        for chunk in response.iter_content(chunk_size=8192):
+            if chunk:
+                f.write(chunk)
+
+    print(f"视频已保存到: {save_path}")
+
+# 完整流程
+def generate_video_async(prompt, model="veo-3.1"):
+    """异步生成视频的完整流程"""
+    print("1. 创建视频任务...")
+    task = create_video_task(prompt, model)
+    video_id = task["id"]
+    print(f"   任务ID: {video_id}")
+
+    print("\n2. 等待视频生成...")
+    completed_task = wait_for_video(video_id)
+    print("   生成完成！")
+
+    print("\n3. 获取视频内容...")
+    content = get_video_content(video_id)
+    video_url = content["url"]
+    print(f"   视频URL: {video_url}")
+
+    print("\n4. 下载视频...")
+    download_video(video_url)
+    print("\n✅ 完成！")
+
+# 使用示例
+if __name__ == "__main__":
+    # 文生视频 - 竖屏标准版
+    generate_video_async(
+        prompt="一只可爱的猫咪在阳光明媚的花园里玩球",
+        model="veo-3.1"
+    )
+
+    # 文生视频 - 横屏快速版
+    # generate_video_async(
+    #     prompt="日落时分，海浪轻轻拍打沙滩",
+    #     model="veo-3.1-landscape-fast"
+    # )
+```
+
+### JavaScript/Node.js 示例
+
+```javascript
+const axios = require('axios');
+const fs = require('fs');
+
+const API_KEY = 'YOUR_API_KEY';
+const BASE_URL = 'https://api.laozhang.ai/v1';
+
+// 创建视频任务
+async function createVideoTask(prompt, model = 'veo-3.1') {
+  const response = await axios.post(`${BASE_URL}/videos`, {
+    model,
+    prompt
+  }, {
+    headers: { 'Authorization': `Bearer ${API_KEY}` }
+  });
+
+  return response.data;
+}
+
+// 轮询查询状态
+async function waitForVideo(videoId, pollInterval = 5000, timeout = 600000) {
+  const startTime = Date.now();
+
+  while (true) {
+    // 检查超时
+    if (Date.now() - startTime > timeout) {
+      throw new Error(`视频生成超时（${timeout/1000}秒）`);
+    }
+
+    // 查询状态
+    const response = await axios.get(`${BASE_URL}/videos/${videoId}`, {
+      headers: { 'Authorization': `Bearer ${API_KEY}` }
+    });
+
+    const task = response.data;
+    const { status } = task;
+
+    console.log(`状态: ${status}`);
+
+    if (status === 'completed') {
+      return task;
+    } else if (status === 'failed') {
+      throw new Error('生成失败');
+    }
+
+    // 等待后重试
+    await new Promise(resolve => setTimeout(resolve, pollInterval));
+  }
+}
+
+// 获取视频内容
+async function getVideoContent(videoId) {
+  const response = await axios.get(`${BASE_URL}/videos/${videoId}/content`, {
+    headers: { 'Authorization': `Bearer ${API_KEY}` }
+  });
+
+  return response.data;
+}
+
+// 下载视频
+async function downloadVideo(videoUrl, savePath = 'video.mp4') {
+  const response = await axios.get(videoUrl, { responseType: 'stream' });
+
+  const writer = fs.createWriteStream(savePath);
+  response.data.pipe(writer);
+
+  return new Promise((resolve, reject) => {
+    writer.on('finish', () => {
+      console.log(`视频已保存到: ${savePath}`);
+      resolve();
+    });
+    writer.on('error', reject);
+  });
+}
+
+// 完整流程
+async function generateVideoAsync(prompt, model = 'veo-3.1') {
+  try {
+    console.log('1. 创建视频任务...');
+    const task = await createVideoTask(prompt, model);
+    const videoId = task.id;
+    console.log(`   任务ID: ${videoId}`);
+
+    console.log('\n2. 等待视频生成...');
+    await waitForVideo(videoId);
+    console.log('   生成完成！');
+
+    console.log('\n3. 获取视频内容...');
+    const content = await getVideoContent(videoId);
+    const videoUrl = content.url;
+    console.log(`   视频URL: ${videoUrl}`);
+
+    console.log('\n4. 下载视频...');
+    await downloadVideo(videoUrl);
+    console.log('\n✅ 完成！');
+
+  } catch (error) {
+    console.error('错误:', error.message);
+  }
+}
+
+// 使用示例
+generateVideoAsync(
+  '一只可爱的猫咪在阳光明媚的花园里玩球',
+  'veo-3.1'
+);
+```
+
+## 最佳实践
+
+<AccordionGroup>
+  <Accordion title="轮询间隔设置" icon="timer">
+    **推荐轮询间隔：5-10 秒**
+
+    ```python
+    # 推荐
+    poll_interval = 5  # 每5秒查询一次
+
+    # 不推荐
+    poll_interval = 1  # 太频繁，浪费请求
+    poll_interval = 30 # 太慢，用户体验差
+    ```
+
+    **原因：**
+    - 视频生成通常需要 2-5 分钟
+    - 5-10 秒可以及时反馈进度
+    - 避免过于频繁的请求
+  </Accordion>
+
+  <Accordion title="超时处理" icon="timer">
+    **推荐超时设置：10 分钟（600秒）**
+
+    ```python
+    def wait_for_video(video_id, timeout=600):
+        start_time = time.time()
+
+        while True:
+            if time.time() - start_time > timeout:
+                # 超时后的处理
+                print(f"任务 {video_id} 超时，稍后可继续查询")
+                break
+
+            # 查询逻辑...
+    ```
+
+    **注意：**
+    - 任务超时不会自动取消
+    - 可以稍后继续查询同一个 video_id
+    - 任务有效期为 24 小时
+  </Accordion>
+
+  <Accordion title="错误重试策略" icon="refresh-cw">
+    **建议重试逻辑：**
+
+    ```python
+    def create_video_with_retry(prompt, model, max_retries=3):
+        for i in range(max_retries):
+            try:
+                return create_video_task(prompt, model)
+            except Exception as e:
+                if i < max_retries - 1:
+                    print(f"创建失败，{5}秒后重试... ({i+1}/{max_retries})")
+                    time.sleep(5)
+                else:
+                    raise
+    ```
+
+    **重试场景：**
+    - ✓ 网络错误 → 重试
+    - ✓ 服务繁忙 (503) → 重试
+    - ✗ 内容违规 → 不要重试，修改提示词
+    - ✗ 余额不足 → 不要重试，充值后再试
+  </Accordion>
+
+  <Accordion title="批量生成优化" icon="list">
+    **并发控制建议：**
+
+    ```python
+    import concurrent.futures
+
+    def batch_generate_videos(prompts, model="veo-3.1", max_workers=5):
+        """批量生成视频，控制并发数"""
+        with concurrent.futures.ThreadPoolExecutor(max_workers=max_workers) as executor:
+            # 创建所有任务
+            future_to_prompt = {
+                executor.submit(create_video_task, prompt, model): prompt
+                for prompt in prompts
+            }
+
+            video_ids = []
+            for future in concurrent.futures.as_completed(future_to_prompt):
+                task = future.result()
+                video_ids.append(task['id'])
+
+            # 并发等待所有任务完成
+            futures = [executor.submit(wait_for_video, vid) for vid in video_ids]
+            results = [f.result() for f in concurrent.futures.as_completed(futures)]
+
+            return results
+    ```
+
+    **建议：**
+    - 创建任务：可以高并发（10-30个）
+    - 查询状态：建议并发数 ≤ 10
+    - 下载视频：建议并发数 ≤ 5
+  </Accordion>
+</AccordionGroup>
+
+## 定价说明
+
+<Info>
+异步 API 与同步 API **价格完全相同**，按次计费。
+</Info>
+
+| 模型类型 | 价格 | 充值100$优惠价 |
+|---------|------|---------------|
+| 标准版（veo-3.1 等）| $0.25/次 | ≈ ¥1.7/次 |
+| 快速版（veo-3.1-fast 等）| $0.15/次 | ≈ ¥1.0/次 |
+
+**计费规则：**
+- ✓ 仅在视频**成功生成**时收费（status = "completed"）
+- ✗ 失败、超时、取消**不计费**
+- ✗ 内容安全问题失败**也不扣费**（与同步API的重要区别⭐）
+- ✗ 查询状态不计费
+
+<Tip>
+**异步API的重要优势**：任何原因导致的失败都不会扣费，包括内容安全审核未通过。而同步API只要请求成功就会扣费，即使最终生成失败。
+</Tip>
+
+## 常见问题
+
+<AccordionGroup>
+  <Accordion title="任务的有效期是多久？" icon="calendar">
+    **任务有效期：24 小时**
+
+    - 创建任务后，24 小时内可随时查询任务状态
+    - 视频生成完成后，文件保存 24 小时
+    - 超过 24 小时后，任务和视频将被自动清理
+
+    **建议：**
+    - 视频生成完成后立即下载
+    - 不要依赖服务器长期存储
+  </Accordion>
+
+  <Accordion title="查询时返回 404 是什么原因？" icon="search">
+    **可能的原因：**
+
+    1. **video_id 错误** - 检查是否复制完整
+    2. **任务已过期** - 超过 24 小时
+    3. **网络问题** - 重试请求
+
+    **解决方法：**
+    ```python
+    try:
+        response = requests.get(f"{BASE_URL}/videos/{video_id}", headers=headers)
+        task = response.json()
+    except requests.exceptions.HTTPError as e:
+        if e.response.status_code == 404:
+            print("任务不存在或已过期")
+        else:
+            raise
+    ```
+  </Accordion>
+
+  <Accordion title="异步和同步 API 可以混用吗？" icon="git-merge">
+    **可以混用，完全独立**
+
+    两个 API 系统完全独立：
+    - 不同的端点
+    - 不同的调用方式
+    - 相同的定价
+    - 共享同一个 API Key 和余额
+
+    **使用建议：**
+    - 快速测试 → 使用同步 API
+    - 生产环境 → 使用异步 API（更稳定）
+    - 批量生成 → 使用异步 API
+  </Accordion>
+
+  <Accordion title="如何选择合适的模型？" icon="sliders">
+    **根据需求选择：**
+
+    | 需求 | 推荐模型 |
+    |------|---------|
+    | 快速测试 | `veo-3.1-fast` |
+    | 标准竖屏视频 | `veo-3.1` |
+    | 标准横屏视频 | `veo-3.1-landscape` |
+    | 图生视频（竖屏）| `veo-3.1-fl` |
+    | 图生视频（横屏）| `veo-3.1-landscape-fl` |
+    | 批量生成（省钱）| `veo-3.1-fast` 或 `veo-3.1-landscape-fast` |
+  </Accordion>
+</AccordionGroup>
+
+## 错误处理
+
+### 常见错误码
+
+| HTTP 状态码 | 错误类型 | 说明 | 处理建议 |
+|------------|---------|------|---------|
+| 400 | Bad Request | 请求参数错误 | 检查参数格式和值 |
+| 401 | Unauthorized | API Key 无效 | 检查 Authorization 头 |
+| 402 | Payment Required | 余额不足 | 充值后重试 |
+| 404 | Not Found | 任务不存在 | 检查 video_id 或任务已过期 |
+| 429 | Too Many Requests | 请求过于频繁 | 降低轮询频率 |
+| 500 | Internal Server Error | 服务器错误 | 稍后重试 |
+| 503 | Service Unavailable | 服务暂时不可用 | 等待后重试 |
+
+### 错误响应格式
+
+```json
+{
+  "error": {
+    "code": "invalid_api_key",
+    "message": "Invalid API key provided",
+    "type": "authentication_error"
+  }
+}
+```
+
+## 技术支持
+
+<Card title="需要帮助？" icon="headset">
+  如有问题，欢迎联系我们：
+
+  - **邮箱：** threezhang.cn@gmail.com
+  - **微信：** laozhangdaichong
+  - **Telegram：** https://t.me/laozhang_cn
+  - **文档：** https://docs.laozhang.ai
+</Card>
+
+## 下一步
+
+<CardGroup cols={2}>
+  <Card title="同步 API" icon="bolt" href="/api-capabilities/veo/veo-31-quick-start">
+    查看同步调用方式（OpenAI 兼容）
+  </Card>
+  <Card title="代码示例" icon="code" href="/api-capabilities/veo/veo-31-examples">
+    查看更多应用示例
+  </Card>
+  <Card title="模型概览" icon="play" href="/api-capabilities/veo/veo-31-overview">
+    了解 Veo-3.1 模型详情
+  </Card>
+  <Card title="常见问题" icon="circle-question" href="/api-capabilities/veo/veo-31-troubleshooting">
+    查看更多问题解答
+  </Card>
+</CardGroup>
+

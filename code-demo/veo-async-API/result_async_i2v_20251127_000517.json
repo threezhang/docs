@@ -1,0 +1,14 @@
+{
+  "completed_at": 1764173113,
+  "created_at": 1764172941,
+  "id": "video_9c4e4872-3cd2-4bfb-9374-f85deed351ca",
+  "model": "sora2_video_generation",
+  "object": "video",
+  "progress": 100,
+  "result_url": "https://mycnd-hz.oss-cn-hangzhou.aliyuncs.com/flow/cd810292-fa41-4178-8f9c-337123262ff5.mp4",
+  "seconds": "4",
+  "size": "720x1280",
+  "status": "completed",
+  "url": "https://mycnd-hz.oss-cn-hangzhou.aliyuncs.com/flow/cd810292-fa41-4178-8f9c-337123262ff5.mp4",
+  "video_url": "https://mycnd-hz.oss-cn-hangzhou.aliyuncs.com/flow/cd810292-fa41-4178-8f9c-337123262ff5.mp4"
+}
