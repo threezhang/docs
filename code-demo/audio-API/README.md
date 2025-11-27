@@ -2,6 +2,14 @@
 
 使用 Gemini 2.5 Pro 模型进行音频转录、分析和理解。
 
+## 文件说明
+
+| 文件 | 说明 | 用途 |
+|------|------|------|
+| `gemini_audio_demo.py` | 内部测试版本（已填入 API Key） | 开发测试 |
+| `gemini_audio_example.py` | 用户示例版本（需要填入 API Key） | 分发给用户 |
+| `test_audio.mp3` | 测试音频文件 | 测试用 |
+
 ## 功能特点
 
 - ✅ 支持音频转录（转文字）
@@ -23,20 +31,25 @@ pip install requests
 
 ### 2. 配置 API Key
 
-编辑 `gemini_audio_demo.py`，找到第 54 行，将 API Key 替换为您的真实密钥：
+编辑 `gemini_audio_example.py`，找到顶部的 API_KEY 变量：
 
 ```python
-api_key = "sk-your-api-key-here"  # ← 替换为您的实际 API Key
+# ============================================================
+# ⚠️ 请在这里填入您的 API Key
+# 获取地址: https://api.laozhang.ai/
+# ============================================================
+API_KEY = "sk-your-api-key-here"  # ← 替换为您的实际 API Key
+# ============================================================
 ```
 
 ### 3. 运行测试
 
 ```bash
 # 使用默认测试音频
-python gemini_audio_demo.py
+python gemini_audio_example.py
 
 # 或指定自定义音频文件
-python gemini_audio_demo.py /path/to/your/audio.mp3
+python gemini_audio_example.py /path/to/your/audio.mp3
 ```
 
 ## 使用示例
@@ -44,7 +57,7 @@ python gemini_audio_demo.py /path/to/your/audio.mp3
 ### 示例 1：音频转录
 
 ```python
-from gemini_audio_demo import gemini_audio_analysis
+from gemini_audio_example import gemini_audio_analysis
 
 result = gemini_audio_analysis(
     question="请转录这段音频的内容",
@@ -113,7 +126,7 @@ def gemini_audio_analysis(question, audio_path, model="gemini-2.5-pro", api_key=
 - `question` (str, 必需): 要问的问题
 - `audio_path` (str, 必需): 本地音频文件路径
 - `model` (str, 可选): 模型名称，默认 "gemini-2.5-pro"
-- `api_key` (str, 可选): API 密钥，不提供则使用代码中的默认值
+- `api_key` (str, 可选): API 密钥，不提供则使用全局 API_KEY 变量
 
 **返回:** dict
 ```python
@@ -192,7 +205,8 @@ A:
 
 ```
 audio-API/
-├── gemini_audio_demo.py    # 核心代码（270行）
+├── gemini_audio_demo.py     # 内部测试版本（已填入 Key）
+├── gemini_audio_example.py  # 用户示例版本（需填入 Key）
 ├── test_audio.mp3           # 测试音频文件
 ├── README.md                # 本文档
 └── 快速开始.md              # 快速入门指南

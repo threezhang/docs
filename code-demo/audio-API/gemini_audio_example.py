@@ -1,8 +1,10 @@
 """
-Gemini 音频理解 API 示例
+Gemini 音频理解 API 示例 - Example 版本
 
 使用 Gemini 模型进行音频转录、分析和理解
 支持多种音频格式：MP3, WAV, M4A, WEBM 等
+
+使用前请先获取 API Key：https://api.laozhang.ai/
 
 作者: 老张 API
 文档: https://docs.laozhang.ai/
@@ -13,6 +15,14 @@ import base64
 import json
 from datetime import datetime
 import os
+
+
+# ============================================================
+# ⚠️ 请在这里填入您的 API Key
+# 获取地址: https://api.laozhang.ai/
+# ============================================================
+API_KEY = "sk-your-api-key-here"  # ← 替换为您的实际 API Key
+# ============================================================
 
 
 def gemini_audio_analysis(question, audio_path, model="gemini-2.5-pro", api_key=None):
@@ -33,7 +43,7 @@ def gemini_audio_analysis(question, audio_path, model="gemini-2.5-pro", api_key=
             - "gemini-2.5-pro": 高准确度，强大理解能力
             - "gemini-2.0-flash-exp": 速度快，成本低
             
-        api_key (str, optional): API密钥，如果不提供则从代码中读取
+        api_key (str, optional): API密钥，如果不提供则使用全局配置
     
     返回:
         dict: 包含以下字段
@@ -52,9 +62,20 @@ def gemini_audio_analysis(question, audio_path, model="gemini-2.5-pro", api_key=
         >>> print(result['result'])
     """
     
-    # API 配置 - Demo 版本（内部测试用，已填入 API Key）
+    # API 配置
     if api_key is None:
-        api_key = "sk-9SOAt1Bkvcv97WDXE0464d8b0712406f86594f4968524fBd"
+        api_key = API_KEY
+    
+    # 检查 API Key 是否已配置
+    if api_key == "sk-your-api-key-here":
+        return {
+            "result": "错误：请先配置 API Key",
+            "model": model,
+            "audio_path": audio_path,
+            "question": question,
+            "success": False,
+            "error": "API Key 未配置，请修改代码顶部的 API_KEY 变量"
+        }
     
     base_url = "https://api.laozhang.ai/v1"
     
@@ -218,12 +239,22 @@ if __name__ == "__main__":
     主程序入口
     
     使用方法:
-        python gemini_audio_demo.py                    # 使用默认测试音频
-        python gemini_audio_demo.py /path/to/audio.mp3 # 使用指定音频
+        1. 先修改代码顶部的 API_KEY 变量
+        2. 运行: python gemini_audio_example.py                    # 使用默认测试音频
+        3. 或者: python gemini_audio_example.py /path/to/audio.mp3 # 使用指定音频
     """
     print("=" * 60)
-    print("Gemini 音频理解测试")
+    print("Gemini 音频理解示例")
     print("=" * 60)
+    
+    # 检查 API Key
+    if API_KEY == "sk-your-api-key-here":
+        print("\n⚠️  请先配置 API Key!")
+        print("   1. 打开本文件")
+        print("   2. 找到顶部的 API_KEY 变量")
+        print("   3. 将 'sk-your-api-key-here' 替换为您的实际 API Key")
+        print("\n   获取 API Key: https://api.laozhang.ai/")
+        exit(1)
     
     # 设置音频文件路径
     import sys
@@ -274,3 +305,4 @@ if __name__ == "__main__":
         print(f"\n❌ 错误: {str(e)}")
         import traceback
         traceback.print_exc()
+
