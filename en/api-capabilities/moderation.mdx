@@ -1,0 +1,195 @@
+---
+title: Content Moderation
+sidebarTitle: Moderation API
+description: Detect harmful content in text, supporting violence, hate speech, sexual content and other categories
+icon: "shield-check"
+---
+
+## Overview
+
+Moderation API detects harmful or inappropriate content in text, helping you:
+
+- **Content Filtering**: Automatically filter inappropriate user submissions
+- **Safety Review**: Detect potential violations before publishing
+- **Compliance Check**: Ensure content meets platform guidelines
+- **Risk Warning**: Identify potentially harmful content types
+
+<Info>
+  Moderation API uses OpenAI's moderation model and is free to use without consuming token quota.
+</Info>
+
+## Quick Start
+
+### Basic Example
+
+```python
+from openai import OpenAI
+
+client = OpenAI(
+    api_key="sk-your-laozhang-api-key",
+    base_url="https://api.laozhang.ai/v1"
+)
+
+response = client.moderations.create(
+    input="Text content to be reviewed"
+)
+
+result = response.results[0]
+print(f"Contains harmful content: {result.flagged}")
+print(f"Category scores: {result.category_scores}")
+```
+
+### Batch Moderation
+
+```python
+texts = ["Text 1", "Text 2", "Text 3"]
+
+response = client.moderations.create(input=texts)
+
+for i, result in enumerate(response.results):
+    status = '⚠️ Flagged' if result.flagged else '✅ Safe'
+    print(f"Text {i+1}: {status}")
+```
+
+## Detection Categories
+
+| Category | Description |
+|----------|-------------|
+| `hate` | Hate speech targeting specific groups |
+| `hate/threatening` | Threatening hate speech |
+| `harassment` | Harassing content |
+| `harassment/threatening` | Threatening harassment |
+| `self-harm` | Self-harm related content |
+| `self-harm/intent` | Intent to self-harm |
+| `self-harm/instructions` | Self-harm instructions |
+| `sexual` | Sexual content |
+| `sexual/minors` | Sexual content involving minors |
+| `violence` | Violent content |
+| `violence/graphic` | Graphic violence |
+
+## Practical Examples
+
+### 1. User Input Filter
+
+```python
+def check_content(text):
+    """Check if content is safe"""
+    response = client.moderations.create(input=text)
+    result = response.results[0]
+    
+    if result.flagged:
+        violations = [
+            cat for cat, flagged in result.categories.model_dump().items()
+            if flagged
+        ]
+        return False, violations
+    
+    return True, []
+
+# Usage
+is_safe, violations = check_content(user_input)
+if not is_safe:
+    print(f"⚠️ Violation categories: {violations}")
+```
+
+### 2. Chatbot Safety Layer
+
+```python
+def safe_chat(user_message):
+    """Chat with safety checks"""
+    # Check user input
+    if client.moderations.create(input=user_message).results[0].flagged:
+        return "Sorry, your message contains inappropriate content."
+    
+    # Process after safety check
+    response = client.chat.completions.create(
+        model="gpt-4.1",
+        messages=[{"role": "user", "content": user_message}]
+    )
+    
+    ai_reply = response.choices[0].message.content
+    
+    # Check AI response
+    if client.moderations.create(input=ai_reply).results[0].flagged:
+        return "Sorry, unable to generate appropriate response."
+    
+    return ai_reply
+```
+
+### 3. Custom Threshold
+
+```python
+def check_with_threshold(text, threshold=0.5):
+    """Check with custom threshold"""
+    response = client.moderations.create(input=text)
+    result = response.results[0]
+    
+    scores = result.category_scores.model_dump()
+    high_risk = {
+        cat: score for cat, score in scores.items()
+        if score > threshold
+    }
+    
+    return len(high_risk) == 0, high_risk
+```
+
+## Best Practices
+
+### Multi-layer Protection
+
+```python
+def process_with_safety(user_input):
+    # 1. Check user input
+    if not is_safe(user_input):
+        return "Input content violates guidelines"
+    
+    # 2. Process
+    result = process(user_input)
+    
+    # 3. Check output
+    if not is_safe(result):
+        return "Unable to generate appropriate content"
+    
+    return result
+```
+
+## Pricing
+
+Moderation API is currently **free to use** and does not count towards token consumption.
+
+## FAQ
+
+<AccordionGroup>
+  <Accordion title="How accurate is moderation?">
+    Based on OpenAI's model with high accuracy, but not 100% reliable. Recommend:
+    - Combine with human review for critical scenarios
+    - Set appropriate thresholds
+    - Provide appeal channels
+  </Accordion>
+
+  <Accordion title="Does it support multiple languages?">
+    Supports multiple languages including Chinese. English works best.
+  </Accordion>
+
+  <Accordion title="Are there rate limits?">
+    There are rate limits. Control request frequency for batch processing.
+  </Accordion>
+</AccordionGroup>
+
+## Related Documentation
+
+<CardGroup cols={2}>
+  <Card title="Text Generation" icon="message-square" href="/en/api-capabilities/text-generation">
+    Chat API documentation
+  </Card>
+  <Card title="Content Safety" icon="shield" href="/en/faq/content-safety">
+    Content safety policy
+  </Card>
+  <Card title="API Reference" icon="code" href="/en/api-reference/chat-completions">
+    API reference
+  </Card>
+  <Card title="Data Security" icon="lock" href="/en/faq/data-security">
+    Data privacy protection
+  </Card>
+</CardGroup>
+

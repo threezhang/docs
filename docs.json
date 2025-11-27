@@ -47,6 +47,14 @@
               ]
             },
             {
+              "group": "文本 API",
+              "pages": [
+                "api-capabilities/text-generation",
+                "api-capabilities/text-embedding",
+                "api-capabilities/moderation"
+              ]
+            },
+            {
               "group": "视频生成 API",
               "pages": [
               {
@@ -311,6 +319,14 @@
                 "en/api-capabilities/model-info",
                 "en/api-capabilities/openai-sdk",
                 "en/api-capabilities/openai-responses"
+              ]
+            },
+            {
+              "group": "Text APIs",
+              "pages": [
+                "en/api-capabilities/text-generation",
+                "en/api-capabilities/text-embedding",
+                "en/api-capabilities/moderation"
               ]
             },
             {

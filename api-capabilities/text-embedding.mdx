@@ -1,0 +1,426 @@
+---
+title: 文本向量化（Embedding）
+sidebarTitle: Embedding API
+description: 将文本转换为向量表示，用于语义搜索、文本分类、相似度计算等场景
+icon: "brackets-square"
+---
+
+## 功能概述
+
+文本嵌入（Text Embedding）API 可以将文本转换为高维向量表示，捕捉文本的语义信息。这些向量可用于：
+
+- **语义搜索**：基于含义而非关键词匹配进行搜索
+- **文本分类**：将文本自动归类到预定义类别
+- **相似度计算**：计算两段文本的语义相似程度
+- **聚类分析**：将相似文本自动分组
+- **推荐系统**：基于内容相似度进行推荐
+- **RAG 应用**：检索增强生成的核心能力
+
+<Info>
+  老张API 支持 OpenAI、Cohere、BGE 等多种 Embedding 模型，兼容 OpenAI SDK。
+</Info>
+
+## 快速开始
+
+### 基础示例
+
+```python
+from openai import OpenAI
+
+client = OpenAI(
+    api_key="sk-你的老张API密钥",
+    base_url="https://api.laozhang.ai/v1"
+)
+
+response = client.embeddings.create(
+    model="text-embedding-3-small",
+    input="人工智能正在改变世界"
+)
+
+# 获取向量
+embedding = response.data[0].embedding
+print(f"向量维度: {len(embedding)}")
+print(f"前5个值: {embedding[:5]}")
+```
+
+### 批量处理
+
+一次请求处理多个文本：
+
+```python
+texts = [
+    "机器学习是人工智能的一个分支",
+    "深度学习使用神经网络进行学习",
+    "自然语言处理让机器理解人类语言"
+]
+
+response = client.embeddings.create(
+    model="text-embedding-3-small",
+    input=texts
+)
+
+# 获取所有向量
+embeddings = [item.embedding for item in response.data]
+print(f"处理了 {len(embeddings)} 个文本")
+```
+
+## 支持的模型
+
+| 模型 | 维度 | 特点 | 推荐场景 |
+|------|------|------|----------|
+| `text-embedding-3-small` | 1536 | 性价比高，速度快 | 通用场景 |
+| `text-embedding-3-large` | 3072 | 效果最好，维度高 | 高精度需求 |
+| `text-embedding-ada-002` | 1536 | 经典模型，兼容性好 | 已有系统迁移 |
+
+<Tip>
+  💡 **选择建议**：
+  - 大多数场景使用 `text-embedding-3-small` 即可
+  - 对精度要求极高时使用 `text-embedding-3-large`
+</Tip>
+
+## 核心参数
+
+### model（必填）
+
+指定 Embedding 模型：
+
+```python
+model="text-embedding-3-small"   # 推荐，性价比高
+model="text-embedding-3-large"   # 高精度
+model="text-embedding-ada-002"   # 经典模型
+```
+
+### input（必填）
+
+要转换的文本，支持单个字符串或字符串数组：
+
+```python
+# 单个文本
+input="这是一段测试文本"
+
+# 多个文本（批量处理）
+input=["文本1", "文本2", "文本3"]
+```
+
+### dimensions（可选）
+
+指定输出向量维度（仅 v3 模型支持）：
+
+```python
+response = client.embeddings.create(
+    model="text-embedding-3-small",
+    input="测试文本",
+    dimensions=512  # 降低维度，减少存储
+)
+```
+
+<Note>
+  降低维度可以减少存储空间和计算成本，但可能略微影响效果。
+</Note>
+
+## 实用示例
+
+### 1. 计算文本相似度
+
+```python
+import numpy as np
+from openai import OpenAI
+
+client = OpenAI(
+    api_key="sk-你的老张API密钥",
+    base_url="https://api.laozhang.ai/v1"
+)
+
+def get_embedding(text):
+    """获取文本的向量表示"""
+    response = client.embeddings.create(
+        model="text-embedding-3-small",
+        input=text
+    )
+    return response.data[0].embedding
+
+def cosine_similarity(a, b):
+    """计算余弦相似度"""
+    return np.dot(a, b) / (np.linalg.norm(a) * np.linalg.norm(b))
+
+# 计算两段文本的相似度
+text1 = "今天天气很好"
+text2 = "今天阳光明媚"
+text3 = "我喜欢吃苹果"
+
+emb1 = get_embedding(text1)
+emb2 = get_embedding(text2)
+emb3 = get_embedding(text3)
+
+print(f"文本1和文本2的相似度: {cosine_similarity(emb1, emb2):.4f}")
+print(f"文本1和文本3的相似度: {cosine_similarity(emb1, emb3):.4f}")
+```
+
+### 2. 语义搜索
+
+```python
+import numpy as np
+from openai import OpenAI
+
+client = OpenAI(
+    api_key="sk-你的老张API密钥",
+    base_url="https://api.laozhang.ai/v1"
+)
+
+# 文档库
+documents = [
+    "Python 是一种解释型编程语言",
+    "JavaScript 常用于网页开发",
+    "机器学习是人工智能的一个分支",
+    "数据库用于存储和管理数据",
+    "深度学习使用多层神经网络"
+]
+
+def get_embeddings(texts):
+    """批量获取向量"""
+    response = client.embeddings.create(
+        model="text-embedding-3-small",
+        input=texts
+    )
+    return [item.embedding for item in response.data]
+
+def semantic_search(query, docs, doc_embeddings, top_k=3):
+    """语义搜索"""
+    query_embedding = get_embeddings([query])[0]
+    
+    # 计算相似度
+    similarities = []
+    for i, doc_emb in enumerate(doc_embeddings):
+        sim = np.dot(query_embedding, doc_emb) / (
+            np.linalg.norm(query_embedding) * np.linalg.norm(doc_emb)
+        )
+        similarities.append((i, sim))
+    
+    # 排序返回最相似的文档
+    similarities.sort(key=lambda x: x[1], reverse=True)
+    return [(docs[i], sim) for i, sim in similarities[:top_k]]
+
+# 预计算文档向量
+doc_embeddings = get_embeddings(documents)
+
+# 搜索
+query = "什么是AI？"
+results = semantic_search(query, documents, doc_embeddings)
+
+print(f"查询: {query}")
+print("搜索结果:")
+for doc, score in results:
+    print(f"  [{score:.4f}] {doc}")
+```
+
+### 3. 文本分类
+
+```python
+import numpy as np
+from openai import OpenAI
+
+client = OpenAI(
+    api_key="sk-你的老张API密钥",
+    base_url="https://api.laozhang.ai/v1"
+)
+
+# 类别示例
+categories = {
+    "技术": ["编程语言", "软件开发", "人工智能"],
+    "体育": ["足球比赛", "篮球运动", "奥运会"],
+    "美食": ["中餐烹饪", "西餐料理", "甜点制作"]
+}
+
+def classify_text(text, categories):
+    """基于向量相似度进行分类"""
+    text_emb = get_embedding(text)
+    
+    best_category = None
+    best_score = -1
+    
+    for category, examples in categories.items():
+        # 获取类别示例的平均向量
+        example_embs = get_embeddings(examples)
+        avg_emb = np.mean(example_embs, axis=0)
+        
+        # 计算相似度
+        score = np.dot(text_emb, avg_emb) / (
+            np.linalg.norm(text_emb) * np.linalg.norm(avg_emb)
+        )
+        
+        if score > best_score:
+            best_score = score
+            best_category = category
+    
+    return best_category, best_score
+
+# 测试分类
+test_texts = [
+    "Python编程入门教程",
+    "世界杯足球赛精彩回顾",
+    "如何做一道美味的红烧肉"
+]
+
+for text in test_texts:
+    category, score = classify_text(text, categories)
+    print(f"'{text}' -> {category} (置信度: {score:.4f})")
+```
+
+## 与向量数据库集成
+
+### Pinecone 集成
+
+```python
+import pinecone
+from openai import OpenAI
+
+# 初始化
+client = OpenAI(api_key="sk-xxx", base_url="https://api.laozhang.ai/v1")
+pinecone.init(api_key="pinecone-api-key")
+index = pinecone.Index("my-index")
+
+# 存储向量
+def store_document(doc_id, text):
+    embedding = client.embeddings.create(
+        model="text-embedding-3-small",
+        input=text
+    ).data[0].embedding
+    
+    index.upsert([(doc_id, embedding, {"text": text})])
+
+# 搜索
+def search(query, top_k=5):
+    query_embedding = client.embeddings.create(
+        model="text-embedding-3-small",
+        input=query
+    ).data[0].embedding
+    
+    results = index.query(query_embedding, top_k=top_k, include_metadata=True)
+    return results
+```
+
+### Chroma 集成
+
+```python
+import chromadb
+from openai import OpenAI
+
+client = OpenAI(api_key="sk-xxx", base_url="https://api.laozhang.ai/v1")
+chroma_client = chromadb.Client()
+collection = chroma_client.create_collection("my_collection")
+
+# 自定义 Embedding 函数
+def get_embedding(texts):
+    response = client.embeddings.create(
+        model="text-embedding-3-small",
+        input=texts
+    )
+    return [item.embedding for item in response.data]
+
+# 添加文档
+documents = ["文档1", "文档2", "文档3"]
+embeddings = get_embedding(documents)
+collection.add(
+    embeddings=embeddings,
+    documents=documents,
+    ids=["id1", "id2", "id3"]
+)
+
+# 搜索
+query_embedding = get_embedding(["搜索查询"])[0]
+results = collection.query(query_embeddings=[query_embedding], n_results=3)
+```
+
+## 最佳实践
+
+### 1. 批量处理
+
+```python
+# ❌ 不好：逐个请求
+for text in texts:
+    embedding = get_embedding(text)
+
+# ✅ 好：批量请求
+embeddings = get_embeddings(texts)  # 一次请求处理所有文本
+```
+
+### 2. 文本预处理
+
+```python
+def preprocess_text(text):
+    """预处理文本"""
+    # 去除多余空白
+    text = " ".join(text.split())
+    # 截断过长文本
+    if len(text) > 8000:
+        text = text[:8000]
+    return text
+```
+
+### 3. 缓存向量
+
+```python
+import hashlib
+import json
+
+embedding_cache = {}
+
+def get_embedding_cached(text):
+    """带缓存的向量获取"""
+    cache_key = hashlib.md5(text.encode()).hexdigest()
+    
+    if cache_key in embedding_cache:
+        return embedding_cache[cache_key]
+    
+    embedding = get_embedding(text)
+    embedding_cache[cache_key] = embedding
+    return embedding
+```
+
+## 定价说明
+
+| 模型 | 价格 |
+|------|------|
+| `text-embedding-3-small` | $0.00002 / 1K tokens |
+| `text-embedding-3-large` | $0.00013 / 1K tokens |
+| `text-embedding-ada-002` | $0.00010 / 1K tokens |
+
+<Tip>
+  老张API 提供更优惠的价格，详见 [定价页面](/pricing)。
+</Tip>
+
+## 常见问题
+
+<AccordionGroup>
+  <Accordion title="向量维度多少合适？">
+    - 通用场景：1536 维（默认）足够
+    - 存储受限：可降到 512 或 256 维
+    - 高精度需求：使用 3072 维的 large 模型
+  </Accordion>
+
+  <Accordion title="单次最多处理多少文本？">
+    建议单次请求不超过 2000 个文本，过多可能超时。
+  </Accordion>
+
+  <Accordion title="文本长度限制是多少？">
+    最大 8192 tokens，超过会被截断。
+  </Accordion>
+</AccordionGroup>
+
+## 相关文档
+
+<CardGroup cols={2}>
+  <Card title="文本生成" icon="message-square" href="/api-capabilities/text-generation">
+    使用 Chat API 进行对话
+  </Card>
+  <Card title="LangChain 集成" icon="link" href="/scenarios/engineering/langchain">
+    在 LangChain 中使用 Embedding
+  </Card>
+  <Card title="模型信息" icon="database" href="/api-capabilities/model-info">
+    查看所有支持的模型
+  </Card>
+  <Card title="Dify 配置" icon="puzzle" href="/scenarios/engineering/dify">
+    在 Dify 中配置向量模型
+  </Card>
+</CardGroup>
+

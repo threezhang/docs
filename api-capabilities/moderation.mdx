@@ -1,0 +1,339 @@
+---
+title: 文本审核（Moderation）
+sidebarTitle: Moderation API
+description: 使用 AI 检测文本中的有害内容，支持暴力、仇恨、性内容等多种类别识别
+icon: "shield-check"
+---
+
+## 功能概述
+
+Moderation API 可以检测文本中是否包含有害或不当内容，帮助您：
+
+- **内容过滤**：自动过滤用户提交的不当内容
+- **安全审核**：在发布前检测潜在违规内容
+- **合规检查**：确保内容符合平台规范
+- **风险预警**：识别可能有害的内容类型
+
+<Info>
+  Moderation API 使用 OpenAI 的审核模型，可免费使用，不消耗 Token 额度。
+</Info>
+
+## 快速开始
+
+### 基础示例
+
+```python
+from openai import OpenAI
+
+client = OpenAI(
+    api_key="sk-你的老张API密钥",
+    base_url="https://api.laozhang.ai/v1"
+)
+
+response = client.moderations.create(
+    input="这是一段需要审核的文本内容"
+)
+
+result = response.results[0]
+print(f"是否包含有害内容: {result.flagged}")
+print(f"类别得分: {result.category_scores}")
+```
+
+### 批量审核
+
+```python
+texts = [
+    "第一段文本",
+    "第二段文本",
+    "第三段文本"
+]
+
+response = client.moderations.create(input=texts)
+
+for i, result in enumerate(response.results):
+    print(f"文本 {i+1}: {'⚠️ 违规' if result.flagged else '✅ 正常'}")
+```
+
+## 检测类别
+
+Moderation API 可以检测以下类别的内容：
+
+| 类别 | 说明 |
+|------|------|
+| `hate` | 仇恨言论，针对特定群体的攻击 |
+| `hate/threatening` | 带有威胁性的仇恨言论 |
+| `harassment` | 骚扰性内容 |
+| `harassment/threatening` | 带有威胁性的骚扰 |
+| `self-harm` | 自我伤害相关内容 |
+| `self-harm/intent` | 表达自我伤害意图 |
+| `self-harm/instructions` | 自我伤害指导 |
+| `sexual` | 性相关内容 |
+| `sexual/minors` | 涉及未成年人的性内容 |
+| `violence` | 暴力内容 |
+| `violence/graphic` | 血腥暴力描述 |
+
+## 响应结构
+
+```python
+response = client.moderations.create(input="测试文本")
+result = response.results[0]
+
+# 是否被标记为违规
+print(result.flagged)  # True/False
+
+# 各类别是否违规
+print(result.categories)
+# {
+#   "hate": False,
+#   "hate/threatening": False,
+#   "harassment": False,
+#   ...
+# }
+
+# 各类别的置信度得分 (0-1)
+print(result.category_scores)
+# {
+#   "hate": 0.0001,
+#   "hate/threatening": 0.00001,
+#   "harassment": 0.002,
+#   ...
+# }
+```
+
+## 实用示例
+
+### 1. 用户输入过滤
+
+```python
+from openai import OpenAI
+
+client = OpenAI(
+    api_key="sk-你的老张API密钥",
+    base_url="https://api.laozhang.ai/v1"
+)
+
+def check_content(text):
+    """检查内容是否安全"""
+    response = client.moderations.create(input=text)
+    result = response.results[0]
+    
+    if result.flagged:
+        # 找出违规类别
+        violations = [
+            cat for cat, flagged in result.categories.model_dump().items()
+            if flagged
+        ]
+        return False, violations
+    
+    return True, []
+
+# 使用示例
+user_input = "用户提交的内容"
+is_safe, violations = check_content(user_input)
+
+if is_safe:
+    print("✅ 内容安全，可以发布")
+else:
+    print(f"⚠️ 内容违规，类别: {violations}")
+```
+
+### 2. 聊天机器人安全层
+
+```python
+from openai import OpenAI
+
+client = OpenAI(
+    api_key="sk-你的老张API密钥",
+    base_url="https://api.laozhang.ai/v1"
+)
+
+def safe_chat(user_message):
+    """带安全检查的聊天"""
+    # 先检查用户输入
+    mod_response = client.moderations.create(input=user_message)
+    if mod_response.results[0].flagged:
+        return "抱歉，您的消息包含不当内容，请修改后重试。"
+    
+    # 安全后才调用 Chat API
+    chat_response = client.chat.completions.create(
+        model="gpt-4.1",
+        messages=[{"role": "user", "content": user_message}]
+    )
+    
+    ai_reply = chat_response.choices[0].message.content
+    
+    # 检查 AI 回复
+    mod_response = client.moderations.create(input=ai_reply)
+    if mod_response.results[0].flagged:
+        return "抱歉，无法生成合适的回复。"
+    
+    return ai_reply
+
+# 使用
+response = safe_chat("你好，请介绍一下人工智能")
+print(response)
+```
+
+### 3. 自定义阈值
+
+```python
+def check_with_threshold(text, threshold=0.5):
+    """使用自定义阈值检查"""
+    response = client.moderations.create(input=text)
+    result = response.results[0]
+    
+    # 检查是否有任何类别超过阈值
+    scores = result.category_scores.model_dump()
+    high_risk = {
+        cat: score for cat, score in scores.items()
+        if score > threshold
+    }
+    
+    if high_risk:
+        return False, high_risk
+    return True, {}
+
+# 使用较低阈值进行更严格的审核
+is_safe, risks = check_with_threshold("测试文本", threshold=0.3)
+if not is_safe:
+    print(f"⚠️ 潜在风险: {risks}")
+```
+
+### 4. 批量内容审核
+
+```python
+def batch_moderation(texts, batch_size=100):
+    """批量审核大量文本"""
+    results = []
+    
+    for i in range(0, len(texts), batch_size):
+        batch = texts[i:i + batch_size]
+        response = client.moderations.create(input=batch)
+        
+        for j, result in enumerate(response.results):
+            results.append({
+                "index": i + j,
+                "text": batch[j][:50] + "...",
+                "flagged": result.flagged,
+                "categories": [
+                    cat for cat, flagged in result.categories.model_dump().items()
+                    if flagged
+                ]
+            })
+    
+    return results
+
+# 使用
+texts = ["文本1", "文本2", "文本3", ...]
+audit_results = batch_moderation(texts)
+
+# 统计
+flagged_count = sum(1 for r in audit_results if r["flagged"])
+print(f"总计 {len(texts)} 条，违规 {flagged_count} 条")
+```
+
+## 最佳实践
+
+### 1. 多层防护
+
+```python
+# 输入层 -> 处理层 -> 输出层 都要检查
+def process_with_safety(user_input):
+    # 1. 检查用户输入
+    if not is_safe(user_input):
+        return "输入内容不合规"
+    
+    # 2. 处理（如调用 AI）
+    result = process(user_input)
+    
+    # 3. 检查输出
+    if not is_safe(result):
+        return "无法生成合适的内容"
+    
+    return result
+```
+
+### 2. 记录违规日志
+
+```python
+import logging
+
+def check_and_log(text, user_id=None):
+    """检查并记录违规"""
+    response = client.moderations.create(input=text)
+    result = response.results[0]
+    
+    if result.flagged:
+        logging.warning(f"违规内容检测 - 用户: {user_id}, 类别: {result.categories}")
+    
+    return not result.flagged
+```
+
+### 3. 优雅处理
+
+```python
+VIOLATION_MESSAGES = {
+    "hate": "您的内容可能包含不友好的言论",
+    "harassment": "请以更友善的方式表达",
+    "sexual": "请注意内容的适当性",
+    "violence": "请避免暴力相关的内容",
+}
+
+def get_friendly_message(violations):
+    """根据违规类别返回友好提示"""
+    for cat in violations:
+        base_cat = cat.split("/")[0]
+        if base_cat in VIOLATION_MESSAGES:
+            return VIOLATION_MESSAGES[base_cat]
+    return "您的内容可能不符合社区规范，请修改后重试"
+```
+
+## 注意事项
+
+<Warning>
+  **重要提醒**：
+  - Moderation API 是辅助工具，不能替代人工审核
+  - 对于高风险场景，建议结合人工审核
+  - 审核结果可能存在误判，需要设置合理的处理流程
+</Warning>
+
+## 定价
+
+Moderation API 目前**免费使用**，不计入 Token 消耗。
+
+## 常见问题
+
+<AccordionGroup>
+  <Accordion title="审核结果准确吗？">
+    Moderation API 基于 OpenAI 的模型，准确率较高，但不能保证 100% 准确。建议：
+    - 重要场景结合人工审核
+    - 设置合理的阈值
+    - 提供申诉渠道
+  </Accordion>
+
+  <Accordion title="支持中文吗？">
+    支持多语言，包括中文。但英文效果最佳，中文可能略有偏差。
+  </Accordion>
+
+  <Accordion title="有速率限制吗？">
+    有一定的速率限制，建议批量处理时控制请求频率。
+  </Accordion>
+</AccordionGroup>
+
+## 相关文档
+
+<CardGroup cols={2}>
+  <Card title="文本生成" icon="message-square" href="/api-capabilities/text-generation">
+    Chat API 文档
+  </Card>
+  <Card title="内容安全" icon="shield" href="/faq/content-safety">
+    了解内容安全政策
+  </Card>
+  <Card title="API 参考" icon="code" href="/api-reference/chat-completions">
+    API 详细参考
+  </Card>
+  <Card title="数据安全" icon="lock" href="/faq/data-security">
+    数据隐私保护
+  </Card>
+</CardGroup>
+

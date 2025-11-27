@@ -1,0 +1,182 @@
+---
+title: Text Generation (Chat Completions)
+sidebarTitle: Text Generation API
+description: Use large language models for chat completions, supporting single-turn, multi-turn conversations, and role-playing scenarios
+icon: "message-square"
+---
+
+## Overview
+
+Text Generation (Chat Completions) is one of the core capabilities of LaoZhang API, supporting 200+ popular AI models for intelligent conversations and text generation. Through a unified OpenAI-compatible interface, you can easily implement:
+
+- **Intelligent Conversations**: Build chatbots and virtual assistants
+- **Content Creation**: Article writing, creative generation, copywriting
+- **Code Assistance**: Code generation, debugging, refactoring suggestions
+- **Knowledge Q&A**: Answer questions, knowledge retrieval, information extraction
+- **Role Playing**: Customized AI characters, scenario simulation
+
+<Info>
+  Supports GPT-5, Claude 4, Gemini 2.5, DeepSeek, Qwen and 200+ mainstream models with a single API Key.
+</Info>
+
+## Quick Start
+
+### Basic Example
+
+```python
+from openai import OpenAI
+
+client = OpenAI(
+    api_key="sk-your-laozhang-api-key",
+    base_url="https://api.laozhang.ai/v1"
+)
+
+response = client.chat.completions.create(
+    model="gpt-4.1",
+    messages=[
+        {"role": "user", "content": "Explain the history of artificial intelligence"}
+    ]
+)
+
+print(response.choices[0].message.content)
+```
+
+### Multi-turn Conversation
+
+```python
+messages = [
+    {"role": "system", "content": "You are a professional Python programming assistant"},
+    {"role": "user", "content": "How to read a CSV file?"},
+    {"role": "assistant", "content": "You can use pandas library's read_csv() function..."},
+    {"role": "user", "content": "How to filter specific column data?"}
+]
+
+response = client.chat.completions.create(
+    model="gpt-4.1",
+    messages=messages
+)
+
+print(response.choices[0].message.content)
+```
+
+## Core Parameters
+
+### model (Required)
+
+Specify the model name. See [Model Info](/en/api-capabilities/model-info) for details.
+
+```python
+model="gpt-5"              # GPT-5 Latest
+model="gpt-4.1"            # GPT-4.1 Fast
+model="claude-sonnet-4-20250514"  # Claude 4 Sonnet
+model="gemini-2.5-pro"     # Gemini 2.5 Pro
+model="deepseek-chat"      # DeepSeek Chat
+```
+
+### messages (Required)
+
+Array of conversation messages with `role` and `content` fields:
+
+<CardGroup cols={3}>
+  <Card title="system" icon="gear">
+    System prompt defining AI behavior and role
+  </Card>
+  <Card title="user" icon="user">
+    User message representing user input
+  </Card>
+  <Card title="assistant" icon="robot">
+    Assistant message representing AI response
+  </Card>
+</CardGroup>
+
+### temperature (Optional)
+
+Controls output randomness, range `0.0 ~ 2.0`, default `1.0`:
+
+| Range | Characteristics | Use Cases |
+|-------|-----------------|-----------|
+| **0.0 ~ 0.3** | More deterministic | Translation, summarization, code |
+| **0.7 ~ 1.0** | Balanced | Daily conversations |
+| **1.0 ~ 2.0** | More creative | Creative writing, brainstorming |
+
+### stream (Optional)
+
+Enable streaming output for better user experience:
+
+```python
+response = client.chat.completions.create(
+    model="gpt-4.1",
+    messages=[{"role": "user", "content": "Write an article about AI"}],
+    stream=True
+)
+
+for chunk in response:
+    if chunk.choices[0].delta.content:
+        print(chunk.choices[0].delta.content, end="")
+```
+
+## Recommended Models
+
+| Scenario | Recommended Model | Reason |
+|----------|-------------------|--------|
+| Daily Chat | `gpt-4.1-mini`, `deepseek-chat` | Fast, low cost |
+| Complex Reasoning | `gpt-5`, `claude-sonnet-4-20250514` | Powerful, accurate |
+| Code Generation | `claude-sonnet-4-20250514`, `deepseek-coder` | Excellent coding |
+| Long Text | `gemini-2.5-pro`, `claude-3-opus` | Ultra-long context |
+
+## Best Practices
+
+### Optimize Prompts
+
+```python
+# ❌ Poor prompt
+"Write an article"
+
+# ✅ Good prompt
+"""Write a popular science article about AI applications in healthcare.
+
+Requirements:
+- Length: 800-1000 words
+- Audience: General readers
+- Structure: Introduction, use cases, case studies, future outlook
+- Include 2-3 real examples"""
+```
+
+### Error Handling
+
+```python
+from openai import OpenAI, OpenAIError
+import time
+
+def chat_with_retry(messages, max_retries=3):
+    for attempt in range(max_retries):
+        try:
+            response = client.chat.completions.create(
+                model="gpt-4.1",
+                messages=messages
+            )
+            return response.choices[0].message.content
+        except OpenAIError as e:
+            if attempt < max_retries - 1:
+                time.sleep(2 ** attempt)
+                continue
+            raise
+```
+
+## Related Documentation
+
+<CardGroup cols={2}>
+  <Card title="Model Info" icon="database" href="/en/api-capabilities/model-info">
+    View all supported models
+  </Card>
+  <Card title="Text Embedding" icon="vector-square" href="/en/api-capabilities/text-embedding">
+    Convert text to vectors
+  </Card>
+  <Card title="API Reference" icon="code" href="/en/api-reference/chat-completions">
+    Detailed API reference
+  </Card>
+  <Card title="OpenAI SDK" icon="plug" href="/en/api-capabilities/openai-sdk">
+    Quick integration with OpenAI SDK
+  </Card>
+</CardGroup>
+
