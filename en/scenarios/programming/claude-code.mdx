@@ -1,0 +1,239 @@
+---
+title: Claude Code Setup Guide
+sidebarTitle: Claude Code
+description: Configure Claude Code CLI with LaoZhang API for stable access to Claude's powerful coding capabilities
+icon: "terminal"
+---
+
+## Overview
+
+Claude Code is Anthropic's official command-line programming assistant. By configuring LaoZhang API, you can:
+
+<CardGroup cols={2}>
+  <Card title="🚀 Stable Connection" icon="wifi">
+    Direct access, no proxy needed
+  </Card>
+  <Card title="💰 Cost Effective" icon="piggy-bank">
+    No $200/month Claude Max subscription
+  </Card>
+  <Card title="⚡ High Concurrency" icon="bolt">
+    Unlimited parallel requests
+  </Card>
+  <Card title="🔧 Simple Setup" icon="wrench">
+    Complete configuration in minutes
+  </Card>
+</CardGroup>
+
+## Quick Start
+
+<Note>
+  **Simplified Setup**: If you don't want to register a Claude account, check the [Project Configuration](#project-configuration-recommended) section below. Using `.claude.json` file can completely bypass official verification.
+</Note>
+
+### 1. Install Claude Code
+
+Run the following command to install globally:
+
+```bash
+npm install -g @anthropic-ai/claude-code
+```
+
+<Info>
+  Requires Node.js 18 or higher. If not installed, download from [nodejs.org](https://nodejs.org).
+</Info>
+
+### 2. Get API Key
+
+1. Visit [LaoZhang API Console](https://api.laozhang.ai/token)
+2. Create a new token
+3. Copy the key for later use
+
+### 3. Set Environment Variables
+
+<Tabs>
+  <Tab title="macOS/Linux">
+    Edit `~/.zshrc` or `~/.bashrc`:
+
+    ```bash
+    # LaoZhang API Configuration
+    export ANTHROPIC_API_KEY="sk-your-laozhang-api-key"
+    export ANTHROPIC_BASE_URL="https://api.laozhang.ai"
+    ```
+
+    Apply changes:
+    ```bash
+    source ~/.zshrc
+    ```
+  </Tab>
+
+  <Tab title="Windows">
+    Edit PowerShell profile:
+
+    ```powershell
+    # Edit profile
+    notepad $PROFILE
+
+    # Add these lines
+    $env:ANTHROPIC_API_KEY = "sk-your-laozhang-api-key"
+    $env:ANTHROPIC_BASE_URL = "https://api.laozhang.ai"
+    ```
+
+    Restart PowerShell or run:
+    ```powershell
+    . $PROFILE
+    ```
+  </Tab>
+</Tabs>
+
+### 4. Launch Claude Code
+
+Navigate to your project directory and start:
+
+```bash
+cd ~/Desktop/my-project
+claude
+```
+
+## Project Configuration (Recommended)
+
+Create `.claude.json` in your project root to bypass Claude verification:
+
+```json
+{
+  "apiKey": "sk-your-laozhang-api-key",
+  "apiBaseUrl": "https://api.laozhang.ai",
+  "hasCompletedOnboarding": true
+}
+```
+
+<Tip>
+  **Important**: Adding `"hasCompletedOnboarding": true` completely bypasses Claude account verification. No need to:
+
+  - Register a Claude account (difficult, requires overseas phone)
+  - Worry about account suspension
+  - Complete any authorization steps
+</Tip>
+
+<Warning>
+  **Security Note**: `.claude.json` contains sensitive information:
+
+  1. Add to `.gitignore` to avoid committing
+  2. Don't share project archives containing this file
+</Warning>
+
+## Model Selection
+
+Available models through LaoZhang API:
+
+| Model | Model ID | Features | Recommended For |
+|-------|----------|----------|-----------------|
+| **Claude 4 Sonnet** | `claude-sonnet-4-20250514` | Best coding | Complex code tasks |
+| **Claude Opus 4.1** | `claude-opus-4-20250514` | Enhanced reasoning | Difficult problems |
+| **Claude 4 Sonnet Thinking** | `claude-sonnet-4-20250514-thinking` | Chain of thought | Complex reasoning |
+| **Claude 3.5 Sonnet** | `claude-3-5-sonnet` | Stable, reliable | Daily development |
+
+## Usage Guide
+
+### Basic Commands
+
+```bash
+claude
+# Shows API Key and Base URL
+# Confirm configuration and continue
+```
+
+### Workflow
+
+1. **Start**: Run `claude` in project directory
+2. **Describe**: Input your programming needs
+3. **Interact**: Claude understands context and provides suggestions
+4. **Apply**: Claude can directly modify files
+
+### Supported Features
+
+- ✅ Code generation and optimization
+- ✅ Bug fixing and debugging
+- ✅ Code refactoring
+- ✅ Documentation writing
+- ✅ Test case generation
+- ✅ Technical Q&A
+- ✅ Multi-file editing (Agent mode)
+
+## Troubleshooting
+
+<AccordionGroup>
+  <Accordion title="Unable to Connect to Anthropic Services">
+    Check the following:
+
+    1. Environment variables are correctly set
+    2. API key is valid
+    3. Network connection is stable
+
+    ```bash
+    echo $ANTHROPIC_API_KEY
+    echo $ANTHROPIC_BASE_URL
+    ```
+  </Accordion>
+
+  <Accordion title="Requires Claude Account Authorization">
+    Create `.claude.json` with `hasCompletedOnboarding: true`:
+
+    ```json
+    {
+      "apiKey": "sk-your-laozhang-api-key",
+      "apiBaseUrl": "https://api.laozhang.ai",
+      "hasCompletedOnboarding": true
+    }
+    ```
+  </Accordion>
+
+  <Accordion title="Invalid API Key">
+    Ensure you're using a LaoZhang API key. Check at [LaoZhang API Console](https://api.laozhang.ai/token).
+  </Accordion>
+
+  <Accordion title="How to Update Claude Code">
+    ```bash
+    npm update -g @anthropic-ai/claude-code
+    ```
+  </Accordion>
+</AccordionGroup>
+
+## Best Practices
+
+### Effective Prompts
+
+```markdown
+Good prompts:
+"Refactor this Python function for efficiency and add type annotations"
+"This code has a memory leak, find and fix it"
+"Write unit tests for this React component"
+
+Avoid vague prompts:
+"Improve my code"  # Too vague
+```
+
+### Performance Tips
+
+1. **Use project config**: `.claude.json` avoids verification, faster startup
+2. **Keep conversations coherent**: Handle related tasks in one session
+3. **Be specific**: Clear descriptions reduce round trips
+
+## Related Resources
+
+<CardGroup cols={2}>
+  <Card title="Official Docs" icon="book" href="https://docs.anthropic.com/en/docs/claude-code/setup">
+    Claude Code Official Documentation
+  </Card>
+  <Card title="API Console" icon="gear" href="https://api.laozhang.ai/token">
+    Manage API Keys
+  </Card>
+  <Card title="Model Info" icon="robot" href="/en/api-capabilities/model-info">
+    Learn about Claude models
+  </Card>
+  <Card title="Cline Setup" icon="code" href="/en/scenarios/programming/cline">
+    VS Code AI Agent
+  </Card>
+</CardGroup>
+
+Need help? Visit [LaoZhang API](https://api.laozhang.ai) for support.
+

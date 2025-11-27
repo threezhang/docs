@@ -1,0 +1,301 @@
+---
+title: OpenAI Codex CLI 配置教程
+sidebarTitle: Codex CLI
+description: 使用老张API配置 OpenAI Codex CLI 命令行编程助手，国内稳定访问 GPT-5 编程能力
+icon: "code"
+---
+
+## 工具简介
+
+OpenAI Codex CLI 是 OpenAI 推出的命令行编程助手，专为开发者设计的 AI 编程工具。通过配置老张API，您可以获得：
+
+<CardGroup cols={2}>
+  <Card title="🚀 稳定服务" icon="server">
+    国内直连，无需代理
+  </Card>
+  <Card title="💰 灵活计费" icon="calculator">
+    支持按量或按次计费
+  </Card>
+  <Card title="⚡ GPT-5 支持" icon="sparkles">
+    使用最新 GPT-5 模型
+  </Card>
+  <Card title="🔧 简单配置" icon="wrench">
+    几分钟完成全部设置
+  </Card>
+</CardGroup>
+
+## 环境准备
+
+### 必要软件
+
+<Steps>
+  <Step title="安装 Git">
+    访问 [Git 官网](https://git-scm.com/downloads) 下载并安装
+
+    <Tip>
+      **Windows 用户**：建议默认安装到 C 盘，使用默认设置  
+      **macOS 用户**：通常已预装，可跳过此步
+    </Tip>
+  </Step>
+
+  <Step title="安装 Node.js">
+    访问 [Node.js 官网](https://nodejs.org/zh-cn/download) 下载并安装
+
+    要求 Node.js 22 或更高版本
+  </Step>
+
+  <Step title="验证安装">
+    打开终端验证安装是否成功：
+
+    ```bash
+    git --version
+    node --version
+    npm --version
+    ```
+  </Step>
+</Steps>
+
+## 安装 Codex CLI
+
+### 方式一：npm 安装
+
+```bash
+npm install -g @openai/codex
+```
+
+### 方式二：源码安装
+
+```bash
+# 克隆仓库
+git clone https://github.com/openai/codex.git
+cd codex
+
+# 安装依赖
+npm install
+
+# 全局链接
+npm link
+```
+
+## 配置老张API
+
+### 1. 获取 API 密钥
+
+1. 访问 [老张API控制台](https://api.laozhang.ai/token)
+2. 创建新的令牌
+3. 复制密钥备用
+
+### 2. 设置环境变量
+
+<Tabs>
+  <Tab title="macOS/Linux">
+    编辑 `~/.zshrc` 或 `~/.bashrc` 文件：
+
+    ```bash
+    # 老张API 配置
+    export OPENAI_API_KEY="sk-你的老张API密钥"
+    export OPENAI_BASE_URL="https://api.laozhang.ai/v1"
+    ```
+
+    使配置生效：
+    ```bash
+    source ~/.zshrc
+    ```
+  </Tab>
+
+  <Tab title="Windows">
+    使用 PowerShell 编辑配置：
+
+    ```powershell
+    # 编辑配置文件
+    notepad $PROFILE
+
+    # 添加以下内容
+    $env:OPENAI_API_KEY = "sk-你的老张API密钥"
+    $env:OPENAI_BASE_URL = "https://api.laozhang.ai/v1"
+    ```
+
+    重启 PowerShell 或运行：
+    ```powershell
+    . $PROFILE
+    ```
+  </Tab>
+</Tabs>
+
+### 3. 验证配置
+
+```bash
+# 验证环境变量
+echo $OPENAI_API_KEY
+echo $OPENAI_BASE_URL
+
+# 启动 Codex
+codex
+```
+
+## 使用指南
+
+### 基本使用
+
+```bash
+# 进入项目目录
+cd ~/my-project
+
+# 启动 Codex
+codex
+
+# 或直接提问
+codex "帮我创建一个 Express 服务器"
+```
+
+### 交互模式
+
+启动后进入交互模式：
+
+```
+> 请帮我优化这个函数的性能
+> 为项目添加单元测试
+> 解释这段代码的逻辑
+```
+
+### 常用命令
+
+| 命令 | 功能 |
+|------|------|
+| `codex` | 启动交互模式 |
+| `codex "问题"` | 直接提问 |
+| `codex --model gpt-5` | 指定模型 |
+| `codex --help` | 查看帮助 |
+
+## 模型选择
+
+通过老张API，你可以使用多种模型：
+
+| 模型 | 模型 ID | 特点 | 推荐场景 |
+|------|---------|------|----------|
+| **GPT-5** | `gpt-5` | 最新最强 | 复杂编程任务 |
+| **GPT-4.1** | `gpt-4.1` | 速度快，能力强 | 日常开发 |
+| **GPT-4.1 Mini** | `gpt-4.1-mini` | 轻量高效 | 简单任务 |
+| **o4-mini** | `o4-mini` | 推理增强 | 算法问题 |
+
+### 切换模型
+
+```bash
+# 使用 GPT-5
+codex --model gpt-5 "优化这段代码"
+
+# 使用推理模型
+codex --model o4-mini "解决这个算法问题"
+```
+
+## 支持的功能
+
+- ✅ 代码生成和补全
+- ✅ Bug 修复和调试
+- ✅ 代码重构优化
+- ✅ 文档和注释生成
+- ✅ 测试用例编写
+- ✅ 代码解释
+- ✅ 多语言支持
+
+### 支持的编程语言
+
+Python, JavaScript/TypeScript, Java, C++, C#, Go, Rust, Swift, Kotlin, Ruby, PHP, HTML/CSS, SQL, Shell Scripts 等所有主流语言。
+
+## 故障排除
+
+<AccordionGroup>
+  <Accordion title="连接超时或失败">
+    检查以下配置：
+
+    1. 环境变量是否正确设置
+    2. API 密钥是否有效
+    3. 网络连接是否正常
+
+    ```bash
+    # 测试连接
+    curl https://api.laozhang.ai/v1/models \
+      -H "Authorization: Bearer $OPENAI_API_KEY"
+    ```
+  </Accordion>
+
+  <Accordion title="API Key 无效">
+    确保使用的是老张API的密钥：
+    
+    1. 访问 [老张API控制台](https://api.laozhang.ai/token)
+    2. 检查密钥是否有效
+    3. 确认账户余额充足
+  </Accordion>
+
+  <Accordion title="模型不可用">
+    某些模型可能暂时不可用，尝试：
+
+    ```bash
+    # 使用其他模型
+    codex --model gpt-4.1 "你的问题"
+    ```
+  </Accordion>
+
+  <Accordion title="如何更新 Codex">
+    ```bash
+    npm update -g @openai/codex
+    ```
+  </Accordion>
+</AccordionGroup>
+
+## 最佳实践
+
+### 有效的提示词
+
+```markdown
+✅ 好的提示：
+"创建一个 Python 函数，接收 JSON 文件路径，解析并返回按日期排序的数据"
+"重构这个类，使用单例模式"
+"为这个 API 添加错误处理和重试机制"
+
+❌ 避免模糊：
+"写代码"
+"修复 bug"
+```
+
+### 性能优化
+
+1. **明确需求**：清晰描述可减少往返交互
+2. **提供上下文**：告诉 AI 项目技术栈和约束
+3. **分步处理**：复杂任务拆分为小步骤
+4. **批量处理**：相关任务一次性描述
+
+### 成本控制
+
+- 按 Token 使用量计费
+- 简单任务使用 `gpt-4.1-mini` 更经济
+- 查看 [定价页面](/pricing) 了解详情
+
+## 与其他工具对比
+
+| 工具 | 类型 | 优势 | 适合场景 |
+|------|------|------|----------|
+| **Codex CLI** | 命令行 | GPT-5 支持，轻量 | 终端操作 |
+| **Claude Code** | 命令行 | Agent 模式强 | 复杂重构 |
+| **Cursor** | IDE | 界面友好 | 日常开发 |
+| **Cline** | VS Code | 完整 Agent | VS Code 用户 |
+
+## 相关资源
+
+<CardGroup cols={2}>
+  <Card title="OpenAI Codex 官网" icon="openai" href="https://openai.com/codex">
+    了解 Codex 技术详情
+  </Card>
+  <Card title="老张API控制台" icon="gear" href="https://api.laozhang.ai/token">
+    管理 API 密钥和查看使用量
+  </Card>
+  <Card title="Claude Code" icon="terminal" href="/scenarios/programming/claude-code">
+    Claude 编程助手
+  </Card>
+  <Card title="模型对比" icon="chart-bar" href="/api-capabilities/model-info">
+    查看所有编程模型对比
+  </Card>
+</CardGroup>
+
+需要更多帮助？请访问 [老张API官网](https://api.laozhang.ai) 获取支持。
+

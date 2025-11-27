@@ -1,0 +1,266 @@
+---
+title: Claude Code 配置教程
+sidebarTitle: Claude Code
+description: 使用老张API配置 Claude Code 命令行编程助手，国内稳定访问，无需 Claude 官网账号
+icon: "terminal"
+---
+
+## 工具简介
+
+Claude Code 是 Anthropic 官方推出的命令行编程助手，可以在终端中直接使用 Claude 的强大编程能力。通过配置老张API，您可以获得：
+
+<CardGroup cols={2}>
+  <Card title="🚀 稳定连接" icon="wifi">
+    国内直连，告别网络不稳定
+  </Card>
+  <Card title="💰 经济实惠" icon="piggy-bank">
+    无需 Claude Max 200美元订阅
+  </Card>
+  <Card title="⚡ 高并发支持" icon="bolt">
+    不限速访问，多项目并行
+  </Card>
+  <Card title="🔧 简单配置" icon="wrench">
+    几分钟完成全部设置
+  </Card>
+</CardGroup>
+
+## 快速开始
+
+<Note>
+  **简化配置提示**：如果您不想注册 Claude 官网账号，直接查看下方的[项目级配置](#项目级配置推荐)，使用 `.claude.json` 文件可以完全绕过官网验证。
+</Note>
+
+### 1. 安装 Claude Code
+
+在终端运行以下命令全局安装：
+
+```bash
+npm install -g @anthropic-ai/claude-code
+```
+
+<Info>
+  需要 Node.js 18 或更高版本。如未安装，请先访问 [nodejs.org](https://nodejs.org) 下载安装。
+</Info>
+
+### 2. 获取 API 密钥
+
+1. 访问 [老张API控制台](https://api.laozhang.ai/token)
+2. 创建新的令牌
+3. 复制密钥备用
+
+### 3. 设置环境变量
+
+<Tabs>
+  <Tab title="macOS/Linux">
+    编辑 `~/.zshrc` 或 `~/.bashrc` 文件：
+
+    ```bash
+    # 老张API 配置
+    export ANTHROPIC_API_KEY="sk-你的老张API密钥"
+    export ANTHROPIC_BASE_URL="https://api.laozhang.ai"
+    ```
+
+    <Tip>
+      **Mac 用户提示**：在用户目录按 `⌘ + ⇧ + .` 显示隐藏文件，使用文本编辑器打开 `.zshrc` 文件。
+    </Tip>
+
+    使配置生效：
+    ```bash
+    source ~/.zshrc
+    ```
+  </Tab>
+
+  <Tab title="Windows">
+    使用 PowerShell 编辑配置：
+
+    ```powershell
+    # 编辑配置文件
+    notepad $PROFILE
+
+    # 添加以下内容
+    $env:ANTHROPIC_API_KEY = "sk-你的老张API密钥"
+    $env:ANTHROPIC_BASE_URL = "https://api.laozhang.ai"
+    ```
+
+    重启 PowerShell 或运行：
+    ```powershell
+    . $PROFILE
+    ```
+  </Tab>
+</Tabs>
+
+### 4. 启动 Claude Code
+
+进入你的项目目录并启动：
+
+```bash
+# 进入项目目录
+cd ~/Desktop/my-project
+
+# 启动 Claude Code
+claude
+```
+
+## 项目级配置（推荐）
+
+在项目根目录创建 `.claude.json` 文件，可以绕过 Claude 官网验证：
+
+```json
+{
+  "apiKey": "sk-你的老张API密钥",
+  "apiBaseUrl": "https://api.laozhang.ai",
+  "hasCompletedOnboarding": true
+}
+```
+
+<Tip>
+  **重要提示**：添加 `"hasCompletedOnboarding": true` 可以完全绕过 Claude 官网账号验证，直接使用老张API服务。这样您无需：
+
+  - 注册 Claude 官网账号（注册困难，需要海外手机号）
+  - 担心 Claude 官网账号被封
+  - 进行任何额外的授权步骤
+</Tip>
+
+<Warning>
+  **安全提醒**：`.claude.json` 文件包含敏感信息，请确保：
+
+  1. 添加到 `.gitignore` 中，避免提交到版本控制系统
+  2. 不要分享包含此文件的项目压缩包
+</Warning>
+
+## 模型选择
+
+Claude Code 默认使用最新的 Claude 模型。通过老张API，你可以访问：
+
+| 模型 | 模型 ID | 特点 | 推荐场景 |
+|------|---------|------|----------|
+| **Claude 4 Sonnet** | `claude-sonnet-4-20250514` | 编程能力最强 | 复杂代码任务 |
+| **Claude Opus 4.1** | `claude-opus-4-20250514` | 深度推理增强 | 高难度编程 |
+| **Claude 4 Sonnet Thinking** | `claude-sonnet-4-20250514-thinking` | 思维链模式 | 复杂推理 |
+| **Claude 3.5 Sonnet** | `claude-3-5-sonnet` | 稳定可靠 | 日常开发 |
+
+## 使用指南
+
+### 基本命令
+
+启动后，Claude Code 会显示当前配置信息：
+
+```bash
+claude
+# 显示 API Key 和 API Base URL
+# 确认配置无误后选择 Yes 继续
+```
+
+### 工作流程
+
+1. **启动助手**：在项目目录运行 `claude`
+2. **描述需求**：输入你的编程需求或问题
+3. **交互对话**：Claude 会理解上下文并提供代码建议
+4. **应用更改**：确认后 Claude 可以直接修改文件
+
+### 支持的功能
+
+- ✅ 代码生成和优化
+- ✅ Bug 修复和调试
+- ✅ 代码重构建议
+- ✅ 文档编写
+- ✅ 测试用例生成
+- ✅ 技术问题解答
+- ✅ 多文件编辑（Agent 模式）
+
+## 故障排除
+
+<AccordionGroup>
+  <Accordion title="Unable to Connect to Anthropic Services">
+    这通常是网络配置问题。请检查：
+
+    1. 环境变量是否正确设置
+    2. API 密钥是否有效
+    3. 网络连接是否正常
+
+    运行以下命令验证配置：
+
+    ```bash
+    echo $ANTHROPIC_API_KEY
+    echo $ANTHROPIC_BASE_URL
+    ```
+  </Accordion>
+
+  <Accordion title="提示需要 Claude 官网账号授权">
+    这是因为没有配置 `hasCompletedOnboarding`。在项目目录创建 `.claude.json` 文件并添加：
+
+    ```json
+    {
+      "apiKey": "sk-你的老张API密钥",
+      "apiBaseUrl": "https://api.laozhang.ai",
+      "hasCompletedOnboarding": true
+    }
+    ```
+  </Accordion>
+
+  <Accordion title="API Key 无效">
+    确保使用的是老张API的密钥。在 [老张API控制台](https://api.laozhang.ai/token) 检查或生成新密钥。
+  </Accordion>
+
+  <Accordion title="如何更新 Claude Code">
+    运行以下命令更新到最新版本：
+
+    ```bash
+    npm update -g @anthropic-ai/claude-code
+    ```
+  </Accordion>
+</AccordionGroup>
+
+## 最佳实践
+
+### 有效的提示词
+
+```markdown
+好的提示：
+"帮我重构这个 Python 函数，使其更高效并添加类型注解"
+"这段代码有内存泄漏，请帮我找出并修复"
+"为这个 React 组件编写单元测试"
+
+避免过于宽泛：
+"改进我的代码"  # 太模糊
+```
+
+### 性能优化
+
+1. **使用项目配置**：`.claude.json` 配置可避免每次验证，启动更快
+2. **保持对话连贯**：在同一会话中处理相关任务
+3. **明确需求**：清晰描述可减少往返交互
+
+### 成本控制
+
+- Claude Code 按 Token 使用量计费
+- 通过老张API可享受优惠价格
+- 查看 [定价页面](/pricing) 了解详情
+
+## 与其他工具对比
+
+| 工具 | Agent 模式 | 优势 | 劣势 |
+|------|-----------|------|------|
+| **Claude Code** | ✅ | 官方出品，功能完整 | 命令行操作 |
+| **Cursor** | ❌ | 界面优雅，补全体验好 | 无 Agent 模式 |
+| **Cline (VS Code)** | ✅ | 完整 Agent 功能 | 需要 VS Code |
+
+## 相关资源
+
+<CardGroup cols={2}>
+  <Card title="官方文档" icon="book" href="https://docs.anthropic.com/zh-CN/docs/claude-code/setup">
+    Claude Code 官方文档
+  </Card>
+  <Card title="老张API控制台" icon="gear" href="https://api.laozhang.ai/token">
+    管理 API 密钥
+  </Card>
+  <Card title="模型介绍" icon="robot" href="/api-capabilities/model-info">
+    了解 Claude 系列模型
+  </Card>
+  <Card title="Cline 配置" icon="code" href="/scenarios/programming/cline">
+    VS Code 中的 AI Agent
+  </Card>
+</CardGroup>
+
+需要更多帮助？请访问 [老张API官网](https://api.laozhang.ai) 获取支持。
+
