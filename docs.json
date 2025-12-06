@@ -14,6 +14,23 @@
     "default": "light",
     "isHidden": false
   },
+  "navbar": {
+    "links": [
+      {
+        "label": "Home",
+        "href": "https://api.laozhang.ai/"
+      },
+      {
+        "label": "AI Images",
+        "href": "https://images.laozhang.ai/"
+      }
+    ],
+    "primary": {
+      "type": "button",
+      "label": "Console",
+      "href": "https://api.laozhang.ai/account/profile"
+    }
+  },
   "icons": {
     "library": "lucide"
   },
