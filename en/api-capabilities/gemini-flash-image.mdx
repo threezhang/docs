@@ -1,7 +1,8 @@
 ---
-title: Gemini Image Generation (Nano Banana Series)
-sidebarTitle: Gemini Image Generation
-description: Google image generation models, including the latest Nano Banana 2 (Gemini 3 Pro Image) and stable Nano Banana (Gemini 2.5 Flash Image)
+title: Nano Banana 2 API Image Generation
+sidebarTitle: Nano Banana 2 API
+description: $0.05/image (79% off), free trial credit, 10s generation, unlimited concurrency
+"og:description": Nano Banana 2 API (gemini-3-pro-image-preview) at $0.05/image - 79% cheaper than official $0.24. Free $0.05 trial credit on signup. 4K resolution, 10-second generation.
 icon: "sparkles"
 ---
 
@@ -16,6 +17,15 @@ Google's latest generation image model **Nano Banana 2** (internal code name) is
 - 📐 **High-Res Support**: Supports 1K, 2K, 4K resolutions (Nano Banana 2 only)
 - 💰 **Pricing**: Nano Banana \$0.025/image (37.5% off), Nano Banana 2 \$0.05/image (79% off official \$0.24)
 </Note>
+
+<CardGroup cols={2}>
+  <Card title="🎁 Free Trial" icon="gift" href="https://api.laozhang.ai">
+    Get **$0.05** free credit, test Nano Banana 2 once
+  </Card>
+  <Card title="🚀 Online Test" icon="play" href="https://images.laozhang.ai/">
+    AI Images - no coding required
+  </Card>
+</CardGroup>
 
 ## Prerequisites
 
@@ -755,6 +765,35 @@ Nano Banana 2 supports mixing up to 14 reference images:
 ```
 
 ## 📋 FAQ
+
+### How to test Nano Banana 2 API for free?
+
+1. Visit [api.laozhang.ai](https://api.laozhang.ai) and create an account
+2. Get **$0.05 free credit** automatically on signup
+3. Create API token with "pay-per-call" billing mode
+4. Call `gemini-3-pro-image-preview` model
+
+$0.05 credit = 1 free Nano Banana 2 test!
+
+### What is the Nano Banana 2 API price?
+
+| Provider | Price | Note |
+|----------|-------|------|
+| **LaoZhang API** | **$0.05/image** | 79% off |
+| Google Official | $0.24/image | Original |
+
+Sign up for $0.05 free credit to test once!
+
+### How to test Nano Banana API online?
+
+**Method 1**: [API Playground](https://api.laozhang.ai/playground) - visual testing
+
+**Method 2**: Curl command
+```bash
+curl -X POST "https://api.laozhang.ai/v1/chat/completions" \
+  -H "Authorization: Bearer YOUR_API_KEY" \
+  -d '{"model": "gemini-3-pro-image-preview", "messages": [{"role": "user", "content": "a cute cat"}]}'
+```
 
 ### Q1: What's the difference between Nano Banana and Nano Banana 2?
 

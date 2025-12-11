@@ -1,7 +1,8 @@
 ---
-title: Gemini Image 图像生成（Nano Banana 系列）
-sidebarTitle: Gemini Image 生成
-description: Google 图像生成模型系列，包括最新的 Nano Banana 2（Gemini 3 Pro Image）和稳定版 Nano Banana（Gemini 2.5 Flash Image）
+title: Nano Banana 2 API 图像生成
+sidebarTitle: Nano Banana 2 API
+description: $0.05/张（官方2折），注册送免费测试额度，10秒极速生成，不限并发
+"og:description": Nano Banana 2 API (gemini-3-pro-image-preview) 官方价2折仅$0.05/张。注册送$0.05免费测试额度，支持4K分辨率，10秒极速生成。不限并发，OpenAI兼容接口。
 icon: "sparkles"
 ---
 
@@ -16,6 +17,15 @@ Google 最新一代图像生成模型 **Nano Banana 2**（内部代号）正式�
 - 📐 **高分辨率支持**：支持 1K、2K、4K 三种分辨率（仅 Nano Banana 2）
 - 💰 **价格**：Nano Banana \$0.025/张（比官网便宜 37.5%），Nano Banana 2 \$0.05/张（比官网便宜 79%）
 </Note>
+
+<CardGroup cols={2}>
+  <Card title="🎁 免费测试" icon="gift" href="https://api.laozhang.ai">
+    注册送 **$0.05**，免费测试一次 Nano Banana 2
+  </Card>
+  <Card title="🚀 在线测试" icon="play" href="https://images.laozhang.ai/">
+    AI Images 即刻体验，无需写代码
+  </Card>
+</CardGroup>
 
 ## 前置要求
 
@@ -955,6 +965,35 @@ response = requests.post(
 ## ❓ 常见问题
 
 <AccordionGroup>
+  <Accordion title="Nano Banana 2 API 如何免费测试？">
+    1. 访问 [api.laozhang.ai](https://api.laozhang.ai) 注册账号
+    2. 自动获得 **$0.05 免费额度**
+    3. 创建令牌，选择"按次计费"
+    4. 调用 `gemini-3-pro-image-preview` 模型
+
+    $0.05 可免费测试 Nano Banana 2 一次！
+  </Accordion>
+
+  <Accordion title="Nano Banana 2 API 价格是多少？">
+    | 渠道 | 价格 | 说明 |
+    |------|------|------|
+    | **老张 API** | **$0.05/张** | 官方 2 折 |
+    | Google 官方 | $0.24/张 | 原价 |
+
+    注册送 $0.05，可免费测试一次！
+  </Accordion>
+
+  <Accordion title="如何在线测试 Nano Banana API？">
+    **方法一**：[API Playground](https://api.laozhang.ai/playground) 可视化测试
+
+    **方法二**：Curl 命令
+    ```bash
+    curl -X POST "https://api.laozhang.ai/v1/chat/completions" \
+      -H "Authorization: Bearer YOUR_API_KEY" \
+      -d '{"model": "gemini-3-pro-image-preview", "messages": [{"role": "user", "content": "a cute cat"}]}'
+    ```
+  </Accordion>
+
   <Accordion title="什么是 Nano Banana 和 Nano Banana 2？">
     **Nano Banana** 是 Google 图像生成技术的内部代号：
 
