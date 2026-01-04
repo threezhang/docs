@@ -80,6 +80,7 @@
                 "pages": [
                   "api-capabilities/sora2/overview",
                   "api-capabilities/sora2/models-pricing",
+                  "api-capabilities/sora2/character",
                   {
                     "group": "同步 API（兼容 OpenAI）",
                     "pages": [
@@ -355,6 +356,7 @@
                   "pages": [
                     "en/api-capabilities/sora2/overview",
                     "en/api-capabilities/sora2/models-pricing",
+                    "en/api-capabilities/sora2/character",
                     {
                       "group": "Sync API (OpenAI Compatible)",
                       "pages": [

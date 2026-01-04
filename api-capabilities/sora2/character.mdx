@@ -1,0 +1,393 @@
+---
+title: "角色创建 API"
+description: "从视频中创建可复用角色，在后续视频生成中通过 @username 使用"
+icon: "user-plus"
+---
+
+<Info>
+  **基础 URL:** `https://api.laozhang.ai/sora/v1/characters`
+  **价格:** $0.01/次
+  **模型:** `sora-2-character`
+</Info>
+
+## 功能介绍
+
+Sora 2 Character 功能允许您从视频中提取角色（人物、宠物、物品等），创建可复用的角色身份。创建后，您可以在后续的视频生成中通过 `@username` 语法引用该角色，保持角色的一致性外观和特征。
+
+<CardGroup cols={2}>
+  <Card title="角色提取" icon="scissors">
+    从视频片段中提取角色形象
+  </Card>
+  <Card title="可复用" icon="rotate">
+    创建一次，多次复用
+  </Card>
+  <Card title="一致性" icon="fingerprint">
+    保持角色外观和特征一致
+  </Card>
+  <Card title="低成本" icon="coins">
+    仅 $0.01/次
+  </Card>
+</CardGroup>
+
+## 前置要求
+
+<Steps>
+  <Step title="获取 API Key">
+    登录 [laozhang.ai 控制台](https://api.laozhang.ai) 获取 API 密钥
+  </Step>
+  <Step title="准备视频素材">
+    准备包含要提取角色的视频，可以是：
+    - 视频 URL（可公开访问）
+    - 已完成的 Sora 视频任务 ID
+  </Step>
+</Steps>
+
+## 快速开始
+
+### 1. 从视频 URL 创建角色
+
+<CodeGroup>
+```bash curl
+curl https://api.laozhang.ai/sora/v1/characters \
+  -H "Content-Type: application/json" \
+  -H "Authorization: Bearer YOUR_API_KEY" \
+  -d '{
+    "model": "sora-2-character",
+    "url": "https://example.com/your-video.mp4",
+    "timestamps": "1,3"
+  }'
+```
+
+```python Python
+import requests
+
+response = requests.post(
+    "https://api.laozhang.ai/sora/v1/characters",
+    headers={
+        "Content-Type": "application/json",
+        "Authorization": "Bearer YOUR_API_KEY"
+    },
+    json={
+        "model": "sora-2-character",
+        "url": "https://example.com/your-video.mp4",
+        "timestamps": "1,3"
+    }
+)
+
+character = response.json()
+print(f"角色创建成功！")
+print(f"Username: @{character['username']}")
+print(f"Display Name: {character['display_name']}")
+```
+
+```javascript JavaScript
+const response = await fetch('https://api.laozhang.ai/sora/v1/characters', {
+  method: 'POST',
+  headers: {
+    'Content-Type': 'application/json',
+    'Authorization': 'Bearer YOUR_API_KEY'
+  },
+  body: JSON.stringify({
+    model: 'sora-2-character',
+    url: 'https://example.com/your-video.mp4',
+    timestamps: '1,3'
+  })
+});
+
+const character = await response.json();
+console.log(`角色创建成功！Username: @${character.username}`);
+```
+</CodeGroup>
+
+### 2. 从任务 ID 创建角色
+
+如果您已经通过 Sora API 生成了视频，可以直接使用任务 ID 创建角色：
+
+<CodeGroup>
+```bash curl
+curl https://api.laozhang.ai/sora/v1/characters \
+  -H "Content-Type: application/json" \
+  -H "Authorization: Bearer YOUR_API_KEY" \
+  -d '{
+    "model": "sora-2-character",
+    "from_task": "video_8a06e19b-408b-4cf1-9b70-9d25c4843451",
+    "timestamps": "1,3"
+  }'
+```
+
+```python Python
+import requests
+
+response = requests.post(
+    "https://api.laozhang.ai/sora/v1/characters",
+    headers={
+        "Content-Type": "application/json",
+        "Authorization": "Bearer YOUR_API_KEY"
+    },
+    json={
+        "model": "sora-2-character",
+        "from_task": "video_8a06e19b-408b-4cf1-9b70-9d25c4843451",
+        "timestamps": "1,3"
+    }
+)
+
+character = response.json()
+print(f"角色创建成功！Username: @{character['username']}")
+```
+</CodeGroup>
+
+## API 参考
+
+### 端点
+
+```
+POST https://api.laozhang.ai/sora/v1/characters
+```
+
+### 请求参数
+
+| 参数 | 类型 | 必需 | 说明 |
+|------|------|------|------|
+| `model` | string | ✓ | 固定值：`"sora-2-character"` |
+| `url` | string | 二选一 | 视频 URL（可公开访问），包含要创建的角色 |
+| `from_task` | string | 二选一 | 已完成的 Sora 视频任务 ID |
+| `timestamps` | string | ✓ | 角色出现的时间范围（秒），格式：`"起始,结束"`，如 `"1,3"` |
+
+<Note>
+**timestamps 说明**
+
+- 格式：`"起始秒,结束秒"`，例如 `"1,3"` 表示视频的第 1 秒到第 3 秒
+- 时间范围差值：最小 1 秒，最大 3 秒
+- 确保指定的时间范围内角色清晰可见
+</Note>
+
+<Warning>
+`url` 和 `from_task` 二选一，不能同时提供或同时为空。
+</Warning>
+
+### 响应字段
+
+| 字段 | 类型 | 说明 |
+|------|------|------|
+| `id` | string | 角色唯一标识符，以 `ch_` 开头 |
+| `username` | string | 角色用户名，用于 `@` 引用 |
+| `display_name` | string | 角色显示名称 |
+| `permalink` | string | 角色在 Sora 平台的链接 |
+| `profile_picture_url` | string | 角色头像 URL |
+
+### 响应示例
+
+```json
+{
+  "id": "ch_6940d0068884819191a38537b5f48e10",
+  "username": "ae27a25bd.dairymuse",
+  "display_name": "Daisy the Dairy Muse",
+  "permalink": "https://sora.chatgpt.com/profile/ae27a25bd.dairymuse",
+  "profile_picture_url": "https://mycdn-gg.oss-us-west-1.aliyuncs.com/sora/95f24b0e-ffd6-43ce-83b8-5575b07d2efc.jpg"
+}
+```
+
+## 在视频中使用角色
+
+创建角色后，您可以在视频生成的 prompt 中使用 `@username` 语法引用该角色。
+
+### 使用示例
+
+<CodeGroup>
+```python Python - 同步 API
+import openai
+
+client = openai.OpenAI(
+    api_key="YOUR_API_KEY",
+    base_url="https://api.laozhang.ai/v1"
+)
+
+# 使用 @username 引用已创建的角色
+response = client.chat.completions.create(
+    model="sora_video2",
+    messages=[
+        {
+            "role": "user",
+            "content": "@ae27a25bd.dairymuse 在阳光下的草地上开心地奔跑"
+        }
+    ]
+)
+
+print(response.choices[0].message.content)
+```
+
+```python Python - 异步 API
+import requests
+
+# 使用异步 API 生成包含角色的视频
+response = requests.post(
+    "https://api.laozhang.ai/v1/videos",
+    headers={
+        "Content-Type": "application/json",
+        "Authorization": "Bearer YOUR_API_KEY"
+    },
+    json={
+        "model": "sora-2",
+        "prompt": "@ae27a25bd.dairymuse 在阳光下的草地上开心地奔跑",
+        "size": "1280x720",
+        "seconds": "10"
+    }
+)
+
+task = response.json()
+print(f"任务 ID: {task['id']}")
+```
+</CodeGroup>
+
+<Tip>
+**提示词建议**
+
+使用角色时，在 `@username` 后面描述角色的动作、场景和氛围，例如：
+- `@username 在咖啡店里读书`
+- `@username 在海边散步，夕阳西下`
+- `@username 在办公室里工作，认真专注`
+</Tip>
+
+## 完整工作流示例
+
+以下是从视频生成到角色创建再到角色复用的完整流程：
+
+```python
+import requests
+import openai
+import time
+
+API_KEY = "YOUR_API_KEY"
+BASE_URL = "https://api.laozhang.ai"
+
+# 步骤 1：生成初始视频（异步 API）
+print("步骤 1：生成初始视频...")
+video_response = requests.post(
+    f"{BASE_URL}/v1/videos",
+    headers={
+        "Content-Type": "application/json",
+        "Authorization": f"Bearer {API_KEY}"
+    },
+    json={
+        "model": "sora-2",
+        "prompt": "一个可爱的卡通角色在跳舞",
+        "size": "1280x720",
+        "seconds": "10"
+    }
+)
+task = video_response.json()
+task_id = task["id"]
+print(f"视频任务 ID: {task_id}")
+
+# 步骤 2：等待视频生成完成
+print("步骤 2：等待视频生成...")
+while True:
+    status_response = requests.get(
+        f"{BASE_URL}/v1/videos/{task_id}",
+        headers={"Authorization": f"Bearer {API_KEY}"}
+    )
+    status = status_response.json()
+    if status["status"] == "completed":
+        print("视频生成完成！")
+        break
+    elif status["status"] == "failed":
+        print("视频生成失败")
+        exit(1)
+    time.sleep(10)
+
+# 步骤 3：从视频创建角色
+print("步骤 3：创建角色...")
+character_response = requests.post(
+    f"{BASE_URL}/sora/v1/characters",
+    headers={
+        "Content-Type": "application/json",
+        "Authorization": f"Bearer {API_KEY}"
+    },
+    json={
+        "model": "sora-2-character",
+        "from_task": task_id,
+        "timestamps": "1,3"
+    }
+)
+character = character_response.json()
+username = character["username"]
+print(f"角色创建成功！Username: @{username}")
+
+# 步骤 4：使用角色生成新视频
+print("步骤 4：使用角色生成新视频...")
+new_video_response = requests.post(
+    f"{BASE_URL}/v1/videos",
+    headers={
+        "Content-Type": "application/json",
+        "Authorization": f"Bearer {API_KEY}"
+    },
+    json={
+        "model": "sora-2",
+        "prompt": f"@{username} 在舞台上表演，观众欢呼",
+        "size": "1280x720",
+        "seconds": "10"
+    }
+)
+new_task = new_video_response.json()
+print(f"新视频任务 ID: {new_task['id']}")
+```
+
+## 常见问题
+
+<AccordionGroup>
+  <Accordion title="timestamps 时间范围有什么限制？" icon="clock">
+    - 最小范围：1 秒（如 `"1,2"`）
+    - 最大范围：3 秒（如 `"1,4"`）
+    - 确保在指定时间范围内角色清晰可见
+    - 建议选择角色正面、光线良好的片段
+  </Accordion>
+
+  <Accordion title="可以创建哪些类型的角色？" icon="user">
+    支持从视频中提取各种角色：
+    - 人物角色
+    - 动物/宠物
+    - 卡通形象
+    - AI 生成的虚拟角色
+    - 物品/道具
+  </Accordion>
+
+  <Accordion title="角色可以复用多少次？" icon="rotate">
+    创建的角色没有使用次数限制，可以在任意数量的视频生成中复用。
+  </Accordion>
+
+  <Accordion title="如何获得最佳角色提取效果？" icon="lightbulb">
+    **建议：**
+    - 选择角色清晰可见的视频片段
+    - 确保良好的光线条件
+    - 选择角色正面或侧面清晰的画面
+    - 避免角色被遮挡或模糊的片段
+  </Accordion>
+</AccordionGroup>
+
+## 定价
+
+| 操作 | 价格 |
+|------|------|
+| 创建角色 | $0.01/次 |
+| 使用角色生成视频 | 按视频生成价格计费（$0.15/次起） |
+
+<Note>
+角色创建按次计费，仅 $0.01/次。使用角色生成视频时，按正常视频生成价格计费。
+</Note>
+
+## 相关链接
+
+<CardGroup cols={2}>
+  <Card title="异步 API" icon="refresh-cw" href="/api-capabilities/sora2/async-api">
+    推荐使用异步 API 生成视频
+  </Card>
+  <Card title="模型定价" icon="tag" href="/api-capabilities/sora2/models-pricing">
+    查看完整的模型定价
+  </Card>
+  <Card title="代码示例" icon="code" href="/api-capabilities/sora2/examples">
+    查看更多代码示例
+  </Card>
+  <Card title="常见问题" icon="circle-question" href="/api-capabilities/sora2/troubleshooting">
+    解决使用中的问题
+  </Card>
+</CardGroup>

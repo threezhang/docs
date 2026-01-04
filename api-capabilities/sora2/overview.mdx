@@ -42,6 +42,7 @@ OpenAI 突然发布 Sora 2 新版本（The New Sora），本站第一时间接�
 
 <Note>
 **最新更新**
+- **01/04** 新增 [角色创建 API](/api-capabilities/sora2/character)，支持从视频中提取角色并在后续视频中复用（$0.01/次）
 - **10/20** 15秒模型大降价！从$0.25降至$0.15/次，所有模型统一定价；新增原始错误日志功能
 - **10/18** 新增支持生成带 Sora 原生水印的视频（默认无水印）
 - **10/16** 恢复15秒模型（sora_video2-15s 和 sora_video2-landscape-15s）
@@ -82,8 +83,8 @@ OpenAI 突然发布 Sora 2 新版本（The New Sora），本站第一时间接�
   <Card title="图生视频" icon="image">
     支持参考图片（最多 1 张）
   </Card>
-  <Card title="同步调用" icon="bolt">
-    快速测试、实时流式输出进度
+  <Card title="角色创建" icon="user-plus" href="/api-capabilities/sora2/character">
+    从视频提取角色，通过 @username 复用
   </Card>
   <Card title="异步调用" icon="refresh-cw">
     更稳定的任务队列方式（推荐生产环境）
@@ -165,14 +166,14 @@ OpenAI 突然发布 Sora 2 新版本（The New Sora），本站第一时间接�
   <Card title="异步调用" icon="refresh-cw" href="/api-capabilities/sora2/async-api">
     任务队列、更稳定（推荐生产环境）
   </Card>
+  <Card title="角色创建" icon="user-plus" href="/api-capabilities/sora2/character">
+    从视频提取角色，@username 复用
+  </Card>
   <Card title="模型定价" icon="tag" href="/api-capabilities/sora2/models-pricing">
     了解详细的模型对比和价格
   </Card>
   <Card title="代码示例" icon="code" href="/api-capabilities/sora2/examples">
     查看多语言示例代码
-  </Card>
-  <Card title="API 参考" icon="book" href="/api-capabilities/sora2/api-reference">
-    查看完整的 API 文档
   </Card>
   <Card title="常见问题" icon="help-circle" href="/api-capabilities/sora2/troubleshooting">
     解决使用中的常见问题

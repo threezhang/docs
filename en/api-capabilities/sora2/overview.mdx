@@ -42,6 +42,7 @@ OpenAI suddenly released Sora 2 new version (The New Sora), and we integrated of
 
 <Note>
 **Latest Updates**
+- **01/04** New [Character Creation API](/en/api-capabilities/sora2/character), extract characters from videos and reuse via @username ($0.01/call)
 - **10/20** Massive price drop for 15s models! From $0.25 to $0.15/call, all models unified pricing; Added raw error log feature
 - **10/18** Added support for generating videos with Sora native watermark (default is no watermark)
 - **10/16** Restored 15-second models (sora_video2-15s and sora_video2-landscape-15s)
@@ -82,8 +83,8 @@ OpenAI suddenly released Sora 2 new version (The New Sora), and we integrated of
   <Card title="Image-to-Video" icon="image">
     Supports reference images (up to 1 image)
   </Card>
-  <Card title="Sync API" icon="bolt">
-    Quick testing with real-time streaming progress
+  <Card title="Character Creation" icon="user-plus" href="/en/api-capabilities/sora2/character">
+    Extract characters from videos, reuse via @username
   </Card>
   <Card title="Async API" icon="refresh-cw">
     More stable task queue approach (recommended for production)
@@ -165,14 +166,14 @@ All base models now unified at $0.15/call, regardless of duration or orientation
   <Card title="Async API" icon="refresh-cw" href="/en/api-capabilities/sora2/async-api">
     Task queue, more stable (recommended for production)
   </Card>
+  <Card title="Character Creation" icon="user-plus" href="/en/api-capabilities/sora2/character">
+    Extract characters, reuse via @username
+  </Card>
   <Card title="Model Pricing" icon="tag" href="/en/api-capabilities/sora2/models-pricing">
     Learn detailed model comparison and pricing
   </Card>
   <Card title="Code Examples" icon="code" href="/en/api-capabilities/sora2/examples">
     View multi-language example code
-  </Card>
-  <Card title="API Reference" icon="book" href="/en/api-capabilities/sora2/api-reference">
-    View complete API documentation
   </Card>
   <Card title="FAQ" icon="help-circle" href="/en/api-capabilities/sora2/troubleshooting">
     Solve common issues

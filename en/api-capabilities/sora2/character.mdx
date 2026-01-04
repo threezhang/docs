@@ -1,0 +1,393 @@
+---
+title: "Character Creation API"
+description: "Create reusable characters from videos and use them in future video generation via @username"
+icon: "user-plus"
+---
+
+<Info>
+  **Base URL:** `https://api.laozhang.ai/sora/v1/characters`
+  **Price:** $0.01/call
+  **Model:** `sora-2-character`
+</Info>
+
+## Introduction
+
+Sora 2 Character feature allows you to extract characters (people, pets, objects, etc.) from videos and create reusable character identities. Once created, you can reference the character using `@username` syntax in subsequent video generation, maintaining consistent appearance and traits.
+
+<CardGroup cols={2}>
+  <Card title="Character Extraction" icon="scissors">
+    Extract character from video clips
+  </Card>
+  <Card title="Reusable" icon="rotate">
+    Create once, use multiple times
+  </Card>
+  <Card title="Consistency" icon="fingerprint">
+    Maintain consistent appearance and traits
+  </Card>
+  <Card title="Low Cost" icon="coins">
+    Only $0.01/call
+  </Card>
+</CardGroup>
+
+## Prerequisites
+
+<Steps>
+  <Step title="Get API Key">
+    Log in to [laozhang.ai console](https://api.laozhang.ai) to obtain your API key
+  </Step>
+  <Step title="Prepare Video Source">
+    Prepare a video containing the character you want to extract:
+    - Video URL (publicly accessible)
+    - Completed Sora video task ID
+  </Step>
+</Steps>
+
+## Quick Start
+
+### 1. Create Character from Video URL
+
+<CodeGroup>
+```bash curl
+curl https://api.laozhang.ai/sora/v1/characters \
+  -H "Content-Type: application/json" \
+  -H "Authorization: Bearer YOUR_API_KEY" \
+  -d '{
+    "model": "sora-2-character",
+    "url": "https://example.com/your-video.mp4",
+    "timestamps": "1,3"
+  }'
+```
+
+```python Python
+import requests
+
+response = requests.post(
+    "https://api.laozhang.ai/sora/v1/characters",
+    headers={
+        "Content-Type": "application/json",
+        "Authorization": "Bearer YOUR_API_KEY"
+    },
+    json={
+        "model": "sora-2-character",
+        "url": "https://example.com/your-video.mp4",
+        "timestamps": "1,3"
+    }
+)
+
+character = response.json()
+print(f"Character created successfully!")
+print(f"Username: @{character['username']}")
+print(f"Display Name: {character['display_name']}")
+```
+
+```javascript JavaScript
+const response = await fetch('https://api.laozhang.ai/sora/v1/characters', {
+  method: 'POST',
+  headers: {
+    'Content-Type': 'application/json',
+    'Authorization': 'Bearer YOUR_API_KEY'
+  },
+  body: JSON.stringify({
+    model: 'sora-2-character',
+    url: 'https://example.com/your-video.mp4',
+    timestamps: '1,3'
+  })
+});
+
+const character = await response.json();
+console.log(`Character created! Username: @${character.username}`);
+```
+</CodeGroup>
+
+### 2. Create Character from Task ID
+
+If you've already generated a video through the Sora API, you can use the task ID directly:
+
+<CodeGroup>
+```bash curl
+curl https://api.laozhang.ai/sora/v1/characters \
+  -H "Content-Type: application/json" \
+  -H "Authorization: Bearer YOUR_API_KEY" \
+  -d '{
+    "model": "sora-2-character",
+    "from_task": "video_8a06e19b-408b-4cf1-9b70-9d25c4843451",
+    "timestamps": "1,3"
+  }'
+```
+
+```python Python
+import requests
+
+response = requests.post(
+    "https://api.laozhang.ai/sora/v1/characters",
+    headers={
+        "Content-Type": "application/json",
+        "Authorization": "Bearer YOUR_API_KEY"
+    },
+    json={
+        "model": "sora-2-character",
+        "from_task": "video_8a06e19b-408b-4cf1-9b70-9d25c4843451",
+        "timestamps": "1,3"
+    }
+)
+
+character = response.json()
+print(f"Character created! Username: @{character['username']}")
+```
+</CodeGroup>
+
+## API Reference
+
+### Endpoint
+
+```
+POST https://api.laozhang.ai/sora/v1/characters
+```
+
+### Request Parameters
+
+| Parameter | Type | Required | Description |
+|-----------|------|----------|-------------|
+| `model` | string | ✓ | Fixed value: `"sora-2-character"` |
+| `url` | string | Either | Video URL (publicly accessible) containing the character |
+| `from_task` | string | Either | Completed Sora video task ID |
+| `timestamps` | string | ✓ | Time range where character appears (seconds), format: `"start,end"`, e.g., `"1,3"` |
+
+<Note>
+**timestamps Explanation**
+
+- Format: `"start_second,end_second"`, e.g., `"1,3"` means from 1st to 3rd second of the video
+- Time range: minimum 1 second, maximum 3 seconds
+- Ensure the character is clearly visible within the specified time range
+</Note>
+
+<Warning>
+Either `url` or `from_task` must be provided, but not both.
+</Warning>
+
+### Response Fields
+
+| Field | Type | Description |
+|-------|------|-------------|
+| `id` | string | Unique character identifier, starts with `ch_` |
+| `username` | string | Character username for `@` reference |
+| `display_name` | string | Character display name |
+| `permalink` | string | Character link on Sora platform |
+| `profile_picture_url` | string | Character avatar URL |
+
+### Response Example
+
+```json
+{
+  "id": "ch_6940d0068884819191a38537b5f48e10",
+  "username": "ae27a25bd.dairymuse",
+  "display_name": "Daisy the Dairy Muse",
+  "permalink": "https://sora.chatgpt.com/profile/ae27a25bd.dairymuse",
+  "profile_picture_url": "https://mycdn-gg.oss-us-west-1.aliyuncs.com/sora/95f24b0e-ffd6-43ce-83b8-5575b07d2efc.jpg"
+}
+```
+
+## Using Characters in Videos
+
+After creating a character, you can reference it using `@username` syntax in your video generation prompts.
+
+### Usage Example
+
+<CodeGroup>
+```python Python - Sync API
+import openai
+
+client = openai.OpenAI(
+    api_key="YOUR_API_KEY",
+    base_url="https://api.laozhang.ai/v1"
+)
+
+# Reference created character using @username
+response = client.chat.completions.create(
+    model="sora_video2",
+    messages=[
+        {
+            "role": "user",
+            "content": "@ae27a25bd.dairymuse running happily in a sunny meadow"
+        }
+    ]
+)
+
+print(response.choices[0].message.content)
+```
+
+```python Python - Async API
+import requests
+
+# Use async API to generate video with character
+response = requests.post(
+    "https://api.laozhang.ai/v1/videos",
+    headers={
+        "Content-Type": "application/json",
+        "Authorization": "Bearer YOUR_API_KEY"
+    },
+    json={
+        "model": "sora-2",
+        "prompt": "@ae27a25bd.dairymuse running happily in a sunny meadow",
+        "size": "1280x720",
+        "seconds": "10"
+    }
+)
+
+task = response.json()
+print(f"Task ID: {task['id']}")
+```
+</CodeGroup>
+
+<Tip>
+**Prompt Tips**
+
+When using characters, describe the character's actions, scene, and atmosphere after `@username`, for example:
+- `@username reading a book in a coffee shop`
+- `@username walking on the beach at sunset`
+- `@username working in an office, focused and concentrated`
+</Tip>
+
+## Complete Workflow Example
+
+Here's a complete workflow from video generation to character creation to character reuse:
+
+```python
+import requests
+import openai
+import time
+
+API_KEY = "YOUR_API_KEY"
+BASE_URL = "https://api.laozhang.ai"
+
+# Step 1: Generate initial video (Async API)
+print("Step 1: Generating initial video...")
+video_response = requests.post(
+    f"{BASE_URL}/v1/videos",
+    headers={
+        "Content-Type": "application/json",
+        "Authorization": f"Bearer {API_KEY}"
+    },
+    json={
+        "model": "sora-2",
+        "prompt": "A cute cartoon character dancing",
+        "size": "1280x720",
+        "seconds": "10"
+    }
+)
+task = video_response.json()
+task_id = task["id"]
+print(f"Video task ID: {task_id}")
+
+# Step 2: Wait for video generation to complete
+print("Step 2: Waiting for video generation...")
+while True:
+    status_response = requests.get(
+        f"{BASE_URL}/v1/videos/{task_id}",
+        headers={"Authorization": f"Bearer {API_KEY}"}
+    )
+    status = status_response.json()
+    if status["status"] == "completed":
+        print("Video generation complete!")
+        break
+    elif status["status"] == "failed":
+        print("Video generation failed")
+        exit(1)
+    time.sleep(10)
+
+# Step 3: Create character from video
+print("Step 3: Creating character...")
+character_response = requests.post(
+    f"{BASE_URL}/sora/v1/characters",
+    headers={
+        "Content-Type": "application/json",
+        "Authorization": f"Bearer {API_KEY}"
+    },
+    json={
+        "model": "sora-2-character",
+        "from_task": task_id,
+        "timestamps": "1,3"
+    }
+)
+character = character_response.json()
+username = character["username"]
+print(f"Character created! Username: @{username}")
+
+# Step 4: Generate new video with character
+print("Step 4: Generating new video with character...")
+new_video_response = requests.post(
+    f"{BASE_URL}/v1/videos",
+    headers={
+        "Content-Type": "application/json",
+        "Authorization": f"Bearer {API_KEY}"
+    },
+    json={
+        "model": "sora-2",
+        "prompt": f"@{username} performing on stage, audience cheering",
+        "size": "1280x720",
+        "seconds": "10"
+    }
+)
+new_task = new_video_response.json()
+print(f"New video task ID: {new_task['id']}")
+```
+
+## FAQ
+
+<AccordionGroup>
+  <Accordion title="What are the timestamps limitations?" icon="clock">
+    - Minimum range: 1 second (e.g., `"1,2"`)
+    - Maximum range: 3 seconds (e.g., `"1,4"`)
+    - Ensure the character is clearly visible within the specified time range
+    - Choose clips where the character is front-facing with good lighting
+  </Accordion>
+
+  <Accordion title="What types of characters can be created?" icon="user">
+    You can extract various types of characters from videos:
+    - Human characters
+    - Animals/pets
+    - Cartoon characters
+    - AI-generated virtual characters
+    - Objects/props
+  </Accordion>
+
+  <Accordion title="How many times can a character be reused?" icon="rotate">
+    Created characters have no usage limit and can be reused in any number of video generations.
+  </Accordion>
+
+  <Accordion title="How to get the best character extraction results?" icon="lightbulb">
+    **Recommendations:**
+    - Choose video clips where the character is clearly visible
+    - Ensure good lighting conditions
+    - Select frames showing the character's front or clear side view
+    - Avoid clips where the character is obscured or blurry
+  </Accordion>
+</AccordionGroup>
+
+## Pricing
+
+| Operation | Price |
+|-----------|-------|
+| Create character | $0.01/call |
+| Generate video with character | Charged at video generation price (from $0.15/call) |
+
+<Note>
+Character creation is billed per call at only $0.01. When generating videos with characters, standard video generation pricing applies.
+</Note>
+
+## Related Links
+
+<CardGroup cols={2}>
+  <Card title="Async API" icon="refresh-cw" href="/en/api-capabilities/sora2/async-api">
+    Recommended for video generation
+  </Card>
+  <Card title="Model Pricing" icon="tag" href="/en/api-capabilities/sora2/models-pricing">
+    View complete pricing details
+  </Card>
+  <Card title="Code Examples" icon="code" href="/en/api-capabilities/sora2/examples">
+    View more code examples
+  </Card>
+  <Card title="FAQ" icon="circle-question" href="/en/api-capabilities/sora2/troubleshooting">
+    Solve common issues
+  </Card>
+</CardGroup>
