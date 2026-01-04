@@ -187,11 +187,18 @@ Create a new video generation task
 
 | Parameter | Type | Required | Options | Description |
 |-----------|------|----------|---------|-------------|
-| `model` | string | ✓ | `"sora-2"` | Model name (fixed value) |
+| `model` | string | ✓ | `"sora-2"`, `"sora-2-pro"` | Model name |
 | `prompt` | string | ✓ | - | Video generation prompt |
 | `size` | string | ✓ | `"1280x720"`, `"720x1280"` | Video resolution (landscape/portrait) |
 | `seconds` | string | ✓ | `"10"`, `"15"` | Video duration (seconds) |
 | `input_reference` | file | Required for image-to-video | - | Local image file (local upload only)<br/>Supported formats: JPG, PNG, WebP<br/>Recommended size: 1280x720<br/>Recommended file size: < 5MB |
+
+<Note>
+**Model Selection**
+
+- `sora-2`: Base model, 720P resolution, extremely high stability, $0.15/call
+- `sora-2-pro`: HD model, 1080P resolution, generation time ~10 minutes, $0.8/call
+</Note>
 
 #### Response Fields
 
@@ -698,10 +705,11 @@ generateVideoFromImageAsync(
 Async API has **exactly the same pricing** as Sync API, billed per call.
 </Info>
 
-| Parameter Combination | Price | $100 Top-up Rate |
+| Parameter Combination | Price | Discounted Rate |
 |----------------------|-------|------------------|
 | 10s video (landscape/portrait) | $0.15/call | ≈ ¥1.0/call |
 | 15s video (landscape/portrait) | $0.15/call | ≈ ¥1.0/call |
+| **HD (sora-2-pro)** | $0.8/call | ≈ ¥5.4/call |
 
 **Billing Rules:**
 - ✓ Charged only when video **successfully generated** (status = "completed")
