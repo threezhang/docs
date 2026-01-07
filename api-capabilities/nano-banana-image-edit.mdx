@@ -5,22 +5,19 @@ description: "Nano Banana Edit (Standard): 基于 Gemini 2.5 Flash 的高性价�
 icon: "paintbrush"
 ---
 
-<Warning>
-**⚠️ 模型即将下线通知**  
-`gemini-2.5-flash-image-preview` 预览版即将下线。
+<Note>
+**🚀 Nano Banana Standard 编辑 - 高性价比之选**
+稳定可靠的图像编辑模型，适合日常使用和生产环境。
+- **超值价格**: 仅 \$0.025/次（比官方便宜 37.5%）
+- **极速编辑**: 平均 10 秒完成
+- **稳定可靠**: 基于 Gemini 2.5 正式版
 
-**推荐迁移到正式版**:
-- ✅ 新版本：[Gemini 2.5 Flash Image 编辑](/api-capabilities/gemini-flash-image-edit)（正式版，更稳定）
-- 🎁 新功能：支持自定义纵横比（16:9、9:16 等 10 种比例）
-- 💰 价格不变：仍为 $0.025/次
-- 🔄 迁移简单：只需更新模型名称即可
-
-[查看新版文档 →](/api-capabilities/gemini-flash-image-edit)
-</Warning>
+需要 4K 分辨率或复杂多图编辑？查看 [Nano Banana Pro 编辑](/api-capabilities/nano-banana-pro-image-edit)
+</Note>
 
 ## 模型简介
 
-Nano Banana (Standard) 图像编辑功能基于 Google `gemini-2.5-flash-image-preview` 模型，通过对话补全接口实现对现有图片的智能编辑和改造。支持单张或多张图片的输入，可以实现图像合成、元素添加、风格转换等高级编辑功能。
+Nano Banana (Standard) 图像编辑功能基于 Google `gemini-2.5-flash-image` 模型，通过对话补全接口实现对现有图片的智能编辑和改造。支持单张或多张图片的输入，可以实现图像合成、元素添加、风格转换等高级编辑功能。
 
 <Note>
 **🎨 智能图像编辑**  
@@ -79,7 +76,7 @@ curl -X POST "https://api.laozhang.ai/v1/chat/completions" \
      -H "Authorization: Bearer sk-YOUR_API_KEY" \
      -H "Content-Type: application/json" \
      -d '{
-    "model": "gemini-2.5-flash-image-preview",
+    "model": "gemini-2.5-flash-image",
     "stream": false,
     "messages": [
         {
@@ -127,7 +124,7 @@ def edit_images_with_gemini():
     
     # 请求数据 - 支持多张图片输入
     data = {
-        "model": "gemini-2.5-flash-image-preview",
+        "model": "gemini-2.5-flash-image",
         "stream": False,
         "messages": [
             {
@@ -247,7 +244,7 @@ RESPONSE=$(curl -s -X POST "https://api.laozhang.ai/v1/chat/completions" \
      -H "Authorization: Bearer $API_KEY" \
      -H "Content-Type: application/json" \
      -d '{
-    "model": "gemini-2.5-flash-image-preview",
+    "model": "gemini-2.5-flash-image",
     "stream": false,
     "messages": [
         {
@@ -354,7 +351,7 @@ def add_element_to_image(image_url, element_description):
     }
     
     data = {
-        "model": "gemini-2.5-flash-image-preview",
+        "model": "gemini-2.5-flash-image",
         "stream": False,
         "messages": [{
             "role": "user",
@@ -395,7 +392,7 @@ def creative_merge(image_urls, merge_instruction):
     }
     
     data = {
-        "model": "gemini-2.5-flash-image-preview",
+        "model": "gemini-2.5-flash-image",
         "stream": False,
         "messages": [{
             "role": "user",
@@ -425,7 +422,7 @@ def style_transfer(image_url, style_description):
     }
     
     data = {
-        "model": "gemini-2.5-flash-image-preview",
+        "model": "gemini-2.5-flash-image",
         "stream": False,
         "messages": [{
             "role": "user",
@@ -505,7 +502,7 @@ class BatchImageEditor:
         }
         
         data = {
-            "model": "gemini-2.5-flash-image-preview",
+            "model": "gemini-2.5-flash-image",
             "stream": False,
             "messages": [{"role": "user", "content": content}]
         }

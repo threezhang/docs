@@ -156,14 +156,6 @@
                     ]
                   },
                   {
-                    "group": "Gemini Flash Image",
-                    "icon": "sparkles",
-                    "pages": [
-                      "api-capabilities/gemini-flash-image",
-                      "api-capabilities/gemini-flash-image-edit"
-                    ]
-                  },
-                  {
                     "group": "🍌 Nano Banana (Standard)",
                     "icon": "banana",
                     "pages": [
@@ -434,14 +426,6 @@
                   {
                     "group": "Gemini Flash Image",
                     "icon": "sparkles",
-                    "pages": [
-                      "en/api-capabilities/gemini-flash-image",
-                      "en/api-capabilities/gemini-flash-image-edit"
-                    ]
-                  },
-                  {
-                    "group": "🍌 Nano Banana 2",
-                    "icon": "cherry",
                     "pages": [
                       "en/api-capabilities/gemini-flash-image",
                       "en/api-capabilities/gemini-flash-image-edit"

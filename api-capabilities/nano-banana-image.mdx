@@ -5,10 +5,15 @@ description: "Nano Banana (Gemini 2.5 Flash): 高性价比图像生成 API。仅
 icon: "sparkles"
 ---
 
-<Warning>
-**⚠️ 模型即将下线通知**  
-`gemini-2.5-flash-image-preview` 预览版即将下线。请迁移至正式版 `gemini-2.5-flash-image`（Nano Banana Standard）。
-</Warning>
+<Note>
+**🚀 Nano Banana Standard - 高性价比之选**
+稳定可靠的图像生成模型，适合日常使用和生产环境。
+- **超值价格**: 仅 \$0.025/张（比官方便宜 37.5%）
+- **极速生成**: 平均 10 秒出图
+- **稳定可靠**: 基于 Gemini 2.5 正式版
+
+需要 4K 分辨率或高级特性？查看 [Nano Banana Pro](/api-capabilities/nano-banana-pro-image)
+</Note>
 
 ## 前置要求
 
@@ -82,7 +87,7 @@ icon: "sparkles"
 
 <Note>
 **返回格式差异**  
-- `gemini-2.5-flash-image-preview`：返回 **base64 编码**
+- `gemini-2.5-flash-image`：返回 **base64 编码**
 - `sora_image`：返回图片 URL
 - 调用方式完全相同，只是返回格式不同
 </Note>
@@ -124,7 +129,7 @@ curl -X POST "https://api.laozhang.ai/v1/chat/completions" \
      -H "Authorization: Bearer $API_KEY" \
      -H "Content-Type: application/json" \
      -d '{
-    "model": "gemini-2.5-flash-image-preview",
+    "model": "gemini-2.5-flash-image",
     "stream": false,
     "messages": [
         {
@@ -170,7 +175,7 @@ class GeminiImageGenerator:
             "Authorization": f"Bearer {api_key}"
         }
     
-    def generate_image(self, prompt: str, model: str = "gemini-2.5-flash-image-preview", 
+    def generate_image(self, prompt: str, model: str = "gemini-2.5-flash-image", 
                       output_dir: str = ".") -> Tuple[bool, str]:
         """
         生成图片并保存到本地
@@ -370,7 +375,7 @@ curl -s https://api.laozhang.ai/v1/chat/completions \
   -H "Content-Type: application/json" \
   -H "Authorization: Bearer ${API_KEY}" \
   -d "{
-    \"model\": \"gemini-2.5-flash-image-preview\",
+    \"model\": \"gemini-2.5-flash-image\",
     \"stream\": false,
     \"messages\": [
         {
@@ -578,7 +583,7 @@ def save_base64_image(base64_str, output_path):
 1. **令牌类型**：必须使用**按次计费**类型的令牌
 2. **调用端点**：使用 `/v1/chat/completions`，不是 `/v1/images/generations`
 3. **返回格式**：返回 base64 编码，需要自行解码保存
-4. **模型名称**：`gemini-2.5-flash-image-preview`（区分大小写）
+4. **模型名称**：`gemini-2.5-flash-image`（区分大小写）
 5. **请求格式**：使用对话格式，将提示词放在 user 消息的 content 中
 
 ## 🔍 常见问题
@@ -588,7 +593,7 @@ def save_base64_image(base64_str, output_path):
 A: base64 直接返回图片数据，无需二次下载，避免了 URL 失效的问题，特别适合需要立即处理图片的场景。
 
 ### Q: 如何从 sora_image 切换到 Nano Banana？
-A: 只需将模型名从 `sora_image` 改为 `gemini-2.5-flash-image-preview`，并修改结果处理逻辑（从 URL 改为 base64）。
+A: 只需将模型名从 `sora_image` 改为 `gemini-2.5-flash-image`，并修改结果处理逻辑（从 URL 改为 base64）。
 
 ### Q: 批量生成有限制吗？
 A: 没有并发限制，但建议控制并发数以获得最佳性能。
