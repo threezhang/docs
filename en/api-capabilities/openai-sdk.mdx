@@ -296,7 +296,7 @@ response = client.chat.completions.create(
 
 # Gemini models
 response = client.chat.completions.create(
-    model="gemini-pro",
+    model="gemini-2.5-pro",
     messages=[{"role": "user", "content": "Hello"}]
 )
 ```
@@ -314,8 +314,8 @@ def chat_with_model(message: str, model: str = "gpt-3.5-turbo"):
 
 # Use different models
 print(chat_with_model("Explain quantum computing", "gpt-4"))
-print(chat_with_model("Explain quantum computing", "claude-3-opus-20240229"))
-print(chat_with_model("Explain quantum computing", "gemini-pro"))
+print(chat_with_model("Explain quantum computing", "claude-sonnet-4-20250514"))
+print(chat_with_model("Explain quantum computing", "gemini-2.5-pro"))
 ```
 
 ## Advanced Features
