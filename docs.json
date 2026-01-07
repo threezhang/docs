@@ -644,6 +644,14 @@
     {
       "source": "/introduction",
       "destination": "/"
+    },
+    {
+      "source": "/api-capabilities/gemini-flash-image",
+      "destination": "/api-capabilities/nano-banana-pro-image"
+    },
+    {
+      "source": "/en/api-capabilities/gemini-flash-image",
+      "destination": "/en/api-capabilities/nano-banana-pro-image"
     }
   ]
 }
