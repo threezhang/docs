@@ -55,8 +55,8 @@ class Veo31Client:
         except Exception as e:
             print(f"Error: {e}")
 
-    def generate_video_from_images(self, prompt, image_urls, model="veo-3.1-fl"):
-        """Image-to-video generation"""
+    def generate_video_from_images(self, prompt, image_base64_list, model="veo-3.1-fl"):
+        """Image-to-video generation (Using Base64)"""
         try:
             content = [
                 {
@@ -66,11 +66,11 @@ class Veo31Client:
             ]
 
             # Add images
-            for url in image_urls:
+            for b64 in image_base64_list:
                 content.append({
                     "type": "image_url",
                     "image_url": {
-                        "url": url
+                        "url": f"data:image/jpeg;base64,{b64}"
                     }
                 })
 
@@ -83,7 +83,7 @@ class Veo31Client:
                 stream=True
             )
 
-            print(f"Starting video generation... (model: {model}, images: {len(image_urls)})")
+            print(f"Starting video generation... (model: {model}, images: {len(image_base64_list)})")
 
             for chunk in response:
                 if chunk.choices[0].delta.content:
@@ -107,13 +107,18 @@ if __name__ == "__main__":
         n=2
     )
 
-    # Example 2: Image-to-video
+    # Example 2: Image-to-video (Requires Base64)
     print("\n=== Example 2: Image-to-Video ===")
+    
+    # Assume base64 strings are ready
+    base64_img1 = "..."
+    base64_img2 = "..."
+    
     client.generate_video_from_images(
         prompt="Generate a smooth transition video based on two images",
-        image_urls=[
-            "https://example.com/start.jpg",
-            "https://example.com/end.jpg"
+        image_base64_list=[
+            base64_img1,
+            base64_img2
         ],
         model="veo-3.1-fl"
     )
@@ -373,39 +378,9 @@ curl --location --request POST 'https://api.laozhang.ai/v1/chat/completions' \
 }'
 ```
 
-### Image-to-Video (URL)
-
-```bash
-curl --location --request POST 'https://api.laozhang.ai/v1/chat/completions' \
---header 'Content-Type: application/json' \
---header 'Authorization: Bearer sk-YOUR_API_KEY' \
---data-raw '{
-    "messages": [{
-        "role": "user",
-        "content": [
-            {
-                "type": "text",
-                "text": "Generate a complete transition video based on two images"
-            },
-            {
-                "type": "image_url",
-                "image_url": {
-                    "url": "https://example.com/start-frame.jpg"
-                }
-            },
-            {
-                "type": "image_url",
-                "image_url": {
-                    "url": "https://example.com/end-frame.jpg"
-                }
-            }
-        ]
-    }],
-    "model": "veo-3.1-fl",
-    "stream": true,
-    "n": 1
-}'
-```
+### Image-to-Video (Requires Base64)
+# Note: Sync API requires Base64, URLs are not supported.
+# Please refer to the "Image-to-Video (Base64)" example below.
 
 ### Image-to-Video (Base64)
 

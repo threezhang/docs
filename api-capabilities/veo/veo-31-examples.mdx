@@ -55,8 +55,8 @@ class Veo31Client:
         except Exception as e:
             print(f"错误: {e}")
 
-    def generate_video_from_images(self, prompt, image_urls, model="veo-3.1-fl"):
-        """图生视频"""
+    def generate_video_from_images(self, prompt, image_base64_list, model="veo-3.1-fl"):
+        """图生视频 (使用 Base64)"""
         try:
             content = [
                 {
@@ -65,12 +65,12 @@ class Veo31Client:
                 }
             ]
 
-            {-# JSX注释: 添加图片 #-}
-            for url in image_urls:
+            {-# JSX注释: 添加 Base64 图片 #-}
+            for b64 in image_base64_list:
                 content.append({
                     "type": "image_url",
                     "image_url": {
-                        "url": url
+                        "url": f"data:image/jpeg;base64,{b64}"
                     }
                 })
 
@@ -83,7 +83,7 @@ class Veo31Client:
                 stream=True
             )
 
-            print(f"开始生成视频... (模型: {model}, 图片数: {len(image_urls)})")
+            print(f"开始生成视频... (模型: {model}, 图片数: {len(image_base64_list)})")
 
             for chunk in response:
                 if chunk.choices[0].delta.content:
@@ -107,13 +107,18 @@ if __name__ == "__main__":
         n=2
     )
 
-    {-# JSX注释: 示例2: 图生视频 #-}
+    {-# JSX注释: 示例2: 图生视频 (需使用Base64) #-}
     print("\n=== 示例2: 图生视频 ===")
+    
+    # 假设这里已经读取了图片并转换为Base64字符串
+    base64_img1 = "..."
+    base64_img2 = "..."
+    
     client.generate_video_from_images(
         prompt="根据两张图片生成平滑的过渡视频",
-        image_urls=[
-            "https://example.com/start.jpg",
-            "https://example.com/end.jpg"
+        image_base64_list=[
+            base64_img1,
+            base64_img2
         ],
         model="veo-3.1-fl"
     )
@@ -373,39 +378,9 @@ curl --location --request POST 'https://api.laozhang.ai/v1/chat/completions' \
 }'
 ```
 
-### 图生视频（URL）
-
-```bash
-curl --location --request POST 'https://api.laozhang.ai/v1/chat/completions' \
---header 'Content-Type: application/json' \
---header 'Authorization: Bearer sk-YOUR_API_KEY' \
---data-raw '{
-    "messages": [{
-        "role": "user",
-        "content": [
-            {
-                "type": "text",
-                "text": "根据两张图片生成一个完整的过渡视频"
-            },
-            {
-                "type": "image_url",
-                "image_url": {
-                    "url": "https://example.com/start-frame.jpg"
-                }
-            },
-            {
-                "type": "image_url",
-                "image_url": {
-                    "url": "https://example.com/end-frame.jpg"
-                }
-            }
-        ]
-    }],
-    "model": "veo-3.1-fl",
-    "stream": true,
-    "n": 1
-}'
-```
+### 图生视频（需使用 Base64）
+# 注意：同步 API 必须传 Base64，不支持直接传 URL
+# 请参考下方的 "图生视频（Base64）" 示例
 
 ### 图生视频（Base64）
 

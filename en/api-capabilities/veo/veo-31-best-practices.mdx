@@ -113,7 +113,7 @@ response = client.chat.completions.create(
             {
                 "type": "image_url",
                 "image_url": {
-                    "url": "https://example.com/scene.jpg"
+                    "url": "data:image/jpeg;base64,/9j/4AAQSkZJRg..."
                 }
             }
         ]
@@ -145,11 +145,11 @@ response = client.chat.completions.create(
             },
             {
                 "type": "image_url",
-                "image_url": {"url": "https://example.com/start.jpg"}
+                "image_url": {"url": "data:image/jpeg;base64,BASE64_STRING_1"}
             },
             {
                 "type": "image_url",
-                "image_url": {"url": "https://example.com/end.jpg"}
+                "image_url": {"url": "data:image/jpeg;base64,BASE64_STRING_2"}
             }
         ]
     }],

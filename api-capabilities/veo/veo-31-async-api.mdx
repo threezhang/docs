@@ -92,6 +92,25 @@ curl -X POST "https://api.laozhang.ai/v1/videos" \
 }
 ```
 
+```bash 步骤1: 创建任务（图生视频）
+# 注意：需要使用 multipart/form-data 格式上传图片
+curl -X POST "https://api.laozhang.ai/v1/videos" \
+  -H "Authorization: Bearer YOUR_API_KEY" \
+  -H "Content-Type: multipart/form-data" \
+  -F "model=veo-3.1-fl" \
+  -F "prompt=让这只猫咪慢慢眨眼睛" \
+  -F "input_reference=@original_image.jpg"
+
+# 响应示例
+{
+  "id": "video_def456",
+  "object": "video",
+  "created": 1762181822,
+  "status": "queued",
+  "model": "veo-3.1-fl"
+}
+```
+
 ```bash 步骤2: 查询状态
 curl -X GET "https://api.laozhang.ai/v1/videos/video_abc123" \
   -H "Authorization: Bearer YOUR_API_KEY"
@@ -152,6 +171,7 @@ curl -X GET "https://api.laozhang.ai/v1/videos/video_abc123/content" \
 |------|------|------|------|
 | `model` | string | ✓ | 模型名称（见下方模型列表）|
 | `prompt` | string | ✓ | 视频生成提示词 |
+| `input_reference` | file | ❌ | 本地图片文件（仅图生视频模型需要，multipart/form-data 格式）|
 
 #### 可用模型
 
@@ -258,24 +278,32 @@ curl -X GET "https://api.laozhang.ai/v1/videos/video_abc123/content" \
 ```python
 import requests
 import time
+import os
 
 API_KEY = "YOUR_API_KEY"
 BASE_URL = "https://api.laozhang.ai/v1"
 
 # 步骤1: 创建视频任务
-def create_video_task(prompt, model="veo-3.1"):
+def create_video_task(prompt, model="veo-3.1", image_path=None):
     """创建视频生成任务"""
     url = f"{BASE_URL}/videos"
-    headers = {
-        "Authorization": f"Bearer {API_KEY}",
-        "Content-Type": "application/json"
-    }
-    data = {
-        "model": model,
-        "prompt": prompt
-    }
+    headers = {"Authorization": f"Bearer {API_KEY}"}
+    
+    if image_path:
+        # 图生视频：使用 multipart/form-data 上传图片
+        if not os.path.exists(image_path):
+             raise FileNotFoundError(f"图片文件不存在: {image_path}")
+             
+        with open(image_path, 'rb') as f:
+            files = {"input_reference": (os.path.basename(image_path), f, "image/jpeg")}
+            data = {"model": model, "prompt": prompt}
+            response = requests.post(url, headers=headers, files=files, data=data)
+    else:
+        # 文生视频：使用 JSON 格式
+        headers["Content-Type"] = "application/json"
+        data = {"model": model, "prompt": prompt}
+        response = requests.post(url, headers=headers, json=data)
 
-    response = requests.post(url, headers=headers, json=data)
     response.raise_for_status()
     return response.json()
 
@@ -354,10 +382,18 @@ def generate_video_async(prompt, model="veo-3.1"):
 # 使用示例
 if __name__ == "__main__":
     # 文生视频 - 竖屏标准版
+    # 文生视频 - 竖屏标准版
     generate_video_async(
         prompt="一只可爱的猫咪在阳光明媚的花园里玩球",
         model="veo-3.1"
     )
+
+    # 图生视频示例 (需要确保当前目录下有 test.jpg)
+    # create_video_task(
+    #     prompt="让这只猫咪慢慢眨眼睛",
+    #     model="veo-3.1-fl", 
+    #     image_path="test.jpg"
+    # )
 
     # 文生视频 - 横屏快速版
     # generate_video_async(

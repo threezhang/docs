@@ -63,6 +63,8 @@ curl --location --request POST 'https://api.laozhang.ai/v1/chat/completions' \
 使用图片作为参考生成视频:
 
 ```bash
+# 注意: 同步 API 必须使用 Base64 格式的图片
+# 这里仅为示例格式,实际使用时需要将 BASE64_STRING 替换为真实的 Base64 字符串
 curl --location --request POST 'https://api.laozhang.ai/v1/chat/completions' \
 --header 'Content-Type: application/json' \
 --header 'Authorization: Bearer sk-YOUR_API_KEY' \
@@ -77,13 +79,13 @@ curl --location --request POST 'https://api.laozhang.ai/v1/chat/completions' \
             {
                 "type": "image_url",
                 "image_url": {
-                    "url": "https://example.com/start-frame.jpg"
+                    "url": "data:image/jpeg;base64,BASE64_STRING_1"
                 }
             },
             {
                 "type": "image_url",
                 "image_url": {
-                    "url": "https://example.com/end-frame.jpg"
+                    "url": "data:image/jpeg;base64,BASE64_STRING_2"
                 }
             }
         ]
@@ -136,12 +138,22 @@ for chunk in response:
 ### 图生视频代码
 
 ```python
+import base64
 from openai import OpenAI
+
+# 辅助函数: 编码图片为 Base64
+def encode_image(image_path):
+    with open(image_path, "rb") as image_file:
+        return base64.b64encode(image_file.read()).decode('utf-8')
 
 client = OpenAI(
     api_key="sk-YOUR_API_KEY",
     base_url="https://api.laozhang.ai/v1"
 )
+
+# 读取本地图片
+base64_image1 = encode_image("start.jpg")
+base64_image2 = encode_image("end.jpg")
 
 response = client.chat.completions.create(
     model="veo-3.1-fl",
@@ -155,13 +167,13 @@ response = client.chat.completions.create(
             {
                 "type": "image_url",
                 "image_url": {
-                    "url": "https://example.com/image1.jpg"
+                    "url": f"data:image/jpeg;base64,{base64_image1}"
                 }
             },
             {
                 "type": "image_url",
                 "image_url": {
-                    "url": "https://example.com/image2.jpg"
+                    "url": f"data:image/jpeg;base64,{base64_image2}"
                 }
             }
         ]
@@ -277,18 +289,7 @@ curl --location --request POST 'https://api.laozhang.ai/v1/chat/completions' \
 Veo-3.1 支持多种图片输入格式:
 
 <Tabs>
-  <Tab title="URL 引用">
-```json
-{
-  "type": "image_url",
-  "image_url": {
-    "url": "https://example.com/image.jpg"
-  }
-}
-```
-  </Tab>
-
-  <Tab title="Base64 编码">
+  <Tab title="Base64 编码 (推荐)">
 ```json
 {
   "type": "image_url",
@@ -299,6 +300,9 @@ Veo-3.1 支持多种图片输入格式:
 ```
   </Tab>
 </Tabs>
+<Note>
+**注意：** 同步 API 必须使用 Base64 编码的图片，不支持 http/https 链接。如需使用 URL 链接，请使用 [异步 API](/api-capabilities/veo/veo-31-async-api)。
+</Note>
 
 <Warning>
 **图片要求:**

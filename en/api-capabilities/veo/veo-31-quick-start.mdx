@@ -63,6 +63,8 @@ curl --location --request POST 'https://api.laozhang.ai/v1/chat/completions' \
 Use images as reference to generate videos:
 
 ```bash
+# Note: Sync API requires Base64 encoded images
+# This is an example format, replace BASE64_STRING with actual Base64 string
 curl --location --request POST 'https://api.laozhang.ai/v1/chat/completions' \
 --header 'Content-Type: application/json' \
 --header 'Authorization: Bearer sk-YOUR_API_KEY' \
@@ -77,13 +79,13 @@ curl --location --request POST 'https://api.laozhang.ai/v1/chat/completions' \
             {
                 "type": "image_url",
                 "image_url": {
-                    "url": "https://example.com/start-frame.jpg"
+                    "url": "data:image/jpeg;base64,BASE64_STRING_1"
                 }
             },
             {
                 "type": "image_url",
                 "image_url": {
-                    "url": "https://example.com/end-frame.jpg"
+                    "url": "data:image/jpeg;base64,BASE64_STRING_2"
                 }
             }
         ]
@@ -135,12 +137,22 @@ for chunk in response:
 ### Image-to-Video Code
 
 ```python
+import base64
 from openai import OpenAI
+
+# Helper function: Encode image to Base64
+def encode_image(image_path):
+    with open(image_path, "rb") as image_file:
+        return base64.b64encode(image_file.read()).decode('utf-8')
 
 client = OpenAI(
     api_key="sk-YOUR_API_KEY",
     base_url="https://api.laozhang.ai/v1"
 )
+
+# Read local images
+base64_image1 = encode_image("image1.jpg")
+base64_image2 = encode_image("image2.jpg")
 
 response = client.chat.completions.create(
     model="veo-3.1-fl",
@@ -154,13 +166,13 @@ response = client.chat.completions.create(
             {
                 "type": "image_url",
                 "image_url": {
-                    "url": "https://example.com/image1.jpg"
+                    "url": f"data:image/jpeg;base64,{base64_image1}"
                 }
             },
             {
                 "type": "image_url",
                 "image_url": {
-                    "url": "https://example.com/image2.jpg"
+                    "url": f"data:image/jpeg;base64,{base64_image2}"
                 }
             }
         ]
@@ -275,18 +287,7 @@ curl --location --request POST 'https://api.laozhang.ai/v1/chat/completions' \
 Veo-3.1 supports multiple image input formats:
 
 <Tabs>
-  <Tab title="URL Reference">
-```json
-{
-  "type": "image_url",
-  "image_url": {
-    "url": "https://example.com/image.jpg"
-  }
-}
-```
-  </Tab>
-
-  <Tab title="Base64 Encoding">
+  <Tab title="Base64 Encoding (Recommended)">
 ```json
 {
   "type": "image_url",
@@ -297,6 +298,9 @@ Veo-3.1 supports multiple image input formats:
 ```
   </Tab>
 </Tabs>
+<Note>
+**Note:** Sync API must use Base64 encoded images, http/https URLs are not supported. If you need to use URL links, please use the [Async API](/en/api-capabilities/veo/veo-31-async-api).
+</Note>
 
 <Warning>
 **Image Requirements:**

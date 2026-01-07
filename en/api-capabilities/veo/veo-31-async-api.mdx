@@ -92,6 +92,25 @@ curl -X POST "https://api.laozhang.ai/v1/videos" \
 }
 ```
 
+```bash Step 1: Create Task (Image-to-Video)
+# Note: Use multipart/form-data for image uploads
+curl -X POST "https://api.laozhang.ai/v1/videos" \
+  -H "Authorization: Bearer YOUR_API_KEY" \
+  -H "Content-Type: multipart/form-data" \
+  -F "model=veo-3.1-fl" \
+  -F "prompt=Make this cat blink slowly" \
+  -F "input_reference=@original_image.jpg"
+
+# Response example
+{
+  "id": "video_def456",
+  "object": "video",
+  "created": 1762181822,
+  "status": "queued",
+  "model": "veo-3.1-fl"
+}
+```
+
 ```bash Step 2: Query Status
 curl -X GET "https://api.laozhang.ai/v1/videos/video_abc123" \
   -H "Authorization: Bearer YOUR_API_KEY"
@@ -152,6 +171,7 @@ Create a new video generation task
 |-----------|------|----------|-------------|
 | `model` | string | ✓ | Model name (see model list below) |
 | `prompt` | string | ✓ | Video generation prompt |
+| `input_reference` | file | ❌ | Local image file (required for Image-to-Video models, multipart/form-data) |
 
 #### Available Models
 
@@ -258,24 +278,32 @@ Video URLs are typically valid for **24 hours**. Please download and save locall
 ```python
 import requests
 import time
+import os
 
 API_KEY = "YOUR_API_KEY"
 BASE_URL = "https://api.laozhang.ai/v1"
 
 # Step 1: Create video task
-def create_video_task(prompt, model="veo-3.1"):
+def create_video_task(prompt, model="veo-3.1", image_path=None):
     """Create video generation task"""
     url = f"{BASE_URL}/videos"
-    headers = {
-        "Authorization": f"Bearer {API_KEY}",
-        "Content-Type": "application/json"
-    }
-    data = {
-        "model": model,
-        "prompt": prompt
-    }
+    headers = {"Authorization": f"Bearer {API_KEY}"}
+    
+    if image_path:
+        # Image-to-Video: Use multipart/form-data to upload image
+        if not os.path.exists(image_path):
+             raise FileNotFoundError(f"Image file not found: {image_path}")
+             
+        with open(image_path, 'rb') as f:
+            files = {"input_reference": (os.path.basename(image_path), f, "image/jpeg")}
+            data = {"model": model, "prompt": prompt}
+            response = requests.post(url, headers=headers, files=files, data=data)
+    else:
+        # Text-to-Video: Use JSON format
+        headers["Content-Type"] = "application/json"
+        data = {"model": model, "prompt": prompt}
+        response = requests.post(url, headers=headers, json=data)
 
-    response = requests.post(url, headers=headers, json=data)
     response.raise_for_status()
     return response.json()
 
@@ -354,10 +382,18 @@ def generate_video_async(prompt, model="veo-3.1"):
 # Usage example
 if __name__ == "__main__":
     # Text-to-video - Portrait standard
+    # Text-to-video - Portrait standard
     generate_video_async(
         prompt="A cute cat playing with a ball in a sunny garden",
         model="veo-3.1"
     )
+
+    # Image-to-Video Example (Make sure test.jpg exists in current directory)
+    # create_video_task(
+    #     prompt="Make this cat blink slowly",
+    #     model="veo-3.1-fl", 
+    #     image_path="test.jpg"
+    # )
 ```
 
 ### JavaScript/Node.js Example
