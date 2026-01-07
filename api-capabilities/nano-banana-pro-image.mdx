@@ -1,0 +1,104 @@
+---
+title: Nano Banana Pro 图像生成
+sidebarTitle: Nano Banana Pro 生图
+description: "Nano Banana Pro (Gemini 3 Pro Image): Google 最新 Gemini 3 Pro 图像生成模型。$0.05/张，支持 4K 高清、Base64 输出和 OpenAI 格式。"
+icon: "cherry"
+---
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "SoftwareApplication",
+  "name": "Nano Banana Pro",
+  "applicationCategory": "DeveloperApplication",
+  "operatingSystem": "Any",
+  "description": "基于 Google Gemini 3 Pro 的高清图像生成 API",
+  "offers": {
+    "@type": "Offer",
+    "price": "0.05",
+    "priceCurrency": "USD",
+    "description": "Per image generation"
+  }
+}
+</script>
+
+## 模型简介
+
+**Nano Banana Pro** 是老张API对 Google 最新 **Gemini 3 Pro Image Preview** (`gemini-3-pro-image-preview`) 模型的定制版称呼。
+
+<Note>
+**Nano Banana Pro 的优势**  
+相比标准版，Pro 版提供更高的图像质量和分辨率支持。
+- 🌟 **4K 高清**：支持 1K, 2K, 4K 分辨率
+- 🧠 **更强理解**：基于 Gemini 3 Pro，精准遵循复杂指令
+- 💰 **价格**：$0.05/张（官方价格 $0.24/张的 2 折）
+- 🛠️ **OpenAI 兼容**：无缝对接 OpenAI SDK
+</Note>
+
+## 前置要求
+
+<Steps>
+  <Step title="获取 API Key">
+    登录 [laozhang.ai 控制台](https://api.laozhang.ai) 获取 API 密钥
+  </Step>
+  <Step title="配置计费模式">
+    编辑令牌设置，选择**按次计费**模式。
+    <Warning>
+    Nano Banana Pro 必须使用按次计费模式！
+    </Warning>
+  </Step>
+</Steps>
+
+## 核心特性对比
+
+| 特性 | Nano Banana (Standard) | Nano Banana Pro (Premium) |
+|------|-----------------------|--------------------------|
+| **模型** | `gemini-2.5-flash-image` | `gemini-3-pro-image-preview` |
+| **价格** | $0.025 / 张 | **$0.05 / 张** |
+| **分辨率** | 固定 1K (1024x1024) | **支持 1K, 2K, 4K** |
+| **智商** | 标准 | **极高 (Gemini 3)** |
+| **速度** | ~10秒 | ~12秒 |
+
+## 快速开始
+
+### Python 示例 (4K 生成)
+
+```python
+import requests
+import json
+
+url = "https://api.laozhang.ai/v1beta/models/gemini-3-pro-image-preview:generateContent"
+headers = {
+    "Authorization": "Bearer sk-YOUR_KEY",
+    "Content-Type": "application/json"
+}
+
+data = {
+    "contents": [{"parts": [{"text": "Futuristic city skyline at night, highly detailed, 4k"}]}],
+    "generationConfig": {
+        "imageConfig": {"imageSize": "4K"}
+    }
+}
+
+response = requests.post(url, headers=headers, json=data)
+print(response.json())
+```
+
+### OpenAI 兼容模式
+
+```python
+from openai import OpenAI
+
+client = OpenAI(
+    api_key="sk-YOUR_KEY",
+    base_url="https://api.laozhang.ai/v1"
+)
+
+response = client.chat.completions.create(
+    model="gemini-3-pro-image-preview",
+    messages=[{"role": "user", "content": "A detailed portrait of a warrior, 4k"}],
+)
+
+# 获取 Base64 图片
+print(response.choices[0].message.content)
+```

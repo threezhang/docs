@@ -1,0 +1,71 @@
+---
+title: Nano Banana Pro 图像编辑
+sidebarTitle: Nano Banana Pro 编辑
+description: "Nano Banana Pro Edit: 基于 Gemini 3 Pro 的专业图像编辑。$0.05/次，更强的指令理解能力，支持复杂多图融合。"
+icon: "paintbrush"
+---
+
+## 模型简介
+
+**Nano Banana Pro 编辑** 使用 Google **Gemini 3 Pro Image Preview** 模型进行图像编辑。
+
+- **价格**: **$0.05/次**
+- **模型**: `gemini-3-pro-image-preview`
+- **定位**: 专业级编辑，适合复杂场景
+- **功能**: 精准局部修改、高保真多图融合、复杂风格迁移
+
+## 核心优势
+
+<CardGroup cols={2}>
+  <Card title="🧠 更高智商" icon="brain">
+    Gemini 3 Pro 内核，通过自然语言精准理解复杂的编辑意图
+  </Card>
+  <Card title="🎨 4K 画质" icon="image">
+    输出更高分辨率的编辑结果，保留原始细节
+  </Card>
+</CardGroup>
+
+## 使用示例
+
+### 复杂指令编辑 (Curl)
+
+```bash
+curl -X POST "https://api.laozhang.ai/v1/chat/completions" \
+     -H "Authorization: Bearer sk-YOUR_KEY" \
+     -d '{
+    "model": "gemini-3-pro-image-preview",
+    "messages": [
+        {
+            "role": "user",
+            "content": [
+                {"type": "text", "text": "Change background to a futuristic cyberpunk city with neon lights, keep the person unchanged, make the lighting dramatic"},
+                {"type": "image_url", "image_url": {"url": "https://example.com/portait.jpg"}}
+            ]
+        }
+    ]
+}'
+```
+
+### 多图创意融合 (Python)
+
+```python
+import requests
+
+url = "https://api.laozhang.ai/v1/chat/completions"
+headers = {"Authorization": "Bearer sk-YOUR_KEY"}
+
+data = {
+    "model": "gemini-3-pro-image-preview",
+    "messages": [{
+        "role": "user",
+        "content": [
+            {"type": "text", "text": "Combine these two images into a surrealist painting"},
+            {"type": "image_url", "image_url": {"url": "https://example.com/img1.jpg"}},
+            {"type": "image_url", "image_url": {"url": "https://example.com/img2.jpg"}}
+        ]
+    }]
+}
+
+response = requests.post(url, headers=headers, json=data)
+print(response.json())
+```
