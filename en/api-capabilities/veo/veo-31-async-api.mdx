@@ -92,7 +92,7 @@ curl -X POST "https://api.laozhang.ai/v1/videos" \
 }
 ```
 
-```bash Step 1: Create Task (Image-to-Video)
+```bash Step 1: Create Task (Image-to-Video - Single Image)
 # Note: Use multipart/form-data for image uploads
 curl -X POST "https://api.laozhang.ai/v1/videos" \
   -H "Authorization: Bearer YOUR_API_KEY" \
@@ -108,6 +108,26 @@ curl -X POST "https://api.laozhang.ai/v1/videos" \
   "created": 1762181822,
   "status": "queued",
   "model": "veo-3.1-fl"
+}
+```
+
+```bash Step 1: Create Task (Image-to-Video - First/Last Frame)
+# Use two images as first and last frames for smooth transition video
+curl -X POST "https://api.laozhang.ai/v1/videos" \
+  -H "Authorization: Bearer YOUR_API_KEY" \
+  -H "Content-Type: multipart/form-data" \
+  -F "model=veo-3.1-landscape-fl" \
+  -F "prompt=Animate this scene with futuristic tech effects" \
+  -F "input_reference=@start_frame.jpg" \
+  -F "input_reference=@end_frame.jpg"
+
+# Response example
+{
+  "id": "video_xyz789",
+  "object": "video",
+  "created": 1762181833,
+  "status": "queued",
+  "model": "veo-3.1-landscape-fl"
 }
 ```
 
@@ -171,7 +191,7 @@ Create a new video generation task
 |-----------|------|----------|-------------|
 | `model` | string | ✓ | Model name (see model list below) |
 | `prompt` | string | ✓ | Video generation prompt |
-| `input_reference` | file | ❌ | Local image file (required for Image-to-Video models, multipart/form-data) |
+| `input_reference` | file | ❌ | Image file, supports 1-2 images (2 images for first/last frame mode, multipart/form-data) |
 
 #### Available Models
 
@@ -192,6 +212,16 @@ Create a new video generation task
 - `fast` = Fast version (cheaper)
 - `fl` = Supports frame-to-video (image-to-video)
 </Note>
+
+<Tip>
+**First/Last Frame Feature**
+
+Image-to-video models (with `-fl` suffix) support uploading 2 images:
+- **First image**: Video start frame
+- **Second image**: Video end frame
+
+The API will automatically generate a smooth transition animation from start frame to end frame.
+</Tip>
 
 #### Response Fields
 
@@ -284,20 +314,38 @@ API_KEY = "YOUR_API_KEY"
 BASE_URL = "https://api.laozhang.ai/v1"
 
 # Step 1: Create video task
-def create_video_task(prompt, model="veo-3.1", image_path=None):
-    """Create video generation task"""
+def create_video_task(prompt, model="veo-3.1", image_paths=None):
+    """Create video generation task
+
+    Args:
+        prompt: Video generation prompt
+        model: Model name
+        image_paths: Image path(s), can be:
+            - None: Text-to-video
+            - str: Single image path
+            - list: Multiple image paths (first/last frame mode, max 2)
+    """
     url = f"{BASE_URL}/videos"
     headers = {"Authorization": f"Bearer {API_KEY}"}
-    
-    if image_path:
-        # Image-to-Video: Use multipart/form-data to upload image
-        if not os.path.exists(image_path):
-             raise FileNotFoundError(f"Image file not found: {image_path}")
-             
-        with open(image_path, 'rb') as f:
-            files = {"input_reference": (os.path.basename(image_path), f, "image/jpeg")}
-            data = {"model": model, "prompt": prompt}
-            response = requests.post(url, headers=headers, files=files, data=data)
+
+    if image_paths:
+        # Convert to list for uniform handling
+        if isinstance(image_paths, str):
+            image_paths = [image_paths]
+
+        # Image-to-Video: Use multipart/form-data to upload images
+        files = []
+        for path in image_paths:
+            if not os.path.exists(path):
+                raise FileNotFoundError(f"Image file not found: {path}")
+            files.append(("input_reference", (os.path.basename(path), open(path, 'rb'), "image/jpeg")))
+
+        data = {"model": model, "prompt": prompt}
+        response = requests.post(url, headers=headers, files=files, data=data)
+
+        # Close file handles
+        for _, (_, f, _) in files:
+            f.close()
     else:
         # Text-to-Video: Use JSON format
         headers["Content-Type"] = "application/json"
@@ -388,11 +436,19 @@ if __name__ == "__main__":
         model="veo-3.1"
     )
 
-    # Image-to-Video Example (Make sure test.jpg exists in current directory)
-    # create_video_task(
+    # Image-to-Video - Single image mode
+    # task = create_video_task(
     #     prompt="Make this cat blink slowly",
-    #     model="veo-3.1-fl", 
-    #     image_path="test.jpg"
+    #     model="veo-3.1-fl",
+    #     image_paths="test.jpg"
+    # )
+
+    # Image-to-Video - First/Last frame mode (2 images)
+    # First image = start frame, Second image = end frame
+    # task = create_video_task(
+    #     prompt="Smoothly transition from start to end frame with dynamic effects",
+    #     model="veo-3.1-landscape-fl",
+    #     image_paths=["start_frame.jpg", "end_frame.jpg"]
     # )
 ```
 

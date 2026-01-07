@@ -1,0 +1,939 @@
+---
+title: Nano Banana Pro Image Editing
+seoTitle: "Nano Banana Pro HD Image Editing API - 4K Multi-Image Fusion & Style Transfer | LaoZhang API"
+sidebarTitle: Nano Banana Pro Image Editing
+description: "Nano Banana Pro Image Editing API: Professional image editing powered by Gemini 3 Pro. $0.05/edit, supports 4K output, complex instructions, multi-image fusion (up to 14 images)."
+icon: "paintbrush"
+---
+
+<Note>
+**🧠 Intelligent Editing at New Heights**
+Nano Banana Pro Edit uses Google's **Gemini 3 Pro** model with exceptional semantic understanding. It doesn't just "modify images" - it "understands and redraws" them.
+</Note>
+
+<CardGroup cols={2}>
+  <Card title="🎁 Free Trial" icon="gift" href="https://api.laozhang.ai">
+    Register and get **$0.05** credit to test Nano Banana Pro once
+  </Card>
+  <Card title="🚀 Live Demo" icon="play" href="https://images.laozhang.ai/">
+    AI Images - Try instantly, no code required
+  </Card>
+</CardGroup>
+
+## Prerequisites
+
+<Steps>
+  <Step title="Get API Key">
+    Login to [laozhang.ai console](https://api.laozhang.ai) to get your API key
+  </Step>
+  <Step title="Configure Billing Mode">
+    Edit token settings and select one of these billing modes (same price):
+
+    - **Pay-per-use Priority** (Recommended): Use balance first, auto-switch when insufficient
+    - **Pay-per-use**: Direct charge per request. Best for strict budget control
+
+    <Note>
+    Both modes have **identical pricing** at $0.05/edit, only the billing method differs.
+    </Note>
+
+    <img src="/images/sora2-token-setting.png" alt="Token Settings" />
+
+    <Warning>
+    API calls will fail without proper billing configuration. Complete this setup first!
+    </Warning>
+  </Step>
+</Steps>
+
+## Model Overview
+
+**Nano Banana Pro Edit** (`gemini-3-pro-image-preview`) is designed for scenarios requiring precise control and high-quality output. Unlike simple filters or patches, it understands complex natural language instructions and makes logical modifications to images.
+
+### Core Capabilities
+
+- **Precise Local Editing**: "Replace that cat with a dog wearing glasses, but keep the same pose"
+- **Perfect Style Transfer**: "Transform this photo into cyberpunk-style oil painting with stronger lighting"
+- **Multi-Image Creative Fusion**: "Combine these two images to generate a brand new poster"
+- **4K HD Output**: Supports 2K/4K resolution output for edited results
+
+## 🌟 Core Features
+
+- **⚡ Fast Response**: ~10 seconds average for editing
+- **💰 Great Value**: $0.05/edit (79% cheaper than official $0.24)
+- **🔄 Dual Compatibility**: Supports OpenAI SDK and Google native formats
+- **📐 Flexible Sizes**: Google native format supports 10 aspect ratios
+- **🖼️ High Resolution**: Supports 1K, 2K, 4K resolution output
+- **🧠 Thinking Mode**: Built-in reasoning ability, understands complex editing instructions
+- **🌐 Search Grounding**: Supports combining real-time search data for editing
+- **🎨 Multi-Image Reference**: Supports up to 14 reference images for complex compositing
+- **📦 Base64 Output**: Returns base64 encoded image data directly
+
+## 🔀 Two API Modes
+
+| Feature | OpenAI Compatible Mode | Google Native Format |
+|---------|------------------------|---------------------|
+| **Endpoint** | `/v1/chat/completions` | `/v1beta/models/gemini-3-pro-image-preview:generateContent` |
+| **Output Size** | Default ratio | 10 aspect ratios |
+| **Resolution** | Fixed 1K | 1K/2K/4K |
+| **Multi-Image** | ✅ Supported | ✅ Supported (up to 14) |
+| **Compatibility** | Perfect with OpenAI SDK | Requires native calls |
+| **Return Format** | Base64 | Base64 |
+| **Image Input** | URL or Base64 | Base64 (inline_data) |
+
+<Tip>
+💡 **How to Choose?**
+- For default ratio images, use **OpenAI Compatible Mode** - simple and fast
+- For custom aspect ratios (like 16:9, 9:16) or high-res (2K/4K), use **Google Native Format**
+</Tip>
+
+## 📋 Model Comparison
+
+### Comparison with Other Editing Models
+
+| Model | Model ID | Billing | LaoZhang Price | Official Price | Savings | Resolution | Speed |
+|-------|----------|---------|----------------|----------------|---------|------------|-------|
+| **Nano Banana Pro** | `gemini-3-pro-image-preview` | Per-use | $0.05/edit | $0.24/edit | 79% | 1K/2K/4K | ~10s |
+| **Nano Banana** | `gemini-2.5-flash-image` | Per-use | $0.025/edit | $0.04/edit | 37.5% | 1K (fixed) | ~10s |
+| **GPT-4o Edit** | `gpt-4o` | Token | - | - | - | - | ~20s |
+| **DALL·E 2 Edit** | `dall-e-2` | Per-use | - | $0.018/image | - | Fixed | Slower |
+
+### Pro vs Standard Detailed Comparison
+
+| Feature | Nano Banana Pro | Nano Banana |
+|---------|-----------------|-------------|
+| **Model** | `gemini-3-pro-image-preview` | `gemini-2.5-flash-image` |
+| **Technology** | Gemini 3 | Gemini 2.5 |
+| **Resolution** | 1K/2K/4K | 1K (fixed) |
+| **Price** | $0.05/edit | $0.025/edit |
+| **Thinking Mode** | ✅ Yes | ❌ No |
+| **Search Grounding** | ✅ Yes | ❌ No |
+| **Multi-Image** | Up to 14 | Up to 3 |
+| **Speed** | ~10s | ~10s |
+| **Best For** | Professional design, complex compositing | Quick edits, simple modifications |
+
+<Tip>
+💰 **Price Advantage**
+- **Nano Banana Pro**: $0.05/edit (LaoZhang API) vs $0.24/edit (official), 79% cheaper
+- **Bonus**: Get +10% bonus on large deposits
+- **Exchange Rate**: Paying in CNY is even more cost-effective
+
+**Nano Banana Pro offers exceptional value at LaoZhang API!**
+</Tip>
+
+## 🚀 Quick Start
+
+### Prerequisites
+
+<Steps>
+  <Step title="Create Token">
+    Login to [LaoZhang API Token Management](https://api.laozhang.ai/token) and create a **pay-per-use** type token
+
+    ![Token Creation Interface](/images/token-create-per-request.png)
+  </Step>
+  <Step title="Select Billing Type">
+    **Important**: Must select "Pay-per-use" type
+  </Step>
+  <Step title="Save Token">
+    Copy the generated token in format `sk-xxxxxx`
+  </Step>
+</Steps>
+
+## Method 1: OpenAI Compatible Mode
+
+### Single Image Edit - Curl
+
+```bash
+curl -X POST "https://api.laozhang.ai/v1/chat/completions" \
+     -H "Authorization: Bearer sk-YOUR_API_KEY" \
+     -H "Content-Type: application/json" \
+     -d '{
+    "model": "gemini-3-pro-image-preview",
+    "stream": false,
+    "messages": [
+        {
+            "role": "user",
+            "content": [
+                {
+                    "type": "text",
+                    "text": "Add a futuristic neon halo above the person head"
+                },
+                {
+                    "type": "image_url",
+                    "image_url": {
+                        "url": "https://example.com/your-image.jpg"
+                    }
+                }
+            ]
+        }
+    ]
+}'
+```
+
+### Single Image Edit - Python SDK
+
+```python
+from openai import OpenAI
+import base64
+import re
+
+client = OpenAI(
+    api_key="sk-YOUR_API_KEY",
+    base_url="https://api.laozhang.ai/v1"
+)
+
+response = client.chat.completions.create(
+    model="gemini-3-pro-image-preview",
+    messages=[
+        {
+            "role": "user",
+            "content": [
+                {
+                    "type": "text",
+                    "text": "Add a cute wizard hat on this cat's head"
+                },
+                {
+                    "type": "image_url",
+                    "image_url": {
+                        "url": "https://example.com/your-image.jpg"
+                    }
+                }
+            ]
+        }
+    ]
+)
+
+# Extract and save image
+content = response.choices[0].message.content
+match = re.search(r'!\[.*?\]\((data:image/png;base64,.*?)\)', content)
+
+if match:
+    base64_data = match.group(1).split(',')[1]
+    image_data = base64.b64decode(base64_data)
+
+    with open('edited.png', 'wb') as f:
+        f.write(image_data)
+    print("✅ Edited image saved: edited.png")
+```
+
+### Multi-Image Compositing - Python SDK
+
+```python
+from openai import OpenAI
+import base64
+import re
+
+client = OpenAI(
+    api_key="sk-YOUR_API_KEY",
+    base_url="https://api.laozhang.ai/v1"
+)
+
+response = client.chat.completions.create(
+    model="gemini-3-pro-image-preview",
+    messages=[
+        {
+            "role": "user",
+            "content": [
+                {
+                    "type": "text",
+                    "text": "Combine the style of image A with the content of image B"
+                },
+                {
+                    "type": "image_url",
+                    "image_url": {"url": "https://example.com/style.jpg"}
+                },
+                {
+                    "type": "image_url",
+                    "image_url": {"url": "https://example.com/content.jpg"}
+                }
+            ]
+        }
+    ]
+)
+
+# Extract and save image
+content = response.choices[0].message.content
+match = re.search(r'!\[.*?\]\((data:image/png;base64,.*?)\)', content)
+
+if match:
+    base64_data = match.group(1).split(',')[1]
+    image_data = base64.b64decode(base64_data)
+
+    with open('merged.png', 'wb') as f:
+        f.write(image_data)
+    print("✅ Merged image saved: merged.png")
+```
+
+## Method 2: Google Native Format (Custom Aspect Ratio + 4K)
+
+### Supported Resolutions
+
+| Aspect Ratio | 1K Resolution | 2K Resolution | 4K Resolution |
+|--------------|---------------|---------------|---------------|
+| **1:1** | 1024×1024 | 2048×2048 | 4096×4096 |
+| **16:9** | 1376×768 | 2752×1536 | 5504×3072 |
+| **9:16** | 768×1376 | 1536×2752 | 3072×5504 |
+| **4:3** | 1200×896 | 2400×1792 | 4800×3584 |
+| **3:4** | 896×1200 | 1792×2400 | 3584×4800 |
+
+<Tip>
+💡 **How to Set Resolution**
+Pass `"2K"` or `"4K"` in `generationConfig.imageConfig.imageSize`. Default is `"1K"` if not specified.
+</Tip>
+
+### 4K HD Editing - Curl
+
+```bash
+curl -X POST "https://api.laozhang.ai/v1beta/models/gemini-3-pro-image-preview:generateContent" \
+  -H "Authorization: Bearer sk-YOUR_API_KEY" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "contents": [{
+      "parts": [
+        {"text": "Transform this image into a cyberpunk style with neon lights"},
+        {"inline_data": {"mime_type": "image/jpeg", "data": "BASE64_IMAGE_DATA_HERE"}}
+      ]
+    }],
+    "generationConfig": {
+      "responseModalities": ["IMAGE"],
+      "imageConfig": {
+        "aspectRatio": "16:9",
+        "imageSize": "4K"
+      }
+    }
+  }'
+```
+
+### Python Code Examples
+
+<Note>
+💡 **Progressive Examples**
+Example 1 edits image → Example 2 transforms its style → Example 3 fuses both images. Clear progression!
+</Note>
+
+<Accordion title="Example 1: Single Image Edit → Add Elements to First Image">
+
+```python
+import requests
+import base64
+
+# ========== Configuration ==========
+API_KEY = "sk-YOUR_API_KEY"
+API_URL = "https://api.laozhang.ai/v1beta/models/gemini-3-pro-image-preview:generateContent"
+INPUT_IMAGE = "cat.jpg"
+PROMPT = "Add a cute wizard hat on this cat's head"
+ASPECT_RATIO = "1:1"
+IMAGE_SIZE = "2K"  # 1K, 2K, 4K
+# ============================
+
+# Read and encode image
+with open(INPUT_IMAGE, "rb") as f:
+    image_b64 = base64.b64encode(f.read()).decode("utf-8")
+
+headers = {"Authorization": f"Bearer {API_KEY}", "Content-Type": "application/json"}
+
+payload = {
+    "contents": [{
+        "parts": [
+            {"text": PROMPT},
+            {"inline_data": {"mime_type": "image/jpeg", "data": image_b64}}
+        ]
+    }],
+    "generationConfig": {
+        "responseModalities": ["IMAGE"],
+        "imageConfig": {
+            "aspectRatio": ASPECT_RATIO,
+            "imageSize": IMAGE_SIZE
+        }
+    }
+}
+
+response = requests.post(API_URL, headers=headers, json=payload, timeout=180)
+result = response.json()
+
+# Save image
+output_data = result["candidates"][0]["content"]["parts"][0]["inlineData"]["data"]
+with open("output.png", "wb") as f:
+    f.write(base64.b64decode(output_data))
+
+print("✅ Image saved: output.png")
+```
+
+</Accordion>
+
+<Accordion title="Example 2: Style Transfer → Use First Image to Generate Second">
+
+```python
+import requests
+import base64
+
+# ========== Configuration ==========
+API_KEY = "sk-YOUR_API_KEY"
+API_URL = "https://api.laozhang.ai/v1beta/models/gemini-3-pro-image-preview:generateContent"
+
+INPUT_IMAGE = "output.png"  # Use image from Example 1
+PROMPT = "Transform this cat into Van Gogh Starry Night style oil painting"
+ASPECT_RATIO = "1:1"
+IMAGE_SIZE = "2K"
+# ============================
+
+# Read and encode image
+with open(INPUT_IMAGE, "rb") as f:
+    image_b64 = base64.b64encode(f.read()).decode("utf-8")
+
+headers = {"Authorization": f"Bearer {API_KEY}", "Content-Type": "application/json"}
+
+payload = {
+    "contents": [{
+        "parts": [
+            {"text": PROMPT},
+            {"inline_data": {"mime_type": "image/png", "data": image_b64}}
+        ]
+    }],
+    "generationConfig": {
+        "responseModalities": ["IMAGE"],
+        "imageConfig": {
+            "aspectRatio": ASPECT_RATIO,
+            "imageSize": IMAGE_SIZE
+        }
+    }
+}
+
+response = requests.post(API_URL, headers=headers, json=payload, timeout=180)
+result = response.json()
+
+# Save image
+output_data = result["candidates"][0]["content"]["parts"][0]["inlineData"]["data"]
+with open("output_styled.png", "wb") as f:
+    f.write(base64.b64decode(output_data))
+
+print("✅ Image saved: output_styled.png")
+```
+
+</Accordion>
+
+<Accordion title="Example 3: Multi-Image Fusion → Use First and Second to Generate Third">
+
+```python
+import requests
+import base64
+
+# ========== Configuration ==========
+API_KEY = "sk-YOUR_API_KEY"
+API_URL = "https://api.laozhang.ai/v1beta/models/gemini-3-pro-image-preview:generateContent"
+
+# Use the two images from Example 1 and Example 2
+IMAGES = ["output.png", "output_styled.png"]
+PROMPT = "Combine these two cat images into a single artistic composition"
+ASPECT_RATIO = "16:9"
+IMAGE_SIZE = "2K"
+# ============================
+
+# Build parts: text + multiple images
+parts = [{"text": PROMPT}]
+
+for img_path in IMAGES:
+    with open(img_path, "rb") as f:
+        img_b64 = base64.b64encode(f.read()).decode("utf-8")
+    parts.append({"inline_data": {"mime_type": "image/png", "data": img_b64}})
+
+headers = {"Authorization": f"Bearer {API_KEY}", "Content-Type": "application/json"}
+
+payload = {
+    "contents": [{"parts": parts}],
+    "generationConfig": {
+        "responseModalities": ["IMAGE"],
+        "imageConfig": {
+            "aspectRatio": ASPECT_RATIO,
+            "imageSize": IMAGE_SIZE
+        }
+    }
+}
+
+response = requests.post(API_URL, headers=headers, json=payload, timeout=180)
+result = response.json()
+
+# Save image
+output_data = result["candidates"][0]["content"]["parts"][0]["inlineData"]["data"]
+with open("output_mixed.png", "wb") as f:
+    f.write(base64.b64decode(output_data))
+
+print("✅ Image saved: output_mixed.png")
+```
+
+</Accordion>
+
+<Accordion title="Complete Python Tool Script">
+
+```python
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+
+"""
+Nano Banana Pro Image Editing Tool - Python Version
+Upload local image + text description, generate new image, supports custom aspect ratio and resolution
+"""
+
+import requests
+import base64
+import os
+import datetime
+import mimetypes
+from typing import Optional, Tuple, List
+
+class NanaBananaProEditor:
+    """Nano Banana Pro Image Editor"""
+
+    SUPPORTED_ASPECT_RATIOS = [
+        "21:9", "16:9", "4:3", "3:2", "1:1",
+        "9:16", "3:4", "2:3", "5:4", "4:5"
+    ]
+
+    SUPPORTED_SIZES = ["1K", "2K", "4K"]
+
+    def __init__(self, api_key: str):
+        self.api_key = api_key
+        self.api_url = "https://api.laozhang.ai/v1beta/models/gemini-3-pro-image-preview:generateContent"
+        self.headers = {
+            "Content-Type": "application/json",
+            "Authorization": f"Bearer {api_key}"
+        }
+
+    def edit_image(self, image_path: str, prompt: str,
+                   aspect_ratio: str = "1:1",
+                   image_size: str = "2K",
+                   output_dir: str = ".") -> Tuple[bool, str]:
+        """
+        Edit a single image
+
+        Args:
+            image_path: Input image path
+            prompt: Edit description
+            aspect_ratio: Aspect ratio
+            image_size: Resolution (1K, 2K, 4K)
+            output_dir: Save directory
+
+        Returns:
+            (success, result message)
+        """
+        print(f"🚀 Starting image edit...")
+        print(f"📁 Input image: {image_path}")
+        print(f"📝 Edit prompt: {prompt}")
+        print(f"📐 Aspect ratio: {aspect_ratio}")
+        print(f"🖼️  Resolution: {image_size}")
+
+        if not os.path.exists(image_path):
+            return False, f"Image file not found: {image_path}"
+
+        if aspect_ratio not in self.SUPPORTED_ASPECT_RATIOS:
+            return False, f"Unsupported aspect ratio {aspect_ratio}"
+
+        if image_size not in self.SUPPORTED_SIZES:
+            return False, f"Unsupported resolution {image_size}"
+
+        # Read and encode image
+        try:
+            with open(image_path, 'rb') as f:
+                image_data = f.read()
+            image_base64 = base64.b64encode(image_data).decode('utf-8')
+
+            mime_type, _ = mimetypes.guess_type(image_path)
+            if not mime_type or not mime_type.startswith('image/'):
+                mime_type = 'image/jpeg'
+        except Exception as e:
+            return False, f"Failed to read image: {str(e)}"
+
+        # Generate output filename
+        timestamp = datetime.datetime.now().strftime("%Y%m%d_%H%M%S")
+        output_file = os.path.join(output_dir, f"edited_{timestamp}.png")
+
+        try:
+            payload = {
+                "contents": [{
+                    "parts": [
+                        {"text": prompt},
+                        {"inline_data": {"mime_type": mime_type, "data": image_base64}}
+                    ]
+                }],
+                "generationConfig": {
+                    "responseModalities": ["IMAGE"],
+                    "imageConfig": {
+                        "aspectRatio": aspect_ratio,
+                        "imageSize": image_size
+                    }
+                }
+            }
+
+            print("📡 Sending request to API...")
+            response = requests.post(self.api_url, headers=self.headers, json=payload, timeout=180)
+
+            if response.status_code != 200:
+                return False, f"API request failed, status code: {response.status_code}"
+
+            result = response.json()
+            output_image_data = result["candidates"][0]["content"]["parts"][0]["inlineData"]["data"]
+
+            print("💾 Saving image...")
+            decoded_data = base64.b64decode(output_image_data)
+
+            with open(output_file, 'wb') as f:
+                f.write(decoded_data)
+
+            file_size = len(decoded_data) / 1024
+            print(f"✅ Image saved: {output_file}")
+            print(f"📊 File size: {file_size:.2f} KB")
+
+            return True, f"Successfully saved image: {output_file}"
+
+        except Exception as e:
+            return False, f"Error: {str(e)}"
+
+    def merge_images(self, image_paths: List[str], prompt: str,
+                     aspect_ratio: str = "16:9",
+                     image_size: str = "2K",
+                     output_dir: str = ".") -> Tuple[bool, str]:
+        """
+        Merge multiple images
+
+        Args:
+            image_paths: List of input image paths
+            prompt: Merge description
+            aspect_ratio: Aspect ratio
+            image_size: Resolution
+            output_dir: Save directory
+
+        Returns:
+            (success, result message)
+        """
+        print(f"🚀 Starting to merge {len(image_paths)} images...")
+
+        parts = [{"text": prompt}]
+
+        for img_path in image_paths:
+            if not os.path.exists(img_path):
+                return False, f"Image file not found: {img_path}"
+
+            with open(img_path, 'rb') as f:
+                img_data = f.read()
+            img_b64 = base64.b64encode(img_data).decode('utf-8')
+
+            mime_type, _ = mimetypes.guess_type(img_path)
+            if not mime_type:
+                mime_type = 'image/jpeg'
+
+            parts.append({"inline_data": {"mime_type": mime_type, "data": img_b64}})
+
+        timestamp = datetime.datetime.now().strftime("%Y%m%d_%H%M%S")
+        output_file = os.path.join(output_dir, f"merged_{timestamp}.png")
+
+        try:
+            payload = {
+                "contents": [{"parts": parts}],
+                "generationConfig": {
+                    "responseModalities": ["IMAGE"],
+                    "imageConfig": {
+                        "aspectRatio": aspect_ratio,
+                        "imageSize": image_size
+                    }
+                }
+            }
+
+            print("📡 Sending request to API...")
+            response = requests.post(self.api_url, headers=self.headers, json=payload, timeout=180)
+
+            if response.status_code != 200:
+                return False, f"API request failed, status code: {response.status_code}"
+
+            result = response.json()
+            output_image_data = result["candidates"][0]["content"]["parts"][0]["inlineData"]["data"]
+
+            print("💾 Saving image...")
+            decoded_data = base64.b64decode(output_image_data)
+
+            with open(output_file, 'wb') as f:
+                f.write(decoded_data)
+
+            print(f"✅ Image saved: {output_file}")
+            return True, f"Successfully saved image: {output_file}"
+
+        except Exception as e:
+            return False, f"Error: {str(e)}"
+
+
+def main():
+    """Main function - Usage examples"""
+
+    API_KEY = "sk-YOUR_API_KEY"
+
+    editor = NanaBananaProEditor(API_KEY)
+
+    # Example 1: Single image edit
+    success, message = editor.edit_image(
+        image_path="./input.jpg",
+        prompt="Add a rainbow in the sky",
+        aspect_ratio="16:9",
+        image_size="2K"
+    )
+    print(message)
+
+    # Example 2: Multi-image merge
+    success, message = editor.merge_images(
+        image_paths=["./cat.jpg", "./dog.jpg"],
+        prompt="Combine these two pets into one happy family portrait",
+        aspect_ratio="1:1",
+        image_size="2K"
+    )
+    print(message)
+
+
+if __name__ == "__main__":
+    main()
+```
+
+</Accordion>
+
+## 🎯 Editing Scenarios
+
+### 1. Single Image Edit - Add Elements
+
+```python
+def add_element_to_image(image_url, element_description):
+    """Add new elements to image"""
+    headers = {
+        "Authorization": f"Bearer {API_KEY}",
+        "Content-Type": "application/json"
+    }
+
+    data = {
+        "model": "gemini-3-pro-image-preview",
+        "stream": False,
+        "messages": [{
+            "role": "user",
+            "content": [
+                {"type": "text", "text": f"Add {element_description} to this image"},
+                {"type": "image_url", "image_url": {"url": image_url}}
+            ]
+        }]
+    }
+
+    response = requests.post(API_URL, headers=headers, json=data)
+    return extract_base64_from_response(response.json())
+
+# Usage example
+result = add_element_to_image(
+    "https://example.com/landscape.jpg",
+    "a rainbow in the sky"
+)
+```
+
+### 2. Style Transfer
+
+```python
+def style_transfer(image_url, style_description):
+    """Image style transfer"""
+    headers = {
+        "Authorization": f"Bearer {API_KEY}",
+        "Content-Type": "application/json"
+    }
+
+    data = {
+        "model": "gemini-3-pro-image-preview",
+        "stream": False,
+        "messages": [{
+            "role": "user",
+            "content": [
+                {"type": "text", "text": f"Transform this image into {style_description} style"},
+                {"type": "image_url", "image_url": {"url": image_url}}
+            ]
+        }]
+    }
+
+    response = requests.post(API_URL, headers=headers, json=data)
+    return extract_base64_from_response(response.json())
+
+# Usage example
+result = style_transfer(
+    "https://example.com/photo.jpg",
+    "Van Gogh oil painting"
+)
+```
+
+### 3. Multi-Image Compositing
+
+```python
+def creative_merge(image_urls, merge_instruction):
+    """Creatively merge multiple images"""
+    content = [{"type": "text", "text": merge_instruction}]
+
+    for url in image_urls:
+        content.append({
+            "type": "image_url",
+            "image_url": {"url": url}
+        })
+
+    headers = {
+        "Authorization": f"Bearer {API_KEY}",
+        "Content-Type": "application/json"
+    }
+
+    data = {
+        "model": "gemini-3-pro-image-preview",
+        "stream": False,
+        "messages": [{"role": "user", "content": content}]
+    }
+
+    response = requests.post(API_URL, headers=headers, json=data)
+    return extract_base64_from_response(response.json())
+
+# Usage example
+images = ["https://example.com/cat.jpg", "https://example.com/background.jpg"]
+result = creative_merge(images, "Naturally blend the cat into the background")
+```
+
+## 💡 Best Practices
+
+### Edit Instruction Optimization
+
+```python
+# ❌ Vague instruction
+instruction = "edit the image"
+
+# ✅ Clear and specific instruction
+instruction = """
+1. Add a bright moon in the upper right corner
+2. Adjust overall color tone to warm tones
+3. Add some firefly light effects
+4. Keep the main subject unchanged
+"""
+```
+
+### Multi-Image Processing Strategy
+
+```python
+def smart_multi_image_edit(images, instruction):
+    """Smart multi-image editing"""
+
+    if len(images) == 1:
+        prompt = f"Edit this image: {instruction}"
+    elif len(images) == 2:
+        prompt = f"Combine these two images creatively: {instruction}"
+    else:
+        prompt = f"Process these {len(images)} images together: {instruction}"
+
+    # Build content...
+    return send_edit_request(content)
+```
+
+## ❓ FAQ
+
+<AccordionGroup>
+  <Accordion title="What's the difference between Pro and Standard?">
+    | Feature | Nano Banana Pro | Nano Banana |
+    |---------|-----------------|-------------|
+    | **Resolution** | 1K/2K/4K | 1K (fixed) |
+    | **Thinking Mode** | ✅ Yes | ❌ No |
+    | **Search Grounding** | ✅ Yes | ❌ No |
+    | **Multi-Image** | Up to 14 | Up to 3 |
+    | **Price** | $0.05/edit | $0.025/edit |
+    | **Best For** | Professional design, complex compositing | Quick edits, simple modifications |
+  </Accordion>
+
+  <Accordion title="How to use 4K resolution?">
+    **4K is only supported by Nano Banana Pro**, use Google native format and add `imageSize` parameter:
+
+    ```json
+    {
+      "generationConfig": {
+        "responseModalities": ["IMAGE"],
+        "imageConfig": {
+          "aspectRatio": "16:9",
+          "imageSize": "4K"
+        }
+      }
+    }
+    ```
+
+    **Important**: Must use uppercase "K" (1K, 2K, 4K).
+  </Accordion>
+
+  <Accordion title="What image formats are supported?">
+    Common image formats are supported:
+    - JPG/JPEG
+    - PNG
+    - WebP
+    - GIF (static)
+
+    JPG or PNG recommended for best results.
+  </Accordion>
+
+  <Accordion title="Are there image size limits?">
+    - **Recommended size**: Single image ≤ 5MB
+    - **Maximum size**: ≤ 10MB
+    - Larger images increase processing time, recommend compressing before upload
+  </Accordion>
+
+  <Accordion title="How many images can be processed at once?">
+    - **Nano Banana Pro**: Up to 14 images
+    - **Nano Banana**: Up to 3 images
+    - Too many images affects quality and processing time, recommend ≤ 4
+  </Accordion>
+
+  <Accordion title="Why is Pro so affordable at LaoZhang API?">
+    | Model | LaoZhang API | Official | Savings |
+    |-------|-------------|----------|---------|
+    | **Nano Banana Pro** | $0.05/edit | $0.24/edit | **79%** |
+    | **Nano Banana** | $0.025/edit | $0.04/edit | 37.5% |
+
+    **Nano Banana Pro offers exceptional value at LaoZhang API!**
+  </Accordion>
+
+  <Accordion title="Does it support Chinese editing instructions?">
+    **Perfectly supported!** Gemini 3 Pro has top-tier multilingual understanding. You can describe editing requirements in Chinese directly.
+  </Accordion>
+
+  <Accordion title="How to get better editing results?">
+    1. **Detailed description**: Provide specific editing details
+    2. **Step by step**: Describe complex edits in multiple steps
+    3. **Reference style**: Specify art style
+    4. **Keep subject**: Clearly state what needs to be preserved
+  </Accordion>
+</AccordionGroup>
+
+## 🎯 Common Use Cases
+
+1. **E-commerce Model Swap**: Upload clothing and model photos, generate outfit effects
+2. **Interior Design**: Upload raw room photos, generate decorated results via prompt
+3. **Game Assets**: Quickly modify game icons or character appearances
+4. **Social Media**: Transform portrait photos into various art styles
+5. **Product Display**: Place products into different scene backgrounds
+6. **Creative Posters**: Fuse multiple assets to generate poster designs
+
+## 🔗 Related Resources
+
+<CardGroup cols={2}>
+  <Card title="Pro Image Generation" icon="sparkles" href="/en/api-capabilities/nano-banana-pro-image">
+    Learn how to generate images from text with Nano Banana Pro
+  </Card>
+  <Card title="Standard Image Editing" icon="paintbrush" href="/en/api-capabilities/nano-banana-image-edit">
+    More affordable Nano Banana Standard editing version
+  </Card>
+  <Card title="Token Management" icon="key" href="https://api.laozhang.ai/token">
+    Create and manage your API tokens
+  </Card>
+  <Card title="Pricing" icon="dollar-sign" href="/en/pricing">
+    View detailed pricing and billing information
+  </Card>
+</CardGroup>
+
+---
+
+## 📝 Changelog
+
+<AccordionGroup>
+  <Accordion title="2025-01: Nano Banana Pro Edit standalone documentation launched">
+    **🚀 Nano Banana Pro Edit Dedicated Page**
+    - Split from combined documentation into dedicated Pro version
+    - Complete 4K resolution editing guide
+    - Detailed multi-image compositing instructions
+    - Complete code examples and best practices
+    - Comparison with Nano Banana Standard
+  </Accordion>
+</AccordionGroup>

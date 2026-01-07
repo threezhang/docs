@@ -1,7 +1,8 @@
 ---
-title: Nano Banana Image Generation
-sidebarTitle: Nano Banana Generation
-description: Google's latest and most powerful image generation model gemini-2.5-flash-image-preview, generates in 10 seconds, pay-per-use at only $0.025/image
+title: Nano Banana Text-to-Image
+seoTitle: "Nano Banana Text-to-Image API - Cost-Effective AI Image Generation | LaoZhang API"
+sidebarTitle: Nano Banana Text-to-Image
+description: "Nano Banana Text-to-Image API: High-performance image generation powered by Gemini 2.5 Flash. Only $0.025/image, 10-second generation, Base64 output, OpenAI-compatible format."
 icon: "sparkles"
 ---
 
@@ -47,9 +48,18 @@ icon: "sparkles"
 Nano Banana is the colloquial name for Google's latest and most powerful image generation model `gemini-2.5-flash-image-preview`. It implements text-to-image functionality through the chat completions interface, fully compatible with `gpt-4o-image` and `sora_image` calling methods - just replace the model name for seamless switching.
 
 <Note>
-**🚀 Lightning-Fast Generation**  
+**🚀 Lightning-Fast Generation**
 Generates high-quality images in just 10 seconds on average, faster than OpenAI series! Returns base64 format data for direct use.
 </Note>
+
+<CardGroup cols={2}>
+  <Card title="Free Trial" icon="gift" href="https://api.laozhang.ai">
+    Register and get **$0.05** free credit for 2 test images
+  </Card>
+  <Card title="Live Demo" icon="play" href="https://images.laozhang.ai/">
+    AI Images - Try instantly, no code required
+  </Card>
+</CardGroup>
 
 ## 🌟 Core Features
 
@@ -584,21 +594,34 @@ def save_base64_image(base64_str, output_path):
 
 ## 🔍 FAQ
 
-### Q: What are the advantages of base64 format compared to URL?
-A: Base64 returns image data directly, no secondary download needed, avoids URL expiration issues, especially suitable for scenarios requiring immediate image processing.
-
-### Q: How to switch from sora_image to Nano Banana?
-A: Simply change the model name from `sora_image` to `gemini-2.5-flash-image-preview`, and modify result processing logic (from URL to base64).
-
-### Q: Are there limits for batch generation?
-A: No concurrency limits, but it's recommended to control concurrency for optimal performance.
+<AccordionGroup>
+  <Accordion title="What are the advantages of base64 format compared to URL?">
+    Base64 returns image data directly, no secondary download needed, avoids URL expiration issues. Especially suitable for scenarios requiring immediate image processing.
+  </Accordion>
+  <Accordion title="How to switch from sora_image to Nano Banana?">
+    Simply change the model name from `sora_image` to `gemini-2.5-flash-image-preview`, and modify result processing logic (from URL to base64).
+  </Accordion>
+  <Accordion title="Are there limits for batch generation?">
+    No concurrency limits, but it's recommended to control concurrency for optimal performance.
+  </Accordion>
+</AccordionGroup>
 
 ## 🔗 Related Resources
 
-- [Nano Banana Image Editing](/api-capabilities/nano-banana-image-edit) - Edit existing images
-- [Pricing Calculator](https://api.laozhang.ai/account/pricing) - Real-time price query
-- [API Key Management](https://api.laozhang.ai/token) - Create and manage tokens
-- [Sora Generation Docs](/api-capabilities/sora-image-generation) - Learn about compatible models
+<CardGroup cols={2}>
+  <Card title="Image Editing API" icon="paintbrush" href="/en/api-capabilities/nano-banana-image-edit">
+    Edit existing images, multi-image composition
+  </Card>
+  <Card title="Nano Banana Pro" icon="cherry" href="/en/api-capabilities/nano-banana-pro-image">
+    4K HD, complex instruction understanding
+  </Card>
+  <Card title="API Key Management" icon="key" href="https://api.laozhang.ai/token">
+    Create and manage tokens
+  </Card>
+  <Card title="Pricing" icon="dollar-sign" href="/en/pricing">
+    View detailed pricing
+  </Card>
+</CardGroup>
 
 <Note>
 🎨 **Pro Tip**: Nano Banana model is particularly good at understanding complex scene descriptions and artistic styles. Utilizing detailed prompts can yield better results!

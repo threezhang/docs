@@ -1,29 +1,36 @@
 ---
 title: Nano Banana Image Editing
-sidebarTitle: Nano Banana Editing
-description: Using Google's latest image editing technology, supports single and multi-image intelligent editing, pay-per-use at only $0.025/edit
+seoTitle: "Nano Banana Image Editing API - AI Smart Edit & Multi-Image Composition | LaoZhang API"
+sidebarTitle: Nano Banana Image Editing
+description: "Nano Banana Image Editing API: Smart image editing powered by Gemini 2.5 Flash. $0.025/edit, supports multi-image composition, element add/remove, style transfer."
 icon: "paintbrush"
 ---
 
-<Warning>
-**⚠️ Model Deprecation Notice**  
-`gemini-2.5-flash-image-preview` preview version will be deprecated soon.
+<Note>
+**🚀 Nano Banana Standard Editing - Best Value Choice**
+Stable and reliable image editing model, perfect for daily use and production environments.
+- **Great Price**: Only $0.025/edit (37.5% cheaper than official)
+- **Fast Editing**: ~10 seconds average
+- **Reliable**: Based on Gemini 2.5 official release
 
-**Recommended Migration to Official Release**:
-- ✅ New Version: [Gemini 2.5 Flash Image Edit](/en/api-capabilities/gemini-flash-image-edit) (official, more stable)
-- 🎁 New Features: Supports custom aspect ratios (16:9, 9:16, and 10 other ratios)
-- 💰 Same Price: Still $0.025/edit
-- 🔄 Easy Migration: Just update the model name
+Need 4K resolution or complex multi-image editing? Check out [Nano Banana Pro Image Editing](/en/api-capabilities/nano-banana-pro-image-edit)
+</Note>
 
-[View New Documentation →](/en/api-capabilities/gemini-flash-image-edit)
-</Warning>
+<CardGroup cols={2}>
+  <Card title="🎁 Free Trial" icon="gift" href="https://api.laozhang.ai">
+    Register and get **$0.05** free credit for 2 test edits
+  </Card>
+  <Card title="🚀 Live Demo" icon="play" href="https://images.laozhang.ai/">
+    AI Images - Try instantly, no code required
+  </Card>
+</CardGroup>
 
 ## Model Overview
 
-Nano Banana image editing functionality is based on Google's `gemini-2.5-flash-image-preview` model, implementing intelligent editing and transformation of existing images through the chat completions interface. Supports single or multiple image inputs, enabling advanced editing functions such as image composition, element addition, and style transformation.
+Nano Banana (Standard) image editing functionality is based on Google's `gemini-2.5-flash-image` model, implementing intelligent editing and transformation of existing images through the chat completions interface. Supports single or multiple image inputs, enabling advanced editing functions such as image composition, element addition, and style transformation.
 
 <Note>
-**🎨 Intelligent Image Editing**  
+**🎨 Intelligent Image Editing**
 Upload image + text description = precise editing! Supports advanced features like multi-image composition, element modification, and style transformation.
 </Note>
 
@@ -37,10 +44,11 @@ Upload image + text description = precise editing! Supports advanced features li
 
 ## 📋 Feature Comparison
 
-| Feature | Nano Banana Edit | GPT-4o Edit | DALL·E 2 Edit | Flux Edit |
-|---------|------------------|-------------|---------------|-----------|
-| Price | $0.025/edit | Token-based | $0.018/image | $0.035/edit |
-| Multi-Image Input | ✅ Supported | ✅ Supported | ❌ Not supported | ❌ Not native |
+| Feature | Nano Banana Edit | Nano Banana Pro Edit | GPT-4o Edit | DALL·E 2 Edit | Flux Edit |
+|---------|------------------|----------------------|-------------|---------------|-----------|
+| Price | $0.025/edit | **$0.05/edit** | Token-based | $0.018/image | $0.035/edit |
+| Model | Gemini 2.5 | **Gemini 3 Pro** | GPT-4o | DALL·E 2 | Flux |
+| Multi-Image Input | ✅ Supported | ✅ **Strong** | ✅ Supported | ❌ Not supported | ❌ Not native |
 | Response Speed | ~10s | ~20s | Slower | Medium |
 | Return Format | Base64 | Base64 | URL | URL |
 | Chinese Support | ✅ Perfect | ✅ Perfect | ❌ Needs translation | ❌ Needs translation |
@@ -78,7 +86,7 @@ curl -X POST "https://api.laozhang.ai/v1/chat/completions" \
      -H "Authorization: Bearer sk-YOUR_API_KEY" \
      -H "Content-Type: application/json" \
      -d '{
-    "model": "gemini-2.5-flash-image-preview",
+    "model": "gemini-2.5-flash-image",
     "stream": false,
     "messages": [
         {
@@ -126,7 +134,7 @@ def edit_images_with_gemini():
     
     # Request data - supports multiple image inputs
     data = {
-        "model": "gemini-2.5-flash-image-preview",
+        "model": "gemini-2.5-flash-image",
         "stream": False,
         "messages": [
             {
@@ -246,7 +254,7 @@ RESPONSE=$(curl -s -X POST "https://api.laozhang.ai/v1/chat/completions" \
      -H "Authorization: Bearer $API_KEY" \
      -H "Content-Type: application/json" \
      -d '{
-    "model": "gemini-2.5-flash-image-preview",
+    "model": "gemini-2.5-flash-image",
     "stream": false,
     "messages": [
         {
@@ -353,7 +361,7 @@ def add_element_to_image(image_url, element_description):
     }
     
     data = {
-        "model": "gemini-2.5-flash-image-preview",
+        "model": "gemini-2.5-flash-image",
         "stream": False,
         "messages": [{
             "role": "user",
@@ -394,7 +402,7 @@ def creative_merge(image_urls, merge_instruction):
     }
     
     data = {
-        "model": "gemini-2.5-flash-image-preview",
+        "model": "gemini-2.5-flash-image",
         "stream": False,
         "messages": [{
             "role": "user",
@@ -424,7 +432,7 @@ def style_transfer(image_url, style_description):
     }
     
     data = {
-        "model": "gemini-2.5-flash-image-preview",
+        "model": "gemini-2.5-flash-image",
         "stream": False,
         "messages": [{
             "role": "user",
@@ -555,21 +563,34 @@ class Base64ImageHandler:
 
 ## 🔍 FAQ
 
-### Q: How many images can be processed simultaneously?
-A: There's no hard limit theoretically, but it's recommended not to exceed 5 images per request for optimal performance.
-
-### Q: What's the resolution of edited images?
-A: The system intelligently maintains or optimizes resolution, usually outputs high-quality images, depending on input images and editing requirements.
-
-### Q: What advantages does it have compared to other editing APIs?
-A: Main advantages include: lower pricing, faster processing speed, native multi-image input support, excellent Chinese language understanding.
+<AccordionGroup>
+  <Accordion title="How many images can be processed simultaneously?">
+    There's no hard limit theoretically, but it's recommended not to exceed 5 images per request for optimal performance.
+  </Accordion>
+  <Accordion title="What's the resolution of edited images?">
+    The system intelligently maintains or optimizes resolution, usually outputs high-quality images, depending on input images and editing requirements.
+  </Accordion>
+  <Accordion title="What advantages does it have compared to other editing APIs?">
+    Main advantages include: lower pricing, faster processing speed, native multi-image input support, excellent Chinese language understanding.
+  </Accordion>
+</AccordionGroup>
 
 ## 🔗 Related Resources
 
-- [Nano Banana Image Generation](/api-capabilities/nano-banana-image) - Text-to-image functionality
-- [Pricing Calculator](https://api.laozhang.ai/account/pricing) - Real-time price query
-- [API Key Management](https://api.laozhang.ai/token) - Create and manage tokens
-- [GPT-4o Image Docs](/api-capabilities/gpt-4o-image) - Learn about compatible models
+<CardGroup cols={2}>
+  <Card title="Text-to-Image API" icon="sparkles" href="/en/api-capabilities/nano-banana-image">
+    Generate images from text descriptions
+  </Card>
+  <Card title="Nano Banana Pro Image Editing" icon="cherry" href="/en/api-capabilities/nano-banana-pro-image-edit">
+    4K HD, complex multi-image editing
+  </Card>
+  <Card title="API Key Management" icon="key" href="https://api.laozhang.ai/token">
+    Create and manage tokens
+  </Card>
+  <Card title="Pricing" icon="dollar-sign" href="/en/pricing">
+    View detailed pricing
+  </Card>
+</CardGroup>
 
 <Note>
 🎨 **Pro Tip**: Nano Banana editing functionality excels at understanding complex editing instructions and creative requirements. Utilizing detailed descriptions can achieve more precise editing results!
