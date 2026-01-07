@@ -92,7 +92,7 @@ curl -X POST "https://api.laozhang.ai/v1/videos" \
 }
 ```
 
-```bash 步骤1: 创建任务（图生视频）
+```bash 步骤1: 创建任务（图生视频 - 单图）
 # 注意：需要使用 multipart/form-data 格式上传图片
 curl -X POST "https://api.laozhang.ai/v1/videos" \
   -H "Authorization: Bearer YOUR_API_KEY" \
@@ -108,6 +108,26 @@ curl -X POST "https://api.laozhang.ai/v1/videos" \
   "created": 1762181822,
   "status": "queued",
   "model": "veo-3.1-fl"
+}
+```
+
+```bash 步骤1: 创建任务（图生视频 - 首尾帧）
+# 使用两张图片作为首帧和尾帧，生成平滑过渡的视频
+curl -X POST "https://api.laozhang.ai/v1/videos" \
+  -H "Authorization: Bearer YOUR_API_KEY" \
+  -H "Content-Type: multipart/form-data" \
+  -F "model=veo-3.1-landscape-fl" \
+  -F "prompt=让这个画面动起来，加点未来科技感" \
+  -F "input_reference=@start_frame.jpg" \
+  -F "input_reference=@end_frame.jpg"
+
+# 响应示例
+{
+  "id": "video_xyz789",
+  "object": "video",
+  "created": 1762181833,
+  "status": "queued",
+  "model": "veo-3.1-landscape-fl"
 }
 ```
 
@@ -171,7 +191,7 @@ curl -X GET "https://api.laozhang.ai/v1/videos/video_abc123/content" \
 |------|------|------|------|
 | `model` | string | ✓ | 模型名称（见下方模型列表）|
 | `prompt` | string | ✓ | 视频生成提示词 |
-| `input_reference` | file | ❌ | 本地图片文件（仅图生视频模型需要，multipart/form-data 格式）|
+| `input_reference` | file | ❌ | 图片文件，支持 1-2 张（2张时为首尾帧模式，multipart/form-data 格式）|
 
 #### 可用模型
 
@@ -192,6 +212,16 @@ curl -X GET "https://api.laozhang.ai/v1/videos/video_abc123/content" \
 - `fast` = 快速版（更便宜）
 - `fl` = 支持帧转视频（图生视频）
 </Note>
+
+<Tip>
+**首尾帧功能**
+
+图生视频模型（带 `-fl` 后缀）支持传入 2 张图片：
+- **第一张**：视频开始帧
+- **第二张**：视频结束帧
+
+API 会自动生成从开始帧到结束帧的平滑过渡动画。
+</Tip>
 
 #### 响应字段
 
@@ -284,20 +314,38 @@ API_KEY = "YOUR_API_KEY"
 BASE_URL = "https://api.laozhang.ai/v1"
 
 # 步骤1: 创建视频任务
-def create_video_task(prompt, model="veo-3.1", image_path=None):
-    """创建视频生成任务"""
+def create_video_task(prompt, model="veo-3.1", image_paths=None):
+    """创建视频生成任务
+
+    Args:
+        prompt: 视频生成提示词
+        model: 模型名称
+        image_paths: 图片路径，可以是：
+            - None: 文生视频
+            - str: 单张图片路径
+            - list: 多张图片路径（首尾帧模式，最多2张）
+    """
     url = f"{BASE_URL}/videos"
     headers = {"Authorization": f"Bearer {API_KEY}"}
-    
-    if image_path:
+
+    if image_paths:
+        # 统一转为列表处理
+        if isinstance(image_paths, str):
+            image_paths = [image_paths]
+
         # 图生视频：使用 multipart/form-data 上传图片
-        if not os.path.exists(image_path):
-             raise FileNotFoundError(f"图片文件不存在: {image_path}")
-             
-        with open(image_path, 'rb') as f:
-            files = {"input_reference": (os.path.basename(image_path), f, "image/jpeg")}
-            data = {"model": model, "prompt": prompt}
-            response = requests.post(url, headers=headers, files=files, data=data)
+        files = []
+        for path in image_paths:
+            if not os.path.exists(path):
+                raise FileNotFoundError(f"图片文件不存在: {path}")
+            files.append(("input_reference", (os.path.basename(path), open(path, 'rb'), "image/jpeg")))
+
+        data = {"model": model, "prompt": prompt}
+        response = requests.post(url, headers=headers, files=files, data=data)
+
+        # 关闭文件句柄
+        for _, (_, f, _) in files:
+            f.close()
     else:
         # 文生视频：使用 JSON 格式
         headers["Content-Type"] = "application/json"
@@ -388,11 +436,19 @@ if __name__ == "__main__":
         model="veo-3.1"
     )
 
-    # 图生视频示例 (需要确保当前目录下有 test.jpg)
-    # create_video_task(
+    # 图生视频 - 单图模式
+    # task = create_video_task(
     #     prompt="让这只猫咪慢慢眨眼睛",
-    #     model="veo-3.1-fl", 
-    #     image_path="test.jpg"
+    #     model="veo-3.1-fl",
+    #     image_paths="test.jpg"
+    # )
+
+    # 图生视频 - 首尾帧模式（传入2张图片）
+    # 第一张图作为开始帧，第二张图作为结束帧
+    # task = create_video_task(
+    #     prompt="让画面从开始帧平滑过渡到结束帧，加入动态效果",
+    #     model="veo-3.1-landscape-fl",
+    #     image_paths=["start_frame.jpg", "end_frame.jpg"]
     # )
 
     # 文生视频 - 横屏快速版
