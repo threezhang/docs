@@ -45,45 +45,41 @@ npm install -g @anthropic-ai/claude-code
 ### 2. Get API Key
 
 1. Visit [LaoZhang API Console](https://api.laozhang.ai/token)
-2. Create a new token
-3. Copy the key for later use
+2. Create a new token, **select "Claude Code" group**
+3. Copy the key for later use (format: `sk-...`)
 
-### 3. Set Environment Variables
+<Warning>
+  **Important**: You must select the "Claude Code" group when creating the token, otherwise it may not work properly.
+</Warning>
 
-<Tabs>
-  <Tab title="macOS/Linux">
-    Edit `~/.zshrc` or `~/.bashrc`:
+### 3. Configure Claude Code (Recommended)
 
-    ```bash
-    # LaoZhang API Configuration
-    export ANTHROPIC_API_KEY="sk-your-laozhang-api-key"
-    export ANTHROPIC_BASE_URL="https://api.laozhang.ai"
-    ```
+Edit `~/.claude/settings.json` file:
 
-    Apply changes:
-    ```bash
-    source ~/.zshrc
-    ```
-  </Tab>
+```bash
+vim ~/.claude/settings.json
+```
 
-  <Tab title="Windows">
-    Edit PowerShell profile:
+Add the following content:
 
-    ```powershell
-    # Edit profile
-    notepad $PROFILE
+```json
+{
+    "env": {
+      "ANTHROPIC_BASE_URL": "https://api.laozhang.ai",
+      "ANTHROPIC_AUTH_TOKEN": "sk-your-laozhang-api-key",
+      "ANTHROPIC_MODEL": "claude-opus-4-5-20251101"
+    }
+}
+```
 
-    # Add these lines
-    $env:ANTHROPIC_API_KEY = "sk-your-laozhang-api-key"
-    $env:ANTHROPIC_BASE_URL = "https://api.laozhang.ai"
-    ```
+<Tip>
+  **Configuration Notes**:
+  - `ANTHROPIC_BASE_URL`: Points to LaoZhang API proxy
+  - `ANTHROPIC_AUTH_TOKEN`: Your API key (from console)
+  - `ANTHROPIC_MODEL`: Default model to use (optional)
+</Tip>
 
-    Restart PowerShell or run:
-    ```powershell
-    . $PROFILE
-    ```
-  </Tab>
-</Tabs>
+Save and you're ready to go. No need to restart terminal.
 
 ### 4. Launch Claude Code
 
@@ -94,43 +90,29 @@ cd ~/Desktop/my-project
 claude
 ```
 
-## Project Configuration (Recommended)
-
-Create `.claude.json` in your project root to bypass Claude verification:
-
-```json
-{
-  "apiKey": "sk-your-laozhang-api-key",
-  "apiBaseUrl": "https://api.laozhang.ai",
-  "hasCompletedOnboarding": true
-}
-```
-
-<Tip>
-  **Important**: Adding `"hasCompletedOnboarding": true` completely bypasses Claude account verification. No need to:
-
-  - Register a Claude account (difficult, requires overseas phone)
-  - Worry about account suspension
-  - Complete any authorization steps
-</Tip>
-
-<Warning>
-  **Security Note**: `.claude.json` contains sensitive information:
-
-  1. Add to `.gitignore` to avoid committing
-  2. Don't share project archives containing this file
-</Warning>
+<Info>
+  First launch will show API configuration info. Confirm and start using.
+</Info>
 
 ## Model Selection
 
-Available models through LaoZhang API:
+Models supported in Claude Code group:
 
-| Model | Model ID | Features | Recommended For |
-|-------|----------|----------|-----------------|
-| **Claude 4 Sonnet** | `claude-sonnet-4-20250514` | Best coding | Complex code tasks |
-| **Claude Opus 4.1** | `claude-opus-4-20250514` | Enhanced reasoning | Difficult problems |
-| **Claude 4 Sonnet Thinking** | `claude-sonnet-4-20250514-thinking` | Chain of thought | Complex reasoning |
-| **Claude 3.5 Sonnet** | `claude-3-5-sonnet` | Stable, reliable | Daily development |
+| Model | Model ID | Features |
+|-------|----------|----------|
+| **Claude Opus 4.5** | `claude-opus-4-5-20251101` | Latest & most powerful, recommended |
+| **Claude Opus 4.5 Thinking** | `claude-opus-4-5-20251101-thinking` | Chain of thought reasoning |
+| **Claude Sonnet 4.5** | `claude-sonnet-4-5-20250929` | Balance of performance & cost |
+| **Claude Opus 4.1** | `claude-opus-4-1-20250805` | Enhanced reasoning |
+| **Claude Sonnet 4** | `claude-sonnet-4-20250514` | Excellent coding capability |
+| **Claude 3.7 Sonnet** | `claude-3-7-sonnet-20250219` | Stable & reliable |
+| **Claude Haiku 4.5** | `claude-haiku-4-5-20251001` | Fast response, low cost |
+| **Claude 3.5 Sonnet** | `claude-3-5-sonnet-20241022` | Classic stable version |
+| **Claude 3.5 Haiku** | `claude-3-5-haiku-20241022` | Lightweight & fast |
+
+<Tip>
+  Models with `-thinking` suffix support chain-of-thought reasoning, ideal for complex problem analysis.
+</Tip>
 
 ## Usage Guide
 
