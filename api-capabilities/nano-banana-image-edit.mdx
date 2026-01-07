@@ -1,7 +1,8 @@
 ---
-title: Nano Banana 图像编辑
-sidebarTitle: Nano Banana 编辑
-description: "Nano Banana Edit (Standard): 基于 Gemini 2.5 Flash 的高性价比图像编辑。$0.025/次，支持多图合成。"
+title: Nano Banana 图改图
+seoTitle: "Nano Banana 图改图 API - AI 智能编辑多图合成 | 老张API"
+sidebarTitle: Nano Banana 图改图
+description: "Nano Banana 图改图 API：基于 Gemini 2.5 Flash 的智能图像编辑。$0.025/次，支持多图合成、元素添加/删除、风格转换。"
 icon: "paintbrush"
 ---
 
@@ -12,8 +13,17 @@ icon: "paintbrush"
 - **极速编辑**: 平均 10 秒完成
 - **稳定可靠**: 基于 Gemini 2.5 正式版
 
-需要 4K 分辨率或复杂多图编辑？查看 [Nano Banana Pro 编辑](/api-capabilities/nano-banana-pro-image-edit)
+需要 4K 分辨率或复杂多图编辑？查看 [Nano Banana Pro 图改图](/api-capabilities/nano-banana-pro-image-edit)
 </Note>
+
+<CardGroup cols={2}>
+  <Card title="🎁 免费测试" icon="gift" href="https://api.laozhang.ai">
+    注册送 **$0.05**，免费体验 2 次
+  </Card>
+  <Card title="🚀 在线测试" icon="play" href="https://images.laozhang.ai/">
+    AI Images 即刻体验，无需写代码
+  </Card>
+</CardGroup>
 
 ## 模型简介
 
@@ -662,23 +672,34 @@ class Base64ImageHandler:
 
 ## 🔍 常见问题
 
-
-### Q: 最多可以同时处理几张图片？
-A: 理论上没有硬性限制，但建议单次请求不超过 5 张图片以获得最佳性能。
-
-### Q: 编辑后的图片分辨率如何？
-A: 系统会智能保持或优化分辨率，通常输出高质量图片，具体取决于输入图片和编辑需求。
-
-
-### Q: 与其他编辑API相比有什么优势？
-A: 主要优势包括：更低的价格、更快的处理速度、原生支持多图输入、优秀的中文理解能力。
+<AccordionGroup>
+  <Accordion title="最多可以同时处理几张图片？">
+    理论上没有硬性限制，但建议单次请求不超过 5 张图片以获得最佳性能。
+  </Accordion>
+  <Accordion title="编辑后的图片分辨率如何？">
+    系统会智能保持或优化分辨率，通常输出高质量图片，具体取决于输入图片和编辑需求。
+  </Accordion>
+  <Accordion title="与其他编辑API相比有什么优势？">
+    主要优势包括：更低的价格、更快的处理速度、原生支持多图输入、优秀的中文理解能力。
+  </Accordion>
+</AccordionGroup>
 
 ## 🔗 相关资源
 
-- [Nano Banana 图像生成](/api-capabilities/nano-banana-image) - 文生图功能
-- [价格计算器](https://api.laozhang.ai/account/pricing) - 实时价格查询
-- [API 密钥管理](https://api.laozhang.ai/token) - 创建和管理令牌
-- [GPT-4o Image 文档](/api-capabilities/gpt-4o-image) - 了解兼容模型
+<CardGroup cols={2}>
+  <Card title="文生图 API" icon="sparkles" href="/api-capabilities/nano-banana-image">
+    从文字描述生成图片
+  </Card>
+  <Card title="Nano Banana Pro 图改图" icon="cherry" href="/api-capabilities/nano-banana-pro-image-edit">
+    4K 高清、复杂多图编辑
+  </Card>
+  <Card title="API 密钥管理" icon="key" href="https://api.laozhang.ai/token">
+    创建和管理令牌
+  </Card>
+  <Card title="价格说明" icon="dollar-sign" href="/pricing">
+    查看详细价格表
+  </Card>
+</CardGroup>
 
 <Note>
 🎨 **专业提示**：Nano Banana 编辑功能特别擅长理解复杂的编辑指令和创意要求，充分利用详细的描述可以获得更精准的编辑效果！

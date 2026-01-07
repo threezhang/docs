@@ -1,7 +1,8 @@
 ---
-title: Nano Banana 图像生成
-sidebarTitle: Nano Banana 生图
-description: "Nano Banana (Gemini 2.5 Flash): 高性价比图像生成 API。仅 $0.025/张，10秒极速出图。支持 Base64 输出和 OpenAI 格式。"
+title: Nano Banana 文生图
+seoTitle: "Nano Banana 文生图 API - 高性价比 AI 图像生成 | 老张API"
+sidebarTitle: Nano Banana 文生图
+description: "Nano Banana 文生图 API：基于 Gemini 2.5 Flash 的高性价比图像生成。仅 $0.025/张，10秒极速出图，支持 Base64 输出和 OpenAI 格式。"
 icon: "sparkles"
 ---
 
@@ -14,6 +15,15 @@ icon: "sparkles"
 
 需要 4K 分辨率或高级特性？查看 [Nano Banana Pro](/api-capabilities/nano-banana-pro-image)
 </Note>
+
+<CardGroup cols={2}>
+  <Card title="🎁 免费测试" icon="gift" href="https://api.laozhang.ai">
+    注册送 **$0.05**，免费体验 2 次
+  </Card>
+  <Card title="🚀 在线测试" icon="play" href="https://images.laozhang.ai/">
+    AI Images 即刻体验，无需写代码
+  </Card>
+</CardGroup>
 
 ## 前置要求
 
@@ -588,24 +598,34 @@ def save_base64_image(base64_str, output_path):
 
 ## 🔍 常见问题
 
-
-### Q: base64 格式相比 URL 有什么优势？
-A: base64 直接返回图片数据，无需二次下载，避免了 URL 失效的问题，特别适合需要立即处理图片的场景。
-
-### Q: 如何从 sora_image 切换到 Nano Banana？
-A: 只需将模型名从 `sora_image` 改为 `gemini-2.5-flash-image`，并修改结果处理逻辑（从 URL 改为 base64）。
-
-### Q: 批量生成有限制吗？
-A: 没有并发限制，但建议控制并发数以获得最佳性能。
-
-
+<AccordionGroup>
+  <Accordion title="base64 格式相比 URL 有什么优势？">
+    base64 直接返回图片数据，无需二次下载，避免了 URL 失效的问题，特别适合需要立即处理图片的场景。
+  </Accordion>
+  <Accordion title="如何从 sora_image 切换到 Nano Banana？">
+    只需将模型名从 `sora_image` 改为 `gemini-2.5-flash-image`，并修改结果处理逻辑（从 URL 改为 base64）。
+  </Accordion>
+  <Accordion title="批量生成有限制吗？">
+    没有并发限制，但建议控制并发数以获得最佳性能。
+  </Accordion>
+</AccordionGroup>
 
 ## 🔗 相关资源
 
-- [Nano Banana 图像编辑](/api-capabilities/nano-banana-image-edit) - 编辑现有图片
-- [价格计算器](https://api.laozhang.ai/account/pricing) - 实时价格查询
-- [API 密钥管理](https://api.laozhang.ai/token) - 创建和管理令牌
-- [Sora 生图文档](/api-capabilities/sora-image-generation) - 了解兼容模型
+<CardGroup cols={2}>
+  <Card title="图改图 API" icon="paintbrush" href="/api-capabilities/nano-banana-image-edit">
+    编辑现有图片、多图合成
+  </Card>
+  <Card title="Nano Banana Pro" icon="cherry" href="/api-capabilities/nano-banana-pro-image">
+    4K 高清、复杂指令理解
+  </Card>
+  <Card title="API 密钥管理" icon="key" href="https://api.laozhang.ai/token">
+    创建和管理令牌
+  </Card>
+  <Card title="价格说明" icon="dollar-sign" href="/pricing">
+    查看详细价格表
+  </Card>
+</CardGroup>
 
 <Note>
 🎨 **专业提示**：Nano Banana 模型特别擅长理解复杂的场景描述和艺术风格，充分利用详细的提示词可以获得更好的效果！
