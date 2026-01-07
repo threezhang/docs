@@ -370,7 +370,7 @@ response = client.chat.completions.create(
 
 # Claude 模型
 response = client.chat.completions.create(
-    model="claude-3-opus-20240229",
+    model="claude-sonnet-4-20250514",
     messages=[{"role": "user", "content": "Hello"}]
 )
 
@@ -394,7 +394,7 @@ def chat_with_model(message: str, model: str = "gpt-3.5-turbo"):
 
 # 使用不同模型
 print(chat_with_model("解释量子计算", "gpt-4"))
-print(chat_with_model("解释量子计算", "claude-3-opus-20240229"))
+print(chat_with_model("解释量子计算", "claude-sonnet-4-20250514"))
 print(chat_with_model("解释量子计算", "gemini-pro"))
 ```
 

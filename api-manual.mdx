@@ -153,7 +153,7 @@ POST /v1/chat/completions
 
 | 参数 | 类型 | 必填 | 说明 |
 |------|------|------|------|
-| model | string | 是 | 模型名称，如 `gpt-3.5-turbo` |
+| model | string | 是 | 模型名称，如 `gpt-4o-mini` |
 | messages | array | 是 | 对话消息数组 |
 | temperature | number | 否 | 采样温度，0-2之间，默认1 |
 | max_tokens | integer | 否 | 最大生成令牌数 |
@@ -181,7 +181,7 @@ POST /v1/chat/completions
       -H "Authorization: Bearer YOUR_API_KEY" \
       -H "Content-Type: application/json" \
       -d '{
-        "model": "gpt-3.5-turbo",
+        "model": "gpt-4o-mini",
         "messages": [
           {"role": "system", "content": "你是一个有用的AI助手。"},
           {"role": "user", "content": "你好！请介绍一下自己。"}
@@ -204,7 +204,7 @@ POST /v1/chat/completions
     
     # 发送聊天请求
     response = client.chat.completions.create(
-        model="gpt-3.5-turbo",
+        model="gpt-4o-mini",
         messages=[
             {"role": "system", "content": "你是一个有用的AI助手。"},
             {"role": "user", "content": "你好！请介绍一下自己。"}
@@ -229,7 +229,7 @@ POST /v1/chat/completions
     }
     
     data = {
-        "model": "gpt-3.5-turbo",
+        "model": "gpt-4o-mini",
         "messages": [
             {"role": "system", "content": "你是一个有用的AI助手。"},
             {"role": "user", "content": "你好！请介绍一下自己。"}
@@ -260,7 +260,7 @@ POST /v1/chat/completions
     async function chatCompletion() {
       try {
         const response = await client.chat.completions.create({
-          model: 'gpt-3.5-turbo',
+          model: 'gpt-4o-mini',
           messages: [
             {"role": "system", "content": "你是一个有用的AI助手。"},
             {"role": "user", "content": "你好！请介绍一下自己。"}
@@ -296,7 +296,7 @@ POST /v1/chat/completions
             
             // 构建请求体
             Map<String, Object> requestBody = new HashMap<>();
-            requestBody.put("model", "gpt-3.5-turbo");
+            requestBody.put("model", "gpt-4o-mini");
             requestBody.put("temperature", 0.7);
             requestBody.put("max_tokens", 1000);
             
@@ -346,7 +346,7 @@ POST /v1/chat/completions
             
             var requestBody = new
             {
-                model = "gpt-3.5-turbo",
+                model = "gpt-4o-mini",
                 messages = new[]
                 {
                     new { role = "system", content = "你是一个有用的AI助手。" },
@@ -403,7 +403,7 @@ POST /v1/chat/completions
         baseURL := "https://api.laozhang.ai/v1"
         
         reqData := ChatRequest{
-            Model: "gpt-3.5-turbo",
+            Model: "gpt-4o-mini",
             Messages: []Message{
                 {Role: "system", Content: "你是一个有用的AI助手。"},
                 {Role: "user", Content: "你好！请介绍一下自己。"},
@@ -439,7 +439,7 @@ POST /v1/chat/completions
     $base_url = 'https://api.laozhang.ai/v1';
     
     $data = array(
-        'model' => 'gpt-3.5-turbo',
+        'model' => 'gpt-4o-mini',
         'messages' => array(
             array('role' => 'system', 'content' => '你是一个有用的AI助手。'),
             array('role' => 'user', 'content' => '你好！请介绍一下自己。')
@@ -489,7 +489,7 @@ POST /v1/chat/completions
     request['Content-Type'] = 'application/json'
     
     request.body = {
-      model: 'gpt-3.5-turbo',
+      model: 'gpt-4o-mini',
       messages: [
         { role: 'system', content: '你是一个有用的AI助手。' },
         { role: 'user', content: '你好！请介绍一下自己。' }
@@ -516,7 +516,7 @@ POST /v1/chat/completions
   "id": "chatcmpl-123",
   "object": "chat.completion",
   "created": 1699000000,
-  "model": "gpt-3.5-turbo",
+  "model": "gpt-4o-mini",
   "choices": [{
     "index": 0,
     "message": {
@@ -812,7 +812,7 @@ GET /v1/models
   "object": "list",
   "data": [
     {
-      "id": "gpt-3.5-turbo",
+      "id": "gpt-4o-mini",
       "object": "model",
       "created": 1677610602,
       "owned_by": "openai"
@@ -835,7 +835,7 @@ GET /v1/models
 
 ```json
 {
-  "model": "gpt-3.5-turbo",
+  "model": "gpt-4o-mini",
   "messages": [{"role": "user", "content": "Hello"}],
   "stream": true
 }
@@ -846,9 +846,9 @@ GET /v1/models
 响应将以 Server-Sent Events (SSE) 格式返回：
 
 ```
-data: {"id":"chatcmpl-123","object":"chat.completion.chunk","created":1699000000,"model":"gpt-3.5-turbo","choices":[{"delta":{"content":"Hello"},"index":0}]}
+data: {"id":"chatcmpl-123","object":"chat.completion.chunk","created":1699000000,"model":"gpt-4o-mini","choices":[{"delta":{"content":"Hello"},"index":0}]}
 
-data: {"id":"chatcmpl-123","object":"chat.completion.chunk","created":1699000000,"model":"gpt-3.5-turbo","choices":[{"delta":{"content":" there"},"index":0}]}
+data: {"id":"chatcmpl-123","object":"chat.completion.chunk","created":1699000000,"model":"gpt-4o-mini","choices":[{"delta":{"content":" there"},"index":0}]}
 
 data: [DONE]
 ```
@@ -868,7 +868,7 @@ data: [DONE]
             'Content-Type': 'application/json'
         },
         json={
-            'model': 'gpt-3.5-turbo',
+            'model': 'gpt-4o-mini',
             'messages': [{'role': 'user', 'content': 'Hello'}],
             'stream': True
         },
@@ -896,7 +896,7 @@ data: [DONE]
         'Content-Type': 'application/json'
       },
       body: JSON.stringify({
-        model: 'gpt-3.5-turbo',
+        model: 'gpt-4o-mini',
         messages: [{role: 'user', content: 'Hello'}],
         stream: true
       })
@@ -958,7 +958,7 @@ data: [DONE]
 ```python
 try:
     response = client.chat.completions.create(
-        model="gpt-3.5-turbo",
+        model="gpt-4o-mini",
         messages=[{"role": "user", "content": "Hello"}]
     )
 except Exception as e:
