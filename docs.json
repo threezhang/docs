@@ -9,6 +9,10 @@
     "light": "#3b82f6",
     "dark": "#1d4ed8"
   },
+  "banner": {
+    "content": "🍌 **Nano Banana Pro** 4K images $0.05, 80% OFF | 4K 超清图像 $0.05，官方 2 折 → [Try / 试用](https://images.laozhang.ai)",
+    "dismissible": true
+  },
   "favicon": "/logo/favicon.svg",
   "modeToggle": {
     "default": "light",
@@ -39,557 +43,557 @@
   },
   "navigation": {
     "languages": [
-    {
-      "language": "zh",
-    "tabs": [
       {
-        "tab": "首页",
-        "groups": [
+        "language": "zh",
+        "tabs": [
           {
-            "group": "产品基础",
-            "pages": [
-              "index",
-              "getting-started", 
-              "api-manual",
-              "pricing",
-              "changelog"
-            ]
-          },
-          {
-              "group": "核心 API",
-            "pages": [
-              "api-capabilities/model-info",
-              "api-capabilities/openai-sdk",
-                "api-capabilities/openai-responses"
-              ]
-            },
-            {
-              "group": "文本 API",
-              "pages": [
-                "api-capabilities/text-generation",
-                "api-capabilities/text-embedding",
-                "api-capabilities/moderation"
-              ]
-            },
-            {
-              "group": "视频生成 API",
-              "pages": [
+            "tab": "首页",
+            "groups": [
               {
-                "group": "Sora 2 视频生成",
-                "icon": "clapperboard",
+                "group": "产品基础",
                 "pages": [
-                  "api-capabilities/sora2/overview",
-                  "api-capabilities/sora2/models-pricing",
-                  "api-capabilities/sora2/character",
-                  {
-                    "group": "同步 API（兼容 OpenAI）",
-                    "pages": [
-                      "api-capabilities/sora2/quick-start",
-                      "api-capabilities/sora2/api-reference",
-                      "api-capabilities/sora2/examples"
-                    ]
-                  },
-                  {
-                    "group": "异步 API（任务队列）",
-                    "pages": [
-                      "api-capabilities/sora2/async-api"
-                    ]
-                  },
-                  "api-capabilities/sora2/troubleshooting"
+                  "index",
+                  "getting-started",
+                  "api-manual",
+                  "pricing",
+                  "changelog"
                 ]
               },
               {
-                "group": "VEO 视频生成",
-                "icon": "video",
+                "group": "核心 API",
+                "pages": [
+                  "api-capabilities/model-info",
+                  "api-capabilities/openai-sdk",
+                  "api-capabilities/openai-responses"
+                ]
+              },
+              {
+                "group": "文本 API",
+                "pages": [
+                  "api-capabilities/text-generation",
+                  "api-capabilities/text-embedding",
+                  "api-capabilities/moderation"
+                ]
+              },
+              {
+                "group": "视频生成 API",
                 "pages": [
                   {
-                    "group": "Veo-3.1 视频生成",
+                    "group": "Sora 2 视频生成",
+                    "icon": "clapperboard",
                     "pages": [
-                      "api-capabilities/veo/veo-31-overview",
+                      "api-capabilities/sora2/overview",
+                      "api-capabilities/sora2/models-pricing",
+                      "api-capabilities/sora2/character",
                       {
                         "group": "同步 API（兼容 OpenAI）",
                         "pages": [
-                          "api-capabilities/veo/veo-31-quick-start",
-                          "api-capabilities/veo/veo-31-examples"
+                          "api-capabilities/sora2/quick-start",
+                          "api-capabilities/sora2/api-reference",
+                          "api-capabilities/sora2/examples"
                         ]
                       },
                       {
                         "group": "异步 API（任务队列）",
                         "pages": [
-                          "api-capabilities/veo/veo-31-async-api"
+                          "api-capabilities/sora2/async-api"
                         ]
                       },
-                      "api-capabilities/veo/veo-31-best-practices",
-                      "api-capabilities/veo/veo-31-troubleshooting"
+                      "api-capabilities/sora2/troubleshooting"
                     ]
                   },
                   {
-                    "group": "VEO (自定义 API)",
+                    "group": "VEO 视频生成",
+                    "icon": "video",
                     "pages": [
-                      "api-capabilities/veo/overview",
-                      "api-capabilities/veo/quick-start",
-                      "api-capabilities/veo/models-pricing",
-                      "api-capabilities/veo/api-reference",
-                      "api-capabilities/veo/examples",
-                      "api-capabilities/veo/best-practices",
-                      "api-capabilities/veo/troubleshooting"
+                      {
+                        "group": "Veo-3.1 视频生成",
+                        "pages": [
+                          "api-capabilities/veo/veo-31-overview",
+                          {
+                            "group": "同步 API（兼容 OpenAI）",
+                            "pages": [
+                              "api-capabilities/veo/veo-31-quick-start",
+                              "api-capabilities/veo/veo-31-examples"
+                            ]
+                          },
+                          {
+                            "group": "异步 API（任务队列）",
+                            "pages": [
+                              "api-capabilities/veo/veo-31-async-api"
+                            ]
+                          },
+                          "api-capabilities/veo/veo-31-best-practices",
+                          "api-capabilities/veo/veo-31-troubleshooting"
+                        ]
+                      },
+                      {
+                        "group": "VEO (自定义 API)",
+                        "pages": [
+                          "api-capabilities/veo/overview",
+                          "api-capabilities/veo/quick-start",
+                          "api-capabilities/veo/models-pricing",
+                          "api-capabilities/veo/api-reference",
+                          "api-capabilities/veo/examples",
+                          "api-capabilities/veo/best-practices",
+                          "api-capabilities/veo/troubleshooting"
+                        ]
+                      }
                     ]
                   }
                 ]
+              },
+              {
+                "group": "图像生成 API",
+                "pages": [
+                  "api-capabilities/image-generation-guide",
+                  {
+                    "group": "Sora 图像",
+                    "icon": "image",
+                    "pages": [
+                      "api-capabilities/sora-image-generation",
+                      "api-capabilities/sora-image-edit"
+                    ]
+                  },
+                  {
+                    "group": "Gemini Flash Image",
+                    "icon": "sparkles",
+                    "pages": [
+                      "api-capabilities/gemini-flash-image",
+                      "api-capabilities/gemini-flash-image-edit"
+                    ]
+                  },
+                  {
+                    "group": "🍌 Nano Banana 2",
+                    "icon": "cherry",
+                    "pages": [
+                      "api-capabilities/gemini-flash-image",
+                      "api-capabilities/gemini-flash-image-edit"
+                    ]
+                  },
+                  {
+                    "group": "Nano Banana (Preview)",
+                    "icon": "sparkles",
+                    "pages": [
+                      "api-capabilities/nano-banana-image",
+                      "api-capabilities/nano-banana-image-edit"
+                    ]
+                  },
+                  {
+                    "group": "Flux 图像生成",
+                    "icon": "zap",
+                    "pages": [
+                      "api-capabilities/flux-image-generation",
+                      "api-capabilities/flux-image-edit"
+                    ]
+                  },
+                  {
+                    "group": "GPT-Image-1",
+                    "icon": "palette",
+                    "pages": [
+                      "api-capabilities/gpt-image-1",
+                      "api-capabilities/image-edit"
+                    ]
+                  },
+                  "api-capabilities/seedream-image"
+                ]
+              },
+              {
+                "group": "AI 理解能力",
+                "pages": [
+                  "api-capabilities/vision-understanding",
+                  "api-capabilities/audio-transcription"
+                ]
               }
             ]
-            },
-            {
-              "group": "图像生成 API",
-              "pages": [
-                "api-capabilities/image-generation-guide",
-                {
-                  "group": "Sora 图像",
-                  "icon": "image",
-                  "pages": [
-                    "api-capabilities/sora-image-generation",
-                    "api-capabilities/sora-image-edit"
-                  ]
-                },
-                {
-                  "group": "Gemini Flash Image",
-                  "icon": "sparkles",
-                  "pages": [
-                    "api-capabilities/gemini-flash-image",
-                    "api-capabilities/gemini-flash-image-edit"
-                  ]
-                },
-                {
-                  "group": "🍌 Nano Banana 2",
-                  "icon": "cherry",
-                  "pages": [
-                    "api-capabilities/gemini-flash-image",
-                    "api-capabilities/gemini-flash-image-edit"
-                  ]
-                },
-                {
-                  "group": "Nano Banana (Preview)",
-                  "icon": "sparkles",
-                  "pages": [
-                    "api-capabilities/nano-banana-image",
-                    "api-capabilities/nano-banana-image-edit"
-                  ]
-                },
-                {
-                  "group": "Flux 图像生成",
-                  "icon": "zap",
-                  "pages": [
-                    "api-capabilities/flux-image-generation",
-                    "api-capabilities/flux-image-edit"
-                  ]
-                },
-                {
-                  "group": "GPT-Image-1",
-                  "icon": "palette",
-                  "pages": [
-                    "api-capabilities/gpt-image-1",
-                    "api-capabilities/image-edit"
-                  ]
-                },
-                "api-capabilities/seedream-image"
-              ]
-            },
-            {
-              "group": "AI 理解能力",
-              "pages": [
-                "api-capabilities/vision-understanding",
-                "api-capabilities/audio-transcription"
-              ]
-            }
-          ]
-        },
-        {
-          "tab": "API 参考",
-          "groups": [
-            {
-              "group": "核心接口",
-              "pages": [
-                "api-reference/chat-completions",
-                "api-reference/models",
-                "api-reference/images"
-              ]
-            },
-            {
-              "group": "模型指南",
-              "pages": [
-                "api-reference/openai",
-                "api-reference/claude",
-                "api-reference/gemini"
-              ]
+          },
+          {
+            "tab": "API 参考",
+            "groups": [
+              {
+                "group": "核心接口",
+                "pages": [
+                  "api-reference/chat-completions",
+                  "api-reference/models",
+                  "api-reference/images"
+                ]
+              },
+              {
+                "group": "模型指南",
+                "pages": [
+                  "api-reference/openai",
+                  "api-reference/claude",
+                  "api-reference/gemini"
+                ]
+              }
+            ]
+          },
+          {
+            "tab": "使用场景",
+            "groups": [
+              {
+                "group": "概览",
+                "pages": [
+                  "scenarios"
+                ]
+              },
+              {
+                "group": "对话型 AI",
+                "pages": [
+                  "scenarios/chat/cherry-studio",
+                  "scenarios/chat/chatbox",
+                  "scenarios/chat/open-webui",
+                  "scenarios/chat/chatgpt-next-web"
+                ]
+              },
+              {
+                "group": "编程开发",
+                "pages": [
+                  "scenarios/programming/cursor",
+                  "scenarios/programming/cline",
+                  "scenarios/programming/claude-code",
+                  "scenarios/programming/codex-cli"
+                ]
+              },
+              {
+                "group": "技术工程",
+                "pages": [
+                  "scenarios/engineering/langchain",
+                  "scenarios/engineering/dify"
+                ]
+              },
+              {
+                "group": "翻译场景",
+                "pages": [
+                  "scenarios/translation/bob",
+                  "scenarios/translation/immersive"
+                ]
+              }
+            ]
+          },
+          {
+            "tab": "资源导航",
+            "groups": [
+              {
+                "group": "官方 API 文档",
+                "pages": [
+                  "resources"
+                ]
+              }
+            ]
+          },
+          {
+            "tab": "常见问题",
+            "groups": [
+              {
+                "group": "使用指南",
+                "pages": [
+                  "faq/token-management",
+                  "faq/call-logs",
+                  "faq/model-availability",
+                  "faq/balance-insufficient",
+                  "faq/payment-methods",
+                  "faq/content-safety",
+                  "faq/data-security"
+                ]
+              }
+            ]
+          }
+        ],
+        "anchors": [
+          {
+            "anchor": "控制台",
+            "icon": "gauge",
+            "href": "https://api.laozhang.ai/account/profile"
+          },
+          {
+            "anchor": "API Key",
+            "icon": "key",
+            "href": "https://api.laozhang.ai/token"
+          },
+          {
+            "anchor": "官网",
+            "icon": "house",
+            "href": "https://api.laozhang.ai"
           }
         ]
       },
       {
-        "tab": "使用场景",
-        "groups": [
+        "language": "en",
+        "tabs": [
           {
-            "group": "概览",
-            "pages": [
-              "scenarios"
+            "tab": "Home",
+            "groups": [
+              {
+                "group": "Getting Started",
+                "pages": [
+                  "en/index",
+                  "en/getting-started",
+                  "en/api-manual",
+                  "en/pricing",
+                  "en/changelog",
+                  "en/resources"
+                ]
+              },
+              {
+                "group": "Core API",
+                "pages": [
+                  "en/api-capabilities/model-info",
+                  "en/api-capabilities/openai-sdk",
+                  "en/api-capabilities/openai-responses"
+                ]
+              },
+              {
+                "group": "Text APIs",
+                "pages": [
+                  "en/api-capabilities/text-generation",
+                  "en/api-capabilities/text-embedding",
+                  "en/api-capabilities/moderation"
+                ]
+              },
+              {
+                "group": "Video Generation APIs",
+                "pages": [
+                  {
+                    "group": "Sora 2 Video Generation",
+                    "icon": "clapperboard",
+                    "pages": [
+                      "en/api-capabilities/sora2/overview",
+                      "en/api-capabilities/sora2/models-pricing",
+                      "en/api-capabilities/sora2/character",
+                      {
+                        "group": "Sync API (OpenAI Compatible)",
+                        "pages": [
+                          "en/api-capabilities/sora2/quick-start",
+                          "en/api-capabilities/sora2/api-reference",
+                          "en/api-capabilities/sora2/examples"
+                        ]
+                      },
+                      {
+                        "group": "Async API (Task Queue)",
+                        "pages": [
+                          "en/api-capabilities/sora2/async-api"
+                        ]
+                      },
+                      "en/api-capabilities/sora2/troubleshooting"
+                    ]
+                  },
+                  {
+                    "group": "VEO Video Generation",
+                    "icon": "video",
+                    "pages": [
+                      {
+                        "group": "Veo-3.1 Video Generation",
+                        "pages": [
+                          "en/api-capabilities/veo/veo-31-overview",
+                          {
+                            "group": "Sync API (OpenAI Compatible)",
+                            "pages": [
+                              "en/api-capabilities/veo/veo-31-quick-start",
+                              "en/api-capabilities/veo/veo-31-examples"
+                            ]
+                          },
+                          {
+                            "group": "Async API (Task Queue)",
+                            "pages": [
+                              "en/api-capabilities/veo/veo-31-async-api"
+                            ]
+                          },
+                          "en/api-capabilities/veo/veo-31-best-practices",
+                          "en/api-capabilities/veo/veo-31-troubleshooting"
+                        ]
+                      },
+                      {
+                        "group": "VEO (Custom API)",
+                        "pages": [
+                          "en/api-capabilities/veo/overview",
+                          "en/api-capabilities/veo/quick-start",
+                          "en/api-capabilities/veo/models-pricing",
+                          "en/api-capabilities/veo/api-reference",
+                          "en/api-capabilities/veo/examples",
+                          "en/api-capabilities/veo/best-practices",
+                          "en/api-capabilities/veo/troubleshooting"
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              },
+              {
+                "group": "Image Generation APIs",
+                "pages": [
+                  "en/api-capabilities/image-generation-guide",
+                  {
+                    "group": "Sora Image",
+                    "icon": "image",
+                    "pages": [
+                      "en/api-capabilities/sora-image-generation",
+                      "en/api-capabilities/sora-image-edit"
+                    ]
+                  },
+                  {
+                    "group": "Gemini Flash Image",
+                    "icon": "sparkles",
+                    "pages": [
+                      "en/api-capabilities/gemini-flash-image",
+                      "en/api-capabilities/gemini-flash-image-edit"
+                    ]
+                  },
+                  {
+                    "group": "🍌 Nano Banana 2",
+                    "icon": "cherry",
+                    "pages": [
+                      "en/api-capabilities/gemini-flash-image",
+                      "en/api-capabilities/gemini-flash-image-edit"
+                    ]
+                  },
+                  {
+                    "group": "Nano Banana (Preview)",
+                    "icon": "sparkles",
+                    "pages": [
+                      "en/api-capabilities/nano-banana-image",
+                      "en/api-capabilities/nano-banana-image-edit"
+                    ]
+                  },
+                  {
+                    "group": "Flux Image Generation",
+                    "icon": "zap",
+                    "pages": [
+                      "en/api-capabilities/flux-image-generation",
+                      "en/api-capabilities/flux-image-edit"
+                    ]
+                  },
+                  {
+                    "group": "GPT-Image-1",
+                    "icon": "palette",
+                    "pages": [
+                      "en/api-capabilities/gpt-image-1",
+                      "en/api-capabilities/image-edit"
+                    ]
+                  },
+                  "en/api-capabilities/seedream-image"
+                ]
+              },
+              {
+                "group": "AI Understanding",
+                "pages": [
+                  "en/api-capabilities/vision-understanding",
+                  "en/api-capabilities/audio-transcription"
+                ]
+              }
             ]
           },
           {
-            "group": "对话型 AI",
-            "pages": [
-              "scenarios/chat/cherry-studio",
-              "scenarios/chat/chatbox",
-              "scenarios/chat/open-webui",
-              "scenarios/chat/chatgpt-next-web"
+            "tab": "API Reference",
+            "groups": [
+              {
+                "group": "Core APIs",
+                "pages": [
+                  "en/api-reference/chat-completions",
+                  "en/api-reference/models",
+                  "en/api-reference/images"
+                ]
+              },
+              {
+                "group": "Model Guides",
+                "pages": [
+                  "en/api-reference/openai",
+                  "en/api-reference/claude",
+                  "en/api-reference/gemini"
+                ]
+              }
             ]
           },
           {
-            "group": "编程开发",
-            "pages": [
-              "scenarios/programming/cursor",
-              "scenarios/programming/cline",
-              "scenarios/programming/claude-code",
-              "scenarios/programming/codex-cli"
+            "tab": "Use Cases",
+            "groups": [
+              {
+                "group": "Overview",
+                "pages": [
+                  "en/scenarios"
+                ]
+              },
+              {
+                "group": "Conversational AI",
+                "pages": [
+                  "en/scenarios/chat/cherry-studio",
+                  "en/scenarios/chat/chatbox",
+                  "en/scenarios/chat/open-webui",
+                  "en/scenarios/chat/chatgpt-next-web"
+                ]
+              },
+              {
+                "group": "Programming",
+                "pages": [
+                  "en/scenarios/programming/cursor",
+                  "en/scenarios/programming/cline",
+                  "en/scenarios/programming/claude-code",
+                  "en/scenarios/programming/codex-cli"
+                ]
+              },
+              {
+                "group": "Engineering",
+                "pages": [
+                  "en/scenarios/engineering/langchain",
+                  "en/scenarios/engineering/dify"
+                ]
+              },
+              {
+                "group": "Translation",
+                "pages": [
+                  "en/scenarios/translation/bob",
+                  "en/scenarios/translation/immersive"
+                ]
+              }
             ]
           },
           {
-            "group": "技术工程",
-            "pages": [
-              "scenarios/engineering/langchain",
-              "scenarios/engineering/dify"
+            "tab": "Resources",
+            "groups": [
+              {
+                "group": "Official API Docs",
+                "pages": [
+                  "en/resources"
+                ]
+              }
             ]
           },
           {
-            "group": "翻译场景",
-            "pages": [
-              "scenarios/translation/bob",
-              "scenarios/translation/immersive"
+            "tab": "FAQ",
+            "groups": [
+              {
+                "group": "User Guide",
+                "pages": [
+                  "en/faq/token-management",
+                  "en/faq/call-logs",
+                  "en/faq/model-availability",
+                  "en/faq/balance-insufficient",
+                  "en/faq/payment-methods",
+                  "en/faq/content-safety",
+                  "en/faq/data-security"
+                ]
+              }
             ]
           }
-        ]
-      },
-      {
-        "tab": "资源导航",
-        "groups": [
+        ],
+        "anchors": [
           {
-            "group": "官方 API 文档",
-            "pages": [
-              "resources"
-            ]
-          }
-        ]
-      },
-      {
-        "tab": "常见问题",
-        "groups": [
+            "anchor": "Console",
+            "icon": "gauge",
+            "href": "https://api.laozhang.ai/account/profile"
+          },
           {
-            "group": "使用指南",
-            "pages": [
-              "faq/token-management",
-              "faq/call-logs",
-              "faq/model-availability",
-              "faq/balance-insufficient",
-              "faq/payment-methods",
-              "faq/content-safety",
-              "faq/data-security"
-            ]
+            "anchor": "API Key",
+            "icon": "key",
+            "href": "https://api.laozhang.ai/token"
+          },
+          {
+            "anchor": "Website",
+            "icon": "house",
+            "href": "https://api.laozhang.ai"
           }
         ]
       }
-    ],
-      "anchors": [
-        {
-          "anchor": "控制台",
-          "icon": "gauge",
-          "href": "https://api.laozhang.ai/account/profile"
-        },
-        {
-          "anchor": "API Key",
-          "icon": "key",
-          "href": "https://api.laozhang.ai/token"
-        },
-        {
-          "anchor": "官网",
-          "icon": "house",
-          "href": "https://api.laozhang.ai"
-        }
-      ]
-    },
-    {
-      "language": "en",
-      "tabs": [
-        {
-          "tab": "Home",
-          "groups": [
-            {
-              "group": "Getting Started",
-              "pages": [
-                "en/index",
-                "en/getting-started",
-                "en/api-manual",
-                "en/pricing",
-                "en/changelog",
-                "en/resources"
-              ]
-            },
-            {
-              "group": "Core API",
-              "pages": [
-                "en/api-capabilities/model-info",
-                "en/api-capabilities/openai-sdk",
-                "en/api-capabilities/openai-responses"
-              ]
-            },
-            {
-              "group": "Text APIs",
-              "pages": [
-                "en/api-capabilities/text-generation",
-                "en/api-capabilities/text-embedding",
-                "en/api-capabilities/moderation"
-              ]
-            },
-            {
-              "group": "Video Generation APIs",
-              "pages": [
-                {
-                  "group": "Sora 2 Video Generation",
-                  "icon": "clapperboard",
-                  "pages": [
-                    "en/api-capabilities/sora2/overview",
-                    "en/api-capabilities/sora2/models-pricing",
-                    "en/api-capabilities/sora2/character",
-                    {
-                      "group": "Sync API (OpenAI Compatible)",
-                      "pages": [
-                        "en/api-capabilities/sora2/quick-start",
-                        "en/api-capabilities/sora2/api-reference",
-                        "en/api-capabilities/sora2/examples"
-                      ]
-                    },
-                    {
-                      "group": "Async API (Task Queue)",
-                      "pages": [
-                        "en/api-capabilities/sora2/async-api"
-                      ]
-                    },
-                    "en/api-capabilities/sora2/troubleshooting"
-                  ]
-                },
-                {
-                  "group": "VEO Video Generation",
-                  "icon": "video",
-                  "pages": [
-                    {
-                      "group": "Veo-3.1 Video Generation",
-                      "pages": [
-                        "en/api-capabilities/veo/veo-31-overview",
-                        {
-                          "group": "Sync API (OpenAI Compatible)",
-                          "pages": [
-                            "en/api-capabilities/veo/veo-31-quick-start",
-                            "en/api-capabilities/veo/veo-31-examples"
-                          ]
-                        },
-                        {
-                          "group": "Async API (Task Queue)",
-                          "pages": [
-                            "en/api-capabilities/veo/veo-31-async-api"
-                          ]
-                        },
-                        "en/api-capabilities/veo/veo-31-best-practices",
-                        "en/api-capabilities/veo/veo-31-troubleshooting"
-                      ]
-                    },
-                    {
-                      "group": "VEO (Custom API)",
-                      "pages": [
-                        "en/api-capabilities/veo/overview",
-                        "en/api-capabilities/veo/quick-start",
-                        "en/api-capabilities/veo/models-pricing",
-                        "en/api-capabilities/veo/api-reference",
-                        "en/api-capabilities/veo/examples",
-                        "en/api-capabilities/veo/best-practices",
-                        "en/api-capabilities/veo/troubleshooting"
-                      ]
-                    }
-                  ]
-                }
-              ]
-            },
-            {
-              "group": "Image Generation APIs",
-              "pages": [
-                "en/api-capabilities/image-generation-guide",
-                {
-                  "group": "Sora Image",
-                  "icon": "image",
-                  "pages": [
-                    "en/api-capabilities/sora-image-generation",
-                    "en/api-capabilities/sora-image-edit"
-                  ]
-                },
-                {
-                  "group": "Gemini Flash Image",
-                  "icon": "sparkles",
-                  "pages": [
-                    "en/api-capabilities/gemini-flash-image",
-                    "en/api-capabilities/gemini-flash-image-edit"
-                  ]
-                },
-                {
-                  "group": "🍌 Nano Banana 2",
-                  "icon": "cherry",
-                  "pages": [
-                    "en/api-capabilities/gemini-flash-image",
-                    "en/api-capabilities/gemini-flash-image-edit"
-                  ]
-                },
-                {
-                  "group": "Nano Banana (Preview)",
-                  "icon": "sparkles",
-                  "pages": [
-                    "en/api-capabilities/nano-banana-image",
-                    "en/api-capabilities/nano-banana-image-edit"
-                  ]
-                },
-                {
-                  "group": "Flux Image Generation",
-                  "icon": "zap",
-                  "pages": [
-                    "en/api-capabilities/flux-image-generation",
-                    "en/api-capabilities/flux-image-edit"
-                  ]
-                },
-                {
-                  "group": "GPT-Image-1",
-                  "icon": "palette",
-                  "pages": [
-                    "en/api-capabilities/gpt-image-1",
-                    "en/api-capabilities/image-edit"
-                  ]
-                },
-                "en/api-capabilities/seedream-image"
-              ]
-            },
-            {
-              "group": "AI Understanding",
-              "pages": [
-                "en/api-capabilities/vision-understanding",
-                "en/api-capabilities/audio-transcription"
-              ]
-            }
-          ]
-        },
-        {
-          "tab": "API Reference",
-          "groups": [
-            {
-              "group": "Core APIs",
-              "pages": [
-                "en/api-reference/chat-completions",
-                "en/api-reference/models",
-                "en/api-reference/images"
-              ]
-            },
-            {
-              "group": "Model Guides",
-              "pages": [
-                "en/api-reference/openai",
-                "en/api-reference/claude",
-                "en/api-reference/gemini"
-              ]
-            }
-          ]
-        },
-        {
-          "tab": "Use Cases",
-          "groups": [
-            {
-              "group": "Overview",
-              "pages": [
-                "en/scenarios"
-              ]
-            },
-            {
-              "group": "Conversational AI",
-              "pages": [
-                "en/scenarios/chat/cherry-studio",
-                "en/scenarios/chat/chatbox",
-                "en/scenarios/chat/open-webui",
-                "en/scenarios/chat/chatgpt-next-web"
-              ]
-            },
-            {
-              "group": "Programming",
-              "pages": [
-                "en/scenarios/programming/cursor",
-                "en/scenarios/programming/cline",
-                "en/scenarios/programming/claude-code",
-                "en/scenarios/programming/codex-cli"
-              ]
-            },
-            {
-              "group": "Engineering",
-              "pages": [
-                "en/scenarios/engineering/langchain",
-                "en/scenarios/engineering/dify"
-              ]
-            },
-            {
-              "group": "Translation",
-              "pages": [
-                "en/scenarios/translation/bob",
-                "en/scenarios/translation/immersive"
-              ]
-            }
-          ]
-        },
-        {
-          "tab": "Resources",
-          "groups": [
-            {
-              "group": "Official API Docs",
-              "pages": [
-                "en/resources"
-              ]
-            }
-          ]
-        },
-        {
-          "tab": "FAQ",
-          "groups": [
-            {
-              "group": "User Guide",
-              "pages": [
-                "en/faq/token-management",
-                "en/faq/call-logs",
-                "en/faq/model-availability",
-                "en/faq/balance-insufficient",
-                "en/faq/payment-methods",
-                "en/faq/content-safety",
-                "en/faq/data-security"
-              ]
-            }
-          ]
-        }
-      ],
-      "anchors": [
-        {
-          "anchor": "Console",
-          "icon": "gauge",
-          "href": "https://api.laozhang.ai/account/profile"
-        },
-        {
-          "anchor": "API Key",
-          "icon": "key",
-          "href": "https://api.laozhang.ai/token"
-        },
-        {
-          "anchor": "Website",
-          "icon": "house",
-          "href": "https://api.laozhang.ai"
-        }
-      ]
-    }
     ]
   },
   "logo": {
@@ -598,12 +602,12 @@
   },
   "footer": {
     "zh": {
-    "socials": {
-      "website": "https://api.laozhang.ai",
-      "telegram": "https://t.me/laozhang_cn",
-      "email": "mailto:threezhang.cn@gmail.com"
-    }
-  },
+      "socials": {
+        "website": "https://api.laozhang.ai",
+        "telegram": "https://t.me/laozhang_cn",
+        "email": "mailto:threezhang.cn@gmail.com"
+      }
+    },
     "en": {
       "socials": {
         "website": "https://api.laozhang.ai",
@@ -621,13 +625,13 @@
   },
   "metadata": {
     "zh": {
-    "og:type": "website",
-    "og:title": "老张API - 企业级AI大模型API中转站",
+      "og:type": "website",
+      "og:title": "老张API - 企业级AI大模型API中转站",
       "og:description": "国内访问ChatGPT、Claude、Gemini等200+AI模型API。完全兼容OpenAI接口,支持支付宝微信付款,提供中文技术支持。",
-    "og:image": "/logo/logo-default.webp",
-    "og:url": "https://docs.laozhang.ai",
-    "twitter:card": "summary_large_image",
-    "twitter:title": "老张API - 企业级AI大模型API中转站",
+      "og:image": "/logo/logo-default.webp",
+      "og:url": "https://docs.laozhang.ai",
+      "twitter:card": "summary_large_image",
+      "twitter:title": "老张API - 企业级AI大模型API中转站",
       "twitter:description": "国内访问ChatGPT、Claude、Gemini等200+AI模型API。OpenAI兼容接口,支付宝微信付款。",
       "twitter:image": "/logo/logo-default.webp"
     },
@@ -640,7 +644,7 @@
       "twitter:card": "summary_large_image",
       "twitter:title": "LaoZhang API - Unified AI API Gateway",
       "twitter:description": "200+ AI models, one API. OpenAI compatible. Pay-as-you-go pricing, no subscription.",
-    "twitter:image": "/logo/logo-default.webp"
+      "twitter:image": "/logo/logo-default.webp"
     }
   },
   "api": {
