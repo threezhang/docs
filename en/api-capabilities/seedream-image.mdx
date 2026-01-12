@@ -1,18 +1,26 @@
 ---
-title: "SeeDream 4.0 Image Generation/Editing"
-description: "BytePlus Ark SeeDream 4.0 AI image generation and editing API, 65% discount from official pricing"
+title: "SeeDream Image Generation/Editing"
+description: "SeeDream API: BytePlus Ark image model. Supports 4.0 ($0.035/image) and 4.5 ($0.045/image) versions, text-to-image and image-to-image, up to 10 reference images."
 icon: "palette"
 ---
 
 <Info>
 **API Endpoint:** `https://api.laozhang.ai/v1/images/generations`
 
-**Model Name:** `seedream-4-0-250828`
+**Available Models:**
+- `seedream-4-0-250828` - $0.035/image
+- `seedream-4-5-251128` - $0.045/image (Latest version)
 
 **Billing:** Pay-per-use
-
-**Price:** $0.025/image (65% off official price)
 </Info>
+
+<Warning>
+**Pricing Update Notice (January 2026)**
+
+Official subsidy has ended, SeeDream prices have been adjusted:
+- SeeDream 4.0: $0.025/image → **$0.035/image**
+- SeeDream 4.5 (New version): **$0.045/image**
+</Warning>
 
 ## Prerequisites
 
@@ -27,7 +35,7 @@ icon: "palette"
     - **Pay-per-call**: Direct deduction for each call. Suitable for strict budget control scenarios
 
     <Note>
-    Both modes have **exactly the same price** at \$0.025/image, only the billing method differs.
+    Both modes have **exactly the same price**, only the billing method differs. SeeDream 4.0 is \$0.035/image, 4.5 is \$0.045/image.
     </Note>
 
     <img src="/images/sora2-token-setting.png" alt="Token Settings" />
@@ -62,8 +70,8 @@ icon: "palette"
   <Card title="OpenAI Format" icon="code">
     Fully compatible with OpenAI Image API format
   </Card>
-  <Card title="Great Value" icon="tag">
-    Only $0.025/image, 65% off official price
+  <Card title="Flexible Versions" icon="tag">
+    4.0 at $0.035/image, 4.5 at $0.045/image
   </Card>
 </CardGroup>
 
@@ -83,23 +91,24 @@ SeeDream 4.0 is powered by **BytePlus Ark** (international version). LaoZhang AI
 |------|-------------|
 | **API Format** | OpenAI Image API compatible |
 | **Request Endpoint** | `/v1/images/generations` |
-| **Model Name** | `seedream-4-0-250828` |
+| **Model Name** | `seedream-4-0-250828` / `seedream-4-5-251128` |
 | **Max Reference Images** | 10 images |
 | **Size Support** | Customizable resolution |
 | **Watermark** | Optional (can be disabled) |
 
-### Pricing Advantage
+### Versions & Pricing
+
+| Version | Model ID | Price | Description |
+|---------|----------|-------|-------------|
+| **SeeDream 4.0** | `seedream-4-0-250828` | $0.035/image | Stable version |
+| **SeeDream 4.5** | `seedream-4-5-251128` | $0.045/image | Latest version, higher quality |
 
 <Note>
-💰 **Exceptional Pricing**
+💰 **Pricing Details**
 
-- **LaoZhang AI Price**: $0.025/image
-- **Official Price**: $0.03/image
-- **Discount**: Equivalent to **65% off** official pricing
-- **Recharge Bonus**: Top up $100, get +15% bonus, double savings
-- **Actual Cost**: Approximately **¥0.14/image** (CNY)
-
-Same price as Nano Banana (Gemini image generation), excellent value!
+- **SeeDream 4.0**: $0.035/image (approximately **¥0.25/image**)
+- **SeeDream 4.5**: $0.045/image (approximately **¥0.32/image**)
+- **Recharge Bonus**: Bulk recharge gets +10% bonus
 </Note>
 
 ## Getting Started
@@ -588,7 +597,7 @@ fi
 
 <CardGroup cols={2}>
   <Card title="Nano Banana Image Generation" icon="sparkles" href="/en/api-capabilities/nano-banana-image">
-    Also $0.025/image Gemini image generation
+    $0.025/image Gemini image generation
   </Card>
   <Card title="FLUX Image Generation" icon="bolt" href="/en/api-capabilities/flux-image-generation">
     Check out FLUX image generation API

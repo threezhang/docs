@@ -1,18 +1,26 @@
 ---
-title: "SeeDream 4.0 图片生成/编辑"
-description: "SeeDream 4.0 API：字节跳动火山方舟图像模型，$0.025/张（官网 65 折）。支持文生图和图改图，最多 10 张参考图。"
+title: "SeeDream 图片生成/编辑"
+description: "SeeDream API：字节跳动火山方舟图像模型。支持 4.0 ($0.035/张) 和 4.5 ($0.045/张) 版本，文生图和图改图，最多 10 张参考图。"
 icon: "palette"
 ---
 
 <Info>
 **API 端点：** `https://api.laozhang.ai/v1/images/generations`
 
-**模型名称：** `seedream-4-0-250828`
+**可用模型：**
+- `seedream-4-0-250828` - $0.035/图
+- `seedream-4-5-251128` - $0.045/图（最新版本）
 
 **计费方式：** 按次计费
-
-**价格：** $0.025/图（官网65%折扣）
 </Info>
+
+<Warning>
+**价格调整通知（2026年1月）**
+
+官方补贴已结束，SeeDream 价格已调整：
+- SeeDream 4.0：$0.025/图 → **$0.035/图**
+- SeeDream 4.5（新版本）：**$0.045/图**
+</Warning>
 
 ## 前置要求
 
@@ -27,7 +35,7 @@ icon: "palette"
     - **按次计费**：每次调用直接扣费。适合预算控制严格的场景
 
     <Note>
-    两种模式**价格完全相同**，都是 \$0.025/张，仅扣费方式不同。
+    两种模式**价格完全相同**，仅扣费方式不同。SeeDream 4.0 为 \$0.035/张，4.5 为 \$0.045/张。
     </Note>
 
     <img src="/images/sora2-token-setting.png" alt="令牌设置" />
@@ -62,8 +70,8 @@ icon: "palette"
   <Card title="OpenAI 格式" icon="code">
     完全兼容 OpenAI Image API 格式
   </Card>
-  <Card title="超值价格" icon="tag">
-    仅 $0.025/图，官网 65% 折扣
+  <Card title="灵活版本" icon="tag">
+    4.0 版 $0.035/图，4.5 版 $0.045/图
   </Card>
 </CardGroup>
 
@@ -83,23 +91,24 @@ SeeDream 4.0 源自 **BytePlus 火山方舟**的海外版，老张AI 已与其�
 |------|------|
 | **API 格式** | OpenAI Image API 兼容 |
 | **请求端点** | `/v1/images/generations` |
-| **模型名称** | `seedream-4-0-250828` |
+| **模型名称** | `seedream-4-0-250828` / `seedream-4-5-251128` |
 | **最大参考图** | 10 张 |
 | **尺寸支持** | 可自定义分辨率 |
 | **水印** | 可选关闭 |
 
-### 价格优势
+### 版本与价格
+
+| 版本 | 模型ID | 价格 | 说明 |
+|------|--------|------|------|
+| **SeeDream 4.0** | `seedream-4-0-250828` | $0.035/图 | 稳定版本 |
+| **SeeDream 4.5** | `seedream-4-5-251128` | $0.045/图 | 最新版本，生成质量更高 |
 
 <Note>
-💰 **超值定价**
+💰 **定价说明**
 
-- **老张AI价格**：$0.025/图
-- **官方价格**：$0.03/图
-- **折扣力度**：相当于官网 **65% 折扣**
-- **充值优惠**：单次大额充值加赠 10%，折上折
-- **实际成本**：约 **0.14 元/图**
-
-价格等同于 Nano Banana (Gemini 图片生成)，性价比极高！
+- **SeeDream 4.0**：$0.035/图（约 **0.25 元/图**）
+- **SeeDream 4.5**：$0.045/图（约 **0.32 元/图**）
+- **充值优惠**：单次大额充值加赠 10%
 </Note>
 
 ## 准备工作
@@ -588,7 +597,7 @@ fi
 
 <CardGroup cols={2}>
   <Card title="Nano Banana 图片生成" icon="sparkles" href="/api-capabilities/nano-banana-image">
-    同样 $0.025/图的 Gemini 图片生成
+    $0.025/图的 Gemini 图片生成
   </Card>
   <Card title="FLUX 图片生成" icon="bolt" href="/api-capabilities/flux-image-generation">
     查看 FLUX 图片生成 API
