@@ -66,6 +66,7 @@ Nano Banana Pro Edit uses Google's **Gemini 3 Pro** model with exceptional seman
 - **🌐 Search Grounding**: Supports combining real-time search data for editing
 - **🎨 Multi-Image Reference**: Supports up to 14 reference images for complex compositing
 - **📦 Base64 Output**: Returns base64 encoded image data directly
+- **🔗 URL Direct Input**: Google native format supports direct image URL input (overseas accessible required), no Base64 encoding needed
 
 ## 🔀 Two API Modes
 
@@ -77,7 +78,7 @@ Nano Banana Pro Edit uses Google's **Gemini 3 Pro** model with exceptional seman
 | **Multi-Image** | ✅ Supported | ✅ Supported (up to 14) |
 | **Compatibility** | Perfect with OpenAI SDK | Requires native calls |
 | **Return Format** | Base64 | Base64 |
-| **Image Input** | URL or Base64 | Base64 (inline_data) |
+| **Image Input** | URL or Base64 | URL (fileData) or Base64 (inline_data) |
 
 <Tip>
 💡 **How to Choose?**
@@ -143,7 +144,7 @@ Nano Banana Pro Edit uses Google's **Gemini 3 Pro** model with exceptional seman
 
 ```bash
 curl -X POST "https://api.laozhang.ai/v1/chat/completions" \
-     -H "Authorization: Bearer sk-YOUR_API_KEY" \
+     -H "x-goog-api-key: sk-YOUR_API_KEY" \
      -H "Content-Type: application/json" \
      -d '{
     "model": "gemini-3-pro-image-preview",
@@ -264,6 +265,25 @@ if match:
 
 ## Method 2: Google Native Format (Custom Aspect Ratio + 4K)
 
+### Authentication Methods
+
+Google native format supports three authentication methods:
+
+```bash
+# Method 1: x-goog-api-key Header
+-H "x-goog-api-key: sk-YOUR_API_KEY"
+
+# Method 2: Authorization Bearer Header
+-H "Authorization: Bearer sk-YOUR_API_KEY"
+
+# Method 3: URL parameter
+https://api.laozhang.ai/v1beta/models/gemini-3-pro-image-preview:generateContent?key=sk-YOUR_API_KEY
+```
+
+<Tip>
+💡 All three methods work the same. Choose whichever you prefer. Header methods are more secure (key won't appear in logs).
+</Tip>
+
 ### Supported Resolutions
 
 | Aspect Ratio | 1K Resolution | 2K Resolution | 4K Resolution |
@@ -279,11 +299,29 @@ if match:
 Pass `"2K"` or `"4K"` in `generationConfig.imageConfig.imageSize`. Default is `"1K"` if not specified.
 </Tip>
 
-### 4K HD Editing - Curl
+### Image Input Methods
+
+Google native format supports two image input methods:
+
+<Tip>
+💡 **Two Methods Comparison**
+- **`inline_data`**: Pass Base64 encoded data, suitable for local images
+- **`fileData`**: Pass image URL directly, more concise (recommended for online images)
+</Tip>
+
+<Warning>
+⚠️ **URL Method Limitations**
+When using `fileData.fileUri` to pass image URL, the following conditions must be met:
+- Image URL must be **directly accessible from overseas public network**
+- Image server **must not have anti-crawling mechanisms** (e.g., Cloudflare verification, CAPTCHA, User-Agent detection)
+- For images on domestic CDN or with access restrictions, use `inline_data` method (download first, then convert to Base64)
+</Warning>
+
+### 4K HD Editing - Curl (Base64 Method)
 
 ```bash
 curl -X POST "https://api.laozhang.ai/v1beta/models/gemini-3-pro-image-preview:generateContent" \
-  -H "Authorization: Bearer sk-YOUR_API_KEY" \
+  -H "x-goog-api-key: sk-YOUR_API_KEY" \
   -H "Content-Type: application/json" \
   -d '{
     "contents": [{
@@ -301,6 +339,45 @@ curl -X POST "https://api.laozhang.ai/v1beta/models/gemini-3-pro-image-preview:g
     }
   }'
 ```
+
+### 4K HD Editing - Curl (URL Method)
+
+Use `fileData.fileUri` to pass online image URL directly, no Base64 conversion needed:
+
+```bash
+curl -X POST "https://api.laozhang.ai/v1beta/models/gemini-3-pro-image-preview:generateContent" \
+  -H "x-goog-api-key: sk-YOUR_API_KEY" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "contents": [{
+      "parts": [
+        {
+          "fileData": {
+            "fileUri": "https://example.com/your-image.png",
+            "mimeType": "image/png"
+          }
+        },
+        {"text": "Add five cute dogs to this image"}
+      ],
+      "role": "user"
+    }],
+    "generationConfig": {
+      "responseModalities": ["IMAGE"],
+      "imageConfig": {
+        "aspectRatio": "16:9",
+        "imageSize": "4K"
+      }
+    }
+  }'
+```
+
+<Note>
+💡 **URL Method Key Points**
+- Use `fileData.fileUri` instead of `inline_data.data`
+- Must specify `mimeType` (e.g., `image/png`, `image/jpeg`)
+- Optionally add `role: "user"` to specify the role
+- Image URL must be directly accessible from overseas public network
+</Note>
 
 ### Python Code Examples
 
@@ -328,7 +405,7 @@ IMAGE_SIZE = "2K"  # 1K, 2K, 4K
 with open(INPUT_IMAGE, "rb") as f:
     image_b64 = base64.b64encode(f.read()).decode("utf-8")
 
-headers = {"Authorization": f"Bearer {API_KEY}", "Content-Type": "application/json"}
+headers = {"x-goog-api-key": API_KEY, "Content-Type": "application/json"}
 
 payload = {
     "contents": [{
@@ -379,7 +456,7 @@ IMAGE_SIZE = "2K"
 with open(INPUT_IMAGE, "rb") as f:
     image_b64 = base64.b64encode(f.read()).decode("utf-8")
 
-headers = {"Authorization": f"Bearer {API_KEY}", "Content-Type": "application/json"}
+headers = {"x-goog-api-key": API_KEY, "Content-Type": "application/json"}
 
 payload = {
     "contents": [{
@@ -435,7 +512,7 @@ for img_path in IMAGES:
         img_b64 = base64.b64encode(f.read()).decode("utf-8")
     parts.append({"inline_data": {"mime_type": "image/png", "data": img_b64}})
 
-headers = {"Authorization": f"Bearer {API_KEY}", "Content-Type": "application/json"}
+headers = {"x-goog-api-key": API_KEY, "Content-Type": "application/json"}
 
 payload = {
     "contents": [{"parts": parts}],
@@ -457,6 +534,61 @@ with open("output_mixed.png", "wb") as f:
     f.write(base64.b64decode(output_data))
 
 print("✅ Image saved: output_mixed.png")
+```
+
+</Accordion>
+
+<Accordion title="Example 4: Edit Online Image Using URL Method">
+
+```python
+import requests
+import base64
+
+# ========== Configuration ==========
+API_KEY = "sk-YOUR_API_KEY"
+API_URL = "https://api.laozhang.ai/v1beta/models/gemini-3-pro-image-preview:generateContent"
+
+# Use online image URL (must be accessible from overseas)
+IMAGE_URL = "https://example.com/your-image.png"
+PROMPT = "Add a beautiful sunset in the background"
+ASPECT_RATIO = "16:9"
+IMAGE_SIZE = "4K"
+# ============================
+
+headers = {"x-goog-api-key": API_KEY, "Content-Type": "application/json"}
+
+# Use fileData.fileUri method - no need to download and encode image
+payload = {
+    "contents": [{
+        "parts": [
+            {
+                "fileData": {
+                    "fileUri": IMAGE_URL,
+                    "mimeType": "image/png"
+                }
+            },
+            {"text": PROMPT}
+        ],
+        "role": "user"
+    }],
+    "generationConfig": {
+        "responseModalities": ["IMAGE"],
+        "imageConfig": {
+            "aspectRatio": ASPECT_RATIO,
+            "imageSize": IMAGE_SIZE
+        }
+    }
+}
+
+response = requests.post(API_URL, headers=headers, json=payload, timeout=180)
+result = response.json()
+
+# Save image
+output_data = result["candidates"][0]["content"]["parts"][0]["inlineData"]["data"]
+with open("output_url.png", "wb") as f:
+    f.write(base64.b64decode(output_data))
+
+print("✅ Image saved: output_url.png")
 ```
 
 </Accordion>
@@ -494,7 +626,7 @@ class NanaBananaProEditor:
         self.api_url = "https://api.laozhang.ai/v1beta/models/gemini-3-pro-image-preview:generateContent"
         self.headers = {
             "Content-Type": "application/json",
-            "Authorization": f"Bearer {api_key}"
+            "x-goog-api-key": api_key
         }
 
     def edit_image(self, image_path: str, prompt: str,
@@ -698,7 +830,7 @@ if __name__ == "__main__":
 def add_element_to_image(image_url, element_description):
     """Add new elements to image"""
     headers = {
-        "Authorization": f"Bearer {API_KEY}",
+        "x-goog-api-key": API_KEY,
         "Content-Type": "application/json"
     }
 
@@ -730,7 +862,7 @@ result = add_element_to_image(
 def style_transfer(image_url, style_description):
     """Image style transfer"""
     headers = {
-        "Authorization": f"Bearer {API_KEY}",
+        "x-goog-api-key": API_KEY,
         "Content-Type": "application/json"
     }
 
@@ -770,7 +902,7 @@ def creative_merge(image_urls, merge_instruction):
         })
 
     headers = {
-        "Authorization": f"Bearer {API_KEY}",
+        "x-goog-api-key": API_KEY,
         "Content-Type": "application/json"
     }
 
@@ -895,6 +1027,39 @@ def smart_multi_image_edit(images, instruction):
     3. **Reference style**: Specify art style
     4. **Keep subject**: Clearly state what needs to be preserved
   </Accordion>
+
+  <Accordion title="What image input methods does Google native format support?">
+    Google native format supports two image input methods:
+
+    **1. URL Method (`fileData.fileUri`)** - More concise
+    ```json
+    {
+      "fileData": {
+        "fileUri": "https://example.com/image.png",
+        "mimeType": "image/png"
+      }
+    }
+    ```
+
+    **2. Base64 Method (`inline_data`)** - More universal
+    ```json
+    {
+      "inline_data": {
+        "mime_type": "image/png",
+        "data": "BASE64_ENCODED_DATA"
+      }
+    }
+    ```
+
+    **⚠️ URL Method Limitations:**
+    - Image URL must be **directly accessible from overseas public network**
+    - Image server **must not have anti-crawling mechanisms** (Cloudflare verification, CAPTCHA, etc.)
+    - For images on domestic CDN or with access restrictions, use Base64 method
+
+    **Recommended Scenarios:**
+    - Images hosted on AWS S3, Google Cloud Storage, Cloudinary, etc. → Use URL
+    - Images on domestic servers or with access restrictions → Use Base64
+  </Accordion>
 </AccordionGroup>
 
 ## 🎯 Common Use Cases
@@ -928,6 +1093,13 @@ def smart_multi_image_edit(images, instruction):
 ## 📝 Changelog
 
 <AccordionGroup>
+  <Accordion title="2025-01: Google Native Format Supports URL Image Input">
+    **🔗 New fileData.fileUri Method**
+    - Support direct online image URL input, no download and Base64 encoding needed
+    - Added Curl and Python code examples
+    - Note: Image URL must be accessible from overseas public network without anti-crawling
+    - Added related FAQ
+  </Accordion>
   <Accordion title="2025-01: Nano Banana Pro Edit standalone documentation launched">
     **🚀 Nano Banana Pro Edit Dedicated Page**
     - Split from combined documentation into dedicated Pro version
