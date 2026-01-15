@@ -270,18 +270,18 @@ if match:
 Google 原生格式支持三种认证方式：
 
 ```bash
-# 方式1：x-goog-api-key Header
--H "x-goog-api-key: sk-YOUR_API_KEY"
+# 方式1：URL 参数（推荐，最简洁）
+https://api.laozhang.ai/v1beta/models/gemini-3-pro-image-preview:generateContent?key=sk-YOUR_API_KEY
 
 # 方式2：Authorization Bearer Header
 -H "Authorization: Bearer sk-YOUR_API_KEY"
 
-# 方式3：URL 参数
-https://api.laozhang.ai/v1beta/models/gemini-3-pro-image-preview:generateContent?key=sk-YOUR_API_KEY
+# 方式3：x-goog-api-key Header
+-H "x-goog-api-key: sk-YOUR_API_KEY"
 ```
 
 <Tip>
-💡 三种方式效果相同，选择你喜欢的即可。Header 方式更安全（key 不会出现在日志中）。
+💡 三种方式效果相同，选择你喜欢的即可。
 </Tip>
 
 ### 支持的分辨率

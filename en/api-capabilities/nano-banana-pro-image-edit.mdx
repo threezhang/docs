@@ -270,18 +270,18 @@ if match:
 Google native format supports three authentication methods:
 
 ```bash
-# Method 1: x-goog-api-key Header
--H "x-goog-api-key: sk-YOUR_API_KEY"
+# Method 1: URL parameter (recommended, simplest)
+https://api.laozhang.ai/v1beta/models/gemini-3-pro-image-preview:generateContent?key=sk-YOUR_API_KEY
 
 # Method 2: Authorization Bearer Header
 -H "Authorization: Bearer sk-YOUR_API_KEY"
 
-# Method 3: URL parameter
-https://api.laozhang.ai/v1beta/models/gemini-3-pro-image-preview:generateContent?key=sk-YOUR_API_KEY
+# Method 3: x-goog-api-key Header
+-H "x-goog-api-key: sk-YOUR_API_KEY"
 ```
 
 <Tip>
-💡 All three methods work the same. Choose whichever you prefer. Header methods are more secure (key won't appear in logs).
+💡 All three methods work the same. Choose whichever you prefer.
 </Tip>
 
 ### Supported Resolutions
