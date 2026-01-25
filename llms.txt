@@ -63,8 +63,8 @@
 ## 技术规格
 
 **接入端点：**
-- 主端点：https://api.laozhang.ai/v1
-- 备用端点：https://api-cf.laozhang.ai/v1
+- 主端点：https://api.laozhang.ai/v1（推荐，全球加速宽带节点）
+- 备用端点：https://api-vip.laozhang.ai/v1（海外服务器可直连，如不稳定请用主端点）
 
 **认证方式：**
 - Bearer Token认证

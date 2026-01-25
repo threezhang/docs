@@ -120,8 +120,12 @@ response = client.chat.completions.create(
 
 ### API 端点
 
-- **主要端点**：`https://api.laozhang.ai/v1`
-- **备用端点**：`https://api-cf.laozhang.ai/v1`
+- **主要端点**：`https://api.laozhang.ai/v1`（推荐，全球加速）
+- **备用端点**：`https://api-vip.laozhang.ai/v1`（海外服务器可直连）
+
+<Note>
+`api.laozhang.ai` 配置了全球加速的宽带节点，建议优先使用。`api-vip.laozhang.ai` 仅作为备用域名，适合海外服务器直连，如遇不稳定请切换回主域名。
+</Note>
 
 ### 认证方式
 

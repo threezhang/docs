@@ -119,8 +119,12 @@ Developers are encouraged to check the backend request examples first. These exa
 
 ### API Endpoints
 
-- **Primary endpoint**: `https://api.laozhang.ai/v1`
-- **Backup endpoint**: `https://api-cf.laozhang.ai/v1`
+- **Primary endpoint**: `https://api.laozhang.ai/v1` (Recommended, globally accelerated)
+- **Backup endpoint**: `https://api-vip.laozhang.ai/v1` (Direct access for overseas servers)
+
+<Note>
+`api.laozhang.ai` is configured with globally accelerated bandwidth nodes, recommended for primary use. `api-vip.laozhang.ai` is a backup domain suitable for direct connection from overseas servers. Switch back to the primary domain if you experience instability.
+</Note>
 
 ### Authentication Method
 
