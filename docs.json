@@ -99,6 +99,12 @@
                           "api-capabilities/sora2/async-api"
                         ]
                       },
+                      {
+                        "group": "官转 API（OpenAI 官方）",
+                        "pages": [
+                          "api-capabilities/sora2/official-forward"
+                        ]
+                      },
                       "api-capabilities/sora2/troubleshooting"
                     ]
                   },
@@ -365,6 +371,12 @@
                         "group": "Async API (Task Queue)",
                         "pages": [
                           "en/api-capabilities/sora2/async-api"
+                        ]
+                      },
+                      {
+                        "group": "Official Forward API",
+                        "pages": [
+                          "en/api-capabilities/sora2/official-forward"
                         ]
                       },
                       "en/api-capabilities/sora2/troubleshooting"

@@ -1,0 +1,334 @@
+---
+title: "Sora 官转方案"
+description: "OpenAI Sora 官方 API 透明转发，99.99% 可用性，支持 4/8/12 秒时长"
+icon: "shield-check"
+---
+
+## 方案介绍
+
+**官转**（官方 API 转发）是指直接调用 OpenAI 官方 Sora API 并透明转发给用户的方案。与当前默认的"官逆"（官网逆向）方案不同，官转方案具有更高的稳定性和更精准的指令遵循能力。
+
+<Info>
+**什么是官转？**
+
+官转是 OpenAI 官方 API 的透明代理转发服务。您的请求会直接转发到 OpenAI 官方服务器，享受与 OpenAI 官方完全一致的服务质量和稳定性。
+</Info>
+
+## 方案对比
+
+| 对比项 | 官转 | 官逆（当前默认） |
+|--------|------|------------------|
+| **稳定性** | 99.99% 可用性 | 依赖逆向，可能波动 |
+| **指令遵循** | 精准还原 | 一般 |
+| **画质** | 稳定无模糊 | 偶现模糊 |
+| **时长选择** | 4/8/12 秒 | 10/15 秒 |
+| **调用方式** | 仅异步 | 同步 + 异步 |
+| **价格** | 按秒计费 | 按次计费 |
+
+<Tip>
+**如何选择？**
+- **追求稳定性和画质**：选择官转方案
+- **追求性价比**：选择官逆方案（当前默认）
+</Tip>
+
+## 支持的模型和定价
+
+### sora-2（标准模型）
+
+| 分辨率 | 每秒价格 | 4 秒 | 8 秒 | 12 秒 |
+|--------|----------|------|------|-------|
+| 720×1280（竖屏） | $0.1 | $0.4 | $0.8 | $1.2 |
+| 1280×720（横屏） | $0.1 | $0.4 | $0.8 | $1.2 |
+
+### sora-2-pro（高清模型）
+
+| 分辨率 | 每秒价格 | 4 秒 | 8 秒 | 12 秒 |
+|--------|----------|------|------|-------|
+| 720×1280（竖屏） | $0.3 | $1.2 | $2.4 | $3.6 |
+| 1280×720（横屏） | $0.3 | $1.2 | $2.4 | $3.6 |
+| 1024×1792（竖屏高清） | $0.5 | $2.0 | $4.0 | $6.0 |
+| 1792×1024（横屏高清） | $0.5 | $2.0 | $4.0 | $6.0 |
+
+<Note>
+以上价格已包含本站服务费。
+</Note>
+
+## 如何开始使用
+
+<Steps>
+  <Step title="创建令牌">
+    登录 [laozhang.ai 控制台](https://api.laozhang.ai/token)，创建新令牌时，**分组选择"Sora2官转"**。
+
+    <img src="/images/sora2-official-token-setting.png" alt="官转令牌配置" />
+  </Step>
+  <Step title="配置计费模式">
+    计费模式必须选择 **"按量计费"**。
+
+    <Warning>
+    官转方案**不支持按次计费**模式，必须使用按量计费。
+    </Warning>
+  </Step>
+  <Step title="调用 API 生成视频">
+    参考下方完整示例调用 API。
+  </Step>
+</Steps>
+
+## API 参考
+
+### 基础信息
+
+| 配置项 | 值 |
+|--------|-----|
+| **Base URL** | `https://api.laozhang.ai` |
+| **认证方式** | `Authorization: Bearer YOUR_API_KEY` |
+
+### API 端点
+
+| 端点 | 方法 | 说明 |
+|------|------|------|
+| `/v1/videos` | POST | 创建视频生成任务 |
+| `/v1/videos/{id}` | GET | 查询任务状态 |
+| `/v1/videos/{id}/content` | GET | 下载生成的视频 |
+
+### 请求参数
+
+| 参数 | 类型 | 必填 | 说明 |
+|------|------|------|------|
+| `model` | string | 是 | 模型名称：`sora-2` 或 `sora-2-pro` |
+| `prompt` | string | 是 | 视频描述文本（最多 500 字符） |
+| `n_seconds` | integer | 否 | 视频时长：4、8 或 12 秒（默认 8） |
+| `width` | integer | 否 | 视频宽度（像素） |
+| `height` | integer | 否 | 视频高度（像素） |
+| `n_variants` | integer | 否 | 生成变体数量（默认 1） |
+
+### 支持的分辨率
+
+**sora-2:**
+- 720×1280（竖屏）
+- 1280×720（横屏）
+
+**sora-2-pro:**
+- 720×1280（竖屏）
+- 1280×720（横屏）
+- 1024×1792（竖屏高清）
+- 1792×1024（横屏高清）
+
+## 完整示例
+
+### cURL 示例
+
+**Step 1: 创建视频生成任务**
+
+```bash
+curl -X POST https://api.laozhang.ai/v1/videos \
+  -H "Authorization: Bearer YOUR_API_KEY" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "model": "sora-2",
+    "prompt": "A golden retriever playing fetch on a sunny beach, waves gently rolling in the background, cinematic lighting",
+    "n_seconds": 8,
+    "width": 1280,
+    "height": 720
+  }'
+```
+
+**响应示例：**
+
+```json
+{
+  "id": "video_abc123xyz",
+  "object": "video.generation",
+  "status": "queued",
+  "created_at": 1706745600,
+  "model": "sora-2",
+  "prompt": "A golden retriever playing fetch on a sunny beach...",
+  "n_seconds": 8,
+  "width": 1280,
+  "height": 720
+}
+```
+
+**Step 2: 轮询任务状态**
+
+```bash
+curl https://api.laozhang.ai/v1/videos/video_abc123xyz \
+  -H "Authorization: Bearer YOUR_API_KEY"
+```
+
+**响应示例（进行中）：**
+
+```json
+{
+  "id": "video_abc123xyz",
+  "object": "video.generation",
+  "status": "in_progress",
+  "created_at": 1706745600,
+  "progress": 45
+}
+```
+
+**响应示例（完成）：**
+
+```json
+{
+  "id": "video_abc123xyz",
+  "object": "video.generation",
+  "status": "completed",
+  "created_at": 1706745600,
+  "finished_at": 1706745900,
+  "generations": [
+    {
+      "id": "gen_xyz789"
+    }
+  ]
+}
+```
+
+**Step 3: 下载视频**
+
+```bash
+curl https://api.laozhang.ai/v1/videos/video_abc123xyz/content \
+  -H "Authorization: Bearer YOUR_API_KEY" \
+  -o output.mp4
+```
+
+### Python 示例
+
+```python
+import requests
+import time
+
+API_KEY = "YOUR_API_KEY"
+BASE_URL = "https://api.laozhang.ai"
+
+headers = {
+    "Authorization": f"Bearer {API_KEY}",
+    "Content-Type": "application/json"
+}
+
+# Step 1: 创建视频生成任务
+def create_video(prompt, model="sora-2", n_seconds=8, width=1280, height=720):
+    response = requests.post(
+        f"{BASE_URL}/v1/videos",
+        headers=headers,
+        json={
+            "model": model,
+            "prompt": prompt,
+            "n_seconds": n_seconds,
+            "width": width,
+            "height": height
+        }
+    )
+    response.raise_for_status()
+    return response.json()
+
+# Step 2: 轮询任务状态
+def poll_status(video_id, timeout=600, interval=10):
+    start_time = time.time()
+    while time.time() - start_time < timeout:
+        response = requests.get(
+            f"{BASE_URL}/v1/videos/{video_id}",
+            headers=headers
+        )
+        response.raise_for_status()
+        data = response.json()
+
+        status = data.get("status")
+        print(f"状态: {status}, 进度: {data.get('progress', 'N/A')}%")
+
+        if status == "completed":
+            return data
+        elif status == "failed":
+            raise Exception(f"视频生成失败: {data.get('error')}")
+
+        time.sleep(interval)
+
+    raise TimeoutError("视频生成超时")
+
+# Step 3: 下载视频
+def download_video(video_id, output_path="output.mp4"):
+    response = requests.get(
+        f"{BASE_URL}/v1/videos/{video_id}/content",
+        headers=headers
+    )
+    response.raise_for_status()
+
+    with open(output_path, "wb") as f:
+        f.write(response.content)
+    print(f"视频已保存到: {output_path}")
+
+# 完整流程
+if __name__ == "__main__":
+    # 创建任务
+    job = create_video(
+        prompt="A golden retriever playing fetch on a sunny beach, waves gently rolling in the background",
+        model="sora-2",
+        n_seconds=8,
+        width=1280,
+        height=720
+    )
+    print(f"任务已创建: {job['id']}")
+
+    # 等待完成
+    result = poll_status(job["id"])
+    print("视频生成完成!")
+
+    # 下载视频
+    download_video(job["id"], "my_video.mp4")
+```
+
+### 任务状态说明
+
+| 状态 | 说明 |
+|------|------|
+| `queued` | 任务已加入队列，等待处理 |
+| `in_progress` | 正在生成视频 |
+| `completed` | 生成完成，可下载 |
+| `failed` | 生成失败 |
+
+<Tip>
+**轮询建议**
+
+视频生成通常需要 2-5 分钟。建议每 10-20 秒轮询一次状态，避免过于频繁的请求。
+</Tip>
+
+## 开发文档
+
+官转方案完全兼容 OpenAI 官方 API 格式，更多参数和高级用法请参考：
+
+<CardGroup cols={2}>
+  <Card title="OpenAI Sora 官方指南" icon="book-open" href="https://platform.openai.com/docs/guides/video-generation">
+    视频生成完整指南
+  </Card>
+  <Card title="Sora 2 模型文档" icon="cpu" href="https://platform.openai.com/docs/models/sora-2">
+    sora-2 模型详情
+  </Card>
+  <Card title="Sora 2 Pro 模型文档" icon="sparkles" href="https://platform.openai.com/docs/models/sora-2-pro">
+    sora-2-pro 模型详情
+  </Card>
+</CardGroup>
+
+## 注意事项
+
+<Warning>
+**重要限制**
+
+1. **仅支持异步调用**：官转方案不支持同步 API，所有请求均为异步模式
+2. **仅支持按量计费**：必须选择"按量计费"模式，不支持"按次计费"
+3. **分组选择**：创建令牌时必须选择"Sora2官转"分组
+</Warning>
+
+
+## 常见问题
+
+<AccordionGroup>
+  <Accordion title="官转和官逆有什么区别？">
+    官转是直接调用 OpenAI 官方 API 的透明转发，稳定性高达 99.99%；官逆是通过逆向工程官网实现的方案，价格更低但稳定性可能受影响。
+  </Accordion>
+  <Accordion title="为什么官转不支持同步 API？">
+    OpenAI 官方 Sora API 本身只提供异步调用方式，因此官转方案也仅支持异步调用。
+  </Accordion>
+  <Accordion title="为什么时长选项不同？">
+    官转方案支持 OpenAI 官方的 4/8/12 秒时长选项；官逆方案支持的是官网界面的 10/15 秒时长。
+  </Accordion>
+</AccordionGroup>
