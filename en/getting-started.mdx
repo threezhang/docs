@@ -1,33 +1,37 @@
 ---
-title: "Quick Start Guide"
+title: "API Integration Quick Start"
 sidebarTitle: Quick Start
-description: "Complete setup guide for ChatGPT, Claude, GPT-5 API integration. OpenAI SDK compatible - just change base URL. Free trial credits, Python/Node.js examples. Start in 5 minutes."
+description: "Complete setup guide for integrating LaoZhang API with ChatGPT, Claude, Gemini models. OpenAI SDK compatible - just change base URL. Python/Node.js examples. Start in 5 minutes."
 icon: "rocket"
 ---
 
-## 🌟 Before You Start
+## Before You Start
 
-Get started with LaoZhang API in just 5 minutes. All you need:
+<Warning>
+**Account Usage Notice**
 
-1️⃣ **Create an account** (free trial credits included)
-2️⃣ **Get your API key** (takes 30 seconds)
-3️⃣ **Change one line of code** (replace base URL)
+Account registration is for **API technical integration testing and enterprise system integration**. The test credits ($0.05) provided to new accounts are only for:
+- API connectivity verification
+- Development debugging and technical testing
+- Pre-integration functionality verification
 
-This guide will show you how to:
-- ✅ Access 200+ AI models through a single API
-- ✅ Use existing OpenAI SDK with zero code changes
-- ✅ Switch between models with one parameter
-- ✅ Start building immediately with free credits
+**Not intended for** production environments or public-facing content delivery services.
+</Warning>
 
-## Step 1: Create Account and Get API Key
+Get started with LaoZhang API in just 5 minutes. This guide shows how to:
+- Access 200+ AI models through a single unified API
+- Use existing OpenAI SDK with minimal code changes
+- Integrate with flexible payment options
 
-### 📧 Create Account (Free Trial Credits Included)
+## Step 1: Create Account and Add Credits
+
+### Create Account
 
 <Steps>
   <Step title="Sign Up">
     Visit [LaoZhang API](https://api.laozhang.ai/register) to create your account
 
-    🎁 **New User Bonus**: Free trial credits automatically added upon registration
+    New accounts receive $0.05 test credits for API connectivity verification
   </Step>
 
   <Step title="Verify Email">
@@ -40,19 +44,52 @@ This guide will show you how to:
     Log in to your [console dashboard](https://api.laozhang.ai/account/profile)
 
     You'll see:
-    - Account balance with trial credits
+    - Account balance with test credits
     - Usage statistics and history
     - API key management
   </Step>
 </Steps>
 
+### Add Credits
+
+<Tabs>
+  <Tab title="Online Payment">
+    1. Navigate to [billing page](https://api.laozhang.ai/topup)
+    2. Select your preferred amount
+    3. Complete payment
+    4. Credits available instantly
+  </Tab>
+
+  <Tab title="Cryptocurrency (USDT)">
+    We support USDT payments on multiple networks:
+    - TRC20 (TRON)
+    - Solana
+    - Other major chains
+
+    Contact support for wallet addresses: support@laozhang.ai
+  </Tab>
+
+  <Tab title="Enterprise">
+    **Enterprise Exclusive Service**:
+    - Volume discounts
+    - Invoice support
+    - Contract options
+    - Dedicated support
+
+    Contact: support@laozhang.ai
+  </Tab>
+</Tabs>
+
 <Note>
-  🎉 **Trial Credits**: New users receive free credits to test all features. Start building immediately without payment information.
+  **Credit Information**:
+  - Test credits for connectivity verification
+  - Instant credit delivery after payment
+  - Enterprise inquiries: support@laozhang.ai
 </Note>
 
 ## Step 2: Get Your API Key
 
-### 🔑 Generate Your API Key
+### Generate Your API Key
 
 <Tabs>
   <Tab title="Use Default Key (Quickest)">
@@ -60,7 +97,7 @@ This guide will show you how to:
     2. Locate your **Default Token**
     3. Click **Copy** to clipboard
 
-    ✅ **Advantage**: Pre-configured and ready to use immediately
+    **Advantage**: Pre-configured and ready to use immediately
   </Tab>
 
   <Tab title="Create Custom Key">
@@ -69,7 +106,7 @@ This guide will show you how to:
     3. Optionally set spending limits for budget control
     4. Click **Generate**
 
-    💡 **Advantage**: Better organization for multiple projects or environments
+    **Advantage**: Better organization for multiple projects or environments
   </Tab>
 </Tabs>
 
@@ -83,7 +120,7 @@ This guide will show you how to:
 
 ## Step 3: Make Your First API Call
 
-### 🎯 Test Your Integration
+### Test Your Integration
 
 <Tabs>
   <Tab title="Online Playground (Recommended)">
@@ -93,7 +130,7 @@ This guide will show you how to:
     2. Enter a test prompt: "Hello, introduce yourself"
     3. Click **Send**
 
-    ✅ **No code required** - verify your setup works before integrating
+    **No code required** - verify your setup works before integrating
   </Tab>
 
   <Tab title="cURL Command">
@@ -111,39 +148,39 @@ This guide will show you how to:
       }'
     ```
 
-    🚀 **Typical response time**: < 500ms
+    **Typical response time**: < 500ms
   </Tab>
 </Tabs>
 
-### 🔧 Integration Configuration
+### Integration Configuration
 
 <Card title="Remember These Three Things" icon="key">
   ```yaml
   # API Base URL
   base_url: https://api.laozhang.ai/v1
-  
+
   # API Key (starts with sk-)
   api_key: sk-xxxxxxxxxxxxxx
-  
+
   # Model Name (plug and play)
   model: gpt-4.1-mini  # or claude-sonnet-4-20250514, etc.
   ```
 </Card>
 
-### 💻 Complete Examples in Different Languages
+### Complete Examples in Different Languages
 
 <Tabs>
   <Tab title="Python (Most Common)">
     ```python
     # Install: pip install openai
     from openai import OpenAI
-    
+
     # Initialize client
     client = OpenAI(
         api_key="Your API Key",  # Get from LaoZhang API
-        base_url="https://api.laozhang.ai/v1"  # Direct connection URL
+        base_url="https://api.laozhang.ai/v1"  # Integration URL
     )
-    
+
     # Examples of calling different models
     def test_models():
         models = [
@@ -151,7 +188,7 @@ This guide will show you how to:
             "claude-sonnet-4-20250514",  # Best for coding
             "deepseek-v3"  # Best Chinese model
         ]
-        
+
         for model in models:
             try:
                 response = client.chat.completions.create(
@@ -167,11 +204,11 @@ This guide will show you how to:
                 print(f"Tokens used: {response.usage.total_tokens}\n")
             except Exception as e:
                 print(f"{model} call failed: {e}\n")
-    
+
     if __name__ == "__main__":
         test_models()
     ```
-    
+
     <Tip>
       **Best Practice**: Store API key in environment variables
       ```python
@@ -183,18 +220,18 @@ This guide will show you how to:
       ```
     </Tip>
   </Tab>
-  
+
   <Tab title="Node.js / TypeScript">
     ```javascript
     // Install: npm install openai
     import OpenAI from 'openai';
-    
+
     // Initialize client
     const client = new OpenAI({
       apiKey: process.env.LAOZHANG_API_KEY || 'Your API Key',
       baseURL: 'https://api.laozhang.ai/v1'
     });
-    
+
     // Streaming output example (real-time response)
     async function streamChat() {
       const stream = await client.chat.completions.create({
@@ -206,44 +243,44 @@ This guide will show you how to:
         stream: true,  // Enable streaming
         temperature: 0.7
       });
-      
+
       // Output word by word
       for await (const chunk of stream) {
         process.stdout.write(chunk.choices[0]?.delta?.content || '');
       }
     }
-    
+
     // Concurrent calls to multiple models
     async function compareModels(prompt) {
       const models = ['gpt-4.1', 'claude-sonnet-4-20250514', 'gemini-2.5-pro'];
-      
-      const promises = models.map(model => 
+
+      const promises = models.map(model =>
         client.chat.completions.create({
           model,
           messages: [{ role: 'user', content: prompt }],
           max_tokens: 100
         })
       );
-      
+
       const results = await Promise.all(promises);
       results.forEach((result, index) => {
         console.log(`\n${models[index]}:\n${result.choices[0].message.content}`);
       });
     }
-    
+
     // Run examples
     streamChat().catch(console.error);
     ```
   </Tab>
-  
+
   <Tab title="Curl / Command Line">
     ```bash
     # Basic call
     curl -X POST https://api.laozhang.ai/v1/chat/completions -H "Authorization: Bearer YOUR_API_KEY" -H "Content-Type: application/json" -d '{"model": "gpt-4.1-mini", "messages": [{"role": "user", "content": "Hello"}]}'
-    
-    # Streaming output (SSE)  
+
+    # Streaming output (SSE)
     curl -X POST https://api.laozhang.ai/v1/chat/completions -H "Authorization: Bearer YOUR_API_KEY" -H "Content-Type: application/json" -d '{"model": "gpt-4.1", "messages": [{"role": "user", "content": "Write a Python quicksort"}], "stream": true}'
-    
+
     # Image generation
     curl -X POST https://api.laozhang.ai/v1/images/generations -H "Authorization: Bearer YOUR_API_KEY" -H "Content-Type: application/json" -d '{"model": "gpt-4o-image", "prompt": "A cute kitten", "n": 1, "size": "1024x1024"}'
     ```
@@ -258,52 +295,52 @@ Congratulations! You've successfully integrated LaoZhang API. Next you can:
   <Card title="View API Documentation" icon="book" href="/en/api-reference/introduction">
     Learn about complete API interface documentation
   </Card>
-  
+
   <Card title="Explore Model List" icon="robot" href="/models">
     View all supported AI models
   </Card>
-  
+
   <Card title="Integrate into Apps" icon="plug" href="/en/api-reference/integrations/langchain">
     Integrate LaoZhang API into various tools
   </Card>
-  
+
   <Card title="View Usage Statistics" icon="chart-line" href="https://api.laozhang.ai/log">
     Monitor usage in console
   </Card>
 </CardGroup>
 
-## 🔥 Common Questions Quick Reference
+## Common Questions Quick Reference
 
 <AccordionGroup>
   <Accordion title="How to tell if integration is successful?">
     **Three signs**:
-    1. ✅ API call returns normal results (no errors)
-    2. ✅ Response time under 1 second
-    3. ✅ Can see call records in console
-    
+    1. API call returns normal results (no errors)
+    2. Response time under 1 second
+    3. Can see call records in console
+
     View call records: [Usage Logs](https://api.laozhang.ai/log)
   </Accordion>
-  
+
   <Accordion title="How to choose the right model?">
     **Choose by scenario**:
-    
-    💻 **Programming Development**:
+
+    **Programming Development**:
     - First choice: `claude-sonnet-4-20250514`
     - Alternative: `deepseek-coder-v3`
-    
-    📝 **Article Writing**:
+
+    **Article Writing**:
     - First choice: `gpt-4o`
     - Alternative: `claude-3.5-sonnet`
-    
-    ⚡ **Quick Response**:
+
+    **Quick Response**:
     - First choice: `gpt-4.1-mini`
     - Alternative: `gemini-2.5-flash`
-    
-    💰 **Cost Sensitive**:
+
+    **Cost Sensitive**:
     - First choice: `deepseek-v3`
     - Alternative: `qwen-max`
   </Accordion>
-  
+
   <Accordion title="What if my API key is leaked?">
     **Immediate actions**:
     1. Go to [Token Management](https://api.laozhang.ai/token)
@@ -311,14 +348,14 @@ Congratulations! You've successfully integrated LaoZhang API. Next you can:
     3. Generate a new API key
     4. Update the key in all your applications
 
-    🔒 **Prevention measures**:
+    **Prevention measures**:
     - Always use environment variables
     - Never hardcode keys in source code
     - Set spending limits per key
     - Rotate keys every 90 days
   </Accordion>
 
-  <Accordion title="What happens when trial credits run out?">
+  <Accordion title="What happens when credits run out?">
     **Options available**:
     1. Add credits to your account via the [billing page](https://api.laozhang.ai/topup)
     2. Switch to more cost-effective models (e.g., `gpt-4o-mini`, `gemini-flash`)
@@ -330,12 +367,10 @@ Congratulations! You've successfully integrated LaoZhang API. Next you can:
     - Use streaming for better user experience
   </Accordion>
 
-  <Accordion title="How do I add more credits?">
-    Visit the [billing page](https://api.laozhang.ai/topup) to add credits to your account.
-
+  <Accordion title="What payment methods are supported?">
     **Payment options**:
     - Credit/debit cards
-    - Cryptocurrency (USDT)
+    - Cryptocurrency (USDT on TRC20, Solana)
     - Wire transfer for enterprise accounts
 
     **Enterprise users**: Contact support@laozhang.ai for invoicing and contract options.
@@ -344,6 +379,4 @@ Congratulations! You've successfully integrated LaoZhang API. Next you can:
 
 <Info>
 Tip: Save your API key properly and check usage logs in the console regularly. Every request has message history for reasonable cost optimization.
-Enjoy using LaoZhang API~
 </Info>
-

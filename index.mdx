@@ -1,15 +1,21 @@
 ---
-title: ChatGPT国内使用指南
+title: 企业级AI技术API接入平台
 sidebarTitle: 首页
-description: "国内直连ChatGPT、Claude、GPT-5、Gemini等200+AI模型API。无需VPN翻墙，支持支付宝微信付款，延迟低至20ms。注册送$0.05测试额度，企业可开发票。OpenAI官方格式兼容，代码零修改。"
+description: "面向企业与开发者的AI技术API接入服务。统一接口对接200+AI模型，标准化API集成，按量计费，企业可开发票。"
 icon: "house"
 ---
 
 <Note>
-  🌐 **International users?** [Switch to English version →](/en/index)
+  **International users?** [Switch to English version](/en/index)
 </Note>
 
-<Card title="📞 联系我们" icon="headset">
+<Info>
+**服务定位声明**
+
+老张API是面向**企业与开发者**的AI技术API接入服务平台，提供标准化API集成能力。本平台仅提供技术API接入服务，不面向公众提供内容生成服务。输出内容的合法性与合规性由使用方自行负责。
+</Info>
+
+<Card title="联系我们" icon="headset">
   <CardGroup cols={3}>
     <Card title="Telegram" icon="paper-plane">
       `@laozhang_cn`
@@ -26,45 +32,37 @@ icon: "house"
 <img
   className="block dark:hidden"
   src="/images/hero-light.png"
-  alt="老张API - ChatGPT和Claude API国内服务提供商"
+  alt="老张API - 企业级AI技术API接入服务"
 />
 <img
   className="hidden dark:block"
   src="/images/hero-dark.png"
-  alt="老张API - ChatGPT和Claude API国内服务提供商"
+  alt="老张API - 企业级AI技术API接入服务"
 />
 
-## 为什么国内开发者需要API中转服务？
+## 企业级AI技术API接入平台
 
-**ChatGPT国内能用吗？Claude国内怎么访问？** 这是很多开发者的疑问。
+老张API提供**统一的AI模型API接入能力**，面向企业系统集成、软件开发及业务自动化场景：
 
-由于网络限制，在国内直接访问OpenAI、Anthropic等海外AI服务存在困难：
-- **访问困难**：官方API需要特殊网络环境才能访问
-- **支付门槛**：海外平台不支持支付宝微信，需要美元信用卡
-- **速度问题**：即使连上了，延迟高、经常超时断连
-- **账号风险**：共享账号容易被封，官方账号申请困难
+- **统一API接口**：一套标准接口对接多个AI模型服务商
+- **面向企业与开发者**：用于系统集成、应用开发、内部工具
+- **技术服务定位**：不参与模型训练、不干预生成逻辑、不存储用户内容
+- **工程级稳定性**：99.9%可用性，面向高并发企业级调用场景
 
-**老张API** 提供稳定的API中转服务，让您在国内轻松使用ChatGPT、Claude等AI模型：
-✅ 国内直连，延迟低至20ms
-✅ 支付宝微信扫码付，人民币结算
-✅ OpenAI格式兼容，代码零修改
-✅ 按量计费，用多少付多少
+## 技术实力
 
-## 💪 为什么选择老张API
-
-### 技术实力
-- **海外主体**：Laozhang AI, LLC 美国公司运营
-- **官方合作**：Azure、AWS、GCP官方合作伙伴
+### 基础设施
+- **多云部署**：部署在主流云服务平台
 - **SLA保障**：99.9%可用性，平均响应时间低于100ms
 - **智能路由**：多节点自动切换，保证稳定性
 
-### 服务优势
+### 企业服务
 - **企业认证**：支持企业对公转账，开具增值税发票
 - **技术支持**：中文技术支持，微信群实时响应
-- **合规保障**：数据不留存，通过ISO27001认证
+- **数据安全**：不存储用户请求内容，参考行业安全标准
 - **灵活计费**：按Token计费，无月费，充值秒到账
 
-## 📖 产品基础
+## 产品基础
 
 <CardGroup cols={2}>
   <Card
@@ -72,7 +70,7 @@ icon: "house"
     icon="rocket"
     href="/getting-started"
   >
-    三步完成接入，立即开始使用 AI 模型
+    三步完成API接入，开始技术集成测试
   </Card>
   <Card
     title="API手册"
@@ -90,7 +88,7 @@ icon: "house"
   </Card>
 </CardGroup>
 
-## 🔧 核心接口
+## 核心接口
 
 <CardGroup cols={2}>
   <Card
@@ -123,7 +121,7 @@ icon: "house"
   </Card>
 </CardGroup>
 
-## ⚡ API 能力
+## API 能力
 
 <CardGroup cols={2}>
   <Card
@@ -152,7 +150,7 @@ icon: "house"
     icon="palette"
     href="/api-capabilities/gpt-image-1"
   >
-    OpenAI 官方直转，稳定可靠的出图模型
+    OpenAI 官方模型，稳定可靠的图像生成服务
   </Card>
   <Card
     title="图像理解（识图）API"
@@ -166,7 +164,7 @@ icon: "house"
     icon="sparkles"
     href="/api-capabilities/flux-image-generation"
   >
-    专业级图像生成，支持多种宽高比，比官方便宜12.5%
+    专业级图像生成，支持多种宽高比
   </Card>
   <Card
     title="Flux 图像编辑"
@@ -180,7 +178,7 @@ icon: "house"
     icon="wand-sparkles"
     href="/api-capabilities/sora-image-generation"
   >
-    逆向技术生图，按次计费仅 $0.01/张
+    图像生成服务，按次计费
   </Card>
   <Card
     title="Sora Image 编辑"
@@ -198,7 +196,7 @@ icon: "house"
   </Card>
 </CardGroup>
 
-## 🎯 使用场景
+## 使用场景
 
 ### 对话型 AI
 
@@ -222,7 +220,7 @@ icon: "house"
     icon="app-window"
     href="/scenarios/chat/chatgpt-next-web"
   >
-    一键部署的网页版 ChatGPT
+    一键部署的网页版对话界面
   </Card>
 </CardGroup>
 
@@ -276,64 +274,52 @@ icon: "house"
   </Card>
   <Card
     title="沉浸式翻译"
-    icon="globe"  
+    icon="globe"
     href="/scenarios/translation/immersive"
   >
     浏览器双语对照阅读扩展
   </Card>
 </CardGroup>
 
-## 🚀 老张API如何解决国内访问ChatGPT的问题？
-
-### 无需VPN，国内直连ChatGPT
-
-不再需要复杂的网络配置，通过 老张API，您可以：
-
-- **国内直接访问**：无需VPN或代理，稳定连接ChatGPT
-- **支付宝充值**：告别信用卡烦恼，人民币结算  
-- **兼容OpenAI格式**：现有代码无需修改，一键切换
-
-## 📚 国内可用的200+AI模型
-
-### 🎯 ChatGPT、Claude等主流模型国内直连
+## 支持的AI模型
 
 <Tabs>
   <Tab title="推理模型">
-    **OpenAI o系列** - 最强推理能力
+    **OpenAI o系列** - 强推理能力
     - o3-pro：顶级推理，复杂任务首选
     - o3：高性价比推理模型
     - o4-mini：快速推理，成本优化
-    
-    **DeepSeek R1** - 国产推理之光
+
+    **DeepSeek R1** - 国产推理模型
     - deepseek-r1-0528：最新优化版
     - deepseek-r1：基础推理模型
   </Tab>
-  
+
   <Tab title="编程模型">
     **Claude 4** - 编程首选
     - claude-sonnet-4-20250514：最新版，代码能力卓越
     - claude-opus-4：强大的代码理解能力
-    
-    **Cursor专用**
-    - gpt-4.1：专为Cursor优化
-    - deepseek-coder-v3：国产最强编程模型
+
+    **开发专用**
+    - gpt-4.1：专为开发优化
+    - deepseek-coder-v3：国产编程模型
   </Tab>
-  
+
   <Tab title="通用模型">
     **性能均衡**
     - gpt-4o：速度与效果平衡
     - gemini-2.5-pro：2M超长上下文
     - claude-3.5-sonnet：稳定可靠
-    
+
     **快速响应**
     - gpt-4.1-mini：轻量级高效
     - gemini-2.5-flash：极速响应
     - claude-3-haiku：成本最低
   </Tab>
-  
+
   <Tab title="国产模型">
-    **性价比之选**
-    - deepseek-v3：综合最强
+    **主流模型**
+    - deepseek-v3：综合性能强
     - qwen-max：阿里旗舰
     - doubao-pro：字节跳动
     - kimi-k2：月之暗面
@@ -341,7 +327,7 @@ icon: "house"
   </Tab>
 </Tabs>
 
-### 🚀 三分钟快速接入
+## 快速接入示例
 
 ### 第一步：获取API密钥
 注册账号后，在控制台获取您的API密钥
@@ -361,14 +347,14 @@ client = OpenAI(
 )
 ```
 
-### 第三步：调用任意模型
+### 第三步：调用模型
 ```python
 # 一个接口，调用所有模型
 models = [
     "gpt-4.1",               # OpenAI最新模型
     "claude-sonnet-4-20250514",  # Claude 4最新版
     "gemini-2.5-pro",        # Google Gemini
-    "deepseek-v3"            # 国产最强模型
+    "deepseek-v3"            # 国产模型
 ]
 
 for model in models:
@@ -379,43 +365,21 @@ for model in models:
     print(f"{model}: {response.choices[0].message.content}")
 ```
 
-### 🛡️ 稳定可靠
+## 技术保障
 
 - **高可用性**：多节点部署，智能路由
 - **自动降级**：模型不可用时自动切换
 - **负载均衡**：智能分配请求，避免限流
 - **实时监控**：24/7 服务状态监控
 
-### 💰 成本优化
+## 计费说明
 
 - **统一计费**：所有模型使用统一余额
 - **透明定价**：清晰的价格体系
 - **用量统计**：详细的使用报告
 - **灵活充值**：支持多种支付方式
 
-## 🎯 独特优势
-
-### 🖼️ 图像生成性价比之王
-- **GPT-4o生图**：仅需$0.01/张，比官方便宜90%
-- **Flux Pro**：专业级图像生成，支持精确控制
-- **实时预览**：生成过程实时返回，用户体验更好
-- **批量处理**：支持批量生成，效率提升10倍
-
-### ⚡ 国内最快的API服务
-- **智能加速**：CDN加速 + 智能路由，延迟降低80%
-- **并发无限**：支持10000+ QPS，双11都不怕
-- **容灾切换**：多地域部署，故障自动切换
-- **实时监控**：API状态实时监控，问题秒级告警
-
-### 🏆 全网最全模型库
-- **实时更新**：新模型24小时内上线
-- **独家模型**：o3-pro、Claude 4等稀缺资源
-- **国产优选**：DeepSeek、Qwen等国产模型价格更优
-- **统一调用**：所有模型统一格式，切换零成本
-
-## 🚀 开始使用
-
-准备好开始了吗？只需三步即可开始：
+## 开始使用
 
 <CardGroup cols={3}>
 <Card title="注册账号" icon="user-plus" href="https://api.laozhang.ai/register/?aff_code=Snip">
@@ -431,7 +395,7 @@ for model in models:
 </Card>
 </CardGroup>
 
-## 🔗 快速链接
+## 快速链接
 
 <CardGroup cols={2}>
   <Card
@@ -439,7 +403,7 @@ for model in models:
     icon="user-plus"
     href="https://api.laozhang.ai/register/?aff_code=Snip"
   >
-    注册账号，免费获得$0.05测试额度
+    注册账号，获得测试额度用于接口连通性验证
   </Card>
   <Card
     title="管理控制台"
@@ -453,29 +417,29 @@ for model in models:
 ---
 
 <Note>
-  注册即可获得$0.05免费测试额度。
+  注册即可获得$0.05测试额度，仅用于API接口连通性验证与开发调试测试。
 </Note>
 
-## ❓ 常见问题
+## 常见问题
 
 <AccordionGroup>
-  <Accordion title="ChatGPT国内真的能用吗？">
-    可以！老张API提供稳定的国内直连服务，无需VPN，延迟低至20ms。已有数万开发者在使用。
+  <Accordion title="老张API提供什么服务？">
+    老张API是面向企业与开发者的AI技术API接入服务平台，提供统一的API接口对接200+AI模型，用于系统集成、应用开发等企业级场景。
   </Accordion>
-  
-  <Accordion title="需要ChatGPT官方账号吗？">
-    不需要。您只需注册老张API账号，即可使用所有AI模型，无需单独申请各个平台的账号。
+
+  <Accordion title="需要单独申请各模型官方账号吗？">
+    不需要。您只需注册老张API账号，即可通过统一接口调用所有支持的AI模型。
   </Accordion>
-  
-  <Accordion title="怎么给ChatGPT付费？">
-    支持支付宝、微信扫码支付，人民币结算。充值秒到账，按使用量计费，没有月费。
+
+  <Accordion title="支持哪些支付方式？">
+    支持支付宝、微信扫码支付，以及企业对公转账。充值秒到账，按使用量计费，没有月费。
   </Accordion>
-  
-  <Accordion title="和ChatGPT官方有什么区别？">
-    功能完全一致，都是调用官方API。优势在于：国内访问更快、支付更方便、还能使用Claude等其他模型。
+
+  <Accordion title="和直接调用官方API有什么区别？">
+    功能完全一致，都是调用模型API。优势在于：统一接口对接多个模型服务商、支持本地支付方式（支付宝/微信）、提供中文技术支持。
   </Accordion>
-  
+
   <Accordion title="适合哪些使用场景？">
-    编程开发（Cursor、VS Code）、学术研究、内容创作、翻译、客服机器人等所有需要AI的场景。
+    适用于企业系统集成、软件开发、内部工具、业务自动化等场景。包括AI对话应用开发、代码辅助、内容处理等。
   </Accordion>
 </AccordionGroup>

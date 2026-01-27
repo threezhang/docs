@@ -2,7 +2,7 @@
   "$schema": "https://mintlify.com/docs.json",
   "theme": "mint",
   "name": "老张API",
-  "description": "国内访问ChatGPT、Claude、Gemini等200+AI模型API。完全兼容OpenAI接口,支持支付宝微信付款,提供中文技术支持。",
+  "description": "企业级AI技术API接入服务。面向企业与开发者，提供200+AI模型的统一API接入能力。",
   "url": "https://docs.laozhang.ai",
   "colors": {
     "primary": "#2563eb",
@@ -10,7 +10,7 @@
     "dark": "#1d4ed8"
   },
   "banner": {
-    "content": "🍌 **Nano Banana Pro** 4K images $0.05, 80% OFF | 4K 超清图像 $0.05，官方 2 折 → [Try / 试用](https://images.laozhang.ai)",
+    "content": "Nano Banana Pro 4K images $0.05, 80% OFF | 4K 超清图像 $0.05，官方 2 折 → [Try / 试用](https://images.laozhang.ai)",
     "dismissible": true
   },
   "favicon": "/logo/favicon.svg",
@@ -156,7 +156,7 @@
                     ]
                   },
                   {
-                    "group": "🍌 Nano Banana (Standard)",
+                    "group": "Nano Banana (Standard)",
                     "icon": "banana",
                     "pages": [
                       "api-capabilities/nano-banana-image",
@@ -164,7 +164,7 @@
                     ]
                   },
                   {
-                    "group": "🍒 Nano Banana Pro",
+                    "group": "Nano Banana Pro",
                     "icon": "cherry",
                     "pages": [
                       "api-capabilities/nano-banana-pro-image",
@@ -424,7 +424,7 @@
                     ]
                   },
                   {
-                    "group": "🍌 Nano Banana (Standard)",
+                    "group": "Nano Banana (Standard)",
                     "icon": "banana",
                     "pages": [
                       "en/api-capabilities/nano-banana-image",
@@ -432,7 +432,7 @@
                     ]
                   },
                   {
-                    "group": "🍒 Nano Banana Pro",
+                    "group": "Nano Banana Pro",
                     "icon": "cherry",
                     "pages": [
                       "en/api-capabilities/nano-banana-pro-image",
@@ -610,24 +610,24 @@
   "metadata": {
     "zh": {
       "og:type": "website",
-      "og:title": "老张API - 企业级AI大模型API中转站",
-      "og:description": "国内访问ChatGPT、Claude、Gemini等200+AI模型API。完全兼容OpenAI接口,支持支付宝微信付款,提供中文技术支持。",
+      "og:title": "老张API - 企业级AI技术API接入服务",
+      "og:description": "面向企业与开发者的AI技术API接入服务。200+模型统一接口，按量计费，企业可开发票。",
       "og:image": "/logo/logo-default.webp",
       "og:url": "https://docs.laozhang.ai",
       "twitter:card": "summary_large_image",
-      "twitter:title": "老张API - 企业级AI大模型API中转站",
-      "twitter:description": "国内访问ChatGPT、Claude、Gemini等200+AI模型API。OpenAI兼容接口,支付宝微信付款。",
+      "twitter:title": "老张API - 企业级AI技术API接入服务",
+      "twitter:description": "面向企业与开发者的AI技术API接入服务。200+模型统一接口，按量计费。",
       "twitter:image": "/logo/logo-default.webp"
     },
     "en": {
       "og:type": "website",
-      "og:title": "LaoZhang API - Unified AI API Gateway | 200+ Models",
-      "og:description": "Access 200+ AI models through a single OpenAI-compatible API. ChatGPT, Claude, Gemini, DeepSeek and more. Pay-as-you-go pricing, no subscription.",
+      "og:title": "LaoZhang API - Enterprise AI API Integration Service",
+      "og:description": "Technical API integration service for enterprises and developers. 200+ AI models, unified API, pay-as-you-go.",
       "og:image": "/logo/logo-default.webp",
       "og:url": "https://docs.laozhang.ai/en",
       "twitter:card": "summary_large_image",
-      "twitter:title": "LaoZhang API - Unified AI API Gateway",
-      "twitter:description": "200+ AI models, one API. OpenAI compatible. Pay-as-you-go pricing, no subscription.",
+      "twitter:title": "LaoZhang API - Enterprise AI API Integration Service",
+      "twitter:description": "200+ AI models, one API. OpenAI compatible. Pay-as-you-go pricing.",
       "twitter:image": "/logo/logo-default.webp"
     }
   },

@@ -1,92 +1,95 @@
 ---
-title: 5分钟快速接入教程
+title: API接入快速开始
 sidebarTitle: 快速开始
-description: "详细教程：如何在国内调用ChatGPT、Claude、GPT-5 API。无需VPN和国外信用卡，支付宝充值秒到账。含 Python、Node.js、curl 代码示例，三步完成接入。"
+description: "API技术接入教程：如何集成老张API调用ChatGPT、Claude、Gemini等AI模型。含 Python、Node.js、curl 代码示例，三步完成接入。"
 icon: "rocket"
 ---
 
-## 🌟 开始之前
+## 开始之前
 
-很多开发者问我们：**“在国内怎么用ChatGPT API？”**
+<Warning>
+**账户用途说明**
 
-答案很简单：不需要VPN，不需要国外信用卡，只需要：
-1️⃣ 一个老张API账号（支付宝注册）
-2️⃣ 一行代码修改（改个URL）
-3️⃣ 五分钟配置（真的很快）
+注册账号用于**API技术接入测试与企业系统集成**。新账号获得的测试额度（$0.05）仅用于：
+- API接口连通性验证
+- 开发调试与技术测试
+- 系统集成前的功能验证
 
-本文会用**最简单**的方式，帮您实现：
-- 💳 用支付宝充值，人民币结算
-- 🌏 国内直连，无需代理
-- ⚡ 低延迟、高速度
-- 🔄 一键切换所有模型
+**不适用于**生产环境或面向公众的内容交付服务。
+</Warning>
 
-## 第一步：5分钟注册并充值
+本文会用**最简单**的方式，帮您实现API技术接入：
+- 统一接口调用200+AI模型
+- OpenAI SDK兼容，代码改动最小化
+- 支持多种支付方式，按量计费
 
-### 📧 注册账号（免费送$0.05额度）
+## 第一步：注册并充值
+
+### 注册账号
 
 <Steps>
   <Step title="访问注册页面">
     打开 [老张API注册页](https://api.laozhang.ai/register/?aff_code=Snip)
-    
-    🎁 **新用户福利**：注册即送$0.05测试额度
+
+    新账户将获得$0.05测试额度，用于API接口连通性验证
   </Step>
-  
+
   <Step title="填写信息">
     - 邮箱：任意邮箱即可
     - 密码：至少8位字符
     - 验证码：检查垃圾邮箱
   </Step>
-  
+
   <Step title="登录控制台">
     登录后进入[控制台首页](https://api.laozhang.ai/account/profile)
-    
+
     您会看到：
-    - 账户余额（含赠送额度）
+    - 账户余额（含测试额度）
     - 使用统计
     - 快速入门指引
   </Step>
 </Steps>
 
-### 💰 快速充值（支付宝秒到账）
+### 充值
 
 <Tabs>
-  <Tab title="支付宝扫码">
+  <Tab title="支付宝/微信扫码">
     1. 点击[充值页面](https://api.laozhang.ai/topup)
     2. 起充 35 人民币（7美金），单次大额充值加赠 10%
-    3. 支付宝扫码支付
+    3. 支付宝/微信扫码支付
     4. 秒级到账，立即使用
   </Tab>
-  
-  <Tab title="企业对公">
+
+  <Tab title="企业对公转账">
     支持企业对公转账：
     - 开具增值税发票
     - 提供采购合同
     - 支持月结等方式
-    
+
     联系微信：Kikivivikids
   </Tab>
 </Tabs>
 
 <Note>
-  🎉 **新人福利**：
-  - 注册送$0.05测试额度
+  **充值说明**：
+  - 测试额度可用于验证接口连通性
   - 充值秒到账，无需等待
-  - 微信：`Kikivivikids` 了解更多优惠
+  - 企业服务请联系微信：`Kikivivikids`
 </Note>
 
-## 第二步：1分钟获取API密钥
+## 第二步：获取API密钥
 
-### 🔑 两种方式获取密钥
+### 两种方式获取密钥
 
 <Tabs>
   <Tab title="使用默认密钥（推荐）">
     1. 进入[令牌管理页](https://api.laozhang.ai/token)
     2. 找到**默认令牌**
     3. 点击右侧**复制**按钮
-    
-    ✅ 优点：立即可用，无需配置
+
+    优点：立即可用，无需配置
   </Tab>
-  
+
   <Tab title="创建新密钥">
     1. 点击右上角[新增]按钮
     2. 输入密钥名称：
@@ -95,8 +98,8 @@ icon: "rocket"
        - `test-claude`：测试Claude模型
     3. 设置额度限制（可选）
     4. 点击创建
-    
-    💡 优点：精细管理，按项目分配
+
+    优点：精细管理，按项目分配
   </Tab>
 </Tabs>
 
@@ -107,9 +110,9 @@ icon: "rocket"
   - 建议使用环境变量存储
 </Warning>
 
-## 第三步：30秒完成首次调用
+## 第三步：完成首次调用
 
-### 🎯 最简单的测试方法
+### 测试方法
 
 <Tabs>
   <Tab title="客户端测试（推荐）">
@@ -119,56 +122,56 @@ icon: "rocket"
     2. 输入提示词："你好，请介绍一下你自己"
     3. 点击发送
 
-    ✅ 配置完成后即可开始测试
+    配置完成后即可开始测试
   </Tab>
-  
+
   <Tab title="命令行测试">
     ```bash
     # 替换YOUR_API_KEY为您的密钥
     curl -X POST https://api.laozhang.ai/v1/chat/completions -H "Content-Type: application/json" -H "Authorization: Bearer YOUR_API_KEY" -d '{"model": "gpt-4.1-mini", "messages": [{"role": "system", "content": "你是一个友好的AI助手"}, {"role": "user", "content": "用中文回答：今天天气怎么样？"}], "temperature": 0.7}'
     ```
-    
-    🚀 响应速度低于500ms
+
+    响应速度低于500ms
   </Tab>
 </Tabs>
 
-### 🔧 接入配置信息
+### 接入配置信息
 
 <Card title="记住这三个信息" icon="key">
   ```yaml
   # API基础地址
   base_url: https://api.laozhang.ai/v1
-  
+
   # API密钥（以sk-开头）
   api_key: sk-xxxxxxxxxxxxxx
-  
+
   # 模型名称（即插即用）
   model: gpt-4.1-mini  # 或 claude-sonnet-4-20250514 等
   ```
 </Card>
 
-### 💻 各语言完整示例
+### 各语言完整示例
 
 <Tabs>
   <Tab title="Python（最常用）">
     ```python
     # 安装：pip install openai
     from openai import OpenAI
-    
+
     # 初始化客户端
     client = OpenAI(
         api_key="您的API密钥",  # 在老张API获取
-        base_url="https://api.laozhang.ai/v1"  # 国内直连地址
+        base_url="https://api.laozhang.ai/v1"  # 接入地址
     )
-    
+
     # 调用不同模型的示例
     def test_models():
         models = [
-            "gpt-4.1-mini",  # 性价比最高
-            "claude-sonnet-4-20250514",  # 编程能力最强
-            "deepseek-v3"  # 国产最强
+            "gpt-4.1-mini",  # 性价比高
+            "claude-sonnet-4-20250514",  # 编程能力强
+            "deepseek-v3"  # 国产模型
         ]
-        
+
         for model in models:
             try:
                 response = client.chat.completions.create(
@@ -184,11 +187,11 @@ icon: "rocket"
                 print(f"使用Token数: {response.usage.total_tokens}\n")
             except Exception as e:
                 print(f"{model} 调用失败: {e}\n")
-    
+
     if __name__ == "__main__":
         test_models()
     ```
-    
+
     <Tip>
       **最佳实践**：使用环境变量存储API密钥
       ```python
@@ -200,18 +203,18 @@ icon: "rocket"
       ```
     </Tip>
   </Tab>
-  
+
   <Tab title="Node.js / TypeScript">
     ```javascript
     // 安装：npm install openai
     import OpenAI from 'openai';
-    
+
     // 初始化客户端
     const client = new OpenAI({
       apiKey: process.env.LAOZHANG_API_KEY || '您的API密钥',
       baseURL: 'https://api.laozhang.ai/v1'
     });
-    
+
     // 流式输出示例（实时响应）
     async function streamChat() {
       const stream = await client.chat.completions.create({
@@ -223,44 +226,44 @@ icon: "rocket"
         stream: true,  // 启用流式输出
         temperature: 0.7
       });
-      
+
       // 逐字输出
       for await (const chunk of stream) {
         process.stdout.write(chunk.choices[0]?.delta?.content || '');
       }
     }
-    
+
     // 并发调用多个模型
     async function compareModels(prompt) {
       const models = ['gpt-4.1', 'claude-sonnet-4-20250514', 'gemini-2.5-pro'];
-      
-      const promises = models.map(model => 
+
+      const promises = models.map(model =>
         client.chat.completions.create({
           model,
           messages: [{ role: 'user', content: prompt }],
           max_tokens: 100
         })
       );
-      
+
       const results = await Promise.all(promises);
       results.forEach((result, index) => {
         console.log(`\n${models[index]}:\n${result.choices[0].message.content}`);
       });
     }
-    
+
     // 运行示例
     streamChat().catch(console.error);
     ```
   </Tab>
-  
+
   <Tab title="Curl / 命令行">
     ```bash
     # 基础调用
     curl -X POST https://api.laozhang.ai/v1/chat/completions -H "Authorization: Bearer YOUR_API_KEY" -H "Content-Type: application/json" -d '{"model": "gpt-4.1-mini", "messages": [{"role": "user", "content": "你好"}]}'
-    
-    # 流式输出（SSE）  
+
+    # 流式输出（SSE）
     curl -X POST https://api.laozhang.ai/v1/chat/completions -H "Authorization: Bearer YOUR_API_KEY" -H "Content-Type: application/json" -d '{"model": "gpt-4.1", "messages": [{"role": "user", "content": "写一个Python快速排序"}], "stream": true}'
-    
+
     # 调用图像生成
     curl -X POST https://api.laozhang.ai/v1/images/generations -H "Authorization: Bearer YOUR_API_KEY" -H "Content-Type: application/json" -d '{"model": "gpt-4o-image", "prompt": "一只可爱的小猫", "n": 1, "size": "1024x1024"}'
     ```
@@ -275,93 +278,91 @@ icon: "rocket"
   <Card title="查看 API 文档" icon="book" href="/api-reference/introduction">
     了解完整的 API 接口说明
   </Card>
-  
+
   <Card title="探索模型列表" icon="robot" href="/models">
     查看所有支持的 AI 模型
   </Card>
-  
+
   <Card title="集成到应用" icon="plug" href="/api-reference/integrations/langchain">
     将 老张API 集成到各种工具
   </Card>
-  
+
   <Card title="查看使用统计" icon="chart-line" href="https://api.laozhang.ai/log">
     在控制台监控使用情况
   </Card>
 </CardGroup>
 
-## 🔥 常见问题速查
+## 常见问题速查
 
 <AccordionGroup>
   <Accordion title="怎么判断接入成功？">
     **三个标志**：
-    1. ✅ API调用返回正常结果（没有报错）
-    2. ✅ 响应时间低于1秒
-    3. ✅ 控制台能看到调用记录
-    
+    1. API调用返回正常结果（没有报错）
+    2. 响应时间低于1秒
+    3. 控制台能看到调用记录
+
     查看调用记录：[使用日志](https://api.laozhang.ai/log)
   </Accordion>
-  
+
   <Accordion title="怎么选择合适的模型？">
     **根据场景选择**：
-    
-    💻 **编程开发**：
+
+    **编程开发**：
     - 首选：`claude-sonnet-4-20250514`
     - 备选：`deepseek-coder-v3`
-    
-    📝 **文章写作**：
+
+    **文章写作**：
     - 首选：`gpt-4o`
     - 备选：`claude-3.5-sonnet`
-    
-    ⚡ **快速响应**：
+
+    **快速响应**：
     - 首选：`gpt-4.1-mini`
     - 备选：`gemini-2.5-flash`
-    
-    💰 **成本敏感**：
+
+    **成本敏感**：
     - 首选：`deepseek-v3`
     - 备选：`qwen-max`
   </Accordion>
-  
+
   <Accordion title="API密钥泄露了怎么办？">
     **立即操作**：
     1. 登录[令牌管理](https://api.laozhang.ai/token)
     2. 删除泄露的密钥
     3. 创建新密钥
     4. 更新所有应用中的密钥
-    
-    🔒 **预防措施**：
+
+    **预防措施**：
     - 使用环境变量
     - 设置额度限制
     - 定期轮换密钥
   </Accordion>
-  
+
   <Accordion title="为什么提示余额不足？">
     **可能原因**：
-    1. 免费额度已用完
+    1. 测试额度已用完
     2. 调用的模型费用较高
     3. 批量请求消耗过快
-    
+
     **解决方法**：
     - [立即充值](https://api.laozhang.ai/topup)
-    - 切换到便宜的模型
+    - 切换到成本较低的模型
     - 设置`max_tokens`限制
   </Accordion>
-  
+
   <Accordion title="支持哪些支付方式？">
     **个人用户**：
-    - 💳 支付宝扫码（秒到账）
-    - 💳 微信扫码（秒到账）
-    - 🎪 USDT（TRC20）
-    
+    - 支付宝扫码（秒到账）
+    - 微信扫码（秒到账）
+
     **企业用户**：
-    - 🏢 对公转账
-    - 🧾 开具增值税发票
-    - 📝 签订采购合同
-    
+    - 对公转账
+    - 开具增值税发票
+    - 签订采购合同
+
     联系微信：`Kikivivikids`
   </Accordion>
 </AccordionGroup>
 
 <Info>
 提示：保存好您的 API 密钥，并定期在控制台查看使用日志，每笔请求都有消息历史，合理优化成本。
-祝使用愉快~
 </Info>
