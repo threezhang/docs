@@ -1,0 +1,271 @@
+---
+title: "How to Query Account Balance via API"
+description: "Use the API to retrieve your LaoZhang API account balance for automated monitoring and alerts"
+icon: "magnifying-glass-dollar"
+---
+
+## Get System Token (AccessToken)
+
+Before calling the balance query API, you need to obtain a system token (AccessToken).
+
+<Steps>
+  <Step title="Go to Account Settings">
+    After logging in, visit the [Account Settings page](https://api.laozhang.ai/account/profile) and click on "System Token".
+
+    <img src="/images/balance-query-step1.png" alt="System Token Entry" />
+  </Step>
+
+  <Step title="Verify Account Password">
+    Enter your account password in the popup dialog for identity verification.
+
+    <img src="/images/balance-query-step2.png" alt="Password Verification" />
+  </Step>
+
+  <Step title="Get AccessToken">
+    After successful verification, the system will display your AccessToken. Copy and save it immediately.
+
+    <img src="/images/balance-query-step3.png" alt="Token Result" />
+  </Step>
+</Steps>
+
+<Warning>
+**Security Warning**:
+- AccessToken has full account permissions, keep it safe
+- Token is only displayed once when created, cannot be retrieved later
+- Generating a new Token will immediately invalidate the old one
+- Never hardcode in source code or commit to public repositories
+</Warning>
+
+## API Reference
+
+### Endpoint Information
+
+| Item | Description |
+|------|-------------|
+| Endpoint URL | `https://api.laozhang.ai/api/user/self` |
+| Method | GET |
+| Authentication | Authorization Header |
+| Response Format | JSON (gzip compressed) |
+
+### Request Headers
+
+| Header Name | Required | Description |
+|-------------|----------|-------------|
+| Authorization | Yes | System token, directly use the Token string |
+| Accept | No | Recommended: `application/json` |
+| Content-Type | No | Recommended: `application/json` |
+
+### Response Fields
+
+Successful response example:
+
+```json
+{
+  "success": true,
+  "message": null,
+  "data": {
+    "username": "your_username",
+    "display_name": "Your Name",
+    "quota": 24997909,
+    "used_quota": 10027091,
+    "request_count": 339,
+    "group": "svip"
+  }
+}
+```
+
+Core fields:
+
+| Field Name | Type | Description |
+|------------|------|-------------|
+| success | Boolean | Whether the request was successful |
+| message | String | Error message (null on success) |
+| data.quota | Integer | Remaining quota (current available balance) |
+| data.used_quota | Integer | Used quota |
+| data.request_count | Integer | Total request count |
+| data.group | String | User group |
+
+### Quota Conversion Formula
+
+<Tip>
+**Conversion Rule**: 500,000 quota = $1.00 USD
+
+- USD Amount = quota ÷ 500,000
+- Example: `quota: 24997909` → **$49.99 USD** (current remaining balance)
+</Tip>
+
+## Code Examples
+
+<Tabs>
+  <Tab title="cURL">
+    **Basic Request** (must add `--compressed` option):
+
+    ```bash
+    curl --compressed 'https://api.laozhang.ai/api/user/self' \
+      -H 'Accept: application/json' \
+      -H 'Authorization: YOUR_ACCESS_TOKEN' \
+      -H 'Content-Type: application/json'
+    ```
+
+    <Warning>
+    **Important**: You must add `--compressed` option because the API returns gzip compressed content, otherwise you'll get garbled output.
+    </Warning>
+  </Tab>
+
+  <Tab title="cURL Quick Test">
+    Using environment variables and jq to extract core info:
+
+    ```bash
+    export LAOZHANG_TOKEN='YOUR_ACCESS_TOKEN'
+
+    curl --compressed -s 'https://api.laozhang.ai/api/user/self' \
+      -H 'Accept: application/json' \
+      -H "Authorization: $LAOZHANG_TOKEN" \
+      -H 'Content-Type: application/json' | \
+      jq '.data | {quota, used_quota, request_count}'
+    ```
+
+    `-s` option hides progress bar, `--compressed` auto-decompresses gzip response.
+  </Tab>
+
+  <Tab title="Python">
+    ```python
+    import requests
+
+    # Configuration
+    url = "https://api.laozhang.ai/api/user/self"
+    access_token = "YOUR_ACCESS_TOKEN"  # Replace with your token
+
+    # Headers
+    headers = {
+        'Accept': 'application/json',
+        'Authorization': access_token,
+        'Content-Type': 'application/json'
+    }
+
+    # Send request
+    response = requests.get(url, headers=headers, timeout=10)
+
+    # Check response
+    if response.status_code == 200:
+        data = response.json()
+        user_data = data['data']
+
+        # Extract core info
+        quota = user_data['quota']
+        used_quota = user_data['used_quota']
+        request_count = user_data['request_count']
+
+        # Calculate USD amount (500,000 quota = $1.00 USD)
+        remaining_usd = quota / 500000
+        used_usd = used_quota / 500000
+
+        # Print results
+        print(f"Remaining: ${remaining_usd:.2f} USD ({quota:,} quota)")
+        print(f"Used: ${used_usd:.2f} USD ({used_quota:,} quota)")
+        print(f"Request count: {request_count:,}")
+    else:
+        print(f"Request failed: HTTP {response.status_code}")
+        print(response.text)
+    ```
+
+    <Info>
+    Python's `requests` library automatically handles gzip decompression, no extra configuration needed.
+    </Info>
+  </Tab>
+</Tabs>
+
+## Error Handling
+
+### HTTP 401 - Authentication Failed
+
+```json
+{
+  "success": false,
+  "message": "Unauthorized"
+}
+```
+
+**Cause**: Authorization token is invalid or expired
+
+**Solution**: Check and update your system token
+
+### HTTP 403 - Permission Denied
+
+```json
+{
+  "success": false,
+  "message": "Forbidden"
+}
+```
+
+**Cause**: Current token doesn't have permission to access this endpoint
+
+**Solution**: Contact admin to verify permission settings
+
+## FAQ
+
+<AccordionGroup>
+  <Accordion title="What does the quota field represent?">
+    The `quota` field represents your current remaining balance (available quota). If `quota` is 0 or near 0, your account balance is insufficient and needs to be recharged.
+  </Accordion>
+
+  <Accordion title="How to calculate remaining USD amount?">
+    Use the formula: **Remaining USD = quota ÷ 500,000**
+
+    Example: `quota: 24997909` → $49.99 USD
+  </Accordion>
+
+  <Accordion title="curl command returns garbled output?">
+    **Cause**: API returns gzip compressed content, curl doesn't auto-decompress.
+
+    **Solution**: Add `--compressed` option:
+    ```bash
+    # Correct
+    curl --compressed 'https://api.laozhang.ai/api/user/self' -H 'Authorization: YOUR_TOKEN'
+
+    # Wrong (will be garbled)
+    curl 'https://api.laozhang.ai/api/user/self' -H 'Authorization: YOUR_TOKEN'
+    ```
+  </Accordion>
+
+  <Accordion title="jq reports Invalid numeric literal error?">
+    This usually happens because curl didn't decompress the gzip content. Add `--compressed` option to fix it.
+  </Accordion>
+
+  <Accordion title="What is the ModelFixedPrice field for?">
+    This field returns pricing information for various AI models. If you only care about balance info, you can ignore this field.
+  </Accordion>
+
+  <Accordion title="How to implement balance alerts?">
+    You can write a scheduled script to periodically query the balance, and send alert notifications (email, Slack, etc.) when `quota` falls below a threshold.
+  </Accordion>
+</AccordionGroup>
+
+## Notes
+
+<CardGroup cols={2}>
+  <Card title="Security" icon="shield">
+    - Use environment variables for Token
+    - Don't commit to public repos
+    - Rotate Token regularly
+  </Card>
+
+  <Card title="Rate Limits" icon="clock">
+    - Set reasonable timeout (10s recommended)
+    - Avoid too frequent queries
+    - Recommended interval ≥ 1 minute
+  </Card>
+
+  <Card title="Error Handling" icon="triangle-exclamation">
+    - Handle network errors and timeouts
+    - Handle authentication failures
+    - Log errors for troubleshooting
+  </Card>
+
+  <Card title="Response Format" icon="file-code">
+    - API returns gzip compressed content
+    - curl must add `--compressed`
+    - requests library handles automatically
+  </Card>
+</CardGroup>

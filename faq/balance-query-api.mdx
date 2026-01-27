@@ -1,0 +1,271 @@
+---
+title: "如何通过API查询账户余额"
+description: "通过API接口获取老张API账户余额，实现自动化余额监控和告警"
+icon: "magnifying-glass-dollar"
+---
+
+## 获取系统令牌（AccessToken）
+
+在调用余额查询接口之前，您需要先获取系统令牌（AccessToken）。
+
+<Steps>
+  <Step title="进入账户设置页面">
+    登录后访问 [账户设置页面](https://api.laozhang.ai/account/profile)，点击「系统令牌」选项。
+
+    <img src="/images/balance-query-step1.png" alt="系统令牌入口" />
+  </Step>
+
+  <Step title="验证账户密码">
+    在弹出的对话框中输入您的账户密码进行身份验证。
+
+    <img src="/images/balance-query-step2.png" alt="输入密码验证" />
+  </Step>
+
+  <Step title="获取 AccessToken">
+    验证成功后，系统会显示您的 AccessToken。请立即复制保存。
+
+    <img src="/images/balance-query-step3.png" alt="获取Token结果" />
+  </Step>
+</Steps>
+
+<Warning>
+**安全警告**：
+- AccessToken 具有账户完全权限，请妥善保管
+- Token 只在创建时显示一次，无法再次查询
+- 生成新 Token 会使旧 Token 立即失效
+- 切勿在代码中硬编码或提交到公开仓库
+</Warning>
+
+## 接口说明
+
+### 接口信息
+
+| 项目 | 说明 |
+|------|------|
+| 接口 URL | `https://api.laozhang.ai/api/user/self` |
+| 请求方法 | GET |
+| 认证方式 | Authorization Header |
+| 响应格式 | JSON (gzip 压缩) |
+
+### 请求 Headers
+
+| Header 名称 | 必填 | 说明 |
+|------------|------|------|
+| Authorization | 是 | 系统令牌，直接填写 Token 字符串 |
+| Accept | 否 | 建议设置为 `application/json` |
+| Content-Type | 否 | 建议设置为 `application/json` |
+
+### 响应字段说明
+
+成功响应示例：
+
+```json
+{
+  "success": true,
+  "message": null,
+  "data": {
+    "username": "your_username",
+    "display_name": "Your Name",
+    "quota": 24997909,
+    "used_quota": 10027091,
+    "request_count": 339,
+    "group": "svip"
+  }
+}
+```
+
+核心字段：
+
+| 字段名 | 类型 | 说明 |
+|--------|------|------|
+| success | Boolean | 请求是否成功 |
+| message | String | 错误信息（成功时为 null） |
+| data.quota | Integer | 剩余额度（当前可用余额） |
+| data.used_quota | Integer | 已使用额度 |
+| data.request_count | Integer | 总请求次数 |
+| data.group | String | 用户所属组 |
+
+### 额度换算公式
+
+<Tip>
+**换算规则**：500,000 额度 = $1.00 USD
+
+- 美金金额 = 额度 ÷ 500,000
+- 示例：`quota: 24997909` → **$49.99 USD**（当前剩余余额）
+</Tip>
+
+## 代码示例
+
+<Tabs>
+  <Tab title="cURL">
+    **基础请求**（必须添加 `--compressed` 选项）：
+
+    ```bash
+    curl --compressed 'https://api.laozhang.ai/api/user/self' \
+      -H 'Accept: application/json' \
+      -H 'Authorization: YOUR_ACCESS_TOKEN' \
+      -H 'Content-Type: application/json'
+    ```
+
+    <Warning>
+    **重要提示**：必须添加 `--compressed` 选项，因为 API 返回 gzip 压缩内容，否则会得到乱码。
+    </Warning>
+  </Tab>
+
+  <Tab title="cURL 快速测试">
+    使用环境变量和 jq 提取核心信息：
+
+    ```bash
+    export LAOZHANG_TOKEN='YOUR_ACCESS_TOKEN'
+
+    curl --compressed -s 'https://api.laozhang.ai/api/user/self' \
+      -H 'Accept: application/json' \
+      -H "Authorization: $LAOZHANG_TOKEN" \
+      -H 'Content-Type: application/json' | \
+      jq '.data | {quota, used_quota, request_count}'
+    ```
+
+    `-s` 选项隐藏进度条，`--compressed` 自动解压 gzip 响应。
+  </Tab>
+
+  <Tab title="Python">
+    ```python
+    import requests
+
+    # 配置
+    url = "https://api.laozhang.ai/api/user/self"
+    access_token = "YOUR_ACCESS_TOKEN"  # 替换为你的令牌
+
+    # 请求头
+    headers = {
+        'Accept': 'application/json',
+        'Authorization': access_token,
+        'Content-Type': 'application/json'
+    }
+
+    # 发送请求
+    response = requests.get(url, headers=headers, timeout=10)
+
+    # 检查响应
+    if response.status_code == 200:
+        data = response.json()
+        user_data = data['data']
+
+        # 提取核心信息
+        quota = user_data['quota']
+        used_quota = user_data['used_quota']
+        request_count = user_data['request_count']
+
+        # 计算美金金额（500,000 额度 = $1.00 USD）
+        remaining_usd = quota / 500000
+        used_usd = used_quota / 500000
+
+        # 打印结果
+        print(f"剩余额度：${remaining_usd:.2f} USD ({quota:,} 额度)")
+        print(f"已使用：${used_usd:.2f} USD ({used_quota:,} 额度)")
+        print(f"请求次数：{request_count:,} 次")
+    else:
+        print(f"请求失败：HTTP {response.status_code}")
+        print(response.text)
+    ```
+
+    <Info>
+    Python 的 `requests` 库会自动处理 gzip 解压，无需额外配置。
+    </Info>
+  </Tab>
+</Tabs>
+
+## 错误处理
+
+### HTTP 401 - 认证失败
+
+```json
+{
+  "success": false,
+  "message": "Unauthorized"
+}
+```
+
+**原因**：Authorization 令牌无效或已过期
+
+**解决方法**：检查并更新系统令牌
+
+### HTTP 403 - 权限不足
+
+```json
+{
+  "success": false,
+  "message": "Forbidden"
+}
+```
+
+**原因**：当前令牌无权访问该接口
+
+**解决方法**：联系管理员确认权限配置
+
+## 常见问题
+
+<AccordionGroup>
+  <Accordion title="quota 字段代表什么？">
+    `quota` 字段就是当前的剩余额度（可用余额）。如果 `quota` 为 0 或接近 0，说明账户余额不足，需要及时充值。
+  </Accordion>
+
+  <Accordion title="如何计算剩余美金金额？">
+    使用公式：**剩余美金 = quota ÷ 500,000**
+
+    例如：`quota: 24997909` → $49.99 USD
+  </Accordion>
+
+  <Accordion title="curl 命令返回乱码怎么办？">
+    **原因**：API 返回 gzip 压缩内容，curl 没有自动解压。
+
+    **解决方案**：添加 `--compressed` 选项：
+    ```bash
+    # 正确
+    curl --compressed 'https://api.laozhang.ai/api/user/self' -H 'Authorization: YOUR_TOKEN'
+
+    # 错误（会乱码）
+    curl 'https://api.laozhang.ai/api/user/self' -H 'Authorization: YOUR_TOKEN'
+    ```
+  </Accordion>
+
+  <Accordion title="jq 报错 Invalid numeric literal 怎么办？">
+    这通常是因为 curl 没有解压 gzip 内容。添加 `--compressed` 选项即可解决。
+  </Accordion>
+
+  <Accordion title="ModelFixedPrice 字段有什么用？">
+    该字段返回各个 AI 模型的定价信息。如果您只关心余额信息，可以忽略该字段。
+  </Accordion>
+
+  <Accordion title="如何实现余额告警？">
+    可以编写定时脚本定期查询余额，当 `quota` 低于设定阈值时发送告警通知（如邮件、Slack、企业微信等）。
+  </Accordion>
+</AccordionGroup>
+
+## 注意事项
+
+<CardGroup cols={2}>
+  <Card title="安全性" icon="shield">
+    - 使用环境变量管理 Token
+    - 不要提交到公开仓库
+    - 定期更换 Token
+  </Card>
+
+  <Card title="请求限制" icon="clock">
+    - 设置合理超时时间（推荐 10 秒）
+    - 避免过于频繁的查询
+    - 建议查询间隔 ≥ 1 分钟
+  </Card>
+
+  <Card title="异常处理" icon="triangle-exclamation">
+    - 处理网络异常和超时
+    - 处理认证失败情况
+    - 记录错误日志便于排查
+  </Card>
+
+  <Card title="响应格式" icon="file-code">
+    - API 返回 gzip 压缩内容
+    - curl 必须添加 `--compressed`
+    - requests 库自动处理
+  </Card>
+</CardGroup>
