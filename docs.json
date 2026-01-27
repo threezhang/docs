@@ -597,20 +597,25 @@
     "dark": "/logo/dark.svg"
   },
   "footer": {
-    "zh": {
-      "socials": {
-        "website": "https://api.laozhang.ai",
-        "telegram": "https://t.me/laozhang_cn",
-        "email": "mailto:threezhang.cn@gmail.com"
-      }
+    "socials": {
+      "website": "https://api.laozhang.ai",
+      "telegram": "https://t.me/laozhang_cn"
     },
-    "en": {
-      "socials": {
-        "website": "https://api.laozhang.ai",
-        "telegram": "https://t.me/laozhang_cn",
-        "email": "mailto:threezhang.cn@gmail.com"
+    "links": [
+      {
+        "header": "法律条款",
+        "items": [
+          {
+            "label": "用户协议",
+            "href": "https://lp.laozhang.ai/serviceAgreement.html"
+          },
+          {
+            "label": "隐私协议",
+            "href": "https://lp.laozhang.ai/privacyPolicy.html"
+          }
+        ]
       }
-    }
+    ]
   },
   "feedback": {
     "thumbsRating": true
