@@ -22,6 +22,7 @@ Official Forward is a transparent proxy forwarding service for OpenAI's official
 | **Instruction Following** | Precise reproduction | Average |
 | **Image Quality** | Stable, no blur | Occasional blur |
 | **Duration Options** | 4/8/12 seconds | 10/15 seconds |
+| **Image-to-Video** | Supported | Supported |
 | **API Method** | Async only | Sync + Async |
 | **Pricing** | Per-second billing | Per-call billing |
 
@@ -81,6 +82,7 @@ Prices above include our service fee.
 |---------------|-------|
 | **Base URL** | `https://api.laozhang.ai` |
 | **Authentication** | `Authorization: Bearer YOUR_API_KEY` |
+| **Request Format** | `multipart/form-data` |
 
 ### API Endpoints
 
@@ -95,63 +97,80 @@ Prices above include our service fee.
 | Parameter | Type | Required | Description |
 |-----------|------|----------|-------------|
 | `model` | string | Yes | Model name: `sora-2` or `sora-2-pro` |
-| `prompt` | string | Yes | Video description text (max 500 characters) |
-| `n_seconds` | integer | No | Video duration: 4, 8, or 12 seconds (default 8) |
-| `width` | integer | No | Video width (pixels) |
-| `height` | integer | No | Video height (pixels) |
-| `n_variants` | integer | No | Number of variants to generate (default 1) |
+| `prompt` | string | Yes | Video description text |
+| `size` | string | No | Resolution, e.g. `1280x720` (default `720x1280`) |
+| `seconds` | string | No | Video duration: `4`, `8`, or `12` (default `4`) |
+| `input_reference` | file | No | Reference image file (for image-to-video) |
 
-### Supported Resolutions
+### Supported Resolutions (size parameter)
 
 **sora-2:**
-- 720×1280 (Portrait)
-- 1280×720 (Landscape)
+- `720x1280` (Portrait, default)
+- `1280x720` (Landscape)
 
 **sora-2-pro:**
-- 720×1280 (Portrait)
-- 1280×720 (Landscape)
-- 1024×1792 (Portrait HD)
-- 1792×1024 (Landscape HD)
+- `720x1280` (Portrait)
+- `1280x720` (Landscape)
+- `1024x1792` (Portrait HD)
+- `1792x1024` (Landscape HD)
 
 ## Complete Examples
 
-### cURL Examples
+### Text-to-Video (cURL)
 
 **Step 1: Create Video Generation Task**
 
 ```bash
-curl -X POST https://api.laozhang.ai/v1/videos \
+curl -X POST "https://api.laozhang.ai/v1/videos" \
   -H "Authorization: Bearer YOUR_API_KEY" \
-  -H "Content-Type: application/json" \
-  -d '{
-    "model": "sora-2",
-    "prompt": "A golden retriever playing fetch on a sunny beach, waves gently rolling in the background, cinematic lighting",
-    "n_seconds": 8,
-    "width": 1280,
-    "height": 720
-  }'
+  -F model="sora-2" \
+  -F prompt="A golden retriever playing fetch on a sunny beach, waves gently rolling in the background, cinematic lighting" \
+  -F size="1280x720" \
+  -F seconds="8"
 ```
 
 **Response Example:**
 
 ```json
 {
-  "id": "video_abc123xyz",
-  "object": "video.generation",
-  "status": "queued",
-  "created_at": 1706745600,
+  "id": "video_69788dc4a1c8819887468fbeffdda023",
+  "object": "video",
   "model": "sora-2",
-  "prompt": "A golden retriever playing fetch on a sunny beach...",
-  "n_seconds": 8,
-  "width": 1280,
-  "height": 720
+  "status": "queued",
+  "progress": 0,
+  "created_at": 1769508292,
+  "size": "1280x720",
+  "seconds": "8"
 }
 ```
+
+### Image-to-Video (cURL)
+
+<Info>
+**Image-to-Video** allows you to provide a reference image as the first frame of the video. The AI will generate a dynamic video based on this image.
+</Info>
+
+```bash
+curl -X POST "https://api.laozhang.ai/v1/videos" \
+  -H "Authorization: Bearer YOUR_API_KEY" \
+  -F model="sora-2" \
+  -F prompt="The camera slowly zooms in, the scene comes alive with gentle movement, cinematic atmosphere" \
+  -F size="1280x720" \
+  -F seconds="4" \
+  -F input_reference="@your_image.jpeg;type=image/jpeg"
+```
+
+<Warning>
+**Image Requirements**
+- Image resolution must match the `size` parameter (e.g., if size=1280x720, image must be 1280×720 pixels)
+- Supported formats: JPEG, PNG, WebP
+- **Images containing real human faces are not supported** (will be rejected by content moderation)
+</Warning>
 
 **Step 2: Poll Task Status**
 
 ```bash
-curl https://api.laozhang.ai/v1/videos/video_abc123xyz \
+curl "https://api.laozhang.ai/v1/videos/video_69788dc4a1c8819887468fbeffdda023" \
   -H "Authorization: Bearer YOUR_API_KEY"
 ```
 
@@ -159,11 +178,11 @@ curl https://api.laozhang.ai/v1/videos/video_abc123xyz \
 
 ```json
 {
-  "id": "video_abc123xyz",
-  "object": "video.generation",
+  "id": "video_69788dc4a1c8819887468fbeffdda023",
+  "object": "video",
   "status": "in_progress",
-  "created_at": 1706745600,
-  "progress": 45
+  "progress": 45,
+  "created_at": 1769508292
 }
 ```
 
@@ -171,23 +190,19 @@ curl https://api.laozhang.ai/v1/videos/video_abc123xyz \
 
 ```json
 {
-  "id": "video_abc123xyz",
-  "object": "video.generation",
+  "id": "video_69788dc4a1c8819887468fbeffdda023",
+  "object": "video",
   "status": "completed",
-  "created_at": 1706745600,
-  "finished_at": 1706745900,
-  "generations": [
-    {
-      "id": "gen_xyz789"
-    }
-  ]
+  "progress": 100,
+  "created_at": 1769508292,
+  "completed_at": 1769508592
 }
 ```
 
 **Step 3: Download Video**
 
 ```bash
-curl https://api.laozhang.ai/v1/videos/video_abc123xyz/content \
+curl "https://api.laozhang.ai/v1/videos/video_69788dc4a1c8819887468fbeffdda023/content" \
   -H "Authorization: Bearer YOUR_API_KEY" \
   -o output.mp4
 ```
@@ -202,28 +217,45 @@ API_KEY = "YOUR_API_KEY"
 BASE_URL = "https://api.laozhang.ai"
 
 headers = {
-    "Authorization": f"Bearer {API_KEY}",
-    "Content-Type": "application/json"
+    "Authorization": f"Bearer {API_KEY}"
 }
 
-# Step 1: Create video generation task
-def create_video(prompt, model="sora-2", n_seconds=8, width=1280, height=720):
+# Text-to-Video
+def create_video(prompt, model="sora-2", seconds="8", size="1280x720"):
     response = requests.post(
         f"{BASE_URL}/v1/videos",
         headers=headers,
-        json={
+        data={
             "model": model,
             "prompt": prompt,
-            "n_seconds": n_seconds,
-            "width": width,
-            "height": height
+            "seconds": seconds,
+            "size": size
         }
     )
     response.raise_for_status()
     return response.json()
 
-# Step 2: Poll task status
-def poll_status(video_id, timeout=600, interval=10):
+# Image-to-Video
+def create_video_from_image(prompt, image_path, model="sora-2", seconds="4", size="1280x720"):
+    with open(image_path, "rb") as f:
+        response = requests.post(
+            f"{BASE_URL}/v1/videos",
+            headers=headers,
+            data={
+                "model": model,
+                "prompt": prompt,
+                "seconds": seconds,
+                "size": size
+            },
+            files={
+                "input_reference": (image_path.split("/")[-1], f, "image/jpeg")
+            }
+        )
+    response.raise_for_status()
+    return response.json()
+
+# Poll task status
+def poll_status(video_id, timeout=600, interval=15):
     start_time = time.time()
     while time.time() - start_time < timeout:
         response = requests.get(
@@ -234,7 +266,8 @@ def poll_status(video_id, timeout=600, interval=10):
         data = response.json()
 
         status = data.get("status")
-        print(f"Status: {status}, Progress: {data.get('progress', 'N/A')}%")
+        progress = data.get("progress", 0)
+        print(f"Status: {status}, Progress: {progress}%")
 
         if status == "completed":
             return data
@@ -245,7 +278,7 @@ def poll_status(video_id, timeout=600, interval=10):
 
     raise TimeoutError("Video generation timeout")
 
-# Step 3: Download video
+# Download video
 def download_video(video_id, output_path="output.mp4"):
     response = requests.get(
         f"{BASE_URL}/v1/videos/{video_id}/content",
@@ -259,13 +292,12 @@ def download_video(video_id, output_path="output.mp4"):
 
 # Complete workflow
 if __name__ == "__main__":
-    # Create task
+    # Text-to-Video
     job = create_video(
-        prompt="A golden retriever playing fetch on a sunny beach, waves gently rolling in the background",
+        prompt="A golden retriever playing fetch on a sunny beach",
         model="sora-2",
-        n_seconds=8,
-        width=1280,
-        height=720
+        seconds="8",
+        size="1280x720"
     )
     print(f"Task created: {job['id']}")
 
@@ -275,6 +307,15 @@ if __name__ == "__main__":
 
     # Download video
     download_video(job["id"], "my_video.mp4")
+
+    # Image-to-Video example
+    # job2 = create_video_from_image(
+    #     prompt="The scene comes alive with gentle movement",
+    #     image_path="reference.jpg",
+    #     model="sora-2",
+    #     seconds="4",
+    #     size="1280x720"
+    # )
 ```
 
 ### Task Status Reference
@@ -289,7 +330,7 @@ if __name__ == "__main__":
 <Tip>
 **Polling Recommendation**
 
-Video generation typically takes 2-5 minutes. We recommend polling status every 10-20 seconds to avoid excessive requests.
+Video generation typically takes 2-5 minutes. We recommend polling status every 15-20 seconds to avoid excessive requests.
 </Tip>
 
 ## Developer Documentation
@@ -299,6 +340,9 @@ The Official Forward plan is fully compatible with OpenAI's official API format.
 <CardGroup cols={2}>
   <Card title="OpenAI Sora Official Guide" icon="book-open" href="https://platform.openai.com/docs/guides/video-generation">
     Complete video generation guide
+  </Card>
+  <Card title="OpenAI Videos API" icon="code" href="https://platform.openai.com/docs/api-reference/videos">
+    API reference documentation
   </Card>
   <Card title="Sora 2 Model Docs" icon="cpu" href="https://platform.openai.com/docs/models/sora-2">
     sora-2 model details
@@ -316,6 +360,7 @@ The Official Forward plan is fully compatible with OpenAI's official API format.
 1. **Async only**: Official Forward does not support sync API, all requests are asynchronous
 2. **Pay-as-you-go only**: Must select "Pay-as-you-go" billing mode, "Pay-per-call" is not supported
 3. **Group selection**: Must select "Sora2官转" group when creating tokens
+4. **Image limitation**: Image-to-video does not support images containing real human faces
 </Warning>
 
 
@@ -330,5 +375,8 @@ The Official Forward plan is fully compatible with OpenAI's official API format.
   </Accordion>
   <Accordion title="Why are duration options different?">
     Official Forward supports OpenAI's official 4/8/12 second duration options; reverse-engineered supports the official website interface's 10/15 second durations.
+  </Accordion>
+  <Accordion title="What are the requirements for image-to-video?">
+    Image resolution must match the target video's size parameter. For example, if size=1280x720, the image must be 1280×720 pixels. Supported formats: JPEG, PNG, WebP. Images containing real human faces are not supported.
   </Accordion>
 </AccordionGroup>
