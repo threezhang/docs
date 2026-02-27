@@ -97,6 +97,7 @@ Nano Banana Pro supports two endpoints, each with unique advantages:
 | Model | Model ID | Billing | LaoZhang API Price | Official Price | Savings | Resolution | Speed |
 |-------|----------|---------|-------------------|----------------|---------|------------|-------|
 | **Nano Banana Pro** | `gemini-3-pro-image-preview` | Per-use | $0.05/image | $0.24/image | 79% | 1K/2K/4K | ~10s |
+| **Nano Banana2** | `gemini-3.1-flash-image-preview` | Per-use | $0.03/image | - | - | 1K/2K/4K | ~10s |
 | **Nano Banana** | `gemini-2.5-flash-image` | Per-use | $0.025/image | $0.04/image | 37.5% | 1K (fixed) | ~10s |
 | **GPT-Image-1** | `gpt-image-1` | Token-based | $10 input/$40 output per M | - | - | - | Medium |
 | **Flux Kontext Pro** | `flux-kontext-pro` | Per-use | $0.035/image | $0.04/image | 12.5% | - | Fast |
@@ -864,6 +865,9 @@ response = requests.post(
 <CardGroup cols={2}>
   <Card title="Pro Image Editing" icon="paintbrush" href="/en/api-capabilities/nano-banana-pro-image-edit">
     Learn how to edit and transform existing images with Nano Banana Pro
+  </Card>
+  <Card title="Nano Banana2 Image Generation" icon="citrus" href="/en/api-capabilities/nano-banana2-image">
+    $0.03/image, better value Banana2 version
   </Card>
   <Card title="Standard Image Generation" icon="sparkles" href="/en/api-capabilities/nano-banana-image">
     More affordable Nano Banana Standard version

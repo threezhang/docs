@@ -1,0 +1,215 @@
+---
+title: "Nano Banana2 图像生成"
+seoTitle: "Nano Banana2 图像生成 API - Gemini 3.1 Flash 高性价比图像生成与编辑 | 老张API"
+sidebarTitle: "Nano Banana2 图像生成"
+description: "Nano Banana2 图像生成 API：基于 Gemini 3.1 Flash。仅 $0.03/张，支持文生图+图改图，4K分辨率，兼容 OpenAI SDK 和 Google 原生格式。"
+icon: "citrus"
+---
+
+<Note>
+**🆕 Nano Banana2 (Gemini 3.1 Flash) 全新上线！**
+性价比新标杆，用法与 Nano Banana Pro 完全相同。
+- **高性价比**: 仅 **\$0.03/张**，比 Pro 版更便宜
+- **4K 画质**: 支持 1K, 2K, 4K 三种分辨率
+- **全功能**: 文生图 + 图改图，兼容 OpenAI SDK 和 Google 原生格式
+</Note>
+
+<CardGroup cols={2}>
+  <Card title="🎁 免费测试" icon="gift" href="https://api.laozhang.ai">
+    注册送 **$0.05**，免费测试 Nano Banana2
+  </Card>
+  <Card title="🚀 在线测试" icon="play" href="https://images.laozhang.ai/">
+    AI Images 即刻体验，无需写代码
+  </Card>
+</CardGroup>
+
+## 前置要求
+
+<Steps>
+  <Step title="获取 API Key">
+    登录 [laozhang.ai 控制台](https://api.laozhang.ai) 获取 API 密钥
+  </Step>
+  <Step title="配置计费模式">
+    编辑令牌设置，选择以下任一计费模式（两者价格相同）：
+
+    - **按量优先**（推荐）：优先使用余额计费，余额不足时自动切换
+    - **按次计费**：每次调用直接扣费，适合预算控制严格的场景
+
+    <Note>
+    两种模式**价格完全相同**，都是 \$0.03/张，仅扣费方式不同。
+    </Note>
+
+    <img src="/images/sora2-token-setting.png" alt="令牌设置" />
+
+    <Warning>
+    如果未设置计费模式，API调用会失败。必须先完成此配置！
+    </Warning>
+  </Step>
+</Steps>
+
+## 模型简介
+
+**Nano Banana2** 是老张API对 Google **Gemini 3.1 Flash Image Preview** (`gemini-3.1-flash-image-preview`) 模型的定制版称呼。它基于最新的 Gemini 3.1 Flash 架构，在保持高质量输出的同时提供更优的性价比。
+
+**Nano Banana2 的用法与 [Nano Banana Pro](/api-capabilities/nano-banana-pro-image) 完全相同**，只需将模型名替换为 `gemini-3.1-flash-image-preview` 即可。
+
+## 📋 三款 Nano Banana 模型对比
+
+| 模型 | 模型 ID | 计费方式 | 老张API价格 | 分辨率 | 速度 | 特色 |
+|------|---------|----------|-----------|--------|------|------|
+| **Nano Banana Pro** | `gemini-3-pro-image-preview` | 按次计费 | \$0.05/张 | 1K/2K/4K | ~10秒 | 最强智能，复杂指令 |
+| **Nano Banana2** | `gemini-3.1-flash-image-preview` | 按次计费 | \$0.03/张 | 1K/2K/4K | ~10秒 | 性价比首选，高质量 |
+| **Nano Banana** | `gemini-2.5-flash-image` | 按次计费 | \$0.025/张 | 1K（固定） | ~10秒 | 基础版，稳定可靠 |
+
+<Tip>
+💡 **如何选择？**
+- **追求极致质量和复杂指令**: 选 Nano Banana Pro（\$0.05/张）
+- **性价比首选，日常高级用途**: 选 **Nano Banana2**（\$0.03/张）
+- **预算敏感，基础需求**: 选 Nano Banana Standard（\$0.025/张）
+</Tip>
+
+## 🚀 快速开始：OpenAI 兼容模式
+
+### Curl 示例
+
+```bash
+curl -X POST "https://api.laozhang.ai/v1/chat/completions" \
+     -H "Authorization: Bearer $API_KEY" \
+     -H "Content-Type: application/json" \
+     -d '{
+    "model": "gemini-3.1-flash-image-preview",
+    "stream": false,
+    "messages": [
+        {
+            "role": "user",
+            "content": "a beautiful sunset over mountains"
+        }
+    ]
+}'
+```
+
+### Python SDK 示例
+
+```python
+from openai import OpenAI
+import base64
+import re
+
+client = OpenAI(
+    api_key="sk-YOUR_API_KEY",
+    base_url="https://api.laozhang.ai/v1"
+)
+
+response = client.chat.completions.create(
+    model="gemini-3.1-flash-image-preview",
+    messages=[
+        {
+            "role": "user",
+            "content": "a beautiful sunset over mountains"
+        }
+    ]
+)
+
+# 提取 base64 图片数据
+content = response.choices[0].message.content
+match = re.search(r'!\[.*?\]\((data:image/png;base64,.*?)\)', content)
+
+if match:
+    base64_data = match.group(1).split(',')[1]
+    image_data = base64.b64decode(base64_data)
+
+    with open('output.png', 'wb') as f:
+        f.write(image_data)
+    print("✅ 图片已保存: output.png")
+```
+
+## 🎨 图改图
+
+Nano Banana2 同样支持图改图功能，用法与 Pro 完全一致。只需在请求中传入参考图片和编辑指令，并将模型名设为 `gemini-3.1-flash-image-preview`。
+
+```python
+# 图改图示例（OpenAI 兼容模式）
+response = client.chat.completions.create(
+    model="gemini-3.1-flash-image-preview",
+    messages=[{
+        "role": "user",
+        "content": [
+            {"type": "text", "text": "把这张图变成梵高星空风格的油画"},
+            {"type": "image_url", "image_url": {"url": "https://example.com/your-image.jpg"}}
+        ]
+    }]
+)
+```
+
+<Info>
+更多图改图用法（多图融合、4K 输出、Google 原生格式等），请参考 [Nano Banana Pro 图改图文档](/api-capabilities/nano-banana-pro-image-edit)，将模型名替换为 `gemini-3.1-flash-image-preview` 即可。
+</Info>
+
+## 📖 完整用法指南
+
+<Info>
+**Nano Banana2 的调用方式与 Nano Banana Pro 完全相同**，包括 OpenAI 兼容模式和 Google 原生格式。只需将模型名从 `gemini-3-pro-image-preview` 替换为 `gemini-3.1-flash-image-preview`，其他代码无需修改。
+</Info>
+
+<CardGroup cols={2}>
+  <Card title="Pro 文生图完整指南" icon="image" href="/api-capabilities/nano-banana-pro-image">
+    4K 分辨率、Google 原生格式、多种纵横比、完整代码示例
+  </Card>
+  <Card title="Pro 图改图完整指南" icon="paintbrush" href="/api-capabilities/nano-banana-pro-image-edit">
+    风格转换、多图融合、4K 高清编辑、URL 输入方式
+  </Card>
+  <Card title="令牌管理" icon="key" href="https://api.laozhang.ai/token">
+    创建和管理你的 API 令牌
+  </Card>
+  <Card title="价格说明" icon="dollar-sign" href="/pricing">
+    查看详细的价格表和计费说明
+  </Card>
+</CardGroup>
+
+## ❓ 常见问题
+
+<AccordionGroup>
+  <Accordion title="Nano Banana2 和 Nano Banana Pro 有什么区别？">
+    | 特性 | Nano Banana Pro | Nano Banana2 |
+    |------|-----------------|--------------|
+    | 模型 | `gemini-3-pro-image-preview` | `gemini-3.1-flash-image-preview` |
+    | 技术 | Gemini 3 Pro | Gemini 3.1 Flash |
+    | 分辨率 | 1K/2K/4K | 1K/2K/4K |
+    | 价格 | \$0.05/张 | \$0.03/张 |
+    | 调用方式 | 完全相同 | 完全相同 |
+
+    两者用法完全一致，Banana2 基于 Gemini 3.1 Flash 架构，价格更优惠。
+  </Accordion>
+
+  <Accordion title="如何从 Pro 迁移到 Banana2？">
+    只需修改一行代码：将模型名从 `gemini-3-pro-image-preview` 改为 `gemini-3.1-flash-image-preview`，其他完全不变。
+  </Accordion>
+
+  <Accordion title="Banana2 支持 Google 原生格式吗？">
+    **完全支持！** 使用以下端点：
+
+    ```
+    https://api.laozhang.ai/v1beta/models/gemini-3.1-flash-image-preview:generateContent
+    ```
+
+    支持自定义纵横比（10 种）和分辨率（1K/2K/4K），用法与 Pro 相同。
+  </Accordion>
+
+  <Accordion title="Banana2 支持图改图吗？">
+    **支持！** 文生图和图改图功能完整，参考 [Pro 图改图文档](/api-capabilities/nano-banana-pro-image-edit) 即可。
+  </Accordion>
+</AccordionGroup>
+
+---
+
+## 📝 更新日志
+
+<AccordionGroup>
+  <Accordion title="2026-02：Nano Banana2 上线">
+    **🆕 Nano Banana2 全新发布**
+    - 基于 Gemini 3.1 Flash 架构
+    - 价格 \$0.03/张，性价比更优
+    - 用法与 Nano Banana Pro 完全一致
+    - 支持文生图、图改图、4K 分辨率
+  </Accordion>
+</AccordionGroup>

@@ -170,6 +170,13 @@
                     ]
                   },
                   {
+                    "group": "Nano Banana2",
+                    "icon": "citrus",
+                    "pages": [
+                      "api-capabilities/nano-banana2-image"
+                    ]
+                  },
+                  {
                     "group": "Nano Banana Pro",
                     "icon": "cherry",
                     "pages": [
@@ -442,6 +449,13 @@
                     "pages": [
                       "en/api-capabilities/nano-banana-image",
                       "en/api-capabilities/nano-banana-image-edit"
+                    ]
+                  },
+                  {
+                    "group": "Nano Banana2",
+                    "icon": "citrus",
+                    "pages": [
+                      "en/api-capabilities/nano-banana2-image"
                     ]
                   },
                   {
