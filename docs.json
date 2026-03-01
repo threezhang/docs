@@ -304,6 +304,11 @@
                 ]
               }
             ]
+          },
+          {
+            "tab": "TG公告频道",
+            "icon": "send",
+            "href": "https://t.me/laozhang_ai"
           }
         ],
         "anchors": [
@@ -586,6 +591,11 @@
                 ]
               }
             ]
+          },
+          {
+            "tab": "TG Channel",
+            "icon": "send",
+            "href": "https://t.me/laozhang_ai"
           }
         ],
         "anchors": [
