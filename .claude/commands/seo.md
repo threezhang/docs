@@ -31,51 +31,43 @@ $ARGUMENTS
 
 这是整个报告的基础。你必须通过实际搜索采集真实数据，**严禁凭经验编造关键词或 SERP 结果**。
 
-**工具选择说明（浏览器 + WebSearch 混合策略）**：
+**工具选择说明（Claude in Chrome + WebSearch 混合策略）**：
 
-Chrome 浏览器能采集完整 SERP 结构（PAA、Video Carousel、Related Searches、People Also Search For、Featured Snippet 等），这些信息 WebSearch 经常遗漏。因此关键搜索使用 Chrome，批量搜索使用 WebSearch，两者结合获得最佳效果。
+使用 **Claude in Chrome**（`navigate_page` + `read_page`）采集完整 SERP 结构（PAA、Video Carousel、Related Searches、People Also Search For、Featured Snippet 等），这些信息 WebSearch 经常遗漏。关键搜索使用 Claude in Chrome，批量搜索使用 Agent + WebSearch，两者结合获得最佳效果。
 
-- **A1（主词 SERP）**：Chrome 浏览器 — 采集完整 SERP 结构
-- **A1-EXT（主词扩展 SERP）**：Chrome 浏览器 — 在 A1 之后串行执行，用浏览器采集 3-4 个最重要的变体搜索（"{keyword} vs"、"{keyword} API"、"{keyword} pricing"、"{keyword} tutorial"），获取这些高价值变体的完整 SERP 结构
+**注意**：Claude in Chrome 只能在主线程中使用，不能在 Agent 子进程中使用。所有浏览器操作必须在主线程执行。
+
+- **A1（主词 SERP）**：Claude in Chrome（`navigate_page` + `read_page`）— 采集完整 SERP 结构
+- **A1-EXT（主词扩展 SERP）**：Claude in Chrome — 在 A1 之后串行执行，用浏览器采集 3-4 个最重要的变体搜索（"{keyword} vs"、"{keyword} API"、"{keyword} pricing"、"{keyword} tutorial"），获取这些高价值变体的完整 SERP 结构
 - **A2**：Agent + WebSearch 并行批量搜索（覆盖 A1-EXT 未覆盖的剩余变体）
-- **A3**：Agent + WebSearch（中文变体批量搜索）+ 主线程 Chrome 补充 1-2 个关键中文变体
+- **A3**：Agent + WebSearch（中文变体批量搜索）+ 主线程 Claude in Chrome 补充 1-2 个关键中文变体
 - **B1**：Agent + WebFetch（Google Suggest API）
 - **B2**：Agent + WebSearch（依赖 A2 竞品数据）
 - **B3**：Agent + WebSearch（竞品反推）
+- **B4**：Agent + WebSearch（Reddit/论坛真实用户问题挖掘）
+- **B5**：Agent + WebSearch（自有资产盘点 site:laozhang.ai + site:blog.laozhang.ai）
 
 **执行顺序**：
-- **第零步（主线程）**：A1 — 用 Chrome 浏览器采集主词 SERP
-- **第零步续（主线程）**：A1-EXT — A1 完成后，继续用 Chrome 浏览器串行采集 3-4 个关键变体 SERP
-- **第一批（并行 Agent，与 A1-EXT 同时启动）**：A2、A3、B1、B3 — 在 A1 完成后并行启动（A1-EXT 和这些 Agent 同时运行）
+- **第零步（主线程）**：A1 — Claude in Chrome 采集主词 SERP
+- **第零步续（主线程）**：A1-EXT — A1 完成后，继续用 Claude in Chrome 串行采集 3-4 个关键变体 SERP
+- **第一批（并行 Agent，与 A1-EXT 同时启动）**：A2、A3、B1、B3、B4、B5 — 在 A1 完成后并行启动（A1-EXT 和这些 Agent 同时运行）
 - **第二批（等第一批完成后）**：B2 — 依赖 A2 的竞品发现结果来填充问题中的竞品名
-- **第三步（主线程）**：A3-CHROME — 用 Chrome 浏览器采集 1-2 个最重要的中文变体 SERP（如 "{keyword} 教程"、"{keyword} 国内使用"），补充 A3 的 WebSearch 数据
+- **第三步（主线程）**：A3-CHROME — Claude in Chrome 采集 1-2 个最重要的中文变体 SERP + Google Trends 页面
 
-#### A1 — 主词 SERP 采集（使用 Chrome 浏览器）
+#### A1 — 主词 SERP 采集（使用 Claude in Chrome）
 
-任务：通过 Chrome 浏览器打开 Google 搜索主关键词，采集完整的 SERP 页面结构。
+任务：通过 Claude in Chrome 打开 Google 搜索主关键词，采集完整的 SERP 页面结构。
 
-具体操作：
-1. 使用 `browser_navigate` 打开 `https://www.google.com/search?q={keyword_encoded}&hl=en`
-2. 使用 `browser_snapshot` 获取页面结构。**如果页面内容超出字符限制（报错 "Output exceeds character limit"）**，按以下降级策略处理：
-   - 先用较小的 depth 参数重试（如 depth=3）
-   - 如果仍然超限，使用 `ref_id` 聚焦到搜索结果区域（通常是 `<div id="search">` 或 `<div id="rso">`）分段读取
-   - 先读取自然搜索结果区域，再读取 Related Searches / PAA 区域
-   - 最后兜底：使用 `browser_evaluate` 执行 JavaScript 直接提取关键数据：
-     ```javascript
-     // 提取自然搜索结果
-     const results = [...document.querySelectorAll('#search .g')].map((el, i) => ({
-       rank: i + 1,
-       title: el.querySelector('h3')?.textContent || '',
-       url: el.querySelector('a')?.href || '',
-       snippet: el.querySelector('.VwiC3b')?.textContent || ''
-     }));
-     // 提取 PAA
-     const paa = [...document.querySelectorAll('[data-sgrd] [role="heading"]')].map(el => el.textContent);
-     // 提取 Related Searches
-     const related = [...document.querySelectorAll('.k8XOCe .s75CSd')].map(el => el.textContent);
-     JSON.stringify({ results, paa, related });
-     ```
-3. 从 snapshot 中提取以下所有信息：
+具体操作（使用 Claude in Chrome）：
+1. 使用 `navigate_page` 打开 `https://www.google.com/search?q={keyword_encoded}&hl=en`
+2. 使用 `read_page` 获取页面结构。**处理大页面的策略**：
+   - 首次尝试：`read_page` 使用默认参数
+   - 如果页面过大（超出 max_chars 限制）→ 降低 `depth` 参数（如 depth=5）重试
+   - 如果仍然过大 → 使用 `ref_id` 聚焦到搜索结果区域，分段读取：
+     - 第一次：聚焦搜索结果主体区域（ref_id 指向搜索结果容器）
+     - 第二次：聚焦 Related Searches / PAA 区域
+   - 最终兜底 → 对该搜索改用 WebSearch 补充，确保不丢失数据
+3. 从 read_page 结果中提取以下所有信息：
 
 **自然搜索结果**（逐条提取）：
    - 排名位置
@@ -84,7 +76,7 @@ Chrome 浏览器能采集完整 SERP 结构（PAA、Video Carousel、Related Sea
    - 域名（判断类型：官方/权威媒体/科技博客/独立博客/工具站/论坛/UGC）
    - 摘要描述原文
 
-**SERP 特殊元素**（从 snapshot 结构中识别）：
+**SERP 特殊元素**（从 read_page 结果中识别）：
    - Featured Snippet（精选摘要）— 通常在自然结果之前
    - Knowledge Panel（知识面板）— 通常在右侧
    - Top Stories / News（热门新闻）— 新闻轮播块
@@ -94,20 +86,26 @@ Chrome 浏览器能采集完整 SERP 结构（PAA、Video Carousel、Related Sea
    - People Also Search For — 记录所有推荐的相关搜索实体
    - Related Searches（页面底部）— 记录所有推荐搜索词
 
+**广告信号采集**（搜索量代理指标）：
+   - 是否有顶部广告（Sponsored results）？记录广告数量
+   - 是否有底部广告？
+   - 广告主是谁？（品牌官方 / 第三方工具 / 竞品 / API 平台）
+   - 广告信号解读：有广告 = 有商业价值和搜索量；广告越多 = 竞价越激烈 = 商业价值越高
+
 4. **如果页面底部有 Related Searches，全部记录**（这是关键词扩展的重要数据源）
 5. **如果有 People Also Search For 区块，全部记录**（这是竞品发现的重要数据源）
 
 输出：将以上信息整理为结构化数据，在后续 Phase 2 中使用
 
-#### A1-EXT — 关键变体 SERP 采集（使用 Chrome 浏览器，主线程串行）
+#### A1-EXT — 关键变体 SERP 采集（使用 Claude in Chrome，主线程串行）
 
-任务：在 A1 完成后，继续用 Chrome 浏览器依次采集 3-4 个最重要的变体搜索的完整 SERP 结构。这些变体对报告质量影响最大，值得用浏览器获取完整数据。
+任务：在 A1 完成后，继续用 Claude in Chrome 依次采集 3-4 个最重要的变体搜索的完整 SERP 结构。这些变体对报告质量影响最大，值得用浏览器获取完整数据。
 
 **必须采集的变体**（按顺序逐个执行）：
 
 1. **"{keyword} vs"** — 竞品发现最关键入口
-   - 使用 `browser_navigate` 打开 `https://www.google.com/search?q={keyword_encoded}+vs&hl=en`
-   - 使用 `browser_snapshot` 获取页面（如超出字符限制，使用 A1 中描述的降级策略：减小 depth → 聚焦 ref_id → browser_evaluate JS 提取）
+   - 使用 `navigate_page` 打开 `https://www.google.com/search?q={keyword_encoded}+vs&hl=en`
+   - 使用 `read_page` 获取页面（如页面过大，使用 A1 降级策略：减小 depth → 聚焦 ref_id → WebSearch 兜底）
    - 重点提取：Google 自动补全的竞品名（搜索框建议）、Related Searches 中的对比词、PAA 中的对比问题
 
 2. **"{keyword} API"** — 开发者意图核心词
@@ -122,10 +120,10 @@ Chrome 浏览器能采集完整 SERP 结构（PAA、Video Carousel、Related Sea
    - 同上操作（含降级策略）
    - 重点提取：教程型内容的竞争格局、哪些站点排名靠前
 
-**页面过大时的通用降级流程**（每个变体都适用）：
-1. 先尝试 `browser_snapshot`（默认 depth）
-2. 如果超限 → 用较小 depth 重试
-3. 如果仍超限 → 用 `browser_evaluate` 执行 JS 直接提取搜索结果、PAA、Related Searches（JS 代码见 A1 部分）
+**页面过大时的通用降级流程**（每个变体都适用，使用 Claude in Chrome 的 read_page 参数控制）：
+1. 先尝试 `read_page`（默认参数）
+2. 如果过大 → 减小 `depth` 参数重试（如 depth=5）
+3. 如果仍过大 → 用 `ref_id` 聚焦搜索结果区域分段读取
 4. 最终兜底 → 对该变体改用 WebSearch 补充，确保不丢失数据
 
 对每个变体，提取与 A1 相同的信息结构：
@@ -187,6 +185,19 @@ Chrome 浏览器能采集完整 SERP 结构（PAA、Video Carousel、Related Sea
 - "{keyword} benchmark"
 - "{keyword} performance"
 
+**故障/排错类变体**（AI 领域高频长尾）：
+- "{keyword} error"
+- "{keyword} not working"
+- "{keyword} issues"
+- "{keyword} troubleshooting"
+
+**时效/更新类变体**（AI 领域关键意图）：
+- "{keyword} latest"
+- "{keyword} new features"
+- "{keyword} updates"
+- "{keyword} changelog"
+- "{keyword} {当前年份}"（如 "{keyword} 2026"）
+
 具体操作：
 1. 对每个变体使用 WebSearch
 2. 对每个变体记录前 10 结果的标题、URL、域名类型
@@ -221,15 +232,15 @@ Chrome 浏览器能采集完整 SERP 结构（PAA、Video Carousel、Related Sea
 
 输出格式：按变体分组，每组列出前 10 结果摘要，末尾附标题反向提词
 
-#### A3-CHROME — 中文关键变体 Chrome 补充（主线程，等第一批 Agent 完成后执行）
+#### A3-CHROME — 中文关键变体补充采集（使用 Claude in Chrome，主线程，等第一批 Agent 完成后执行）
 
-任务：在第一批 Agent 完成后，用 Chrome 浏览器补充采集 1-2 个最重要的中文变体 SERP。
+任务：在第一批 Agent 完成后，用 Claude in Chrome 补充采集 1-2 个最重要的中文变体 SERP。
 
 **必须采集的变体**（从 A3 结果中挑选搜索结果最有价值的 1-2 个，优先选择）：
 
 1. **"{keyword} 教程"** 或 **"{keyword} 怎么用"** — 中文教程需求
-   - 使用 `browser_navigate` 打开 `https://www.google.com/search?q={keyword_encoded}+教程&hl=zh-CN`
-   - 使用 `browser_snapshot` 获取页面（如超限，使用 A1 降级策略：减小 depth → browser_evaluate JS 提取）
+   - 使用 `navigate_page` 打开 `https://www.google.com/search?q={keyword_encoded}+教程&hl=zh-CN`
+   - 使用 `read_page` 获取页面（如页面过大，使用 A1 降级策略：减小 depth → ref_id 分段 → WebSearch 兜底）
    - 重点提取：中文内容的 PAA 问题、Related Searches、竞品中文站点
 
 2. **"{keyword} API 中转"** 或 **"{keyword} 国内使用"** — 与 laozhang.ai 业务最相关的中文搜索
@@ -348,6 +359,80 @@ Chrome 浏览器能采集完整 SERP 结构（PAA、Video Carousel、Related Sea
 - 每个站点覆盖的关键词/角度列表
 - 启发性发现（它们做了什么我们可以借鉴的）
 
+#### Agent B4 — Reddit/论坛真实用户问题挖掘
+
+任务：从 Reddit、GitHub、Stack Overflow 等社区中挖掘用户围绕该关键词的真实痛点和问题。这些社区问题往往是最好的长尾关键词来源，且内容差异化机会大。
+
+具体操作：
+1. 使用 WebSearch 搜索以下查询：
+   - "site:reddit.com {keyword}"
+   - "site:reddit.com {keyword} API"
+   - "site:github.com {keyword} issue"
+   - "site:stackoverflow.com {keyword}"
+   - "{keyword} reddit"
+   - "{keyword} experience"（用户真实体验帖）
+2. 从搜索结果中提取：
+   - Reddit 帖子标题（= 真实用户问题）
+   - GitHub Issue 标题（= 开发者真实痛点）
+   - Stack Overflow 问题标题（= 技术问题）
+   - 帖子的热度信号（出现在搜索结果前列 = 高关注度话题）
+3. 将提取的问题/痛点分类：
+   - 使用类问题（怎么用、怎么接入）
+   - 比较类问题（和 XX 比哪个好）
+   - 价格类问题（贵不贵、有免费吗）
+   - 故障类问题（报错、不工作）
+   - 评价类问题（效果怎么样、值不值得用）
+
+输出格式：
+- 按来源分组的问题列表（Reddit / GitHub / Stack Overflow）
+- 高频痛点总结（出现 2 次以上的主题）
+- 从社区问题中发现的长尾关键词候选
+
+#### Agent B5 — 自有资产盘点
+
+任务：检查 laozhang.ai 和 blog.laozhang.ai 已有的与该关键词相关的内容，避免重复建设和关键词自相残杀。
+
+具体操作：
+1. 使用 WebSearch 搜索：
+   - "site:laozhang.ai {keyword}"
+   - "site:blog.laozhang.ai {keyword}"
+   - "site:laozhang.ai {keyword核心词}"（去掉版本号等修饰词后的核心词）
+   - "site:blog.laozhang.ai {keyword核心词}"
+2. 对每个找到的已有页面，记录：
+   - 页面 URL
+   - 页面标题
+   - 在 Google 中的排名位置（如能判断）
+   - 页面看起来是什么类型（教程/对比/定价/概览）
+3. 评估：
+   - 已有页面是否覆盖了目标关键词？覆盖程度如何？
+   - 是否存在可以优化而非新建的页面？
+   - 已有页面可以为新文章提供哪些内链支撑？
+
+输出格式：
+- 已有页面列表（URL + 标题 + 类型 + 当前状态）
+- 优化建议 vs 新建建议
+- 内链机会列表（已有页面 → 新文章的链接机会）
+
+#### Google Trends 采集（在 A3-CHROME 步骤中执行）
+
+在 A3-CHROME 步骤完成中文变体采集后，继续用 Claude in Chrome 访问 Google Trends：
+
+1. 使用 `navigate_page` 打开 `https://trends.google.com/trends/explore?q={keyword_encoded}&hl=en`
+2. 使用 `read_page` 获取趋势数据
+3. 提取关键信息：
+   - 过去 12 个月的趋势走向（上升/稳定/下降/刚爆发）
+   - 趋势峰值时间点（是否与产品发布相关）
+   - 相关查询（Rising 和 Top）— 这是高价值长尾词来源
+   - 相关主题
+4. 如果 read_page 无法提取趋势图数据 → 降级：使用 WebSearch 搜索 "google trends {keyword}" 获取趋势描述
+
+**趋势信号解读**（在 Phase 2 中使用）：
+- 持续上升 = 高优先级，抢首发
+- 刚爆发（近 1-3 个月暴涨）= 紧急，立即做
+- 平稳 = 常规优先级
+- 下降 = 低优先级，除非有差异化角度
+- 脉冲型（发布时暴涨后回落）= 做常青内容而非时效内容
+
 ---
 
 ### Phase 2：数据分析
@@ -370,12 +455,14 @@ Chrome 浏览器能采集完整 SERP 结构（PAA、Video Carousel、Related Sea
 **数据来源合并**：将以下所有来源的关键词合并去重：
 - B1 Autocomplete 采集结果（完整词 + 短词根 + 中文）
 - B2 问题列表 + PAA + Related Searches
-- A1 主词 SERP 的 Related Searches、PAA、People Also Search For（Chrome 浏览器数据）
-- A1-EXT 关键变体 SERP 的 Related Searches、PAA（Chrome 浏览器数据）
+- A1 主词 SERP 的 Related Searches、PAA、People Also Search For（Chrome 数据）
+- A1-EXT 关键变体 SERP 的 Related Searches、PAA（Chrome 数据）
 - A2 所有变体 SERP 的标题反向提词（WebSearch 数据）
 - A3 中文变体 SERP 的标题反向提词（WebSearch 数据）
-- A3-CHROME 中文关键变体的 Related Searches、PAA（Chrome 浏览器数据）
+- A3-CHROME 中文关键变体的 Related Searches、PAA（Chrome 数据）
 - B3 竞品站点覆盖的关键词
+- B4 Reddit/论坛中发现的长尾关键词候选
+- Google Trends 的 Related Queries（Rising + Top）
 
 **关键词总数要求**：合并去重后，总关键词数应不少于 30 个。如果不足 30 个，说明采集不充分，需要在报告中注明原因（如关键词太小众）。
 
@@ -402,15 +489,21 @@ Chrome 浏览器能采集完整 SERP 结构（PAA、Video Carousel、Related Sea
 - SERP 中存在独立站/中小站排名（非全被大站垄断）
 - 与 laozhang.ai API 中转业务有明确承接关系
 - 内容可以做出差异化
+- Google Trends 趋势不是下降（上升/稳定/刚爆发优先）
+- laozhang.ai 尚未有优质页面覆盖该词（B5 盘点结果）
 
 **可做但不优先的标准**：
 - 有机会但转化路径远，或竞争偏强
+- 趋势平稳但搜索量信号弱（无广告、Autocomplete 建议少）
+- laozhang.ai 已有相关页面但可以优化
 
 **不建议做的标准**（满足任一即可）：
 - SERP 完全被官方/大站垄断
 - 导航型意图（用户只想找官网）
 - 零点击风险高（Google 直接给出答案）
 - 与业务无关
+- Google Trends 显示明确下降趋势
+- laozhang.ai 已有高质量页面充分覆盖（避免自相残杀）
 
 **输出要求**：每个关键词的筛选结论都必须标注依据（如"该词 SERP 前 10 中有 3 个独立站排名"或"该词 SERP 全是官方页面"）。
 
@@ -445,6 +538,18 @@ Chrome 浏览器能采集完整 SERP 结构（PAA、Video Carousel、Related Sea
    - Google 在摘要中选择展示什么内容？→ 这是 Google 认为用户最想看的信息
    - 摘要中反复出现什么关键词/数据？→ 页面中必须包含这些信息
 
+6. **内容格式偏好分析**（从 SERP 结果推断 Google 偏好的内容格式）：
+   - 前 10 的页面是什么格式？（深度长文 / 列表型 / 对比表格 / 快速教程 / FAQ 页面 / 工具页）
+   - 是否有 Schema 标记信号？（搜索结果中出现星级评分 = Review Schema，FAQ 折叠 = FAQ Schema，步骤展示 = HowTo Schema）
+   - 是否偏好带图片/视频的内容？（Image Pack、Video Carousel 的出现是信号）
+   - → 新内容应该匹配 Google 偏好的格式，否则排名机会降低
+
+7. **搜索量与商业价值间接评估**：
+   - 广告信号：SERP 顶部/底部是否有广告？广告数量？广告主类型？
+   - Autocomplete 丰富度：B1 采集到的补全建议数量（多 = 搜索量大）
+   - Google Trends 趋势方向：上升/稳定/下降/刚爆发？
+   - 综合判断：该关键词的搜索量级别（高/中/低）和商业价值级别（高/中/低）
+
 #### Step 2.4 — 内容差异化判断
 
 基于 A1 前 10 结果的摘要，分析：
@@ -461,6 +566,8 @@ Chrome 浏览器能采集完整 SERP 结构（PAA、Video Carousel、Related Sea
    - 与竞品的深度对比
    - 最佳实践 / workflow
 3. **缺口 = 机会**：未被覆盖的维度就是差异化切入点
+4. **社区痛点缺口**（来自 B4）：Reddit/GitHub/Stack Overflow 中高频出现但 SERP 前 10 未充分解答的问题 = 高价值差异化机会
+5. **自有资产评估**（来自 B5）：laozhang.ai 已有哪些相关页面？是新建还是优化？已有页面能提供哪些内链支撑？
 
 #### Step 2.5 — 业务匹配判断
 
@@ -483,8 +590,11 @@ Chrome 浏览器能采集完整 SERP 结构（PAA、Video Carousel、Related Sea
 ### 一、结论先行
 
 - **这个词值不值得做**：[值得做 / 不值得做 / 换角度做]
+- **Google Trends 趋势**：[上升/稳定/下降/刚爆发] — [一句话描述趋势]
+- **搜索量级别**：[高/中/低] — [依据：广告数量、Autocomplete 丰富度、Trends 数据]
 - **不建议直接打的原因**：[基于 SERP 数据说明]
 - **最值得切入的次级角度**：[具体关键词或内容角度]
+- **自有资产现状**：[laozhang.ai 已有 X 个相关页面 / 无覆盖] — [优化已有 or 新建]
 - **对 laozhang.ai 的核心价值**：[流量 / 转化 / 品牌认知 / GEO 引用]
 - **最终判断**：[做 / 不做 / 换角度做]
 
@@ -504,6 +614,12 @@ Chrome 浏览器能采集完整 SERP 结构（PAA、Video Carousel、Related Sea
 **标题反向提词附录**：将 A2、A3 的标题反向提词汇总列出。
 
 **竞品覆盖词附录**：将 B3 发现的竞品关键词列出。
+
+**社区问题附录**：将 B4 从 Reddit/GitHub/Stack Overflow 中发现的用户问题和长尾词列出。
+
+**自有资产附录**：将 B5 发现的 laozhang.ai 已有相关页面列出（URL + 标题 + 优化/新建建议）。
+
+**Google Trends 数据附录**：列出 Trends 的 Related Queries（Rising + Top）。
 
 ### 三、SERP 结构判断
 
@@ -528,15 +644,20 @@ Chrome 浏览器能采集完整 SERP 结构（PAA、Video Carousel、Related Sea
 7. **前 3 名赢在哪里**：[域名权重？内容深度？时效性？页面类型匹配？]
 8. **4-10 位是否存在切入窗口**：[有/无，具体说明]
 9. **SERP 特殊元素**：[列出发现的特殊元素及对应机会]
-10. **风险判断**：[正面硬打的风险等级和原因]
+10. **广告信号**：[广告数量、广告主类型、商业价值判断]
+11. **Google Trends 趋势**：[上升/稳定/下降/刚爆发 + 关键时间节点]
+12. **Google Trends 相关查询**：[列出 Rising 和 Top 相关查询中的关键词机会]
+13. **风险判断**：[正面硬打的风险等级和原因]
 
 ### 四、内容缺口与切入机会
 
 1. **当前内容同质化点**：[前 10 都在重复什么]
 2. **确认的内容缺口**：[列出具体维度]
-3. **最容易赢的切角**：[具体角度 + 为什么容易赢（引用数据）]
-4. **不建议正面硬打的方向**：[具体说明]
-5. **更适合打的次级意图**：[具体关键词或角度]
+3. **社区真实痛点**（来自 B4 Reddit/论坛数据）：[用户真正在问什么？SERP 前 10 是否解答了这些问题？]
+4. **最容易赢的切角**：[具体角度 + 为什么容易赢（引用数据）]
+5. **不建议正面硬打的方向**：[具体说明]
+6. **更适合打的次级意图**：[具体关键词或角度]
+7. **自有资产利用建议**（来自 B5）：[已有页面如何优化？新文章如何与已有页面形成内链集群？]
 
 ### 五、业务承接判断
 
@@ -596,8 +717,9 @@ Chrome 浏览器能采集完整 SERP 结构（PAA、Video Carousel、Related Sea
 
 | 维度 | 评分（1-5） | 原因 |
 |------|------------|------|
-| 可抢性 | | [基于 SERP 数据] |
-| 点击可得性 | | [零点击风险评估] |
+| 可抢性 | | [基于 SERP 竞争格局] |
+| 点击可得性 | | [零点击风险 + 广告挤压评估] |
+| 搜索量/趋势 | | [基于 Trends + 广告 + Autocomplete 信号] |
 | 商业承接性 | | [与业务的关联度] |
 | GEO / AI 引用潜力 | | [结构化内容机会] |
 | 程序化扩展潜力 | | [能否复用框架到同类词] |
@@ -621,7 +743,7 @@ Chrome 浏览器能采集完整 SERP 结构（PAA、Video Carousel、Related Sea
 
 在报告开头附上以下声明：
 
-> **数据局限性说明**：本报告基于 Chrome 浏览器（SERP 完整结构采集）、WebSearch（批量并行搜索）和 Google Suggest API（Autocomplete 数据）采集的实时数据。主词及关键变体的 SERP 通过 Chrome 浏览器采集，包含完整的 PAA、Related Searches、Video Carousel 等特殊元素。无 Ahrefs/SEMrush 等专业工具支持，搜索量和关键词难度为基于 SERP 竞争格局的间接推断。SERP 数据为搜索时快照，排名会动态变化。
+> **数据局限性说明**：本报告基于 Claude in Chrome（SERP 完整结构采集，含 PAA、Related Searches、Video Carousel 等特殊元素）、WebSearch（批量并行搜索）和 Google Suggest API（Autocomplete 数据）采集的实时数据。无 Ahrefs/SEMrush 等专业工具支持，搜索量和关键词难度为基于 SERP 竞争格局的间接推断。SERP 数据为搜索时快照，排名会动态变化。
 
 ## 质量红线
 
@@ -640,3 +762,6 @@ Chrome 浏览器能采集完整 SERP 结构（PAA、Video Carousel、Related Sea
 11. **时效性校验**：报告中提到的所有模型/产品名、价格数据必须来自 Phase 1 的实时搜索结果，不可来自训练知识。所有对比对象必须经过 A2 竞品发现步骤的时效性验证。无法确认时效性的信息必须标注"⚠️ 需验证时效性"
 12. **文章建议数量**：第七节内容规划中，文章建议数量不少于 5 篇，且必须有明确的优先级排序
 13. **优先做关键词数量**：第二节中"优先做"层关键词不少于 10 个
+14. **趋势数据**：报告必须包含 Google Trends 趋势判断（上升/稳定/下降/刚爆发），如无法获取需注明
+15. **自有资产盘点**：报告必须包含 B5 的 site:laozhang.ai 盘点结果，避免重复建设
+16. **社区痛点**：报告必须包含 B4 的 Reddit/论坛用户问题数据，用于长尾词发现和内容差异化
