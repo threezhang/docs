@@ -257,7 +257,8 @@
                   "scenarios/programming/cursor",
                   "scenarios/programming/cline",
                   "scenarios/programming/claude-code",
-                  "scenarios/programming/codex-cli"
+                  "scenarios/programming/codex-cli",
+                  "scenarios/programming/openclaw"
                 ]
               },
               {
@@ -544,7 +545,8 @@
                   "en/scenarios/programming/cursor",
                   "en/scenarios/programming/cline",
                   "en/scenarios/programming/claude-code",
-                  "en/scenarios/programming/codex-cli"
+                  "en/scenarios/programming/codex-cli",
+                  "en/scenarios/programming/openclaw"
                 ]
               },
               {

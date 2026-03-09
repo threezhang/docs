@@ -1,0 +1,133 @@
+---
+title: "OpenClaw 本地AI网关配置老张API教程"
+description: "OpenClaw配置老张API完整教程。通过Custom Provider接入200+AI模型，支持OpenAI兼容端点，使用GPT-5、Claude Opus 4.6、Gemini等最新模型。"
+icon: "terminal"
+---
+
+## 什么是 OpenClaw
+
+OpenClaw 是一款开源的本地 AI 网关工具，在终端中运行，支持通过统一接口连接多种 AI 模型提供商。它内置了对 OpenAI、Anthropic、Google 等主流服务商的支持，同时也支持通过 **Custom Provider** 接入任何兼容 OpenAI 或 Anthropic 的第三方端点。
+
+通过老张API的 Custom Provider 接入，您可以在 OpenClaw 中使用 200+ AI 模型，包括 GPT-5、Claude Opus 4.6、Gemini 2.5 Pro 等最新模型。
+
+## 前置准备
+
+- 已安装 OpenClaw（参考 [OpenClaw 官方文档](https://github.com/openclaw-ai/openclaw)）
+- 已注册老张API账号并获取 API 密钥（访问 [老张API令牌管理](https://api.laozhang.ai/token)，创建新令牌，选择按量扣费，默认分组，其他保持默认即可）
+
+## 配置步骤
+
+### 第一步：选择 Custom Provider
+
+启动 OpenClaw 配置向导后，在 **Model/auth provider** 列表中，滚动到底部，选择 **Custom Provider (Any OpenAI or Anthropic compatible endpoint)**。
+
+<img src="/images/openclaw-step-1.png" alt="OpenClaw选择Custom Provider作为模型提供商" />
+
+<Info>
+Custom Provider 支持任何兼容 OpenAI 或 Anthropic 接口的服务端点，老张API 完全兼容 OpenAI 接口格式。
+</Info>
+
+### 第二步：填写 API Base URL
+
+在 **API Base URL** 字段中输入老张API的接口地址：
+
+```
+http://api.laozhang.ai/v1
+```
+
+<img src="/images/openclaw-step-2.png" alt="OpenClaw填写老张API的Base URL地址" />
+
+<Tip>
+也可以使用 `https://api.laozhang.ai/v1`，推荐使用 HTTPS 以获得更好的安全性。
+</Tip>
+
+### 第三步：选择 API Key 提供方式
+
+系统会询问如何提供 API Key，选择 **Paste API key now**，将密钥直接存储在 OpenClaw 配置中。
+
+<img src="/images/openclaw-step-3.png" alt="OpenClaw选择粘贴API Key的方式" />
+
+### 第四步：输入 API Key
+
+在 **API Key** 字段中粘贴您从老张API控制台获取的密钥（格式为 `sk-` 开头的字符串）。
+
+<img src="/images/openclaw-step-4.png" alt="OpenClaw输入老张API密钥" />
+
+<Info>
+API 密钥可在 [老张API令牌管理](https://api.laozhang.ai/token) 页面创建。创建新令牌时，选择按量扣费，默认分组，其他保持默认即可。
+</Info>
+
+### 第五步：选择端点兼容模式
+
+在 **Endpoint compatibility** 选项中，选择 **OpenAI-compatible (Uses /chat/completions)**。
+
+<img src="/images/openclaw-step-5.png" alt="OpenClaw选择OpenAI兼容端点模式" />
+
+老张API 完全兼容 OpenAI 的 `/chat/completions` 接口，选择此选项即可。
+
+### 第六步：设置 Model ID
+
+在 **Model ID** 字段中输入您想使用的模型名称。
+
+<img src="/images/openclaw-step-6.png" alt="OpenClaw设置AI模型ID" />
+
+### 第七步：验证并完成
+
+OpenClaw 会自动验证配置。验证成功后，系统会生成一个 **Endpoint ID**（如 `custom-api-laozhang-ai`），配置即完成。
+
+<img src="/images/openclaw-step-7.png" alt="OpenClaw验证成功并生成Endpoint ID" />
+
+<Info>
+验证时可能返回错误，重试即可成功。如验证持续失败，可选择 **Change model** 更换为其他模型 ID 再试。
+</Info>
+
+## 推荐模型
+
+通过老张API，您可以在 OpenClaw 中使用以下主流模型：
+
+| 模型系列 | Model ID | 特点 |
+|---------|----------|------|
+| **GPT-5** | `gpt-5.2` | OpenAI 最新旗舰模型 |
+| **Claude Opus 4.6** | `claude-opus-4-6` | Anthropic 最强推理模型 |
+| **Claude Sonnet 4.6** | `claude-sonnet-4-6` | 平衡性能与成本 |
+| **Gemini 2.5 Pro** | `gemini-2.5-pro` | Google 最新多模态模型 |
+| **GPT-4o** | `gpt-4o` | 经典稳定，速度快 |
+
+<Tip>
+**模型选择建议**
+- 复杂编程任务：推荐 `claude-opus-4-6` 或 `gpt-5.2`
+- 日常对话：推荐 `gpt-4o`
+- 多模态任务：推荐 `gemini-2.5-pro`
+- 性价比优先：推荐 `claude-sonnet-4-6`
+</Tip>
+
+## 配置总结
+
+完成配置后，您的 OpenClaw 关键参数如下：
+
+| 配置项 | 值 |
+|-------|-----|
+| Provider | Custom Provider |
+| API Base URL | `http://api.laozhang.ai/v1` |
+| Endpoint Compatibility | OpenAI-compatible |
+| Endpoint ID | `custom-api-laozhang-ai` |
+
+## 故障排除
+
+### 验证返回错误
+
+验证时可能返回错误，重试即可成功。
+
+### 连接超时
+
+- 检查网络连接是否正常
+- 确认 API Base URL 是否正确填写
+- 尝试使用 `https://api.laozhang.ai/v1`
+
+### 模型调用失败
+
+- 确认账户余额充足
+- 检查 Model ID 是否拼写正确
+- 在 [老张API日志页面](https://api.laozhang.ai/log) 查看调用日志排查问题
+
+需要更多帮助？请访问 [老张API官网](https://api.laozhang.ai)。
