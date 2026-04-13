@@ -16,7 +16,7 @@ icon: "cherry"
 
 <CardGroup cols={2}>
   <Card title="🎁 免费测试" icon="gift" href="https://api.laozhang.ai">
-    注册送 **$0.05**，可直接抵扣 Nano Banana Pro 调用费用
+    注册送 **$0.5**，可直接抵扣 Nano Banana Pro 调用费用
   </Card>
   <Card title="🚀 在线测试" icon="play" href="https://yingtu.ai/">
     AI Images 即刻体验，无需写代码
@@ -97,7 +97,7 @@ Nano Banana Pro 支持两种调用端点，各有优势：
 | 模型 | 模型 ID | 计费方式 | 老张API价格 | 官方价格 | 节省比例 | 分辨率 | 速度 |
 |------|---------|----------|-----------|----------|----------|--------|------|
 | **Nano Banana Pro** | `gemini-3-pro-image-preview` | 按次计费 | \$0.09/张 | \$0.24/张 | 62.5% | 1K/2K/4K | ~10秒 |
-| **Nano Banana2** | `gemini-3.1-flash-image-preview` | 按次计费 | \$0.081/张 | - | - | 1K/2K/4K | ~10秒 |
+| **Nano Banana2** | `gemini-3.1-flash-image-preview` | 按次计费 | \$0.055/张 | - | - | 1K/2K/4K | ~10秒 |
 | **Nano Banana** | `gemini-2.5-flash-image` | 按次计费 | \$0.025/张 | \$0.04/张 | 37.5% | 1K（固定） | ~10秒 |
 | **GPT-Image-1** | `gpt-image-1` | 按Token | \$10输入/\$40输出 per M | - | - | - | 中等 |
 | **Flux Kontext Pro** | `flux-kontext-pro` | 按次计费 | \$0.035/张 | \$0.04/张 | 12.5% | - | 快速 |
@@ -778,11 +778,11 @@ response = requests.post(
 <AccordionGroup>
   <Accordion title="Nano Banana Pro API 如何免费测试？">
     1. 访问 [api.laozhang.ai](https://api.laozhang.ai) 注册账号
-    2. 自动获得 **$0.05 免费额度**
+    2. 自动获得 **$0.5 免费额度**
     3. 创建令牌，选择"按次计费"
     4. 调用 `gemini-3-pro-image-preview` 模型
 
-    $0.05 可直接抵扣首笔 Nano Banana Pro 调用费用。
+    $0.5 可直接抵扣多次 Nano Banana Pro 调用费用。
   </Accordion>
 
   <Accordion title="Nano Banana Pro API 价格是多少？">
@@ -791,7 +791,7 @@ response = requests.post(
     | **老张 API** | **$0.09/张** | 比官网便宜 62.5% |
     | Google 官方 | $0.24/张 | 原价 |
 
-    注册送 $0.05，可直接抵扣调用费用！
+    注册送 $0.5，可直接抵扣调用费用！
   </Accordion>
 
   <Accordion title="如何在线测试 Nano Banana Pro API？">
@@ -867,7 +867,7 @@ response = requests.post(
     学习如何使用 Nano Banana Pro 编辑和改造现有图片
   </Card>
   <Card title="Nano Banana2 图像生成" icon="citrus" href="/api-capabilities/nano-banana2-image">
-    $0.081/张，性价比更优的 Banana2 版本
+    $0.055/张，性价比更优的 Banana2 版本
   </Card>
   <Card title="Standard 图像生成" icon="sparkles" href="/api-capabilities/nano-banana-image">
     更实惠的 Nano Banana Standard 版本
