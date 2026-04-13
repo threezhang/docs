@@ -1,0 +1,344 @@
+---
+title: "Seedance 2.0 Video Generation API"
+seoTitle: "Seedance 2.0 Video Generation API - Text to Video and Multimodal References | LaoZhang API"
+description: "Use /v1/videos with Seedance 2.0 and Seedance 2.0 fast for text-to-video, image references, first/last frames, video references, audio references, multimodal references, video extension, track completion, and video editing."
+icon: "clapperboard"
+---
+
+<Warning>
+**Access Notice**
+Seedance 2.0 is not yet available to all users.
+Contact LaoZhang API support to request access: Telegram [@laozhang_cn](https://t.me/laozhang_cn).
+</Warning>
+
+<Info>
+**Base URL:** `https://api.laozhang.ai`
+
+**Required endpoints:** 2
+
+1. `POST /v1/videos`: create a video generation task
+2. `GET /v1/videos/{task_id}`: query task status and get the result URL
+
+To download the video file, send a direct `GET` request to the `video_url` returned by the completed task.
+</Info>
+
+## API Flow
+
+Seedance 2.0 video generation is an asynchronous task API. Create a task first, poll the task by `id`, then download the mp4 after the task returns `video_url`.
+
+<Steps>
+  <Step title="Create task">
+    Call `POST /v1/videos` with the model, prompt, video parameters, and optional reference assets.
+  </Step>
+  <Step title="Poll status">
+    Call `GET /v1/videos/{task_id}` and check `status`.
+  </Step>
+  <Step title="Download video">
+    When `status=completed`, read `video_url` from the response and download the mp4 file.
+  </Step>
+</Steps>
+
+Common status progression:
+
+```text
+submitted -> queued -> in_progress -> completed
+```
+
+Failed tasks usually return `failed` with an `error` field.
+
+## Models
+
+| Model | Description | Recommended use |
+| --- | --- | --- |
+| `doubao-seedance-2-0-fast-260128` | Seedance 2.0 fast | Fast generation, batch jobs, general video generation |
+| `doubao-seedance-2-0-260128` | Seedance 2.0 standard | Standard-quality generation, video editing, workflows that need more stable output |
+
+## Create Task
+
+<ParamField method="POST" path="/v1/videos">
+Create a Seedance 2.0 video generation task.
+</ParamField>
+
+### Headers
+
+| Header | Required | Description |
+| --- | --- | --- |
+| `Authorization` | Yes | `Bearer $API_KEY` |
+| `Content-Type` | Yes | `application/json` |
+
+### Request Parameters
+
+| Parameter | Type | Required | Description |
+| --- | --- | --- | --- |
+| `model` | string | Yes | Model ID, for example `doubao-seedance-2-0-fast-260128` |
+| `prompt` | string | Yes | Video generation prompt. Text-only generation only requires `model` and `prompt` |
+| `content` | array | No | Multimodal content array for image, video, or audio references |
+| `ratio` | string | No | Output aspect ratio, for example `16:9`, `9:16`, `1:1`, `3:4`, `4:3`, or `21:9` |
+| `duration` | integer | No | Output duration. Use the 4-15 second range unless your account has different limits |
+| `watermark` | boolean | No | Whether to add a watermark. `false` is common |
+| `generate_audio` | boolean | No | Whether to generate or keep audio |
+
+### `content` Items
+
+Use `content` to provide multimodal reference assets. Keep the top-level `prompt`, and for multimodal requests put the same text in the first `content` item for compatibility with the multimodal structure.
+
+| Field | Type | Applies to | Required | Description |
+| --- | --- | --- | --- | --- |
+| `type` | string | all | Yes | `text`, `image_url`, `video_url`, or `audio_url` |
+| `text` | string | `text` | Yes | Prompt text |
+| `image_url.url` | string | `image_url` | Yes | Image URL |
+| `video_url.url` | string | `video_url` | Yes | Video URL |
+| `audio_url.url` | string | `audio_url` | Yes | Audio URL |
+| `role` | string | asset items | Recommended | `reference_image`, `reference_video`, or `reference_audio` |
+
+Refer to assets by media type and order in the prompt:
+
+| Reference | Meaning |
+| --- | --- |
+| `image 1` | The first `image_url` item in `content` |
+| `image 2` | The second `image_url` item in `content` |
+| `video 1` | The first `video_url` item in `content` |
+| `audio 1` | The first `audio_url` item in `content` |
+
+### Text-to-video Example
+
+```bash
+curl -X POST "https://api.laozhang.ai/v1/videos" \
+  -H "Content-Type: application/json" \
+  -H "Authorization: Bearer $API_KEY" \
+  --data-raw '{
+    "model": "doubao-seedance-2-0-fast-260128",
+    "prompt": "First-person apple fruit tea ad, 8 seconds, fast-paced edit, show apple tea preparation and finished product, fresh bright style",
+    "ratio": "16:9",
+    "duration": 8,
+    "watermark": false,
+    "generate_audio": true
+  }'
+```
+
+### Multimodal Reference Example
+
+```bash
+curl -X POST "https://api.laozhang.ai/v1/videos" \
+  -H "Content-Type: application/json" \
+  -H "Authorization: Bearer $API_KEY" \
+  --data-raw '{
+    "model": "doubao-seedance-2-0-fast-260128",
+    "prompt": "Use the first-person camera composition from video 1 throughout, and use audio 1 as background music. The first frame is image 1. Generate a first-person apple fruit tea ad and freeze the final frame as image 2.",
+    "ratio": "16:9",
+    "duration": 11,
+    "watermark": false,
+    "generate_audio": true,
+    "content": [
+      {
+        "type": "text",
+        "text": "Use the first-person camera composition from video 1 throughout, and use audio 1 as background music. The first frame is image 1. Generate a first-person apple fruit tea ad and freeze the final frame as image 2."
+      },
+      {
+        "type": "image_url",
+        "image_url": {
+          "url": "https://ark-project.tos-cn-beijing.volces.com/doc_image/r2v_tea_pic1.jpg"
+        },
+        "role": "reference_image"
+      },
+      {
+        "type": "image_url",
+        "image_url": {
+          "url": "https://ark-project.tos-cn-beijing.volces.com/doc_image/r2v_tea_pic2.jpg"
+        },
+        "role": "reference_image"
+      },
+      {
+        "type": "video_url",
+        "video_url": {
+          "url": "https://ark-project.tos-cn-beijing.volces.com/doc_video/r2v_tea_video1.mp4"
+        },
+        "role": "reference_video"
+      },
+      {
+        "type": "audio_url",
+        "audio_url": {
+          "url": "https://ark-project.tos-cn-beijing.volces.com/doc_audio/r2v_tea_audio1.mp3"
+        },
+        "role": "reference_audio"
+      }
+    ]
+  }'
+```
+
+### Create Response
+
+```json
+{
+  "id": "cgt-20260410125521-rpf27",
+  "object": "video",
+  "model": "doubao-seedance-2-0-fast-260128",
+  "status": "submitted",
+  "created_at": 1775796921
+}
+```
+
+Response fields:
+
+| Field | Type | Description |
+| --- | --- | --- |
+| `id` | string | Task ID used for status polling |
+| `object` | string | Object type, usually `video` |
+| `model` | string | Model used by the task |
+| `status` | string | Initial status, commonly `submitted` or `queued` |
+| `created_at` | integer | Creation timestamp |
+| `billing_detail` | object | Optional billing estimate or billing detail |
+
+## Query Task
+
+<ParamField method="GET" path="/v1/videos/{task_id}">
+Query the status of a video generation task.
+</ParamField>
+
+```bash
+curl "https://api.laozhang.ai/v1/videos/cgt-20260410125521-rpf27" \
+  -H "Authorization: Bearer $API_KEY"
+```
+
+### Path Parameters
+
+| Parameter | Type | Required | Description |
+| --- | --- | --- | --- |
+| `task_id` | string | Yes | The `id` returned by the create task response |
+
+### Query Response
+
+In progress:
+
+```json
+{
+  "id": "cgt-20260410125521-rpf27",
+  "object": "video",
+  "model": "doubao-seedance-2-0-fast-260128",
+  "status": "in_progress",
+  "created_at": 1775796921,
+  "updated_at": 1775796980
+}
+```
+
+Completed:
+
+```json
+{
+  "id": "cgt-20260410125521-rpf27",
+  "object": "video",
+  "model": "doubao-seedance-2-0-fast-260128",
+  "status": "completed",
+  "video_url": "https://example.com/generated-video.mp4",
+  "created_at": 1775796921,
+  "updated_at": 1775797043
+}
+```
+
+Failed:
+
+```json
+{
+  "id": "cgt-20260410125521-rpf27",
+  "object": "video",
+  "model": "doubao-seedance-2-0-fast-260128",
+  "status": "failed",
+  "error": {
+    "message": "generation failed"
+  }
+}
+```
+
+Response fields:
+
+| Field | Type | Description |
+| --- | --- | --- |
+| `id` | string | Task ID |
+| `object` | string | Object type |
+| `model` | string | Model used by the task |
+| `status` | string | `submitted`, `queued`, `in_progress`, `completed`, `failed`, etc. |
+| `video_url` | string | Video URL returned after completion |
+| `url` | string | Some responses may use this field for the video URL |
+| `created_at` | integer | Creation timestamp |
+| `updated_at` | integer | Update timestamp |
+| `error` | object | Error details for failed tasks |
+
+## Download Video
+
+After the query response returns `completed`, read `video_url` and download it directly:
+
+```bash
+curl -L "$VIDEO_URL" -o output.mp4
+```
+
+<Warning>
+`video_url` is usually a temporary signed URL. Download it immediately or copy it to your own object storage.
+</Warning>
+
+## Full Python Example
+
+```python
+import os
+import time
+import requests
+
+API_KEY = os.environ["API_KEY"]
+BASE_URL = "https://api.laozhang.ai/v1"
+
+headers = {
+    "Authorization": f"Bearer {API_KEY}",
+    "Content-Type": "application/json",
+}
+
+payload = {
+    "model": "doubao-seedance-2-0-fast-260128",
+    "prompt": "First-person apple fruit tea ad, 8 seconds, fast-paced edit, show apple tea preparation and finished product, fresh bright style",
+    "ratio": "16:9",
+    "duration": 8,
+    "watermark": False,
+    "generate_audio": True,
+}
+
+create_resp = requests.post(f"{BASE_URL}/videos", headers=headers, json=payload, timeout=60)
+create_resp.raise_for_status()
+task_id = create_resp.json()["id"]
+
+while True:
+    query_resp = requests.get(f"{BASE_URL}/videos/{task_id}", headers=headers, timeout=60)
+    query_resp.raise_for_status()
+    task = query_resp.json()
+    status = task.get("status")
+
+    if status == "completed":
+        video_url = task.get("video_url") or task.get("url")
+        video_resp = requests.get(video_url, timeout=120)
+        video_resp.raise_for_status()
+        with open(f"{task_id}.mp4", "wb") as f:
+            f.write(video_resp.content)
+        break
+
+    if status == "failed":
+        raise RuntimeError(task.get("error") or task)
+
+    time.sleep(20)
+```
+
+## Common Integration Questions
+
+<AccordionGroup>
+  <Accordion title="How many endpoints do I need to integrate?">
+    Two endpoints are required: `POST /v1/videos` to create a task and `GET /v1/videos/{task_id}` to query it. Download the final video by requesting the returned `video_url`.
+  </Accordion>
+
+  <Accordion title="When do I need content?">
+    Text-to-video does not need `content`. Use the `content` array when you need image, video, or audio references, then refer to them in the prompt as `image 1`, `video 1`, or `audio 1`.
+  </Accordion>
+
+  <Accordion title="Do I need both prompt and content[0].text?">
+    For text-to-video, top-level `prompt` is enough. For multimodal reference requests, keep top-level `prompt` and `content[0].text` the same for better compatibility with the multimodal structure.
+  </Accordion>
+
+  <Accordion title="What should I check if no channel is available?">
+    Check whether the token group, billing mode, and model route are enabled. A correct model name does not guarantee that the current billing group has an available route.
+  </Accordion>
+</AccordionGroup>

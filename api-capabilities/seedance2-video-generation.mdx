@@ -1,0 +1,344 @@
+---
+title: "Seedance 2.0 视频生成 API"
+seoTitle: "Seedance 2.0 视频生成 API - 文生视频与多模态参考 | 老张API"
+description: "使用 /v1/videos 调用 Seedance 2.0 与 Seedance 2.0 fast，支持文生视频、图片参考、首尾帧、视频参考、音频参考、多模态参考、视频延长、轨道补齐与视频编辑。"
+icon: "clapperboard"
+---
+
+<Warning>
+**权限说明**
+Seedance 2.0 暂未对所有用户开放。
+如需开通调用权限，请联系老张 API 客服协助处理：Telegram [@laozhang_cn](https://t.me/laozhang_cn)。
+</Warning>
+
+<Info>
+**Base URL:** `https://api.laozhang.ai`
+
+**需要接入的接口：** 2 个
+
+1. `POST /v1/videos`：创建视频生成任务
+2. `GET /v1/videos/{task_id}`：查询任务状态与获取结果 URL
+
+视频文件下载使用任务完成后返回的 `video_url`，直接对该 URL 发起 `GET` 即可。
+</Info>
+
+## 接口流程
+
+Seedance 2.0 视频生成是异步任务接口。业务侧需要先创建任务，拿到 `id` 后轮询查询状态，直到任务完成并返回 `video_url`。
+
+<Steps>
+  <Step title="创建任务">
+    调用 `POST /v1/videos`，传入模型、提示词、视频参数和可选参考素材。
+  </Step>
+  <Step title="查询状态">
+    调用 `GET /v1/videos/{task_id}`，轮询 `status`。
+  </Step>
+  <Step title="下载视频">
+    当 `status=completed` 时，从响应中读取 `video_url` 并下载 mp4。
+  </Step>
+</Steps>
+
+常见状态流转：
+
+```text
+submitted -> queued -> in_progress -> completed
+```
+
+失败时通常返回 `failed`，并在响应中包含 `error` 字段。
+
+## 模型
+
+| 模型 | 说明 | 推荐用途 |
+| --- | --- | --- |
+| `doubao-seedance-2-0-fast-260128` | Seedance 2.0 fast | 快速生成、批量任务、常规视频生成 |
+| `doubao-seedance-2-0-260128` | Seedance 2.0 标准版 | 标准质量生成、视频编辑、对稳定性要求更高的场景 |
+
+## 创建任务
+
+<ParamField method="POST" path="/v1/videos">
+创建 Seedance 2.0 视频生成任务。
+</ParamField>
+
+### 请求头
+
+| Header | 必填 | 说明 |
+| --- | --- | --- |
+| `Authorization` | 是 | `Bearer $API_KEY` |
+| `Content-Type` | 是 | `application/json` |
+
+### 请求参数
+
+| 参数 | 类型 | 必填 | 说明 |
+| --- | --- | --- | --- |
+| `model` | string | 是 | 模型 ID，如 `doubao-seedance-2-0-fast-260128` |
+| `prompt` | string | 是 | 视频生成提示词。纯文生视频只需要 `model` + `prompt` 即可 |
+| `content` | array | 否 | 多模态内容数组。需要图片、视频、音频参考时传入 |
+| `ratio` | string | 否 | 输出比例，如 `16:9`、`9:16`、`1:1`、`3:4`、`4:3`、`21:9` |
+| `duration` | integer | 否 | 输出时长，建议使用 4-15 秒范围 |
+| `watermark` | boolean | 否 | 是否添加水印，常用 `false` |
+| `generate_audio` | boolean | 否 | 是否生成或保留音频 |
+
+### `content` 内容项
+
+`content` 用于传入多模态参考素材。建议同时保留顶层 `prompt`，并在 `content` 的第一个元素中放入同一段文本，便于兼容多模态请求结构。
+
+| 字段 | 类型 | 适用类型 | 必填 | 说明 |
+| --- | --- | --- | --- | --- |
+| `type` | string | 全部 | 是 | `text`、`image_url`、`video_url`、`audio_url` |
+| `text` | string | `text` | 是 | 提示词文本 |
+| `image_url.url` | string | `image_url` | 是 | 图片 URL |
+| `video_url.url` | string | `video_url` | 是 | 视频 URL |
+| `audio_url.url` | string | `audio_url` | 是 | 音频 URL |
+| `role` | string | 素材项 | 建议 | `reference_image`、`reference_video`、`reference_audio` |
+
+提示词中按同类素材顺序引用：
+
+| 写法 | 含义 |
+| --- | --- |
+| `图片1` | `content` 中第 1 个 `image_url` |
+| `图片2` | `content` 中第 2 个 `image_url` |
+| `视频1` | `content` 中第 1 个 `video_url` |
+| `音频1` | `content` 中第 1 个 `audio_url` |
+
+### 文生视频示例
+
+```bash
+curl -X POST "https://api.laozhang.ai/v1/videos" \
+  -H "Content-Type: application/json" \
+  -H "Authorization: Bearer $API_KEY" \
+  --data-raw '{
+    "model": "doubao-seedance-2-0-fast-260128",
+    "prompt": "第一人称视角果茶广告，8秒，快节奏剪辑，展示苹果果茶制作与成品，清爽风格",
+    "ratio": "16:9",
+    "duration": 8,
+    "watermark": false,
+    "generate_audio": true
+  }'
+```
+
+### 多模态参考示例
+
+```bash
+curl -X POST "https://api.laozhang.ai/v1/videos" \
+  -H "Content-Type: application/json" \
+  -H "Authorization: Bearer $API_KEY" \
+  --data-raw '{
+    "model": "doubao-seedance-2-0-fast-260128",
+    "prompt": "全程使用视频1的第一视角构图，全程使用音频1作为背景音乐。首帧为图片1，生成第一人称苹果果茶广告，尾帧定格为图片2。",
+    "ratio": "16:9",
+    "duration": 11,
+    "watermark": false,
+    "generate_audio": true,
+    "content": [
+      {
+        "type": "text",
+        "text": "全程使用视频1的第一视角构图，全程使用音频1作为背景音乐。首帧为图片1，生成第一人称苹果果茶广告，尾帧定格为图片2。"
+      },
+      {
+        "type": "image_url",
+        "image_url": {
+          "url": "https://ark-project.tos-cn-beijing.volces.com/doc_image/r2v_tea_pic1.jpg"
+        },
+        "role": "reference_image"
+      },
+      {
+        "type": "image_url",
+        "image_url": {
+          "url": "https://ark-project.tos-cn-beijing.volces.com/doc_image/r2v_tea_pic2.jpg"
+        },
+        "role": "reference_image"
+      },
+      {
+        "type": "video_url",
+        "video_url": {
+          "url": "https://ark-project.tos-cn-beijing.volces.com/doc_video/r2v_tea_video1.mp4"
+        },
+        "role": "reference_video"
+      },
+      {
+        "type": "audio_url",
+        "audio_url": {
+          "url": "https://ark-project.tos-cn-beijing.volces.com/doc_audio/r2v_tea_audio1.mp3"
+        },
+        "role": "reference_audio"
+      }
+    ]
+  }'
+```
+
+### 创建响应
+
+```json
+{
+  "id": "cgt-20260410125521-rpf27",
+  "object": "video",
+  "model": "doubao-seedance-2-0-fast-260128",
+  "status": "submitted",
+  "created_at": 1775796921
+}
+```
+
+响应字段：
+
+| 字段 | 类型 | 说明 |
+| --- | --- | --- |
+| `id` | string | 任务 ID，后续查询状态使用 |
+| `object` | string | 对象类型，通常为 `video` |
+| `model` | string | 本次请求使用的模型 |
+| `status` | string | 初始状态，常见为 `submitted` 或 `queued` |
+| `created_at` | integer | 创建时间戳 |
+| `billing_detail` | object | 计费预估或计费明细，部分响应会返回 |
+
+## 查询任务
+
+<ParamField method="GET" path="/v1/videos/{task_id}">
+查询视频生成任务状态。
+</ParamField>
+
+```bash
+curl "https://api.laozhang.ai/v1/videos/cgt-20260410125521-rpf27" \
+  -H "Authorization: Bearer $API_KEY"
+```
+
+### 路径参数
+
+| 参数 | 类型 | 必填 | 说明 |
+| --- | --- | --- | --- |
+| `task_id` | string | 是 | 创建任务时返回的 `id` |
+
+### 查询响应
+
+任务进行中：
+
+```json
+{
+  "id": "cgt-20260410125521-rpf27",
+  "object": "video",
+  "model": "doubao-seedance-2-0-fast-260128",
+  "status": "in_progress",
+  "created_at": 1775796921,
+  "updated_at": 1775796980
+}
+```
+
+任务完成：
+
+```json
+{
+  "id": "cgt-20260410125521-rpf27",
+  "object": "video",
+  "model": "doubao-seedance-2-0-fast-260128",
+  "status": "completed",
+  "video_url": "https://example.com/generated-video.mp4",
+  "created_at": 1775796921,
+  "updated_at": 1775797043
+}
+```
+
+任务失败：
+
+```json
+{
+  "id": "cgt-20260410125521-rpf27",
+  "object": "video",
+  "model": "doubao-seedance-2-0-fast-260128",
+  "status": "failed",
+  "error": {
+    "message": "generation failed"
+  }
+}
+```
+
+响应字段：
+
+| 字段 | 类型 | 说明 |
+| --- | --- | --- |
+| `id` | string | 任务 ID |
+| `object` | string | 对象类型 |
+| `model` | string | 任务使用的模型 |
+| `status` | string | `submitted`、`queued`、`in_progress`、`completed`、`failed` 等 |
+| `video_url` | string | 任务完成后返回的视频 URL |
+| `url` | string | 部分响应可能使用该字段返回视频 URL |
+| `created_at` | integer | 创建时间戳 |
+| `updated_at` | integer | 更新时间戳 |
+| `error` | object | 失败时的错误信息 |
+
+## 下载视频
+
+查询响应进入 `completed` 后，读取 `video_url` 并直接下载：
+
+```bash
+curl -L "$VIDEO_URL" -o output.mp4
+```
+
+<Warning>
+`video_url` 通常是临时签名 URL。生产环境建议任务完成后立即下载，或转存到自己的对象存储。
+</Warning>
+
+## Python 完整示例
+
+```python
+import os
+import time
+import requests
+
+API_KEY = os.environ["API_KEY"]
+BASE_URL = "https://api.laozhang.ai/v1"
+
+headers = {
+    "Authorization": f"Bearer {API_KEY}",
+    "Content-Type": "application/json",
+}
+
+payload = {
+    "model": "doubao-seedance-2-0-fast-260128",
+    "prompt": "第一人称视角果茶广告，8秒，快节奏剪辑，展示苹果果茶制作与成品，清爽风格",
+    "ratio": "16:9",
+    "duration": 8,
+    "watermark": False,
+    "generate_audio": True,
+}
+
+create_resp = requests.post(f"{BASE_URL}/videos", headers=headers, json=payload, timeout=60)
+create_resp.raise_for_status()
+task_id = create_resp.json()["id"]
+
+while True:
+    query_resp = requests.get(f"{BASE_URL}/videos/{task_id}", headers=headers, timeout=60)
+    query_resp.raise_for_status()
+    task = query_resp.json()
+    status = task.get("status")
+
+    if status == "completed":
+        video_url = task.get("video_url") or task.get("url")
+        video_resp = requests.get(video_url, timeout=120)
+        video_resp.raise_for_status()
+        with open(f"{task_id}.mp4", "wb") as f:
+            f.write(video_resp.content)
+        break
+
+    if status == "failed":
+        raise RuntimeError(task.get("error") or task)
+
+    time.sleep(20)
+```
+
+## 常见接入问题
+
+<AccordionGroup>
+  <Accordion title="业务侧到底需要接几个接口？">
+    必接 2 个接口：`POST /v1/videos` 创建任务，`GET /v1/videos/{task_id}` 查询任务。下载视频时直接请求完成响应里的 `video_url`。
+  </Accordion>
+
+  <Accordion title="什么时候需要传 content？">
+    纯文生视频不需要 `content`。需要参考图片、视频或音频时，传 `content` 数组，并在提示词中用 `图片1`、`视频1`、`音频1` 指代素材。
+  </Accordion>
+
+  <Accordion title="prompt 和 content 里的 text 是否都要传？">
+    文生视频只传顶层 `prompt` 即可。多模态参考请求建议同时传顶层 `prompt` 和 `content[0].text`，两者内容保持一致，便于兼容多模态结构。
+  </Accordion>
+
+  <Accordion title="没有可用渠道怎么办？">
+    检查令牌所在分组、计费模式和模型渠道是否已开通。模型名称正确不代表当前分组一定有可用渠道。
+  </Accordion>
+</AccordionGroup>

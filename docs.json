@@ -10,7 +10,7 @@
     "dark": "#1d4ed8"
   },
   "banner": {
-    "content": "Nano Banana Pro 4K images $0.05, 80% OFF | 4K 超清图像 $0.05，官方 2 折 → [Try / 试用](https://images.laozhang.ai)",
+    "content": "Nano Banana 调价：Pro $0.09，Banana2 $0.081 → [Try / 试用](https://yingtu.ai)",
     "dismissible": true
   },
   "favicon": "/logo/favicon.svg",
@@ -26,7 +26,7 @@
       },
       {
         "label": "AI Images",
-        "href": "https://images.laozhang.ai/"
+        "href": "https://yingtu.ai/"
       }
     ],
     "primary": {
@@ -53,10 +53,10 @@
                 "group": "产品基础",
                 "pages": [
                   "index",
+                  "changelog",
                   "getting-started",
                   "api-manual",
-                  "pricing",
-                  "changelog"
+                  "pricing"
                 ]
               },
               {
@@ -78,6 +78,7 @@
               {
                 "group": "视频生成 API",
                 "pages": [
+                  "api-capabilities/seedance2-video-generation",
                   {
                     "group": "Sora 2 视频生成",
                     "icon": "clapperboard",
@@ -341,10 +342,10 @@
                 "group": "Getting Started",
                 "pages": [
                   "en/index",
+                  "en/changelog",
                   "en/getting-started",
                   "en/api-manual",
                   "en/pricing",
-                  "en/changelog",
                   "en/resources"
                 ]
               },
@@ -367,6 +368,7 @@
               {
                 "group": "Video Generation APIs",
                 "pages": [
+                  "en/api-capabilities/seedance2-video-generation",
                   {
                     "group": "Sora 2 Video Generation",
                     "icon": "clapperboard",

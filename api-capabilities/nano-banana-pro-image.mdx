@@ -2,7 +2,7 @@
 title: Nano Banana Pro 文生图
 seoTitle: "Nano Banana Pro 4K 文生图 API - Gemini 3 超高清图像生成 | 老张API"
 sidebarTitle: Nano Banana Pro 文生图
-description: "Nano Banana Pro 文生图 API：Google Gemini 3 Pro 图像生成。支持 4K 高清、复杂指令理解、思考模式。仅 $0.05/张，官方 2 折。"
+description: "Nano Banana Pro 文生图 API：Google Gemini 3 Pro 图像生成。支持 4K 高清、复杂指令理解、思考模式。当前 $0.09/张，比官网便宜 62.5%。"
 icon: "cherry"
 ---
 
@@ -11,14 +11,14 @@ icon: "cherry"
 这是 Google 目前最强大的图像生成模型。
 - **4K 画质**: 支持 1K, 2K, 4K 三种分辨率
 - **超高智商**: 基于 Gemini 3 架构，精准理解复杂 Prompt
-- **极具性价比**: 仅需 **\$0.05/张**（官方价格 \$0.24 的 2 折）
+- **极具性价比**: 仅需 **\$0.09/张**（比官方价格 \$0.24 便宜 62.5%）
 </Note>
 
 <CardGroup cols={2}>
   <Card title="🎁 免费测试" icon="gift" href="https://api.laozhang.ai">
-    注册送 **$0.05**，免费测试一次 Nano Banana Pro
+    注册送 **$0.05**，可直接抵扣 Nano Banana Pro 调用费用
   </Card>
-  <Card title="🚀 在线测试" icon="play" href="https://images.laozhang.ai/">
+  <Card title="🚀 在线测试" icon="play" href="https://yingtu.ai/">
     AI Images 即刻体验，无需写代码
   </Card>
 </CardGroup>
@@ -36,7 +36,7 @@ icon: "cherry"
     - **按次计费**：每次调用直接扣费。适合预算控制严格的场景
 
     <Note>
-    两种模式**价格完全相同**，都是 \$0.05/张，仅扣费方式不同。
+    两种模式**价格完全相同**，都是 \$0.09/张，仅扣费方式不同。
     </Note>
 
     <img src="/images/sora2-token-setting.png" alt="令牌设置" />
@@ -56,12 +56,12 @@ icon: "cherry"
 1. **🌟 4K 原生分辨率**: 支持生成最大 4096×4096 的超高清图像。
 2. **🧠 Gemini 3 智能**: 内置逻辑推理，能理解 "一只没吃早饭的猫看着空盘子的失落感" 这种抽象描述。
 3. **💪 复杂构图**: 能够精准控制画面中的物体位置、数量和文字渲染。
-4. **💰 极致价格**: \$0.05/张，打破行业底价。
+4. **💰 极致价格**: \$0.09/张，适合高质量专业图像生成场景。
 
 ## 🌟 核心特性
 
 - **⚡ 极速响应**：平均 10 秒生成，显著快于 OpenAI 系列
-- **💰 超值价格**：\$0.05/张（比官网 \$0.24 便宜 79%）
+- **💰 超值价格**：\$0.09/张（比官网 \$0.24 便宜 62.5%）
 - **🔄 双重兼容**：支持 OpenAI SDK 和 Google 原生格式
 - **📐 灵活尺寸**：Google 原生格式支持 10 种纵横比
 - **🖼️ 高分辨率**：支持 1K、2K、4K 三种分辨率
@@ -96,8 +96,8 @@ Nano Banana Pro 支持两种调用端点，各有优势：
 
 | 模型 | 模型 ID | 计费方式 | 老张API价格 | 官方价格 | 节省比例 | 分辨率 | 速度 |
 |------|---------|----------|-----------|----------|----------|--------|------|
-| **Nano Banana Pro** | `gemini-3-pro-image-preview` | 按次计费 | \$0.05/张 | \$0.24/张 | 79% | 1K/2K/4K | ~10秒 |
-| **Nano Banana2** | `gemini-3.1-flash-image-preview` | 按次计费 | \$0.045/张 | - | - | 1K/2K/4K | ~10秒 |
+| **Nano Banana Pro** | `gemini-3-pro-image-preview` | 按次计费 | \$0.09/张 | \$0.24/张 | 62.5% | 1K/2K/4K | ~10秒 |
+| **Nano Banana2** | `gemini-3.1-flash-image-preview` | 按次计费 | \$0.081/张 | - | - | 1K/2K/4K | ~10秒 |
 | **Nano Banana** | `gemini-2.5-flash-image` | 按次计费 | \$0.025/张 | \$0.04/张 | 37.5% | 1K（固定） | ~10秒 |
 | **GPT-Image-1** | `gpt-image-1` | 按Token | \$10输入/\$40输出 per M | - | - | - | 中等 |
 | **Flux Kontext Pro** | `flux-kontext-pro` | 按次计费 | \$0.035/张 | \$0.04/张 | 12.5% | - | 快速 |
@@ -105,7 +105,7 @@ Nano Banana Pro 支持两种调用端点，各有优势：
 
 <Tip>
 💰 **价格优势详解**
-- **Nano Banana Pro**：\$0.05/张（老张API）vs \$0.24/张（官网），便宜 79%
+- **Nano Banana Pro**：\$0.09/张（老张API）vs \$0.24/张（官网），便宜 62.5%
 - **充值优惠**：单次大额充值加赠 10%
 - **汇率优势**：人民币充值更划算
 
@@ -782,16 +782,16 @@ response = requests.post(
     3. 创建令牌，选择"按次计费"
     4. 调用 `gemini-3-pro-image-preview` 模型
 
-    $0.05 可免费测试 Nano Banana Pro 一次！
+    $0.05 可直接抵扣首笔 Nano Banana Pro 调用费用。
   </Accordion>
 
   <Accordion title="Nano Banana Pro API 价格是多少？">
     | 渠道 | 价格 | 说明 |
     |------|------|------|
-    | **老张 API** | **$0.05/张** | 官方 2 折 |
+    | **老张 API** | **$0.09/张** | 比官网便宜 62.5% |
     | Google 官方 | $0.24/张 | 原价 |
 
-    注册送 $0.05，可免费测试一次！
+    注册送 $0.05，可直接抵扣调用费用！
   </Accordion>
 
   <Accordion title="如何在线测试 Nano Banana Pro API？">
@@ -811,7 +811,7 @@ response = requests.post(
     | 模型 | `gemini-3-pro-image-preview` | `gemini-2.5-flash-image` |
     | 技术 | Gemini 3 | Gemini 2.5 |
     | 分辨率 | 1K/2K/4K | 1K（固定） |
-    | 价格 | \$0.05/张 | \$0.025/张 |
+    | 价格 | \$0.09/张 | \$0.025/张 |
     | 思考模式 | ✅ 有 | ❌ 无 |
     | 搜索接地 | ✅ 有 | ❌ 无 |
     | 多图参考 | 最多 14 张 | 最多 3 张 |
@@ -867,7 +867,7 @@ response = requests.post(
     学习如何使用 Nano Banana Pro 编辑和改造现有图片
   </Card>
   <Card title="Nano Banana2 图像生成" icon="citrus" href="/api-capabilities/nano-banana2-image">
-    $0.045/张，性价比更优的 Banana2 版本
+    $0.081/张，性价比更优的 Banana2 版本
   </Card>
   <Card title="Standard 图像生成" icon="sparkles" href="/api-capabilities/nano-banana-image">
     更实惠的 Nano Banana Standard 版本
