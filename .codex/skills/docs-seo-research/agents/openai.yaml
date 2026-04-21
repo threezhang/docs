@@ -1,0 +1,4 @@
+interface:
+  display_name: "Docs SEO Research"
+  short_description: "Run evidence-led SEO and GEO keyword research"
+  default_prompt: "Use $docs-seo-research to research a keyword with Computer Use live Google SERP capture first, collect owned-asset evidence, then produce a prioritized SEO/GEO content plan with site allocation."

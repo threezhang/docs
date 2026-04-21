@@ -154,6 +154,7 @@
                 "group": "图像生成 API",
                 "pages": [
                   "api-capabilities/image-generation-guide",
+                  "api-capabilities/gpt-image-2",
                   {
                     "group": "Sora 图像",
                     "icon": "image",
@@ -444,6 +445,7 @@
                 "group": "Image Generation APIs",
                 "pages": [
                   "en/api-capabilities/image-generation-guide",
+                  "en/api-capabilities/gpt-image-2",
                   {
                     "group": "Sora Image",
                     "icon": "image",

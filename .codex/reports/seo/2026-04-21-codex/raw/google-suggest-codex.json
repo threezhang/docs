@@ -1,0 +1,4564 @@
+{
+  "capturedAt": "2026-04-21T05:10:14.246Z",
+  "endpoint": "https://suggestqueries.google.com/complete/search?client=firefox",
+  "locale": "hl=en/zh-CN, gl=us",
+  "queryCount": 60,
+  "results": [
+    {
+      "query": "codex",
+      "hl": "en",
+      "gl": "us",
+      "suggestions": [
+        "codex",
+        "codex cli",
+        "codex app",
+        "codex skills",
+        "codex pricing",
+        "codex install",
+        "codex github",
+        "codex windows",
+        "codex vs claude code",
+        "codex usage"
+      ],
+      "raw": [
+        "codex",
+        [
+          "codex",
+          "codex cli",
+          "codex app",
+          "codex skills",
+          "codex pricing",
+          "codex install",
+          "codex github",
+          "codex windows",
+          "codex vs claude code",
+          "codex usage"
+        ],
+        [],
+        {
+          "google:suggestsubtypes": [
+            [
+              512
+            ],
+            [
+              512
+            ],
+            [
+              512
+            ],
+            [
+              512
+            ],
+            [
+              512
+            ],
+            [
+              512
+            ],
+            [
+              512
+            ],
+            [
+              512
+            ],
+            [
+              512
+            ],
+            [
+              512
+            ]
+          ]
+        }
+      ]
+    },
+    {
+      "query": "codex api",
+      "hl": "en",
+      "gl": "us",
+      "suggestions": [
+        "codex api",
+        "codex api key",
+        "codex api pricing",
+        "codex api usage",
+        "codex api key free",
+        "codex api key pricing",
+        "codex api limits",
+        "codex api openai",
+        "codex api token",
+        "codex api docs"
+      ],
+      "raw": [
+        "codex api",
+        [
+          "codex api",
+          "codex api key",
+          "codex api pricing",
+          "codex api usage",
+          "codex api key free",
+          "codex api key pricing",
+          "codex api limits",
+          "codex api openai",
+          "codex api token",
+          "codex api docs"
+        ],
+        [],
+        {
+          "google:suggestsubtypes": [
+            [
+              512
+            ],
+            [
+              512
+            ],
+            [
+              512
+            ],
+            [
+              512
+            ],
+            [
+              512
+            ],
+            [
+              512
+            ],
+            [
+              512
+            ],
+            [
+              512
+            ],
+            [
+              512
+            ],
+            [
+              512
+            ]
+          ]
+        }
+      ]
+    },
+    {
+      "query": "codex pricing",
+      "hl": "en",
+      "gl": "us",
+      "suggestions": [
+        "codex pricing",
+        "codex pricing plans",
+        "codex pricing openai",
+        "codex pricing india",
+        "codex pricing vs claude code",
+        "codex pricing api",
+        "codex pricing and limits",
+        "codex pricing reddit",
+        "codex pricing model",
+        "codex pricing chatgpt"
+      ],
+      "raw": [
+        "codex pricing",
+        [
+          "codex pricing",
+          "codex pricing plans",
+          "codex pricing openai",
+          "codex pricing india",
+          "codex pricing vs claude code",
+          "codex pricing api",
+          "codex pricing and limits",
+          "codex pricing reddit",
+          "codex pricing model",
+          "codex pricing chatgpt"
+        ],
+        [],
+        {
+          "google:suggestsubtypes": [
+            [
+              512
+            ],
+            [
+              512
+            ],
+            [
+              512
+            ],
+            [
+              512
+            ],
+            [
+              512
+            ],
+            [
+              512
+            ],
+            [
+              512
+            ],
+            [
+              512
+            ],
+            [
+              512
+            ],
+            [
+              512
+            ]
+          ]
+        }
+      ]
+    },
+    {
+      "query": "codex cost",
+      "hl": "en",
+      "gl": "us",
+      "suggestions": [
+        "codex cost",
+        "codex cost vs claude code",
+        "codex cost openai",
+        "codex cost per month",
+        "codex cost per token",
+        "codex cost chatgpt",
+        "codex costo",
+        "codex cost india",
+        "codex cost per million tokens",
+        "codex cost api"
+      ],
+      "raw": [
+        "codex cost",
+        [
+          "codex cost",
+          "codex cost vs claude code",
+          "codex cost openai",
+          "codex cost per month",
+          "codex cost per token",
+          "codex cost chatgpt",
+          "codex costo",
+          "codex cost india",
+          "codex cost per million tokens",
+          "codex cost api"
+        ],
+        [],
+        {
+          "google:suggestsubtypes": [
+            [
+              512
+            ],
+            [
+              512
+            ],
+            [
+              512
+            ],
+            [
+              512
+            ],
+            [
+              512
+            ],
+            [
+              512
+            ],
+            [
+              512
+            ],
+            [
+              512
+            ],
+            [
+              512
+            ],
+            [
+              512
+            ]
+          ]
+        }
+      ]
+    },
+    {
+      "query": "codex tutorial",
+      "hl": "en",
+      "gl": "us",
+      "suggestions": [
+        "codex tutorial",
+        "codex tutorial youtube",
+        "codex tutorial vscode",
+        "codex tutorial for beginners",
+        "codex tutorial openai",
+        "codex tutorial reddit",
+        "codex tutorial pdf",
+        "codex tutorial chatgpt",
+        "codex tutorial github",
+        "codex tutorial udemy"
+      ],
+      "raw": [
+        "codex tutorial",
+        [
+          "codex tutorial",
+          "codex tutorial youtube",
+          "codex tutorial vscode",
+          "codex tutorial for beginners",
+          "codex tutorial openai",
+          "codex tutorial reddit",
+          "codex tutorial pdf",
+          "codex tutorial chatgpt",
+          "codex tutorial github",
+          "codex tutorial udemy"
+        ],
+        [],
+        {
+          "google:suggestsubtypes": [
+            [
+              512
+            ],
+            [
+              512
+            ],
+            [
+              512
+            ],
+            [
+              512
+            ],
+            [
+              512
+            ],
+            [
+              512
+            ],
+            [
+              512
+            ],
+            [
+              22,
+              30
+            ],
+            [
+              22,
+              30
+            ],
+            [
+              22,
+              30
+            ]
+          ]
+        }
+      ]
+    },
+    {
+      "query": "codex how to use",
+      "hl": "en",
+      "gl": "us",
+      "suggestions": [
+        "codex how to use",
+        "codex how to use skills",
+        "codex how to use subagents",
+        "codex how to use code review",
+        "codex how to use plan mode",
+        "codex how to use mcp",
+        "codex how to use worktree",
+        "codex how to use in vs code",
+        "codex how to use agents",
+        "codex how to use api key"
+      ],
+      "raw": [
+        "codex how to use",
+        [
+          "codex how to use",
+          "codex how to use skills",
+          "codex how to use subagents",
+          "codex how to use code review",
+          "codex how to use plan mode",
+          "codex how to use mcp",
+          "codex how to use worktree",
+          "codex how to use in vs code",
+          "codex how to use agents",
+          "codex how to use api key"
+        ],
+        [],
+        {
+          "google:suggestsubtypes": [
+            [
+              512
+            ],
+            [
+              512
+            ],
+            [
+              512
+            ],
+            [
+              512
+            ],
+            [
+              512
+            ],
+            [
+              512
+            ],
+            [
+              512
+            ],
+            [
+              512
+            ],
+            [
+              512
+            ],
+            [
+              512
+            ]
+          ]
+        }
+      ]
+    },
+    {
+      "query": "codex vs",
+      "hl": "en",
+      "gl": "us",
+      "suggestions": [
+        "codex vs claude code",
+        "codex vscode",
+        "codex vs claude",
+        "codex vscode extension",
+        "codex vs cursor",
+        "codex vs copilot",
+        "codex vs github copilot",
+        "codex vs antigravity",
+        "codex vs opencode",
+        "codex vs gemini"
+      ],
+      "raw": [
+        "codex vs",
+        [
+          "codex vs claude code",
+          "codex vscode",
+          "codex vs claude",
+          "codex vscode extension",
+          "codex vs cursor",
+          "codex vs copilot",
+          "codex vs github copilot",
+          "codex vs antigravity",
+          "codex vs opencode",
+          "codex vs gemini"
+        ],
+        [],
+        {
+          "google:suggestsubtypes": [
+            [
+              512
+            ],
+            [
+              512
+            ],
+            [
+              512
+            ],
+            [
+              512
+            ],
+            [
+              512
+            ],
+            [
+              512
+            ],
+            [
+              512
+            ],
+            [
+              512
+            ],
+            [
+              512
+            ],
+            [
+              512
+            ]
+          ]
+        }
+      ]
+    },
+    {
+      "query": "codex vs claude code",
+      "hl": "en",
+      "gl": "us",
+      "suggestions": [
+        "codex vs claude code",
+        "codex vs claude code vs gemini cli",
+        "codex vs claude code reddit",
+        "codex vs claude code vs cursor",
+        "codex vs claude code vs antigravity",
+        "codex vs claude code pricing",
+        "codex vs claude code 2026",
+        "codex vs claude code limits",
+        "codex vs claude code usage limits",
+        "codex vs claude code vs gemini"
+      ],
+      "raw": [
+        "codex vs claude code",
+        [
+          "codex vs claude code",
+          "codex vs claude code vs gemini cli",
+          "codex vs claude code reddit",
+          "codex vs claude code vs cursor",
+          "codex vs claude code vs antigravity",
+          "codex vs claude code pricing",
+          "codex vs claude code 2026",
+          "codex vs claude code limits",
+          "codex vs claude code usage limits",
+          "codex vs claude code vs gemini"
+        ],
+        [],
+        {
+          "google:suggestsubtypes": [
+            [
+              512
+            ],
+            [
+              512
+            ],
+            [
+              512
+            ],
+            [
+              512
+            ],
+            [
+              512
+            ],
+            [
+              512
+            ],
+            [
+              512
+            ],
+            [
+              512
+            ],
+            [
+              512
+            ],
+            [
+              512
+            ]
+          ]
+        }
+      ]
+    },
+    {
+      "query": "codex cli",
+      "hl": "en",
+      "gl": "us",
+      "suggestions": [
+        "codex cli",
+        "codex cli install",
+        "codex cli github",
+        "codex cli windows",
+        "codex cli skills",
+        "codex cli vs claude code",
+        "codex cli update",
+        "codex cli download",
+        "codex cli mcp",
+        "codex cli pricing"
+      ],
+      "raw": [
+        "codex cli",
+        [
+          "codex cli",
+          "codex cli install",
+          "codex cli github",
+          "codex cli windows",
+          "codex cli skills",
+          "codex cli vs claude code",
+          "codex cli update",
+          "codex cli download",
+          "codex cli mcp",
+          "codex cli pricing"
+        ],
+        [],
+        {
+          "google:suggestsubtypes": [
+            [
+              512
+            ],
+            [
+              512
+            ],
+            [
+              512
+            ],
+            [
+              512
+            ],
+            [
+              512
+            ],
+            [
+              512
+            ],
+            [
+              512
+            ],
+            [
+              512
+            ],
+            [
+              512
+            ],
+            [
+              512
+            ]
+          ]
+        }
+      ]
+    },
+    {
+      "query": "codex app",
+      "hl": "en",
+      "gl": "us",
+      "suggestions": [
+        "codex app",
+        "codex app windows",
+        "codex app download",
+        "codex app linux",
+        "codex app server",
+        "codex app mac",
+        "codex app github",
+        "codex approval_policy",
+        "codex app brew",
+        "codex app ssh"
+      ],
+      "raw": [
+        "codex app",
+        [
+          "codex app",
+          "codex app windows",
+          "codex app download",
+          "codex app linux",
+          "codex app server",
+          "codex app mac",
+          "codex app github",
+          "codex approval_policy",
+          "codex app brew",
+          "codex app ssh"
+        ],
+        [],
+        {
+          "google:suggestsubtypes": [
+            [
+              512
+            ],
+            [
+              512
+            ],
+            [
+              512
+            ],
+            [
+              512
+            ],
+            [
+              512
+            ],
+            [
+              512
+            ],
+            [
+              512
+            ],
+            [
+              512
+            ],
+            [
+              512
+            ],
+            [
+              512
+            ]
+          ]
+        }
+      ]
+    },
+    {
+      "query": "codex download",
+      "hl": "en",
+      "gl": "us",
+      "suggestions": [
+        "codex download",
+        "codex download windows",
+        "codex download mac",
+        "codex download for windows 11",
+        "codex download for windows 10",
+        "codex download linux",
+        "codex download cli",
+        "codex download ubuntu",
+        "codex download macos",
+        "codex download app"
+      ],
+      "raw": [
+        "codex download",
+        [
+          "codex download",
+          "codex download windows",
+          "codex download mac",
+          "codex download for windows 11",
+          "codex download for windows 10",
+          "codex download linux",
+          "codex download cli",
+          "codex download ubuntu",
+          "codex download macos",
+          "codex download app"
+        ],
+        [],
+        {
+          "google:suggestsubtypes": [
+            [
+              512
+            ],
+            [
+              512
+            ],
+            [
+              512
+            ],
+            [
+              512
+            ],
+            [
+              512
+            ],
+            [
+              512
+            ],
+            [
+              512
+            ],
+            [
+              512
+            ],
+            [
+              512
+            ],
+            [
+              512
+            ]
+          ]
+        }
+      ]
+    },
+    {
+      "query": "codex login",
+      "hl": "en",
+      "gl": "us",
+      "suggestions": [
+        "codex login",
+        "codex login with api key",
+        "codex login openai",
+        "codex login cli",
+        "codex login with chatgpt",
+        "codex login headless",
+        "codex login not working",
+        "codex login terminal",
+        "codex login device auth",
+        "codex login command"
+      ],
+      "raw": [
+        "codex login",
+        [
+          "codex login",
+          "codex login with api key",
+          "codex login openai",
+          "codex login cli",
+          "codex login with chatgpt",
+          "codex login headless",
+          "codex login not working",
+          "codex login terminal",
+          "codex login device auth",
+          "codex login command"
+        ],
+        [],
+        {
+          "google:suggestsubtypes": [
+            [
+              512
+            ],
+            [
+              512
+            ],
+            [
+              512
+            ],
+            [
+              512
+            ],
+            [
+              512
+            ],
+            [
+              512
+            ],
+            [
+              512
+            ],
+            [
+              512
+            ],
+            [
+              512
+            ],
+            [
+              512
+            ]
+          ]
+        }
+      ]
+    },
+    {
+      "query": "codex api key",
+      "hl": "en",
+      "gl": "us",
+      "suggestions": [
+        "codex api key",
+        "codex api key free",
+        "codex api key pricing",
+        "codex api key config",
+        "codex api key github",
+        "codex api key login",
+        "codex api key for openclaw",
+        "codex api key vs subscription",
+        "codex api key vscode",
+        "codex api key vs chatgpt"
+      ],
+      "raw": [
+        "codex api key",
+        [
+          "codex api key",
+          "codex api key free",
+          "codex api key pricing",
+          "codex api key config",
+          "codex api key github",
+          "codex api key login",
+          "codex api key for openclaw",
+          "codex api key vs subscription",
+          "codex api key vscode",
+          "codex api key vs chatgpt"
+        ],
+        [],
+        {
+          "google:suggestsubtypes": [
+            [
+              512
+            ],
+            [
+              512
+            ],
+            [
+              512
+            ],
+            [
+              512
+            ],
+            [
+              512
+            ],
+            [
+              512
+            ],
+            [
+              512
+            ],
+            [
+              512
+            ],
+            [
+              512
+            ],
+            [
+              512
+            ]
+          ]
+        }
+      ]
+    },
+    {
+      "query": "codex free",
+      "hl": "en",
+      "gl": "us",
+      "suggestions": [
+        "codex free",
+        "codex free plan",
+        "codex free tier",
+        "codex free trial",
+        "codex free limits",
+        "codex free for students",
+        "codex free usage",
+        "codex free credits",
+        "codex free version",
+        "codex free api key"
+      ],
+      "raw": [
+        "codex free",
+        [
+          "codex free",
+          "codex free plan",
+          "codex free tier",
+          "codex free trial",
+          "codex free limits",
+          "codex free for students",
+          "codex free usage",
+          "codex free credits",
+          "codex free version",
+          "codex free api key"
+        ],
+        [],
+        {
+          "google:suggestsubtypes": [
+            [
+              512
+            ],
+            [
+              512
+            ],
+            [
+              512
+            ],
+            [
+              512
+            ],
+            [
+              512
+            ],
+            [
+              512
+            ],
+            [
+              512
+            ],
+            [
+              512
+            ],
+            [
+              512
+            ],
+            [
+              512
+            ]
+          ]
+        }
+      ]
+    },
+    {
+      "query": "codex rate limit",
+      "hl": "en",
+      "gl": "us",
+      "suggestions": [
+        "codex rate limit",
+        "codex rate limits remaining",
+        "codex rate limits plus",
+        "codex rate limits reddit",
+        "codex rate limit reset",
+        "codex rate limit check",
+        "codex rate limit reached",
+        "codex rate limit weekly",
+        "codex rate limit monitor",
+        "codex rate limit exceeded"
+      ],
+      "raw": [
+        "codex rate limit",
+        [
+          "codex rate limit",
+          "codex rate limits remaining",
+          "codex rate limits plus",
+          "codex rate limits reddit",
+          "codex rate limit reset",
+          "codex rate limit check",
+          "codex rate limit reached",
+          "codex rate limit weekly",
+          "codex rate limit monitor",
+          "codex rate limit exceeded"
+        ],
+        [],
+        {
+          "google:suggestsubtypes": [
+            [
+              512
+            ],
+            [
+              512
+            ],
+            [
+              512
+            ],
+            [
+              512
+            ],
+            [
+              512
+            ],
+            [
+              512
+            ],
+            [
+              512
+            ],
+            [
+              512
+            ],
+            [
+              512
+            ],
+            [
+              512
+            ]
+          ]
+        }
+      ]
+    },
+    {
+      "query": "codex usage limit",
+      "hl": "en",
+      "gl": "us",
+      "suggestions": [
+        "codex usage limits",
+        "codex usage limits check",
+        "codex usage limits reddit",
+        "codex usage limits for plus",
+        "codex usage limits vs claude code",
+        "codex usage limits dashboard",
+        "codex usage limit reached",
+        "codex usage limits chatgpt plus",
+        "codex usage limits openai",
+        "codex usage limit reset"
+      ],
+      "raw": [
+        "codex usage limit",
+        [
+          "codex usage limits",
+          "codex usage limits check",
+          "codex usage limits reddit",
+          "codex usage limits for plus",
+          "codex usage limits vs claude code",
+          "codex usage limits dashboard",
+          "codex usage limit reached",
+          "codex usage limits chatgpt plus",
+          "codex usage limits openai",
+          "codex usage limit reset"
+        ],
+        [],
+        {
+          "google:suggestsubtypes": [
+            [
+              512
+            ],
+            [
+              512
+            ],
+            [
+              512
+            ],
+            [
+              512
+            ],
+            [
+              512
+            ],
+            [
+              512
+            ],
+            [
+              512
+            ],
+            [
+              512
+            ],
+            [
+              512
+            ],
+            [
+              512
+            ]
+          ]
+        }
+      ]
+    },
+    {
+      "query": "codex config.toml",
+      "hl": "en",
+      "gl": "us",
+      "suggestions": [
+        "codex config.toml",
+        "codex config.toml example",
+        "codex config.toml options",
+        "codex config.toml location",
+        "codex config.toml mcp",
+        "codex config.toml api key",
+        "codex config.toml file",
+        "codex config.toml windows",
+        "codex config.toml settings",
+        "codex config.toml auto approve"
+      ],
+      "raw": [
+        "codex config.toml",
+        [
+          "codex config.toml",
+          "codex config.toml example",
+          "codex config.toml options",
+          "codex config.toml location",
+          "codex config.toml mcp",
+          "codex config.toml api key",
+          "codex config.toml file",
+          "codex config.toml windows",
+          "codex config.toml settings",
+          "codex config.toml auto approve"
+        ],
+        [],
+        {
+          "google:suggestsubtypes": [
+            [
+              512
+            ],
+            [
+              512
+            ],
+            [
+              512
+            ],
+            [
+              512
+            ],
+            [
+              512
+            ],
+            [
+              512
+            ],
+            [
+              512
+            ],
+            [
+              512
+            ],
+            [
+              512
+            ],
+            [
+              512
+            ]
+          ]
+        }
+      ]
+    },
+    {
+      "query": "codex agents.md",
+      "hl": "en",
+      "gl": "us",
+      "suggestions": [
+        "codex agents.md",
+        "codex agents.md example",
+        "codex agents.md best practices",
+        "codex agents.md file",
+        "codex agents.md location",
+        "codex agents.md github",
+        "codex agents.md global",
+        "codex agents.md reddit",
+        "codex agents.md template",
+        "codex agents.md skills"
+      ],
+      "raw": [
+        "codex agents.md",
+        [
+          "codex agents.md",
+          "codex agents.md example",
+          "codex agents.md best practices",
+          "codex agents.md file",
+          "codex agents.md location",
+          "codex agents.md github",
+          "codex agents.md global",
+          "codex agents.md reddit",
+          "codex agents.md template",
+          "codex agents.md skills"
+        ],
+        [],
+        {
+          "google:suggestsubtypes": [
+            [
+              512
+            ],
+            [
+              512
+            ],
+            [
+              512
+            ],
+            [
+              512
+            ],
+            [
+              512
+            ],
+            [
+              512
+            ],
+            [
+              512
+            ],
+            [
+              512
+            ],
+            [
+              512
+            ],
+            [
+              512
+            ]
+          ]
+        }
+      ]
+    },
+    {
+      "query": "openai codex",
+      "hl": "en",
+      "gl": "us",
+      "suggestions": [
+        "openai codex",
+        "openai codex cli",
+        "openai codex pricing",
+        "openai codex usage",
+        "openai codex app",
+        "openai codex plan",
+        "openai codex skills",
+        "openai codex vs claude code",
+        "openai codex api",
+        "openai codex github"
+      ],
+      "raw": [
+        "openai codex",
+        [
+          "openai codex",
+          "openai codex cli",
+          "openai codex pricing",
+          "openai codex usage",
+          "openai codex app",
+          "openai codex plan",
+          "openai codex skills",
+          "openai codex vs claude code",
+          "openai codex api",
+          "openai codex github"
+        ],
+        [],
+        {
+          "google:suggestsubtypes": [
+            [
+              512
+            ],
+            [
+              512
+            ],
+            [
+              512
+            ],
+            [
+              512
+            ],
+            [
+              512
+            ],
+            [
+              512
+            ],
+            [
+              512
+            ],
+            [
+              512
+            ],
+            [
+              512
+            ],
+            [
+              512
+            ]
+          ]
+        }
+      ]
+    },
+    {
+      "query": "chatgpt codex",
+      "hl": "en",
+      "gl": "us",
+      "suggestions": [
+        "chatgpt codex",
+        "chatgpt codex pricing",
+        "chatgpt codex cli",
+        "chatgpt codex usage",
+        "chatgpt codex vs claude code",
+        "chatgpt codex app",
+        "chatgpt codex plan",
+        "chatgpt codex 5.3",
+        "chatgpt codex vscode",
+        "chatgpt codex limits"
+      ],
+      "raw": [
+        "chatgpt codex",
+        [
+          "chatgpt codex",
+          "chatgpt codex pricing",
+          "chatgpt codex cli",
+          "chatgpt codex usage",
+          "chatgpt codex vs claude code",
+          "chatgpt codex app",
+          "chatgpt codex plan",
+          "chatgpt codex 5.3",
+          "chatgpt codex vscode",
+          "chatgpt codex limits"
+        ],
+        [],
+        {
+          "google:suggestsubtypes": [
+            [
+              512
+            ],
+            [
+              512
+            ],
+            [
+              512
+            ],
+            [
+              512
+            ],
+            [
+              512
+            ],
+            [
+              512
+            ],
+            [
+              512
+            ],
+            [
+              512
+            ],
+            [
+              512
+            ],
+            [
+              512
+            ]
+          ]
+        }
+      ]
+    },
+    {
+      "query": "gpt-5.4 codex",
+      "hl": "en",
+      "gl": "us",
+      "suggestions": [
+        "gpt-5.4 codex",
+        "gpt-5.4 codex context window",
+        "gpt 5.4 codex release date",
+        "gpt 5.4 codex vs opus 4.6",
+        "gpt 5.4 codex reddit",
+        "gpt 5.4 codex pricing",
+        "gpt 5.4 codex openclaw",
+        "gpt 5.4 codex vs claude",
+        "gpt 5.4 codex vs claude opus 4.6",
+        "gpt 5.4 codex cli"
+      ],
+      "raw": [
+        "gpt-5.4 codex",
+        [
+          "gpt-5.4 codex",
+          "gpt-5.4 codex context window",
+          "gpt 5.4 codex release date",
+          "gpt 5.4 codex vs opus 4.6",
+          "gpt 5.4 codex reddit",
+          "gpt 5.4 codex pricing",
+          "gpt 5.4 codex openclaw",
+          "gpt 5.4 codex vs claude",
+          "gpt 5.4 codex vs claude opus 4.6",
+          "gpt 5.4 codex cli"
+        ],
+        [],
+        {
+          "google:suggestsubtypes": [
+            [
+              512
+            ],
+            [
+              512
+            ],
+            [
+              22,
+              30
+            ],
+            [
+              22,
+              30
+            ],
+            [
+              22,
+              30
+            ],
+            [
+              22,
+              30
+            ],
+            [
+              22,
+              30
+            ],
+            [
+              22,
+              30
+            ],
+            [
+              22,
+              30
+            ],
+            [
+              22,
+              30
+            ]
+          ]
+        }
+      ]
+    },
+    {
+      "query": "gpt-5.3 codex",
+      "hl": "en",
+      "gl": "us",
+      "suggestions": [
+        "gpt-5.3 codex",
+        "gpt-5.3 codex spark",
+        "gpt-5.3 codex pricing",
+        "gpt-5.3 codex from openai",
+        "gpt-5.3 codex vs opus 4.6",
+        "gpt-5.3 codex api",
+        "gpt-5.3 codex vs gpt-5.4",
+        "gpt-5.3 codex vs claude opus 4.6",
+        "gpt-5.3 codex release date",
+        "gpt-5.3 codex context window"
+      ],
+      "raw": [
+        "gpt-5.3 codex",
+        [
+          "gpt-5.3 codex",
+          "gpt-5.3 codex spark",
+          "gpt-5.3 codex pricing",
+          "gpt-5.3 codex from openai",
+          "gpt-5.3 codex vs opus 4.6",
+          "gpt-5.3 codex api",
+          "gpt-5.3 codex vs gpt-5.4",
+          "gpt-5.3 codex vs claude opus 4.6",
+          "gpt-5.3 codex release date",
+          "gpt-5.3 codex context window"
+        ],
+        [],
+        {
+          "google:suggestsubtypes": [
+            [
+              512
+            ],
+            [
+              512
+            ],
+            [
+              512
+            ],
+            [
+              512
+            ],
+            [
+              512
+            ],
+            [
+              512
+            ],
+            [
+              512
+            ],
+            [
+              512
+            ],
+            [
+              512
+            ],
+            [
+              512
+            ]
+          ]
+        }
+      ]
+    },
+    {
+      "query": "codex 教程",
+      "hl": "zh-CN",
+      "gl": "us",
+      "suggestions": [
+        "codex 教程"
+      ],
+      "raw": [
+        "codex 教程",
+        [
+          "codex 教程"
+        ],
+        [],
+        {
+          "google:suggestsubtypes": [
+            [
+              512
+            ]
+          ]
+        }
+      ]
+    },
+    {
+      "query": "codex 价格",
+      "hl": "zh-CN",
+      "gl": "us",
+      "suggestions": [
+        "codex 价格"
+      ],
+      "raw": [
+        "codex 价格",
+        [
+          "codex 价格"
+        ],
+        [],
+        {
+          "google:suggestsubtypes": [
+            [
+              512
+            ]
+          ]
+        }
+      ]
+    },
+    {
+      "query": "codex 国内使用",
+      "hl": "zh-CN",
+      "gl": "us",
+      "suggestions": [
+        "codex 国内使用"
+      ],
+      "raw": [
+        "codex 国内使用",
+        [
+          "codex 国内使用"
+        ],
+        [],
+        {
+          "google:suggestsubtypes": [
+            [
+              512
+            ]
+          ]
+        }
+      ]
+    },
+    {
+      "query": "codex 免费",
+      "hl": "zh-CN",
+      "gl": "us",
+      "suggestions": [
+        "codex 免费",
+        "codex 免费额度",
+        "codex免费吗",
+        "codex 免费使用",
+        "codex 免费模型",
+        "codex 免费试用",
+        "codex 免费用户",
+        "codex 免费到什么时候",
+        "codex 免费账号额度",
+        "codex免费用户额度"
+      ],
+      "raw": [
+        "codex 免费",
+        [
+          "codex 免费",
+          "codex 免费额度",
+          "codex免费吗",
+          "codex 免费使用",
+          "codex 免费模型",
+          "codex 免费试用",
+          "codex 免费用户",
+          "codex 免费到什么时候",
+          "codex 免费账号额度",
+          "codex免费用户额度"
+        ],
+        [],
+        {
+          "google:suggestsubtypes": [
+            [
+              512
+            ],
+            [
+              512
+            ],
+            [
+              512,
+              12
+            ],
+            [
+              512
+            ],
+            [
+              512
+            ],
+            [
+              512
+            ],
+            [
+              512
+            ],
+            [
+              512
+            ],
+            [
+              512
+            ],
+            [
+              512,
+              12
+            ]
+          ]
+        }
+      ]
+    },
+    {
+      "query": "codex 额度",
+      "hl": "zh-CN",
+      "gl": "us",
+      "suggestions": [
+        "codex 额度",
+        "codex 额度查询",
+        "codex额度刷新",
+        "codex 额度查看",
+        "codex 额度限制",
+        "codex 额度翻倍",
+        "codex 额度重置",
+        "codex额度怎么看",
+        "codex 额度购买",
+        "codex额度不够"
+      ],
+      "raw": [
+        "codex 额度",
+        [
+          "codex 额度",
+          "codex 额度查询",
+          "codex额度刷新",
+          "codex 额度查看",
+          "codex 额度限制",
+          "codex 额度翻倍",
+          "codex 额度重置",
+          "codex额度怎么看",
+          "codex 额度购买",
+          "codex额度不够"
+        ],
+        [],
+        {
+          "google:suggestsubtypes": [
+            [
+              512
+            ],
+            [
+              512
+            ],
+            [
+              512,
+              12
+            ],
+            [
+              512
+            ],
+            [
+              512
+            ],
+            [
+              512
+            ],
+            [
+              512
+            ],
+            [
+              512,
+              12
+            ],
+            [
+              512
+            ],
+            [
+              512,
+              12
+            ]
+          ]
+        }
+      ]
+    },
+    {
+      "query": "codex 订阅",
+      "hl": "zh-CN",
+      "gl": "us",
+      "suggestions": [
+        "codex 订阅",
+        "codex 订阅价格",
+        "codex 订阅额度",
+        "codex 订阅费用",
+        "codex 订阅方案",
+        "codex 订阅套餐",
+        "codex 订阅计划",
+        "codex 订阅 国内",
+        "codex订阅购买",
+        "codex订阅对比"
+      ],
+      "raw": [
+        "codex 订阅",
+        [
+          "codex 订阅",
+          "codex 订阅价格",
+          "codex 订阅额度",
+          "codex 订阅费用",
+          "codex 订阅方案",
+          "codex 订阅套餐",
+          "codex 订阅计划",
+          "codex 订阅 国内",
+          "codex订阅购买",
+          "codex订阅对比"
+        ],
+        [],
+        {
+          "google:suggestsubtypes": [
+            [
+              512
+            ],
+            [
+              512
+            ],
+            [
+              512
+            ],
+            [
+              512
+            ],
+            [
+              512
+            ],
+            [
+              512
+            ],
+            [
+              512
+            ],
+            [
+              512
+            ],
+            [
+              512,
+              12
+            ],
+            [
+              512,
+              12
+            ]
+          ]
+        }
+      ]
+    },
+    {
+      "query": "codex 安装",
+      "hl": "zh-CN",
+      "gl": "us",
+      "suggestions": [
+        "codex 安装",
+        "codex安装教程",
+        "codex安装包",
+        "codex 安装skill",
+        "codex 安装命令",
+        "codex 安装mcp",
+        "codex安装使用",
+        "codex 安装 superpowers",
+        "codex 安装 mac",
+        "codex 安装 windows"
+      ],
+      "raw": [
+        "codex 安装",
+        [
+          "codex 安装",
+          "codex安装教程",
+          "codex安装包",
+          "codex 安装skill",
+          "codex 安装命令",
+          "codex 安装mcp",
+          "codex安装使用",
+          "codex 安装 superpowers",
+          "codex 安装 mac",
+          "codex 安装 windows"
+        ],
+        [],
+        {
+          "google:suggestsubtypes": [
+            [
+              512
+            ],
+            [
+              512,
+              12
+            ],
+            [
+              512,
+              12
+            ],
+            [
+              512
+            ],
+            [
+              512
+            ],
+            [
+              512
+            ],
+            [
+              512,
+              12
+            ],
+            [
+              512
+            ],
+            [
+              512
+            ],
+            [
+              512
+            ]
+          ]
+        }
+      ]
+    },
+    {
+      "query": "codex api key",
+      "hl": "en",
+      "gl": "us",
+      "suggestions": [
+        "codex api key",
+        "codex api key free",
+        "codex api key pricing",
+        "codex api key config",
+        "codex api key github",
+        "codex api key login",
+        "codex api key for openclaw",
+        "codex api key vs subscription",
+        "codex api key vscode",
+        "codex api key vs chatgpt"
+      ],
+      "raw": [
+        "codex api key",
+        [
+          "codex api key",
+          "codex api key free",
+          "codex api key pricing",
+          "codex api key config",
+          "codex api key github",
+          "codex api key login",
+          "codex api key for openclaw",
+          "codex api key vs subscription",
+          "codex api key vscode",
+          "codex api key vs chatgpt"
+        ],
+        [],
+        {
+          "google:suggestsubtypes": [
+            [
+              512
+            ],
+            [
+              512
+            ],
+            [
+              512
+            ],
+            [
+              512
+            ],
+            [
+              512
+            ],
+            [
+              512
+            ],
+            [
+              512
+            ],
+            [
+              512
+            ],
+            [
+              512
+            ],
+            [
+              512
+            ]
+          ]
+        }
+      ]
+    },
+    {
+      "query": "codex cli 使用",
+      "hl": "zh-CN",
+      "gl": "us",
+      "suggestions": [
+        "codex cli 使用",
+        "codex cli 使用 技巧",
+        "codex cli 使用 教程",
+        "codex cli 使用第三方api",
+        "codex cli 使用指南",
+        "codex cli 使用方法",
+        "codex cli 使用skill",
+        "codex cli 使用glm",
+        "codex cli 使用量",
+        "codex cli 使用 deepseek"
+      ],
+      "raw": [
+        "codex cli 使用",
+        [
+          "codex cli 使用",
+          "codex cli 使用 技巧",
+          "codex cli 使用 教程",
+          "codex cli 使用第三方api",
+          "codex cli 使用指南",
+          "codex cli 使用方法",
+          "codex cli 使用skill",
+          "codex cli 使用glm",
+          "codex cli 使用量",
+          "codex cli 使用 deepseek"
+        ],
+        [],
+        {
+          "google:suggestsubtypes": [
+            [
+              512
+            ],
+            [
+              512
+            ],
+            [
+              512
+            ],
+            [
+              512
+            ],
+            [
+              512
+            ],
+            [
+              512
+            ],
+            [
+              512
+            ],
+            [
+              512
+            ],
+            [
+              512
+            ],
+            [
+              512
+            ]
+          ]
+        }
+      ]
+    },
+    {
+      "query": "codex vs claude code",
+      "hl": "en",
+      "gl": "us",
+      "suggestions": [
+        "codex vs claude code",
+        "codex vs claude code vs gemini cli",
+        "codex vs claude code reddit",
+        "codex vs claude code vs cursor",
+        "codex vs claude code vs antigravity",
+        "codex vs claude code pricing",
+        "codex vs claude code 2026",
+        "codex vs claude code limits",
+        "codex vs claude code usage limits",
+        "codex vs claude code vs gemini"
+      ],
+      "raw": [
+        "codex vs claude code",
+        [
+          "codex vs claude code",
+          "codex vs claude code vs gemini cli",
+          "codex vs claude code reddit",
+          "codex vs claude code vs cursor",
+          "codex vs claude code vs antigravity",
+          "codex vs claude code pricing",
+          "codex vs claude code 2026",
+          "codex vs claude code limits",
+          "codex vs claude code usage limits",
+          "codex vs claude code vs gemini"
+        ],
+        [],
+        {
+          "google:suggestsubtypes": [
+            [
+              512
+            ],
+            [
+              512
+            ],
+            [
+              512
+            ],
+            [
+              512
+            ],
+            [
+              512
+            ],
+            [
+              512
+            ],
+            [
+              512
+            ],
+            [
+              512
+            ],
+            [
+              512
+            ],
+            [
+              512
+            ]
+          ]
+        }
+      ]
+    },
+    {
+      "query": "openai codex 国内",
+      "hl": "zh-CN",
+      "gl": "us",
+      "suggestions": [],
+      "raw": [
+        "openai codex 国内",
+        []
+      ]
+    },
+    {
+      "query": "chatgpt codex 国内",
+      "hl": "zh-CN",
+      "gl": "us",
+      "suggestions": [],
+      "raw": [
+        "chatgpt codex 国内",
+        []
+      ]
+    },
+    {
+      "query": "codex a",
+      "hl": "en",
+      "gl": "us",
+      "suggestions": [
+        "codex app",
+        "codex api",
+        "codex agents.md",
+        "codex ai",
+        "codex app windows",
+        "codex agent",
+        "codex api key",
+        "codex agent team",
+        "codex app download",
+        "codex app server"
+      ],
+      "raw": [
+        "codex a",
+        [
+          "codex app",
+          "codex api",
+          "codex agents.md",
+          "codex ai",
+          "codex app windows",
+          "codex agent",
+          "codex api key",
+          "codex agent team",
+          "codex app download",
+          "codex app server"
+        ],
+        [],
+        {
+          "google:suggestsubtypes": [
+            [
+              512
+            ],
+            [
+              512
+            ],
+            [
+              512
+            ],
+            [
+              512
+            ],
+            [
+              512
+            ],
+            [
+              512
+            ],
+            [
+              512
+            ],
+            [
+              512
+            ],
+            [
+              512
+            ],
+            [
+              512
+            ]
+          ]
+        }
+      ]
+    },
+    {
+      "query": "codex b",
+      "hl": "en",
+      "gl": "us",
+      "suggestions": [
+        "codex best practices",
+        "codex bar",
+        "codex business",
+        "codex brew",
+        "codex business plan",
+        "codex bundle mtg",
+        "codex bypass permissions",
+        "codex bundle",
+        "codex browser",
+        "codex bedrock"
+      ],
+      "raw": [
+        "codex b",
+        [
+          "codex best practices",
+          "codex bar",
+          "codex business",
+          "codex brew",
+          "codex business plan",
+          "codex bundle mtg",
+          "codex bypass permissions",
+          "codex bundle",
+          "codex browser",
+          "codex bedrock"
+        ],
+        [],
+        {
+          "google:suggestsubtypes": [
+            [
+              512
+            ],
+            [
+              512
+            ],
+            [
+              512
+            ],
+            [
+              512
+            ],
+            [
+              512
+            ],
+            [
+              512
+            ],
+            [
+              512
+            ],
+            [
+              512
+            ],
+            [
+              512
+            ],
+            [
+              512
+            ]
+          ]
+        }
+      ]
+    },
+    {
+      "query": "codex c",
+      "hl": "en",
+      "gl": "us",
+      "suggestions": [
+        "codex cli",
+        "codex cli install",
+        "codex chatgpt",
+        "codex claude code",
+        "codex config.toml",
+        "codex cli github",
+        "codex cli windows",
+        "codex cloud",
+        "codex config",
+        "codex changelog"
+      ],
+      "raw": [
+        "codex c",
+        [
+          "codex cli",
+          "codex cli install",
+          "codex chatgpt",
+          "codex claude code",
+          "codex config.toml",
+          "codex cli github",
+          "codex cli windows",
+          "codex cloud",
+          "codex config",
+          "codex changelog"
+        ],
+        [],
+        {
+          "google:suggestsubtypes": [
+            [
+              512
+            ],
+            [
+              512
+            ],
+            [
+              512
+            ],
+            [
+              512
+            ],
+            [
+              512
+            ],
+            [
+              512
+            ],
+            [
+              512
+            ],
+            [
+              512
+            ],
+            [
+              512
+            ],
+            [
+              512
+            ]
+          ]
+        }
+      ]
+    },
+    {
+      "query": "codex d",
+      "hl": "en",
+      "gl": "us",
+      "suggestions": [
+        "codex download",
+        "codex desktop",
+        "codex docs",
+        "codex desktop app",
+        "codex documentation",
+        "codex dangerously skip permissions",
+        "codex dashboard",
+        "codex desktop windows",
+        "codex docker",
+        "codex down"
+      ],
+      "raw": [
+        "codex d",
+        [
+          "codex download",
+          "codex desktop",
+          "codex docs",
+          "codex desktop app",
+          "codex documentation",
+          "codex dangerously skip permissions",
+          "codex dashboard",
+          "codex desktop windows",
+          "codex docker",
+          "codex down"
+        ],
+        [],
+        {
+          "google:suggestsubtypes": [
+            [
+              512
+            ],
+            [
+              512
+            ],
+            [
+              512
+            ],
+            [
+              512
+            ],
+            [
+              512
+            ],
+            [
+              512
+            ],
+            [
+              512
+            ],
+            [
+              512
+            ],
+            [
+              512
+            ],
+            [
+              512
+            ]
+          ]
+        }
+      ]
+    },
+    {
+      "query": "codex e",
+      "hl": "en",
+      "gl": "us",
+      "suggestions": [
+        "codex exec",
+        "codex enterprise",
+        "codex experimental",
+        "codex editor",
+        "codex emacs",
+        "codex error starting conversation",
+        "codex extension",
+        "codex enterprise plan",
+        "codex enable 1m context",
+        "codex executor apk"
+      ],
+      "raw": [
+        "codex e",
+        [
+          "codex exec",
+          "codex enterprise",
+          "codex experimental",
+          "codex editor",
+          "codex emacs",
+          "codex error starting conversation",
+          "codex extension",
+          "codex enterprise plan",
+          "codex enable 1m context",
+          "codex executor apk"
+        ],
+        [],
+        {
+          "google:suggestsubtypes": [
+            [
+              512
+            ],
+            [
+              512
+            ],
+            [
+              512
+            ],
+            [
+              512
+            ],
+            [
+              512
+            ],
+            [
+              512
+            ],
+            [
+              512
+            ],
+            [
+              512
+            ],
+            [
+              512
+            ],
+            [
+              512
+            ]
+          ]
+        }
+      ]
+    },
+    {
+      "query": "codex f",
+      "hl": "en",
+      "gl": "us",
+      "suggestions": [
+        "codex for windows",
+        "codex free",
+        "codex fast mode",
+        "codex for mac",
+        "codex figma mcp",
+        "codex free plan",
+        "codex full access",
+        "codex for open source",
+        "codex frontend skill",
+        "codex fast"
+      ],
+      "raw": [
+        "codex f",
+        [
+          "codex for windows",
+          "codex free",
+          "codex fast mode",
+          "codex for mac",
+          "codex figma mcp",
+          "codex free plan",
+          "codex full access",
+          "codex for open source",
+          "codex frontend skill",
+          "codex fast"
+        ],
+        [],
+        {
+          "google:suggestsubtypes": [
+            [
+              512
+            ],
+            [
+              512
+            ],
+            [
+              512
+            ],
+            [
+              512
+            ],
+            [
+              512
+            ],
+            [
+              512
+            ],
+            [
+              512
+            ],
+            [
+              512
+            ],
+            [
+              512
+            ],
+            [
+              512
+            ]
+          ]
+        }
+      ]
+    },
+    {
+      "query": "codex g",
+      "hl": "en",
+      "gl": "us",
+      "suggestions": [
+        "codex github",
+        "codex gigas",
+        "codex gpt",
+        "codex gui",
+        "codex gpt 5.3",
+        "codex github copilot",
+        "codex github actions",
+        "codex github mcp",
+        "codex gemini",
+        "codex github review"
+      ],
+      "raw": [
+        "codex g",
+        [
+          "codex github",
+          "codex gigas",
+          "codex gpt",
+          "codex gui",
+          "codex gpt 5.3",
+          "codex github copilot",
+          "codex github actions",
+          "codex github mcp",
+          "codex gemini",
+          "codex github review"
+        ],
+        [],
+        {
+          "google:suggestsubtypes": [
+            [
+              512
+            ],
+            [
+              512
+            ],
+            [
+              512
+            ],
+            [
+              512
+            ],
+            [
+              512
+            ],
+            [
+              512
+            ],
+            [
+              512
+            ],
+            [
+              512
+            ],
+            [
+              512
+            ],
+            [
+              512
+            ]
+          ]
+        }
+      ]
+    },
+    {
+      "query": "codex h",
+      "hl": "en",
+      "gl": "us",
+      "suggestions": [
+        "codex hooks",
+        "codex harness",
+        "codex how to use",
+        "codex history",
+        "codex handoff",
+        "codex harness engineering",
+        "codex headless",
+        "codex homebrew",
+        "codex http proxy",
+        "codex hud"
+      ],
+      "raw": [
+        "codex h",
+        [
+          "codex hooks",
+          "codex harness",
+          "codex how to use",
+          "codex history",
+          "codex handoff",
+          "codex harness engineering",
+          "codex headless",
+          "codex homebrew",
+          "codex http proxy",
+          "codex hud"
+        ],
+        [],
+        {
+          "google:suggestsubtypes": [
+            [
+              512
+            ],
+            [
+              512
+            ],
+            [
+              512
+            ],
+            [
+              512
+            ],
+            [
+              512
+            ],
+            [
+              512
+            ],
+            [
+              512
+            ],
+            [
+              512
+            ],
+            [
+              512
+            ],
+            [
+              512
+            ]
+          ]
+        }
+      ]
+    },
+    {
+      "query": "codex i",
+      "hl": "en",
+      "gl": "us",
+      "suggestions": [
+        "codex install",
+        "codex ide",
+        "codex ios",
+        "codex intellij",
+        "codex intel mac",
+        "codex install windows",
+        "codex iphone",
+        "codex ide extension",
+        "codex init",
+        "codex icon"
+      ],
+      "raw": [
+        "codex i",
+        [
+          "codex install",
+          "codex ide",
+          "codex ios",
+          "codex intellij",
+          "codex intel mac",
+          "codex install windows",
+          "codex iphone",
+          "codex ide extension",
+          "codex init",
+          "codex icon"
+        ],
+        [],
+        {
+          "google:suggestsubtypes": [
+            [
+              512
+            ],
+            [
+              512
+            ],
+            [
+              512
+            ],
+            [
+              512
+            ],
+            [
+              512
+            ],
+            [
+              512
+            ],
+            [
+              512
+            ],
+            [
+              512
+            ],
+            [
+              512
+            ],
+            [
+              512
+            ]
+          ]
+        }
+      ]
+    },
+    {
+      "query": "codex j",
+      "hl": "en",
+      "gl": "us",
+      "suggestions": [
+        "codex jetbrains",
+        "codex justinianus",
+        "codex jailbreak",
+        "codex journals",
+        "codex jira mcp",
+        "codex jobs",
+        "codex jetbrains plugin",
+        "codex jupyter notebook",
+        "codex javascript repl",
+        "codex java"
+      ],
+      "raw": [
+        "codex j",
+        [
+          "codex jetbrains",
+          "codex justinianus",
+          "codex jailbreak",
+          "codex journals",
+          "codex jira mcp",
+          "codex jobs",
+          "codex jetbrains plugin",
+          "codex jupyter notebook",
+          "codex javascript repl",
+          "codex java"
+        ],
+        [],
+        {
+          "google:suggestsubtypes": [
+            [
+              512
+            ],
+            [
+              512
+            ],
+            [
+              512
+            ],
+            [
+              512
+            ],
+            [
+              512
+            ],
+            [
+              512
+            ],
+            [
+              512
+            ],
+            [
+              512
+            ],
+            [
+              512
+            ],
+            [
+              512
+            ]
+          ]
+        }
+      ]
+    },
+    {
+      "query": "codex k",
+      "hl": "en",
+      "gl": "us",
+      "suggestions": [
+        "codex key",
+        "codex kiro",
+        "codex keeps asking for permission",
+        "codex kya hai",
+        "codex kettle",
+        "codex kya hota hai",
+        "codex kit",
+        "codex keeps asking for approval",
+        "codex keeps reconnecting",
+        "codex keeps crashing"
+      ],
+      "raw": [
+        "codex k",
+        [
+          "codex key",
+          "codex kiro",
+          "codex keeps asking for permission",
+          "codex kya hai",
+          "codex kettle",
+          "codex kya hota hai",
+          "codex kit",
+          "codex keeps asking for approval",
+          "codex keeps reconnecting",
+          "codex keeps crashing"
+        ],
+        [],
+        {
+          "google:suggestsubtypes": [
+            [
+              512
+            ],
+            [
+              512
+            ],
+            [
+              512
+            ],
+            [
+              512
+            ],
+            [
+              512
+            ],
+            [
+              512
+            ],
+            [
+              512
+            ],
+            [
+              512
+            ],
+            [
+              512
+            ],
+            [
+              512
+            ]
+          ]
+        }
+      ]
+    },
+    {
+      "query": "codex l",
+      "hl": "en",
+      "gl": "us",
+      "suggestions": [
+        "codex linux",
+        "codex limit",
+        "codex login",
+        "codex logo",
+        "codex lsp",
+        "codex latest version",
+        "codex leicester",
+        "codex litellm",
+        "codex linux install",
+        "codex local llm"
+      ],
+      "raw": [
+        "codex l",
+        [
+          "codex linux",
+          "codex limit",
+          "codex login",
+          "codex logo",
+          "codex lsp",
+          "codex latest version",
+          "codex leicester",
+          "codex litellm",
+          "codex linux install",
+          "codex local llm"
+        ],
+        [],
+        {
+          "google:suggestsubtypes": [
+            [
+              512
+            ],
+            [
+              512
+            ],
+            [
+              512
+            ],
+            [
+              512
+            ],
+            [
+              512
+            ],
+            [
+              512
+            ],
+            [
+              512
+            ],
+            [
+              512
+            ],
+            [
+              512
+            ],
+            [
+              512
+            ]
+          ]
+        }
+      ]
+    },
+    {
+      "query": "codex m",
+      "hl": "en",
+      "gl": "us",
+      "suggestions": [
+        "codex mcp",
+        "codex mac",
+        "codex multi agent",
+        "codex model",
+        "codex monitor",
+        "codex meaning",
+        "codex mac app",
+        "codex mcp server",
+        "codex memory",
+        "codex macos"
+      ],
+      "raw": [
+        "codex m",
+        [
+          "codex mcp",
+          "codex mac",
+          "codex multi agent",
+          "codex model",
+          "codex monitor",
+          "codex meaning",
+          "codex mac app",
+          "codex mcp server",
+          "codex memory",
+          "codex macos"
+        ],
+        [],
+        {
+          "google:suggestsubtypes": [
+            [
+              512
+            ],
+            [
+              512
+            ],
+            [
+              512
+            ],
+            [
+              512
+            ],
+            [
+              512
+            ],
+            [
+              512
+            ],
+            [
+              512
+            ],
+            [
+              512
+            ],
+            [
+              512
+            ],
+            [
+              512
+            ]
+          ]
+        }
+      ]
+    },
+    {
+      "query": "codex n",
+      "hl": "en",
+      "gl": "us",
+      "suggestions": [
+        "codex npm",
+        "codex notify",
+        "codex nvim",
+        "codex notification",
+        "codex npm install",
+        "codex neovim",
+        "codex notion mcp",
+        "codex network access",
+        "codex notion",
+        "codex node version"
+      ],
+      "raw": [
+        "codex n",
+        [
+          "codex npm",
+          "codex notify",
+          "codex nvim",
+          "codex notification",
+          "codex npm install",
+          "codex neovim",
+          "codex notion mcp",
+          "codex network access",
+          "codex notion",
+          "codex node version"
+        ],
+        [],
+        {
+          "google:suggestsubtypes": [
+            [
+              512
+            ],
+            [
+              512
+            ],
+            [
+              512
+            ],
+            [
+              512
+            ],
+            [
+              512
+            ],
+            [
+              512
+            ],
+            [
+              512
+            ],
+            [
+              512
+            ],
+            [
+              512
+            ],
+            [
+              512
+            ]
+          ]
+        }
+      ]
+    },
+    {
+      "query": "codex o",
+      "hl": "en",
+      "gl": "us",
+      "suggestions": [
+        "codex openai",
+        "codex openclaw",
+        "codex oauth",
+        "codex opencode",
+        "codex open source",
+        "codex or claude code",
+        "codex openrouter",
+        "codex online",
+        "codex ollama",
+        "codex obsidian"
+      ],
+      "raw": [
+        "codex o",
+        [
+          "codex openai",
+          "codex openclaw",
+          "codex oauth",
+          "codex opencode",
+          "codex open source",
+          "codex or claude code",
+          "codex openrouter",
+          "codex online",
+          "codex ollama",
+          "codex obsidian"
+        ],
+        [],
+        {
+          "google:suggestsubtypes": [
+            [
+              512
+            ],
+            [
+              512
+            ],
+            [
+              512
+            ],
+            [
+              512
+            ],
+            [
+              512
+            ],
+            [
+              512
+            ],
+            [
+              512
+            ],
+            [
+              512
+            ],
+            [
+              512
+            ],
+            [
+              512
+            ]
+          ]
+        }
+      ]
+    },
+    {
+      "query": "codex p",
+      "hl": "en",
+      "gl": "us",
+      "suggestions": [
+        "codex pricing",
+        "codex plan",
+        "codex plan mode",
+        "codex plugin",
+        "codex plus",
+        "codex proxy",
+        "codex permission",
+        "codex pricing plans",
+        "codex prompts",
+        "codex plus vs pro"
+      ],
+      "raw": [
+        "codex p",
+        [
+          "codex pricing",
+          "codex plan",
+          "codex plan mode",
+          "codex plugin",
+          "codex plus",
+          "codex proxy",
+          "codex permission",
+          "codex pricing plans",
+          "codex prompts",
+          "codex plus vs pro"
+        ],
+        [],
+        {
+          "google:suggestsubtypes": [
+            [
+              512
+            ],
+            [
+              512
+            ],
+            [
+              512
+            ],
+            [
+              512
+            ],
+            [
+              512
+            ],
+            [
+              512
+            ],
+            [
+              512
+            ],
+            [
+              512
+            ],
+            [
+              512
+            ],
+            [
+              512
+            ]
+          ]
+        }
+      ]
+    },
+    {
+      "query": "codex q",
+      "hl": "en",
+      "gl": "us",
+      "suggestions": [
+        "codex quota",
+        "codex que es",
+        "codex quota check",
+        "codex quickstart",
+        "codex quota exceeded",
+        "codex quota limit",
+        "codex qr",
+        "codex queue messages",
+        "codex queueing",
+        "codex q"
+      ],
+      "raw": [
+        "codex q",
+        [
+          "codex quota",
+          "codex que es",
+          "codex quota check",
+          "codex quickstart",
+          "codex quota exceeded",
+          "codex quota limit",
+          "codex qr",
+          "codex queue messages",
+          "codex queueing",
+          "codex q"
+        ],
+        [],
+        {
+          "google:suggestsubtypes": [
+            [
+              512
+            ],
+            [
+              512
+            ],
+            [
+              512
+            ],
+            [
+              512
+            ],
+            [
+              512
+            ],
+            [
+              512
+            ],
+            [
+              512
+            ],
+            [
+              512
+            ],
+            [
+              512
+            ],
+            [
+              512
+            ]
+          ]
+        }
+      ]
+    },
+    {
+      "query": "codex r",
+      "hl": "en",
+      "gl": "us",
+      "suggestions": [
+        "codex rules",
+        "codex review",
+        "codex rate limit",
+        "codex releases",
+        "codex remote",
+        "codex remote control",
+        "codex reconnecting",
+        "codex resume",
+        "codex reddit",
+        "codex rewind"
+      ],
+      "raw": [
+        "codex r",
+        [
+          "codex rules",
+          "codex review",
+          "codex rate limit",
+          "codex releases",
+          "codex remote",
+          "codex remote control",
+          "codex reconnecting",
+          "codex resume",
+          "codex reddit",
+          "codex rewind"
+        ],
+        [],
+        {
+          "google:suggestsubtypes": [
+            [
+              512
+            ],
+            [
+              512
+            ],
+            [
+              512
+            ],
+            [
+              512
+            ],
+            [
+              512
+            ],
+            [
+              512
+            ],
+            [
+              512
+            ],
+            [
+              512
+            ],
+            [
+              512
+            ],
+            [
+              512
+            ]
+          ]
+        }
+      ]
+    },
+    {
+      "query": "codex s",
+      "hl": "en",
+      "gl": "us",
+      "suggestions": [
+        "codex skills",
+        "codex subagents",
+        "codex spark",
+        "codex sdk",
+        "codex sandbox",
+        "codex sinaiticus",
+        "codex subscription",
+        "codex status",
+        "codex seraphinianus",
+        "codex security"
+      ],
+      "raw": [
+        "codex s",
+        [
+          "codex skills",
+          "codex subagents",
+          "codex spark",
+          "codex sdk",
+          "codex sandbox",
+          "codex sinaiticus",
+          "codex subscription",
+          "codex status",
+          "codex seraphinianus",
+          "codex security"
+        ],
+        [],
+        {
+          "google:suggestsubtypes": [
+            [
+              512
+            ],
+            [
+              512
+            ],
+            [
+              512
+            ],
+            [
+              512
+            ],
+            [
+              512
+            ],
+            [
+              512
+            ],
+            [
+              512
+            ],
+            [
+              512
+            ],
+            [
+              512
+            ],
+            [
+              512
+            ]
+          ]
+        }
+      ]
+    },
+    {
+      "query": "codex t",
+      "hl": "en",
+      "gl": "us",
+      "suggestions": [
+        "codex team",
+        "codex terminal",
+        "codex team plan",
+        "codex token limit",
+        "codex token",
+        "codex tutorial",
+        "codex token usage",
+        "codex telegram",
+        "codex tui",
+        "codex tmux"
+      ],
+      "raw": [
+        "codex t",
+        [
+          "codex team",
+          "codex terminal",
+          "codex team plan",
+          "codex token limit",
+          "codex token",
+          "codex tutorial",
+          "codex token usage",
+          "codex telegram",
+          "codex tui",
+          "codex tmux"
+        ],
+        [],
+        {
+          "google:suggestsubtypes": [
+            [
+              512
+            ],
+            [
+              512
+            ],
+            [
+              512
+            ],
+            [
+              512
+            ],
+            [
+              512
+            ],
+            [
+              512
+            ],
+            [
+              512
+            ],
+            [
+              512
+            ],
+            [
+              512
+            ],
+            [
+              512
+            ]
+          ]
+        }
+      ]
+    },
+    {
+      "query": "codex u",
+      "hl": "en",
+      "gl": "us",
+      "suggestions": [
+        "codex usage",
+        "codex update",
+        "codex usage dashboard",
+        "codex usage limits",
+        "codex upgrade",
+        "codex ui",
+        "codex ubuntu",
+        "codex unity",
+        "codex usage check",
+        "codex update command"
+      ],
+      "raw": [
+        "codex u",
+        [
+          "codex usage",
+          "codex update",
+          "codex usage dashboard",
+          "codex usage limits",
+          "codex upgrade",
+          "codex ui",
+          "codex ubuntu",
+          "codex unity",
+          "codex usage check",
+          "codex update command"
+        ],
+        [],
+        {
+          "google:suggestsubtypes": [
+            [
+              512
+            ],
+            [
+              512
+            ],
+            [
+              512
+            ],
+            [
+              512
+            ],
+            [
+              512
+            ],
+            [
+              512
+            ],
+            [
+              512
+            ],
+            [
+              512
+            ],
+            [
+              512
+            ],
+            [
+              512
+            ]
+          ]
+        }
+      ]
+    },
+    {
+      "query": "codex v",
+      "hl": "en",
+      "gl": "us",
+      "suggestions": [
+        "codex vs claude code",
+        "codex vscode",
+        "codex vs claude",
+        "codex vscode extension",
+        "codex vaticanus",
+        "codex vs cursor",
+        "codex version",
+        "codex vs copilot",
+        "codex voice input",
+        "codex vs github copilot"
+      ],
+      "raw": [
+        "codex v",
+        [
+          "codex vs claude code",
+          "codex vscode",
+          "codex vs claude",
+          "codex vscode extension",
+          "codex vaticanus",
+          "codex vs cursor",
+          "codex version",
+          "codex vs copilot",
+          "codex voice input",
+          "codex vs github copilot"
+        ],
+        [],
+        {
+          "google:suggestsubtypes": [
+            [
+              512
+            ],
+            [
+              512
+            ],
+            [
+              512
+            ],
+            [
+              512
+            ],
+            [
+              512
+            ],
+            [
+              512
+            ],
+            [
+              512
+            ],
+            [
+              512
+            ],
+            [
+              512
+            ],
+            [
+              512
+            ]
+          ]
+        }
+      ]
+    },
+    {
+      "query": "codex w",
+      "hl": "en",
+      "gl": "us",
+      "suggestions": [
+        "codex windows",
+        "codex web",
+        "codex worktree",
+        "codex web search",
+        "codex windows app",
+        "codex wsl",
+        "codex windows install",
+        "codex windows download",
+        "codex weekly limit",
+        "codex web_search"
+      ],
+      "raw": [
+        "codex w",
+        [
+          "codex windows",
+          "codex web",
+          "codex worktree",
+          "codex web search",
+          "codex windows app",
+          "codex wsl",
+          "codex windows install",
+          "codex windows download",
+          "codex weekly limit",
+          "codex web_search"
+        ],
+        [],
+        {
+          "google:suggestsubtypes": [
+            [
+              512
+            ],
+            [
+              512
+            ],
+            [
+              512
+            ],
+            [
+              512
+            ],
+            [
+              512
+            ],
+            [
+              512
+            ],
+            [
+              512
+            ],
+            [
+              512
+            ],
+            [
+              512
+            ],
+            [
+              512
+            ]
+          ]
+        }
+      ]
+    },
+    {
+      "query": "codex x",
+      "hl": "en",
+      "gl": "us",
+      "suggestions": [
+        "codex xhigh",
+        "codex xcode",
+        "codex cli",
+        "codex cli install",
+        "codex chatgpt",
+        "codex claude code",
+        "codex config.toml",
+        "codex cli github",
+        "codex cli windows",
+        "codex cloud"
+      ],
+      "raw": [
+        "codex x",
+        [
+          "codex xhigh",
+          "codex xcode",
+          "codex cli",
+          "codex cli install",
+          "codex chatgpt",
+          "codex claude code",
+          "codex config.toml",
+          "codex cli github",
+          "codex cli windows",
+          "codex cloud"
+        ],
+        [],
+        {
+          "google:suggestsubtypes": [
+            [
+              512
+            ],
+            [
+              512
+            ],
+            [
+              512,
+              10,
+              11
+            ],
+            [
+              512,
+              10,
+              11
+            ],
+            [
+              512,
+              10,
+              11
+            ],
+            [
+              512,
+              10,
+              11
+            ],
+            [
+              512,
+              10,
+              11
+            ],
+            [
+              512,
+              10,
+              11
+            ],
+            [
+              512,
+              10,
+              11
+            ],
+            [
+              512,
+              10,
+              11
+            ]
+          ]
+        }
+      ]
+    },
+    {
+      "query": "codex y",
+      "hl": "en",
+      "gl": "us",
+      "suggestions": [
+        "codex yolo",
+        "codex yolo mode",
+        "codex youtube",
+        "codex yearly subscription",
+        "codex yolo command",
+        "codex yolo mode command",
+        "codex yugioh",
+        "codex yearly",
+        "codex youtube channel",
+        "codex yeet skill"
+      ],
+      "raw": [
+        "codex y",
+        [
+          "codex yolo",
+          "codex yolo mode",
+          "codex youtube",
+          "codex yearly subscription",
+          "codex yolo command",
+          "codex yolo mode command",
+          "codex yugioh",
+          "codex yearly",
+          "codex youtube channel",
+          "codex yeet skill"
+        ],
+        [],
+        {
+          "google:suggestsubtypes": [
+            [
+              512
+            ],
+            [
+              512
+            ],
+            [
+              512
+            ],
+            [
+              512
+            ],
+            [
+              512
+            ],
+            [
+              512
+            ],
+            [
+              512
+            ],
+            [
+              512
+            ],
+            [
+              512
+            ],
+            [
+              512
+            ]
+          ]
+        }
+      ]
+    },
+    {
+      "query": "codex z",
+      "hl": "en",
+      "gl": "us",
+      "suggestions": [
+        "codex zenn",
+        "codex zed",
+        "codex z2",
+        "codex zouche-nuttall",
+        "codex z2 gaming desktop",
+        "codex z2 a8nvp-486us",
+        "codex z2 a8nvm-485us",
+        "codex zajecar",
+        "codex z2 a8nvp-436us",
+        "codex z2 a8nvl-484us"
+      ],
+      "raw": [
+        "codex z",
+        [
+          "codex zenn",
+          "codex zed",
+          "codex z2",
+          "codex zouche-nuttall",
+          "codex z2 gaming desktop",
+          "codex z2 a8nvp-486us",
+          "codex z2 a8nvm-485us",
+          "codex zajecar",
+          "codex z2 a8nvp-436us",
+          "codex z2 a8nvl-484us"
+        ],
+        [],
+        {
+          "google:suggestsubtypes": [
+            [
+              512
+            ],
+            [
+              512
+            ],
+            [
+              512
+            ],
+            [
+              512
+            ],
+            [
+              512
+            ],
+            [
+              512
+            ],
+            [
+              512
+            ],
+            [
+              512
+            ],
+            [
+              512
+            ],
+            [
+              512
+            ]
+          ]
+        }
+      ]
+    }
+  ],
+  "uniqueSuggestions": [
+    "chatgpt codex",
+    "chatgpt codex 5.3",
+    "chatgpt codex app",
+    "chatgpt codex cli",
+    "chatgpt codex limits",
+    "chatgpt codex plan",
+    "chatgpt codex pricing",
+    "chatgpt codex usage",
+    "chatgpt codex vs claude code",
+    "chatgpt codex vscode",
+    "codex",
+    "codex agent",
+    "codex agent team",
+    "codex agents.md",
+    "codex agents.md best practices",
+    "codex agents.md example",
+    "codex agents.md file",
+    "codex agents.md github",
+    "codex agents.md global",
+    "codex agents.md location",
+    "codex agents.md reddit",
+    "codex agents.md skills",
+    "codex agents.md template",
+    "codex ai",
+    "codex api",
+    "codex api docs",
+    "codex api key",
+    "codex api key config",
+    "codex api key for openclaw",
+    "codex api key free",
+    "codex api key github",
+    "codex api key login",
+    "codex api key pricing",
+    "codex api key vs chatgpt",
+    "codex api key vs subscription",
+    "codex api key vscode",
+    "codex api limits",
+    "codex api openai",
+    "codex api pricing",
+    "codex api token",
+    "codex api usage",
+    "codex app",
+    "codex app brew",
+    "codex app download",
+    "codex app github",
+    "codex app linux",
+    "codex app mac",
+    "codex app server",
+    "codex app ssh",
+    "codex app windows",
+    "codex approval_policy",
+    "codex bar",
+    "codex bedrock",
+    "codex best practices",
+    "codex brew",
+    "codex browser",
+    "codex bundle",
+    "codex bundle mtg",
+    "codex business",
+    "codex business plan",
+    "codex bypass permissions",
+    "codex changelog",
+    "codex chatgpt",
+    "codex claude code",
+    "codex cli",
+    "codex cli download",
+    "codex cli github",
+    "codex cli install",
+    "codex cli mcp",
+    "codex cli pricing",
+    "codex cli skills",
+    "codex cli update",
+    "codex cli vs claude code",
+    "codex cli windows",
+    "codex cli 使用",
+    "codex cli 使用 deepseek",
+    "codex cli 使用 技巧",
+    "codex cli 使用 教程",
+    "codex cli 使用glm",
+    "codex cli 使用skill",
+    "codex cli 使用指南",
+    "codex cli 使用方法",
+    "codex cli 使用第三方api",
+    "codex cli 使用量",
+    "codex cloud",
+    "codex config",
+    "codex config.toml",
+    "codex config.toml api key",
+    "codex config.toml auto approve",
+    "codex config.toml example",
+    "codex config.toml file",
+    "codex config.toml location",
+    "codex config.toml mcp",
+    "codex config.toml options",
+    "codex config.toml settings",
+    "codex config.toml windows",
+    "codex cost",
+    "codex cost api",
+    "codex cost chatgpt",
+    "codex cost india",
+    "codex cost openai",
+    "codex cost per million tokens",
+    "codex cost per month",
+    "codex cost per token",
+    "codex cost vs claude code",
+    "codex costo",
+    "codex dangerously skip permissions",
+    "codex dashboard",
+    "codex desktop",
+    "codex desktop app",
+    "codex desktop windows",
+    "codex docker",
+    "codex docs",
+    "codex documentation",
+    "codex down",
+    "codex download",
+    "codex download app",
+    "codex download cli",
+    "codex download for windows 10",
+    "codex download for windows 11",
+    "codex download linux",
+    "codex download mac",
+    "codex download macos",
+    "codex download ubuntu",
+    "codex download windows",
+    "codex editor",
+    "codex emacs",
+    "codex enable 1m context",
+    "codex enterprise",
+    "codex enterprise plan",
+    "codex error starting conversation",
+    "codex exec",
+    "codex executor apk",
+    "codex experimental",
+    "codex extension",
+    "codex fast",
+    "codex fast mode",
+    "codex figma mcp",
+    "codex for mac",
+    "codex for open source",
+    "codex for windows",
+    "codex free",
+    "codex free api key",
+    "codex free credits",
+    "codex free for students",
+    "codex free limits",
+    "codex free plan",
+    "codex free tier",
+    "codex free trial",
+    "codex free usage",
+    "codex free version",
+    "codex frontend skill",
+    "codex full access",
+    "codex gemini",
+    "codex gigas",
+    "codex github",
+    "codex github actions",
+    "codex github copilot",
+    "codex github mcp",
+    "codex github review",
+    "codex gpt",
+    "codex gpt 5.3",
+    "codex gui",
+    "codex handoff",
+    "codex harness",
+    "codex harness engineering",
+    "codex headless",
+    "codex history",
+    "codex homebrew",
+    "codex hooks",
+    "codex how to use",
+    "codex how to use agents",
+    "codex how to use api key",
+    "codex how to use code review",
+    "codex how to use in vs code",
+    "codex how to use mcp",
+    "codex how to use plan mode",
+    "codex how to use skills",
+    "codex how to use subagents",
+    "codex how to use worktree",
+    "codex http proxy",
+    "codex hud",
+    "codex icon",
+    "codex ide",
+    "codex ide extension",
+    "codex init",
+    "codex install",
+    "codex install windows",
+    "codex intel mac",
+    "codex intellij",
+    "codex ios",
+    "codex iphone",
+    "codex jailbreak",
+    "codex java",
+    "codex javascript repl",
+    "codex jetbrains",
+    "codex jetbrains plugin",
+    "codex jira mcp",
+    "codex jobs",
+    "codex journals",
+    "codex jupyter notebook",
+    "codex justinianus",
+    "codex keeps asking for approval",
+    "codex keeps asking for permission",
+    "codex keeps crashing",
+    "codex keeps reconnecting",
+    "codex kettle",
+    "codex key",
+    "codex kiro",
+    "codex kit",
+    "codex kya hai",
+    "codex kya hota hai",
+    "codex latest version",
+    "codex leicester",
+    "codex limit",
+    "codex linux",
+    "codex linux install",
+    "codex litellm",
+    "codex local llm",
+    "codex login",
+    "codex login cli",
+    "codex login command",
+    "codex login device auth",
+    "codex login headless",
+    "codex login not working",
+    "codex login openai",
+    "codex login terminal",
+    "codex login with api key",
+    "codex login with chatgpt",
+    "codex logo",
+    "codex lsp",
+    "codex mac",
+    "codex mac app",
+    "codex macos",
+    "codex mcp",
+    "codex mcp server",
+    "codex meaning",
+    "codex memory",
+    "codex model",
+    "codex monitor",
+    "codex multi agent",
+    "codex neovim",
+    "codex network access",
+    "codex node version",
+    "codex notification",
+    "codex notify",
+    "codex notion",
+    "codex notion mcp",
+    "codex npm",
+    "codex npm install",
+    "codex nvim",
+    "codex oauth",
+    "codex obsidian",
+    "codex ollama",
+    "codex online",
+    "codex open source",
+    "codex openai",
+    "codex openclaw",
+    "codex opencode",
+    "codex openrouter",
+    "codex or claude code",
+    "codex permission",
+    "codex plan",
+    "codex plan mode",
+    "codex plugin",
+    "codex plus",
+    "codex plus vs pro",
+    "codex pricing",
+    "codex pricing and limits",
+    "codex pricing api",
+    "codex pricing chatgpt",
+    "codex pricing india",
+    "codex pricing model",
+    "codex pricing openai",
+    "codex pricing plans",
+    "codex pricing reddit",
+    "codex pricing vs claude code",
+    "codex prompts",
+    "codex proxy",
+    "codex q",
+    "codex qr",
+    "codex que es",
+    "codex queue messages",
+    "codex queueing",
+    "codex quickstart",
+    "codex quota",
+    "codex quota check",
+    "codex quota exceeded",
+    "codex quota limit",
+    "codex rate limit",
+    "codex rate limit check",
+    "codex rate limit exceeded",
+    "codex rate limit monitor",
+    "codex rate limit reached",
+    "codex rate limit reset",
+    "codex rate limit weekly",
+    "codex rate limits plus",
+    "codex rate limits reddit",
+    "codex rate limits remaining",
+    "codex reconnecting",
+    "codex reddit",
+    "codex releases",
+    "codex remote",
+    "codex remote control",
+    "codex resume",
+    "codex review",
+    "codex rewind",
+    "codex rules",
+    "codex sandbox",
+    "codex sdk",
+    "codex security",
+    "codex seraphinianus",
+    "codex sinaiticus",
+    "codex skills",
+    "codex spark",
+    "codex status",
+    "codex subagents",
+    "codex subscription",
+    "codex team",
+    "codex team plan",
+    "codex telegram",
+    "codex terminal",
+    "codex tmux",
+    "codex token",
+    "codex token limit",
+    "codex token usage",
+    "codex tui",
+    "codex tutorial",
+    "codex tutorial chatgpt",
+    "codex tutorial for beginners",
+    "codex tutorial github",
+    "codex tutorial openai",
+    "codex tutorial pdf",
+    "codex tutorial reddit",
+    "codex tutorial udemy",
+    "codex tutorial vscode",
+    "codex tutorial youtube",
+    "codex ubuntu",
+    "codex ui",
+    "codex unity",
+    "codex update",
+    "codex update command",
+    "codex upgrade",
+    "codex usage",
+    "codex usage check",
+    "codex usage dashboard",
+    "codex usage limit reached",
+    "codex usage limit reset",
+    "codex usage limits",
+    "codex usage limits chatgpt plus",
+    "codex usage limits check",
+    "codex usage limits dashboard",
+    "codex usage limits for plus",
+    "codex usage limits openai",
+    "codex usage limits reddit",
+    "codex usage limits vs claude code",
+    "codex vaticanus",
+    "codex version",
+    "codex voice input",
+    "codex vs antigravity",
+    "codex vs claude",
+    "codex vs claude code",
+    "codex vs claude code 2026",
+    "codex vs claude code limits",
+    "codex vs claude code pricing",
+    "codex vs claude code reddit",
+    "codex vs claude code usage limits",
+    "codex vs claude code vs antigravity",
+    "codex vs claude code vs cursor",
+    "codex vs claude code vs gemini",
+    "codex vs claude code vs gemini cli",
+    "codex vs copilot",
+    "codex vs cursor",
+    "codex vs gemini",
+    "codex vs github copilot",
+    "codex vs opencode",
+    "codex vscode",
+    "codex vscode extension",
+    "codex web",
+    "codex web search",
+    "codex web_search",
+    "codex weekly limit",
+    "codex windows",
+    "codex windows app",
+    "codex windows download",
+    "codex windows install",
+    "codex worktree",
+    "codex wsl",
+    "codex xcode",
+    "codex xhigh",
+    "codex yearly",
+    "codex yearly subscription",
+    "codex yeet skill",
+    "codex yolo",
+    "codex yolo command",
+    "codex yolo mode",
+    "codex yolo mode command",
+    "codex youtube",
+    "codex youtube channel",
+    "codex yugioh",
+    "codex z2",
+    "codex z2 a8nvl-484us",
+    "codex z2 a8nvm-485us",
+    "codex z2 a8nvp-436us",
+    "codex z2 a8nvp-486us",
+    "codex z2 gaming desktop",
+    "codex zajecar",
+    "codex zed",
+    "codex zenn",
+    "codex zouche-nuttall",
+    "codex 价格",
+    "codex 免费",
+    "codex 免费使用",
+    "codex 免费到什么时候",
+    "codex 免费模型",
+    "codex 免费用户",
+    "codex 免费试用",
+    "codex 免费账号额度",
+    "codex 免费额度",
+    "codex 国内使用",
+    "codex 安装",
+    "codex 安装 mac",
+    "codex 安装 superpowers",
+    "codex 安装 windows",
+    "codex 安装mcp",
+    "codex 安装skill",
+    "codex 安装命令",
+    "codex 教程",
+    "codex 订阅",
+    "codex 订阅 国内",
+    "codex 订阅价格",
+    "codex 订阅套餐",
+    "codex 订阅方案",
+    "codex 订阅计划",
+    "codex 订阅费用",
+    "codex 订阅额度",
+    "codex 额度",
+    "codex 额度查看",
+    "codex 额度查询",
+    "codex 额度翻倍",
+    "codex 额度购买",
+    "codex 额度重置",
+    "codex 额度限制",
+    "codex免费吗",
+    "codex免费用户额度",
+    "codex安装使用",
+    "codex安装包",
+    "codex安装教程",
+    "codex订阅对比",
+    "codex订阅购买",
+    "codex额度不够",
+    "codex额度刷新",
+    "codex额度怎么看",
+    "gpt 5.4 codex cli",
+    "gpt 5.4 codex openclaw",
+    "gpt 5.4 codex pricing",
+    "gpt 5.4 codex reddit",
+    "gpt 5.4 codex release date",
+    "gpt 5.4 codex vs claude",
+    "gpt 5.4 codex vs claude opus 4.6",
+    "gpt 5.4 codex vs opus 4.6",
+    "gpt-5.3 codex",
+    "gpt-5.3 codex api",
+    "gpt-5.3 codex context window",
+    "gpt-5.3 codex from openai",
+    "gpt-5.3 codex pricing",
+    "gpt-5.3 codex release date",
+    "gpt-5.3 codex spark",
+    "gpt-5.3 codex vs claude opus 4.6",
+    "gpt-5.3 codex vs gpt-5.4",
+    "gpt-5.3 codex vs opus 4.6",
+    "gpt-5.4 codex",
+    "gpt-5.4 codex context window",
+    "openai codex",
+    "openai codex api",
+    "openai codex app",
+    "openai codex cli",
+    "openai codex github",
+    "openai codex plan",
+    "openai codex pricing",
+    "openai codex skills",
+    "openai codex usage",
+    "openai codex vs claude code"
+  ],
+  "highIntentSuggestions": [
+    "chatgpt codex app",
+    "chatgpt codex cli",
+    "chatgpt codex limits",
+    "chatgpt codex pricing",
+    "chatgpt codex usage",
+    "chatgpt codex vs claude code",
+    "chatgpt codex vscode",
+    "codex agents.md",
+    "codex agents.md best practices",
+    "codex agents.md example",
+    "codex agents.md file",
+    "codex agents.md github",
+    "codex agents.md global",
+    "codex agents.md location",
+    "codex agents.md reddit",
+    "codex agents.md skills",
+    "codex agents.md template",
+    "codex api",
+    "codex api docs",
+    "codex api key",
+    "codex api key config",
+    "codex api key for openclaw",
+    "codex api key free",
+    "codex api key github",
+    "codex api key login",
+    "codex api key pricing",
+    "codex api key vs chatgpt",
+    "codex api key vs subscription",
+    "codex api key vscode",
+    "codex api limits",
+    "codex api openai",
+    "codex api pricing",
+    "codex api token",
+    "codex api usage",
+    "codex app",
+    "codex app brew",
+    "codex app download",
+    "codex app github",
+    "codex app linux",
+    "codex app mac",
+    "codex app server",
+    "codex app ssh",
+    "codex app windows",
+    "codex approval_policy",
+    "codex claude code",
+    "codex cli",
+    "codex cli download",
+    "codex cli github",
+    "codex cli install",
+    "codex cli mcp",
+    "codex cli pricing",
+    "codex cli skills",
+    "codex cli update",
+    "codex cli vs claude code",
+    "codex cli windows",
+    "codex cli 使用",
+    "codex cli 使用 deepseek",
+    "codex cli 使用 技巧",
+    "codex cli 使用 教程",
+    "codex cli 使用glm",
+    "codex cli 使用skill",
+    "codex cli 使用指南",
+    "codex cli 使用方法",
+    "codex cli 使用第三方api",
+    "codex cli 使用量",
+    "codex config",
+    "codex config.toml",
+    "codex config.toml api key",
+    "codex config.toml auto approve",
+    "codex config.toml example",
+    "codex config.toml file",
+    "codex config.toml location",
+    "codex config.toml mcp",
+    "codex config.toml options",
+    "codex config.toml settings",
+    "codex config.toml windows",
+    "codex cost",
+    "codex cost api",
+    "codex cost chatgpt",
+    "codex cost india",
+    "codex cost openai",
+    "codex cost per million tokens",
+    "codex cost per month",
+    "codex cost per token",
+    "codex cost vs claude code",
+    "codex costo",
+    "codex desktop app",
+    "codex download",
+    "codex download app",
+    "codex download cli",
+    "codex download for windows 10",
+    "codex download for windows 11",
+    "codex download linux",
+    "codex download mac",
+    "codex download macos",
+    "codex download ubuntu",
+    "codex download windows",
+    "codex free",
+    "codex free api key",
+    "codex free credits",
+    "codex free for students",
+    "codex free limits",
+    "codex free plan",
+    "codex free tier",
+    "codex free trial",
+    "codex free usage",
+    "codex free version",
+    "codex how to use",
+    "codex how to use agents",
+    "codex how to use api key",
+    "codex how to use code review",
+    "codex how to use in vs code",
+    "codex how to use mcp",
+    "codex how to use plan mode",
+    "codex how to use skills",
+    "codex how to use subagents",
+    "codex how to use worktree",
+    "codex keeps asking for approval",
+    "codex key",
+    "codex limit",
+    "codex login",
+    "codex login cli",
+    "codex login command",
+    "codex login device auth",
+    "codex login headless",
+    "codex login not working",
+    "codex login openai",
+    "codex login terminal",
+    "codex login with api key",
+    "codex login with chatgpt",
+    "codex mac app",
+    "codex or claude code",
+    "codex plus vs pro",
+    "codex pricing",
+    "codex pricing and limits",
+    "codex pricing api",
+    "codex pricing chatgpt",
+    "codex pricing india",
+    "codex pricing model",
+    "codex pricing openai",
+    "codex pricing plans",
+    "codex pricing reddit",
+    "codex pricing vs claude code",
+    "codex quota limit",
+    "codex rate limit",
+    "codex rate limit check",
+    "codex rate limit exceeded",
+    "codex rate limit monitor",
+    "codex rate limit reached",
+    "codex rate limit reset",
+    "codex rate limit weekly",
+    "codex rate limits plus",
+    "codex rate limits reddit",
+    "codex rate limits remaining",
+    "codex subagents",
+    "codex token limit",
+    "codex token usage",
+    "codex tutorial",
+    "codex tutorial chatgpt",
+    "codex tutorial for beginners",
+    "codex tutorial github",
+    "codex tutorial openai",
+    "codex tutorial pdf",
+    "codex tutorial reddit",
+    "codex tutorial udemy",
+    "codex tutorial vscode",
+    "codex tutorial youtube",
+    "codex usage",
+    "codex usage check",
+    "codex usage dashboard",
+    "codex usage limit reached",
+    "codex usage limit reset",
+    "codex usage limits",
+    "codex usage limits chatgpt plus",
+    "codex usage limits check",
+    "codex usage limits dashboard",
+    "codex usage limits for plus",
+    "codex usage limits openai",
+    "codex usage limits reddit",
+    "codex usage limits vs claude code",
+    "codex vs antigravity",
+    "codex vs claude",
+    "codex vs claude code",
+    "codex vs claude code 2026",
+    "codex vs claude code limits",
+    "codex vs claude code pricing",
+    "codex vs claude code reddit",
+    "codex vs claude code usage limits",
+    "codex vs claude code vs antigravity",
+    "codex vs claude code vs cursor",
+    "codex vs claude code vs gemini",
+    "codex vs claude code vs gemini cli",
+    "codex vs copilot",
+    "codex vs cursor",
+    "codex vs gemini",
+    "codex vs github copilot",
+    "codex vs opencode",
+    "codex vscode",
+    "codex vscode extension",
+    "codex weekly limit",
+    "codex windows app",
+    "codex windows download",
+    "codex 价格",
+    "codex 免费",
+    "codex 免费使用",
+    "codex 免费到什么时候",
+    "codex 免费模型",
+    "codex 免费用户",
+    "codex 免费试用",
+    "codex 免费账号额度",
+    "codex 免费额度",
+    "codex 国内使用",
+    "codex 安装",
+    "codex 安装 mac",
+    "codex 安装 superpowers",
+    "codex 安装 windows",
+    "codex 安装mcp",
+    "codex 安装skill",
+    "codex 安装命令",
+    "codex 教程",
+    "codex 订阅",
+    "codex 订阅 国内",
+    "codex 订阅价格",
+    "codex 订阅套餐",
+    "codex 订阅方案",
+    "codex 订阅计划",
+    "codex 订阅费用",
+    "codex 订阅额度",
+    "codex 额度",
+    "codex 额度查看",
+    "codex 额度查询",
+    "codex 额度翻倍",
+    "codex 额度购买",
+    "codex 额度重置",
+    "codex 额度限制",
+    "codex免费吗",
+    "codex免费用户额度",
+    "codex安装使用",
+    "codex安装包",
+    "codex安装教程",
+    "codex订阅对比",
+    "codex订阅购买",
+    "codex额度不够",
+    "codex额度刷新",
+    "codex额度怎么看",
+    "gpt 5.4 codex cli",
+    "gpt 5.4 codex pricing",
+    "gpt 5.4 codex vs claude",
+    "gpt 5.4 codex vs claude opus 4.6",
+    "gpt 5.4 codex vs opus 4.6",
+    "gpt-5.3 codex api",
+    "gpt-5.3 codex pricing",
+    "gpt-5.3 codex vs claude opus 4.6",
+    "gpt-5.3 codex vs gpt-5.4",
+    "gpt-5.3 codex vs opus 4.6",
+    "openai codex api",
+    "openai codex app",
+    "openai codex cli",
+    "openai codex pricing",
+    "openai codex usage",
+    "openai codex vs claude code"
+  ]
+}

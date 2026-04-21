@@ -16,6 +16,15 @@ icon: "compass"
     [View Docs →](/en/api-capabilities/sora-image-generation)
   </Card>
 
+  <Card title="OpenAI-Compatible" icon="plug">
+    **GPT-Image-2** - $0.03/call
+    - OpenAI-compatible endpoints
+    - Supports Chat Completions and Images API
+    - Covers generation and editing
+
+    [View Docs →](/en/api-capabilities/gpt-image-2)
+  </Card>
+
   <Card title="Highest Quality" icon="sparkles">
     **Flux Kontext Max** - $0.07/image
     - Premium quality
@@ -35,12 +44,12 @@ icon: "compass"
   </Card>
 
   <Card title="Editing Features" icon="paintbrush">
-    **Gemini Flash Edit** - $0.025/call
-    - Multi-image composition
-    - Style transfer
-    - Custom dimensions
+    **GPT-Image-2 / Gemini Flash Edit**
+    - GPT-Image-2 fits OpenAI-compatible image editing
+    - Gemini Flash is useful for multi-image composition
+    - Choose URL or Base64 based on your app
 
-    [View Docs →](/en/api-capabilities/gemini-flash-image-edit)
+    [View GPT-Image-2 →](/en/api-capabilities/gpt-image-2)
   </Card>
 </CardGroup>
 
@@ -49,6 +58,7 @@ icon: "compass"
 | Service | Price | Speed | Quality | Features | Best For |
 |---------|-------|-------|---------|----------|----------|
 | **Sora Image** | $0.01/img | ~10-15s | ⭐⭐⭐⭐ | Chinese-friendly, pay-per-call | Batch content, quick prototyping |
+| **GPT-Image-2** | $0.03/call | Medium | ⭐⭐⭐⭐⭐ | Chat Completions + Images API, URL/Base64 | OpenAI-compatible integration, generation and editing |
 | **Flux Pro** | $0.035/img | Fast | ⭐⭐⭐⭐ | Flexible ratios (3:7-7:3) | Professional design, social media |
 | **Flux Max** | $0.07/img | Fast | ⭐⭐⭐⭐⭐ | Highest quality | Commercial work, premium design |
 | **Gemini Flash** | $0.025/img | ~10s | ⭐⭐⭐⭐ | 10 ratios, ultra-fast | Quick prototyping, mobile apps |
@@ -62,6 +72,7 @@ icon: "compass"
 **Cost Comparison**: Generating 100 images
 - Sora: $1.00
 - Gemini/Nano Banana: $2.50
+- GPT-Image-2: $3.00
 - Nano Banana2: $5.50
 - Seedream 4.0: $3.50
 - Nano Banana Pro: $9.00
@@ -138,6 +149,7 @@ icon: "compass"
 | Need | Recommended Service | Price | Features |
 |------|-------------------|-------|----------|
 | Multi-image composition | Gemini Flash Edit | $0.025/call | Up to 4 images fusion |
+| OpenAI-compatible image-to-image | GPT-Image-2 | $0.03/call | Chat Completions supports URL/base64 input; Images Edits supports multipart |
 | Precise control | Flux Edit | $0.035/call | Mask control, local editing |
 | Style transfer | Sora Edit, Seedream | $0.01-0.035/call | Artistic style migration |
 | Image-to-image | Seedream | $0.035/call | Keep structure, change details |
@@ -246,6 +258,9 @@ Ready? Click below to view detailed docs:
   <Card title="Sora Image" icon="wand-sparkles" href="/en/api-capabilities/sora-image-generation">
     $0.01/img - Best Value
   </Card>
+  <Card title="GPT-Image-2" icon="image" href="/en/api-capabilities/gpt-image-2">
+    $0.03/call - OpenAI-compatible generation and editing
+  </Card>
   <Card title="Flux" icon="zap" href="/en/api-capabilities/flux-image-generation">
     $0.035-0.07/img - Professional Choice
   </Card>
@@ -275,10 +290,13 @@ Ready? Click below to view detailed docs:
   **Q: I need to edit images or compose multiple images**
   A: Choose **Gemini Flash Edit** or **Flux Edit**
 
+  **Q: I want one OpenAI-compatible path for both generation and editing**
+  A: Choose **GPT-Image-2**
+
   **Q: I need Base64 for direct web embedding**
-  A: Choose **Nano Banana** or **Gemini Flash**
+  A: Choose **GPT-Image-2 Images API**, **Nano Banana**, or **Gemini Flash**
 </Accordion>
 
 <Tip>
-Want to see actual results? Visit [imagen.laozhang.ai](https://imagen.laozhang.ai/) to test different models online.
+Want to see actual results? Visit [yingtu.ai](https://yingtu.ai) to test different image models online.
 </Tip>

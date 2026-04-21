@@ -1,0 +1,254 @@
+---
+title: GPT Image 2 API
+sidebarTitle: GPT-Image-2
+description: "Developer guide for using GPT-Image-2 through LaoZhang API with OpenAI-compatible image generation and image editing endpoints."
+icon: "image"
+---
+
+## Quick Overview
+
+`gpt-image-2` is an image generation and image editing model available through LaoZhang API. Use it when you need an OpenAI-compatible path that can cover both text-to-image and image-to-image workflows.
+
+<CardGroup cols={2}>
+  <Card title="Price" icon="badge-dollar">
+    `gpt-image-2` is billed per request at **$0.03/call**.
+  </Card>
+  <Card title="Online Test" icon="external-link" href="https://yingtu.ai">
+    Test the model online at [yingtu.ai](https://yingtu.ai) before integrating the API.
+  </Card>
+</CardGroup>
+
+## Which Endpoint Should You Use?
+
+| Need | Recommended endpoint | Response shape |
+| --- | --- | --- |
+| You already use Chat Completions and want minimal changes | `/v1/chat/completions` | Markdown image URL in `choices[0].message.content` |
+| You only need text-to-image with the standard Images API shape | `/v1/images/generations` | `data[0].b64_json` by default, or `data[0].url` |
+| You need multipart local image upload for image editing | `/v1/images/edits` | `data[0].b64_json` by default, or `data[0].url` |
+| Your source image is already a CDN URL or base64 data URL | `/v1/chat/completions` | Markdown image URL |
+
+<Tip>
+If your app only needs "prompt in, image URL out", start with `/v1/chat/completions`. If you already have OpenAI Images API code, use `/v1/images/generations` and `/v1/images/edits`.
+</Tip>
+
+## Base Configuration
+
+```bash
+export LAOZHANG_API_KEY="sk-your-key"
+export BASE_URL="https://api.laozhang.ai/v1"
+```
+
+Use the unified OpenAI-compatible gateway URL `https://api.laozhang.ai/v1`. Do not set the base URL to a model-level path.
+
+## Chat Completions Text-to-Image
+
+This is the simplest integration path. Set `model` to `gpt-image-2` and put the image request in `messages`.
+
+```bash
+curl "$BASE_URL/chat/completions" \
+  -H "Content-Type: application/json" \
+  -H "Authorization: Bearer $LAOZHANG_API_KEY" \
+  -d '{
+    "model": "gpt-image-2",
+    "messages": [
+      {
+        "role": "user",
+        "content": "Create a clean product render of a white ceramic mug on a gray desk, soft natural light, minimal background"
+      }
+    ],
+    "stream": false
+  }'
+```
+
+The generated image usually appears as a Markdown image link in `choices[0].message.content`:
+
+```json
+{
+  "choices": [
+    {
+      "message": {
+        "role": "assistant",
+        "content": "![image](https://example.com/generated.png)"
+      }
+    }
+  ]
+}
+```
+
+## Chat Completions Image-to-Image
+
+Use `/v1/chat/completions` when your source image is available as a CDN URL or a base64 data URL. In this mode, `messages[].content` is an array that includes both the text instruction and the image input.
+
+### Use an Image URL
+
+```bash
+curl "$BASE_URL/chat/completions" \
+  -H "Content-Type: application/json" \
+  -H "Authorization: Bearer $LAOZHANG_API_KEY" \
+  -d '{
+    "model": "gpt-image-2",
+    "messages": [
+      {
+        "role": "user",
+        "content": [
+          {
+            "type": "text",
+            "text": "Use the provided image as the source. Keep the subject, composition, and text. Only change the sticker to red and add a very thin gold rim to the mug."
+          },
+          {
+            "type": "image_url",
+            "image_url": {
+              "url": "https://example.com/source.png"
+            }
+          }
+        ]
+      }
+    ],
+    "stream": false
+  }'
+```
+
+### Use a base64 Data URL
+
+```bash
+curl "$BASE_URL/chat/completions" \
+  -H "Content-Type: application/json" \
+  -H "Authorization: Bearer $LAOZHANG_API_KEY" \
+  -d '{
+    "model": "gpt-image-2",
+    "messages": [
+      {
+        "role": "user",
+        "content": [
+          {
+            "type": "text",
+            "text": "Use the provided image as the source. Keep the subject, composition, and text. Only change the sticker to green."
+          },
+          {
+            "type": "image_url",
+            "image_url": {
+              "url": "data:image/png;base64,put-image-base64-here"
+            }
+          }
+        ]
+      }
+    ],
+    "stream": false
+  }'
+```
+
+## Images Generations Text-to-Image
+
+If your code already uses the OpenAI Images API shape, call `/v1/images/generations`.
+
+The default response returns `data[0].b64_json`:
+
+```bash
+curl "$BASE_URL/images/generations" \
+  -H "Content-Type: application/json" \
+  -H "Authorization: Bearer $LAOZHANG_API_KEY" \
+  -d '{
+    "model": "gpt-image-2",
+    "prompt": "Create a clean product poster: a white card on a wooden desk with IMG-42 printed in the lower-right corner"
+  }'
+```
+
+Add `response_format` when you want a URL:
+
+```bash
+curl "$BASE_URL/images/generations" \
+  -H "Content-Type: application/json" \
+  -H "Authorization: Bearer $LAOZHANG_API_KEY" \
+  -d '{
+    "model": "gpt-image-2",
+    "prompt": "Create a clean product poster: a white card on a wooden desk with IMG-42 printed in the lower-right corner",
+    "response_format": "url"
+  }'
+```
+
+## Images Edits Image-to-Image
+
+Use `/v1/images/edits` when your source image is a local file and multipart upload is the most convenient path.
+
+The default response returns `data[0].b64_json`:
+
+```bash
+curl "$BASE_URL/images/edits" \
+  -H "Authorization: Bearer $LAOZHANG_API_KEY" \
+  -F "model=gpt-image-2" \
+  -F "prompt=Use the provided image as the source. Keep the desk, card, and IMG-42 label. Only add a very thin red border to the card." \
+  -F "image=@source.png"
+```
+
+Return a URL:
+
+```bash
+curl "$BASE_URL/images/edits" \
+  -H "Authorization: Bearer $LAOZHANG_API_KEY" \
+  -F "model=gpt-image-2" \
+  -F "prompt=Use the provided image as the source. Keep the desk, card, and IMG-42 label. Only add a very thin blue border to the card." \
+  -F "image=@source.png" \
+  -F "response_format=url"
+```
+
+## Parse Responses
+
+### Extract a Chat Completions Image URL
+
+```python
+import re
+
+content = response["choices"][0]["message"]["content"]
+match = re.search(r"!\[[^\]]*\]\((https?://[^)\s]+)\)", content)
+image_url = match.group(1) if match else None
+```
+
+### Save Images API b64_json
+
+```python
+import base64
+
+value = response["data"][0]["b64_json"]
+if value.startswith("data:"):
+    value = value.split(",", 1)[1]
+
+with open("output.png", "wb") as f:
+    f.write(base64.b64decode(value))
+```
+
+### Read an Images API URL
+
+```python
+image_url = response["data"][0]["url"]
+```
+
+## Prompt Pattern for Image Editing
+
+For image-to-image, tell the model what to preserve and what to change. A reliable pattern is:
+
+```text
+Use the provided image as the source. Keep the subject, composition, camera angle, and key text. Change only one specific detail: turn X into Y.
+```
+
+More stable instructions:
+
+- Keep the product, background, and camera angle; change only a color or local decoration.
+- Keep the card position and text; add only a border, label, or small icon.
+- Avoid "generate a similar image", which can encourage the model to redraw the whole image.
+
+## FAQ
+
+<AccordionGroup>
+  <Accordion title="Why is there no data[0].url in Chat Completions?">
+    `/v1/chat/completions` returns a chat completion shape. The image URL is inside the Markdown image link at `choices[0].message.content`. `data[0].url` belongs to Images API responses.
+  </Accordion>
+  <Accordion title="Why does b64_json decoding fail?">
+    Check whether the value includes a `data:image/png;base64,` prefix. If it does, split on the first comma and decode only the second part.
+  </Accordion>
+  <Accordion title="How much does it cost?">
+    `gpt-image-2` is billed per request at **$0.03/call**.
+  </Accordion>
+  <Accordion title="Can I test it online first?">
+    Yes. Visit [yingtu.ai](https://yingtu.ai) to test prompts online, then move the confirmed prompt into your API call.
+  </Accordion>
+</AccordionGroup>

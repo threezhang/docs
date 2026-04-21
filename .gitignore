@@ -37,3 +37,4 @@ out/
 # Mintlify
 .mintlify/
 .playwright-mcp/
+.playwright-cli/

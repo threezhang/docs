@@ -16,6 +16,15 @@ icon: "compass"
     [查看文档 →](/api-capabilities/sora-image-generation)
   </Card>
 
+  <Card title="OpenAI 兼容接入" icon="plug">
+    **GPT-Image-2** - $0.03/次
+    - OpenAI 兼容接口
+    - 支持 Chat Completions 和 Images API
+    - 文生图和图改图都可接入
+
+    [查看文档 →](/api-capabilities/gpt-image-2)
+  </Card>
+
   <Card title="需要高质量" icon="sparkles">
     **Flux Kontext Max** - $0.07/张
     - 最高质量
@@ -35,12 +44,12 @@ icon: "compass"
   </Card>
 
   <Card title="需要编辑功能" icon="paintbrush">
-    **Gemini Flash 编辑** - $0.025/次
-    - 多图合成
-    - 风格转换
-    - 自定义尺寸
+    **GPT-Image-2 / Gemini Flash 编辑**
+    - GPT-Image-2 适合 OpenAI 兼容图改图
+    - Gemini Flash 适合多图合成
+    - 根据返回格式选择 URL 或 Base64
 
-    [查看文档 →](/api-capabilities/gemini-flash-image-edit)
+    [查看 GPT-Image-2 →](/api-capabilities/gpt-image-2)
   </Card>
 </CardGroup>
 
@@ -49,6 +58,7 @@ icon: "compass"
 | 服务 | 价格 | 速度 | 质量 | 特点 | 适用场景 |
 |------|------|------|------|------|----------|
 | **Sora Image** | $0.01/张 | ~10-15秒 | ⭐⭐⭐⭐ | 中文友好、按次计费 | 批量内容生成、快速原型 |
+| **GPT-Image-2** | $0.03/次 | 中等 | ⭐⭐⭐⭐⭐ | Chat Completions + Images API，URL/Base64 | OpenAI 兼容集成、文生图和图改图 |
 | **Flux Pro** | $0.035/张 | 快速 | ⭐⭐⭐⭐ | 灵活比例（3:7-7:3）| 专业设计、社交媒体 |
 | **Flux Max** | $0.07/张 | 快速 | ⭐⭐⭐⭐⭐ | 最高质量 | 商业作品、高端设计 |
 | **Gemini Flash** | $0.025/张 | ~10秒 | ⭐⭐⭐⭐ | 10种比例、极速 | 快速原型、移动应用 |
@@ -62,6 +72,7 @@ icon: "compass"
 **成本对比**：生成100张图片
 - Sora: $1.00
 - Gemini/Nano Banana: $2.50
+- GPT-Image-2: $3.00
 - Nano Banana2: $5.50
 - Seedream 4.0: $3.50
 - Nano Banana Pro: $9.00
@@ -138,6 +149,7 @@ icon: "compass"
 | 需求 | 推荐服务 | 价格 | 特点 |
 |------|---------|------|------|
 | 多图合成 | Gemini Flash 编辑 | $0.025/次 | 最多4张图片融合 |
+| OpenAI 兼容图改图 | GPT-Image-2 | $0.03/次 | Chat Completions 支持 URL/base64 输入，Images Edits 支持 multipart |
 | 精确控制 | Flux 编辑 | $0.035/次 | 蒙版控制，局部编辑 |
 | 风格转换 | Sora 编辑、Seedream | $0.01-0.035/次 | 艺术风格迁移 |
 | 图改图 | Seedream | $0.035/次 | 保持结构，改变细节 |
@@ -246,6 +258,9 @@ icon: "compass"
   <Card title="Sora Image" icon="wand-sparkles" href="/api-capabilities/sora-image-generation">
     $0.01/张 - 性价比之王
   </Card>
+  <Card title="GPT-Image-2" icon="image" href="/api-capabilities/gpt-image-2">
+    $0.03/次 - OpenAI 兼容文生图和图改图
+  </Card>
   <Card title="Flux" icon="zap" href="/api-capabilities/flux-image-generation">
     $0.035-0.07/张 - 专业首选
   </Card>
@@ -275,10 +290,13 @@ icon: "compass"
   **Q: 我需要编辑图片或多图合成**
   A: 选择 **Gemini Flash 编辑** 或 **Flux 编辑**
 
+  **Q: 我想用 OpenAI 兼容接口同时做文生图和图改图**
+  A: 选择 **GPT-Image-2**
+
   **Q: 我需要Web应用直接嵌入（Base64）**
-  A: 选择 **Nano Banana (Standard)** 或 **Gemini Flash**
+  A: 选择 **GPT-Image-2 Images API**、**Nano Banana (Standard)** 或 **Gemini Flash**
 </Accordion>
 
 <Tip>
-不确定效果？访问 [imagen.laozhang.ai](https://imagen.laozhang.ai/) 在线测试各个模型的实际生成效果。
+不确定效果？访问 [yingtu.ai](https://yingtu.ai) 在线测试各个图像模型的实际生成效果。
 </Tip>
