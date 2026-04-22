@@ -1,11 +1,37 @@
 ---
 title: 网站公告
 sidebarTitle: 网站公告 🔥
-description: "老张API最新动态：Claude Opus 4.7、GPT-5.2、Gemini 3等新模型第一时间上线。价格调整、功能更新、优惠活动实时发布。订阅获取最新AI模型资讯。"
+description: "老张API最新动态：GPT-Image-2、Claude Opus 4.7、GPT-5.2、Gemini 3等新模型第一时间上线。价格调整、功能更新、优惠活动实时发布。订阅获取最新AI模型资讯。"
 icon: "newspaper"
 ---
 
 ## 📅 2026年4月
+
+### 🎨 GPT-Image-2 逆向方案上线，sora_image 官方线路下线
+**2026年4月22日**
+
+<Card>
+  **图像生成接口迁移公告**
+
+  - 🚀 **新增方案**：`gpt-image-2` 逆向方案已上线，支持文生图和图改图
+
+  - ⚠️ **线路调整**：
+    - `sora_image` 官方线路已下线
+    - 新增图像生成需求建议优先迁移到 `gpt-image-2`
+    - 现有 `sora_image` 调用请尽快切换模型和接口配置
+
+  - 💵 **价格说明**：
+    - `gpt-image-2` 按次计费，价格为 **$0.03/次**
+    - 可先在 [yingtu.ai](https://yingtu.ai) 在线测试效果，再接入 API
+
+  - 📝 **接入文档**：
+    - 开发文档：[GPT Image 2 API](/api-capabilities/gpt-image-2)
+    - 飞书说明文档：[GPT-Image-2 逆向方案说明](https://peixikeji.feishu.cn/wiki/ADXEwt76cisR32kAiqscd79lnKp)
+
+  <Info>
+    推荐优先使用 `gpt-image-2`。如果你的应用只需要“提示词输入、图片 URL 输出”，可直接使用 Chat Completions 接口；如果需要标准 Images API 返回结构，可使用 Images Generations 或 Images Edits 接口。
+  </Info>
+</Card>
 
 ### 🧠 Claude Opus 4.7 / Thinking 发布上线
 **2026年4月17日**
@@ -496,12 +522,13 @@ icon: "newspaper"
 ## 📊 更新统计
 
 ### 本月亮点（2026年4月）
+- 🎨 图像接口更新：GPT-Image-2 逆向方案上线，`sora_image` 官方线路下线
 - 🧠 新模型上线：Claude Opus 4.7 / Thinking 已开放调用
 - 💰 价格调整：Nano Banana Pro / Nano Banana2 新价格已生效
 - 📝 文档同步：公告页已更新最新模型与价格动态
 
 ### 历史里程碑
-- 2026年4月：Claude Opus 4.7 / Thinking 发布上线；Nano Banana 系列价格调整
+- 2026年4月：GPT-Image-2 逆向方案上线；`sora_image` 官方线路下线；Claude Opus 4.7 / Thinking 发布上线；Nano Banana 系列价格调整
 - 2026年1月：文档全面更新迎接新年；Claude 3 Opus 正式退役
 - 2025年12月：GPT-5.2 震撼发布，减少30%幻觉
 - 2025年11月：Claude Opus 4.5 最智能模型发布；Gemini 3 系列上线；GPT-5.1 系列上线
