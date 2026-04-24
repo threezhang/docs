@@ -1,48 +1,199 @@
 ---
 title: GPT Image 2 API
 sidebarTitle: GPT-Image-2
-description: "GPT-Image-2 图像生成与图像编辑 API 开发指南，支持 Chat Completions 和 Images API 两种 OpenAI 兼容调用方式。"
+description: "GPT-Image-2 开发指南，说明默认分组逆向线路、gpt-image-2-vip 尺寸参数，以及 Sora2Official 官转线路。"
 icon: "image"
 ---
 
-## 快速说明
+## 先确认令牌分组
 
-`gpt-image-2` 是 LaoZhang API 提供的图像生成与图像编辑模型，适合需要 OpenAI 兼容接口、希望同时覆盖文生图和图改图的开发场景。
+GPT Image 2 的线路由**令牌分组**决定。同一个 `gpt-image-2` 模型名，在默认分组和 `Sora2Official` 分组下不是同一条线路。
 
 <CardGroup cols={2}>
-  <Card title="价格" icon="badge-dollar">
-    `gpt-image-2` 按次计费，价格为 **$0.03/次**。
+  <Card title="默认分组：逆向线路" icon="rotate-cw">
+    按次扣费。`gpt-image-2` 是逆向 ChatGPT 网页版，`gpt-image-2-vip` 是逆向 Codex，价格都是 **$0.03/次**。
   </Card>
-  <Card title="在线测试" icon="external-link" href="https://yingtu.ai">
-    可在 [yingtu.ai](https://yingtu.ai) 在线测试生成效果，再接入 API。
+  <Card title="Sora2Official：官转 API" icon="shield-check">
+    按量扣费，价格与官方一致。模型名仍然是 `gpt-image-2`，调用方式与官方 Images API 一致。
   </Card>
 </CardGroup>
 
-## 接口怎么选
-
-| 你的需求 | 推荐接口 | 返回方式 |
-| --- | --- | --- |
-| 已经在用 Chat Completions，希望少改代码 | `/v1/chat/completions` | Markdown 图片 URL，位于 `choices[0].message.content` |
-| 只做文生图，并希望使用标准 Images API 结构 | `/v1/images/generations` | 默认 `data[0].b64_json`，也可返回 `data[0].url` |
-| 需要 multipart 上传本地图片做图改图 | `/v1/images/edits` | 默认 `data[0].b64_json`，也可返回 `data[0].url` |
-| 源图已经是 CDN 地址或 base64 data URL | `/v1/chat/completions` | Markdown 图片 URL |
-
 <Tip>
-如果你的应用只是“输入提示词，拿到一张图片 URL”，优先使用 `/v1/chat/completions`。如果你需要标准 Images API 响应结构，或已有 OpenAI Images API 代码，可以使用 `/v1/images/generations` 和 `/v1/images/edits`。
+先看令牌分组，再看模型名。默认分组的 `gpt-image-2` 和 `Sora2Official` 分组的 `gpt-image-2` 名字相同，但参数、计费和接口要求不同。
 </Tip>
+
+<Card title="在线测试" icon="external-link" href="https://yingtu.ai">
+  可以先在 [yingtu.ai](https://yingtu.ai) 在线测试效果，再迁移到 API。
+</Card>
+
+## 线路对照
+
+| 令牌分组 | 模型名 | 线路 | 计费 | `size` | `quality` | 可用接口 |
+| --- | --- | --- | --- | --- | --- | --- |
+| 默认分组 | `gpt-image-2` | 逆向 ChatGPT 网页版 | **$0.03/次** | 不支持 | 不支持 | Chat Completions、Images 生成、Images 编辑 |
+| 默认分组 | `gpt-image-2-vip` | 逆向 Codex | **$0.03/次** | 支持 | 不支持 | Chat Completions、Images 生成、Images 编辑 |
+| `Sora2Official` | `gpt-image-2` | 官转 API | 与官方一致 | 支持 | 支持 | Images 生成、Images 编辑 |
+
+## 怎么选
+
+| 你的需求 | 选择 |
+| --- | --- |
+| 快速接入，不需要控制尺寸 | 默认分组 `gpt-image-2` |
+| 需要逆向线路，并且要指定图片尺寸 | 默认分组 `gpt-image-2-vip` |
+| 已有官方 OpenAI GPT Image 2 代码，希望参数完全一致 | `Sora2Official` 分组 `gpt-image-2` |
+| 需要 `quality` 或更多官方参数 | `Sora2Official` 分组 `gpt-image-2` |
 
 ## 基础配置
 
+三条线路都使用同一个 OpenAI 兼容网关地址：
+
 ```bash
-export LAOZHANG_API_KEY="sk-你的许可"
+export LAOZHANG_API_KEY="sk-你的令牌"
 export BASE_URL="https://api.laozhang.ai/v1"
 ```
 
-OpenAI 兼容调用使用统一网关地址 `https://api.laozhang.ai/v1`，不要把 base URL 写成模型级路径。
+<Info>
+不要把 base URL 写成模型路径。实际线路由令牌分组和请求里的 `model` 字段共同决定。
+</Info>
 
-## Chat Completions 文生图
+## 参数支持
 
-这是最简单的接入方式：把 `model` 设置为 `gpt-image-2`，把图片需求写进 `messages`。
+### 默认分组 gpt-image-2
+
+默认分组的 `gpt-image-2` 是逆向 ChatGPT 网页版线路，适合不需要尺寸控制的快速接入。
+
+- 不支持 `size`
+- 不支持 `quality`
+- 价格：**$0.03/次**
+
+### 默认分组 gpt-image-2-vip
+
+默认分组的 `gpt-image-2-vip` 是逆向 Codex 线路，适合需要指定输出尺寸的逆向接入。
+
+- 支持 `size`
+- 不支持 `quality`
+- 价格：**$0.03/次**
+
+常用 `size`：
+
+- `1024x1024`
+- `1536x1024`
+- `1024x1536`
+- `2048x2048`
+- `2048x1152`
+- `3840x2160`
+- `2160x3840`
+- `auto`
+
+`size` 约束：
+
+- 最长边不超过 `3840px`
+- 两条边都必须是 `16px` 的倍数
+- 长边与短边比例不超过 `3:1`
+- 总像素不少于 `655,360`，不超过 `8,294,400`
+
+### Sora2Official 分组 gpt-image-2
+
+`Sora2Official` 分组的 `gpt-image-2` 是官转 API 线路，按量扣费，价格与官方 OpenAI GPT Image 2 API 一致。
+
+使用方式：
+
+1. 在控制台创建新令牌。
+2. 令牌分组选择 `Sora2Official`。
+3. 请求体继续使用 `model="gpt-image-2"`。
+4. 保留官方请求体，只替换 base URL 和 API Key。
+
+支持官方参数，包括 `size`、`quality` 以及官方 API 支持的其他参数。
+
+常用 `size`：
+
+- `1024x1024`
+- `1536x1024`
+- `1024x1536`
+- `2048x2048`
+- `2048x1152`
+- `3840x2160`
+- `2160x3840`
+- `auto`
+
+`quality` 可用值：
+
+- `low`
+- `medium`
+- `high`
+- `auto`
+
+## 接口支持
+
+默认分组逆向方案同时支持对话接口和 Images 接口：
+
+| 需求 | 接口 | 说明 |
+| --- | --- | --- |
+| 对话方式文生图或图改图 | `/v1/chat/completions` | 图片通常在 `choices[0].message.content` 的 Markdown 链接里 |
+| Images API 文生图 | `/v1/images/generations` | 默认返回 `data[0].b64_json`，也可返回 `data[0].url` |
+| Images API 图改图 | `/v1/images/edits` | multipart 上传本地图片 |
+
+`Sora2Official` 官转方案必须使用官方一致的 Images API：
+
+| 需求 | 接口 | 说明 |
+| --- | --- | --- |
+| 文生图 | `/v1/images/generations` | 和官方 Images 生成接口一致 |
+| 图改图 | `/v1/images/edits` | 和官方 Images 编辑接口一致 |
+
+<Warning>
+`Sora2Official` 官转 `gpt-image-2` 不按 `/v1/chat/completions` 文档化。需要官转时，请使用 `/v1/images/generations` 和 `/v1/images/edits`。
+</Warning>
+
+## 文生图示例
+
+### 默认分组 gpt-image-2
+
+不要传 `size` 或 `quality`。
+
+```bash
+curl "$BASE_URL/images/generations" \
+  -H "Content-Type: application/json" \
+  -H "Authorization: Bearer $LAOZHANG_API_KEY" \
+  -d '{
+    "model": "gpt-image-2",
+    "prompt": "生成一张白色陶瓷马克杯放在灰色桌面上的产品图，柔和自然光，简洁背景"
+  }'
+```
+
+### 默认分组 gpt-image-2-vip
+
+只传 `size`，不要传 `quality`。
+
+```bash
+curl "$BASE_URL/images/generations" \
+  -H "Content-Type: application/json" \
+  -H "Authorization: Bearer $LAOZHANG_API_KEY" \
+  -d '{
+    "model": "gpt-image-2-vip",
+    "prompt": "生成一张白色陶瓷马克杯放在灰色桌面上的产品图，柔和自然光，简洁背景",
+    "size": "1536x1024"
+  }'
+```
+
+### Sora2Official 分组 gpt-image-2
+
+使用官方一致的 Images 生成接口，可以传 `size` 和 `quality`。
+
+```bash
+curl "$BASE_URL/images/generations" \
+  -H "Content-Type: application/json" \
+  -H "Authorization: Bearer $LAOZHANG_API_KEY" \
+  -d '{
+    "model": "gpt-image-2",
+    "prompt": "生成一张白色陶瓷马克杯放在灰色桌面上的产品图，柔和自然光，简洁背景",
+    "size": "1536x1024",
+    "quality": "high"
+  }'
+```
+
+### 默认分组 Chat Completions
+
+默认分组逆向方案也可以用 `/v1/chat/completions` 文生图：
 
 ```bash
 curl "$BASE_URL/chat/completions" \
@@ -60,55 +211,46 @@ curl "$BASE_URL/chat/completions" \
   }'
 ```
 
-返回中的图片通常在 `choices[0].message.content` 里，以 Markdown 图片链接形式出现：
+## 图改图示例
 
-```json
-{
-  "choices": [
-    {
-      "message": {
-        "role": "assistant",
-        "content": "![image](https://example.com/generated.png)"
-      }
-    }
-  ]
-}
-```
-
-## Chat Completions 图改图
-
-当源图是可访问的 CDN 图片地址，或者你已经把图片转成了 base64 data URL，可以继续使用 `/v1/chat/completions`。`messages[].content` 需要改成数组，同时传入文字指令和图片。
-
-### 使用图片 URL
+### 默认分组 Images Edits
 
 ```bash
-curl "$BASE_URL/chat/completions" \
-  -H "Content-Type: application/json" \
+curl "$BASE_URL/images/edits" \
   -H "Authorization: Bearer $LAOZHANG_API_KEY" \
-  -d '{
-    "model": "gpt-image-2",
-    "messages": [
-      {
-        "role": "user",
-        "content": [
-          {
-            "type": "text",
-            "text": "使用提供的图片作为源图。保留主体、构图和文字，只把杯身贴纸改成红色，并给杯口加一条很细的金色边。"
-          },
-          {
-            "type": "image_url",
-            "image_url": {
-              "url": "https://example.com/source.png"
-            }
-          }
-        ]
-      }
-    ],
-    "stream": false
-  }'
+  -F "model=gpt-image-2" \
+  -F "prompt=使用提供的图片作为源图。保留主体、构图和文字，只把杯身贴纸改成红色，并给杯口加一条很细的金色边。" \
+  -F "image=@source.png"
 ```
 
-### 使用 base64 data URL
+### 默认分组 gpt-image-2-vip Images Edits
+
+```bash
+curl "$BASE_URL/images/edits" \
+  -H "Authorization: Bearer $LAOZHANG_API_KEY" \
+  -F "model=gpt-image-2-vip" \
+  -F "prompt=使用提供的图片作为源图。保留主体、构图和文字，只把贴纸改成蓝色。" \
+  -F "image=@source.png" \
+  -F "size=1024x1024"
+```
+
+### Sora2Official 分组 Images Edits
+
+官转图改图必须使用 `/v1/images/edits`，参数按官方 API 写法。
+
+```bash
+curl "$BASE_URL/images/edits" \
+  -H "Authorization: Bearer $LAOZHANG_API_KEY" \
+  -F "model=gpt-image-2" \
+  -F "prompt=使用提供的图片作为源图。保留主体、构图和文字，只把贴纸改成绿色。" \
+  -F "image=@source.png" \
+  -F "size=1024x1024" \
+  -F "quality=high"
+```
+
+### 默认分组 Chat Completions 图改图
+
+默认分组逆向方案还支持通过 `/v1/chat/completions` 传 CDN 图片地址或 base64 data URL：
 
 ```bash
 curl "$BASE_URL/chat/completions" \
@@ -127,7 +269,7 @@ curl "$BASE_URL/chat/completions" \
           {
             "type": "image_url",
             "image_url": {
-              "url": "data:image/png;base64,这里放图片base64"
+              "url": "https://example.com/source.png"
             }
           }
         ]
@@ -135,60 +277,6 @@ curl "$BASE_URL/chat/completions" \
     ],
     "stream": false
   }'
-```
-
-## Images Generations 文生图
-
-如果你的代码已经使用 OpenAI Images API，可以调用 `/v1/images/generations`。
-
-默认返回 `data[0].b64_json`：
-
-```bash
-curl "$BASE_URL/images/generations" \
-  -H "Content-Type: application/json" \
-  -H "Authorization: Bearer $LAOZHANG_API_KEY" \
-  -d '{
-    "model": "gpt-image-2",
-    "prompt": "生成一张简洁产品海报：木质桌面上一张白色卡片，卡片右下角印有 IMG-42"
-  }'
-```
-
-如果你希望直接拿图片 URL，添加 `response_format`：
-
-```bash
-curl "$BASE_URL/images/generations" \
-  -H "Content-Type: application/json" \
-  -H "Authorization: Bearer $LAOZHANG_API_KEY" \
-  -d '{
-    "model": "gpt-image-2",
-    "prompt": "生成一张简洁产品海报：木质桌面上一张白色卡片，卡片右下角印有 IMG-42",
-    "response_format": "url"
-  }'
-```
-
-## Images Edits 图改图
-
-如果源图在本地文件中，使用 `/v1/images/edits` 的 multipart 表单上传方式更直接。
-
-默认返回 `data[0].b64_json`：
-
-```bash
-curl "$BASE_URL/images/edits" \
-  -H "Authorization: Bearer $LAOZHANG_API_KEY" \
-  -F "model=gpt-image-2" \
-  -F "prompt=使用提供的图片作为源图。保留桌面、卡片和 IMG-42 标签，只给卡片加一条很细的红色边框。" \
-  -F "image=@source.png"
-```
-
-返回 URL：
-
-```bash
-curl "$BASE_URL/images/edits" \
-  -H "Authorization: Bearer $LAOZHANG_API_KEY" \
-  -F "model=gpt-image-2" \
-  -F "prompt=使用提供的图片作为源图。保留桌面、卡片和 IMG-42 标签，只给卡片加一条很细的蓝色边框。" \
-  -F "image=@source.png" \
-  -F "response_format=url"
 ```
 
 ## 返回结果解析
@@ -212,6 +300,8 @@ value = response["data"][0]["b64_json"]
 if value.startswith("data:"):
     value = value.split(",", 1)[1]
 
+value += "=" * ((4 - len(value) % 4) % 4)
+
 with open("output.png", "wb") as f:
     f.write(base64.b64decode(value))
 ```
@@ -222,33 +312,25 @@ with open("output.png", "wb") as f:
 image_url = response["data"][0]["url"]
 ```
 
-## 图改图提示词写法
-
-图改图的关键是明确“保留什么”和“只改什么”。推荐写法：
-
-```text
-使用提供的图片作为源图。保留主体、构图、镜头角度和关键文字。只修改一个明确细节：把 X 改成 Y。
-```
-
-更稳定的写法：
-
-- 保留商品、背景、镜头角度，只替换颜色或局部装饰。
-- 保留卡片位置和文字，只增加边框、标签或小图标。
-- 避免写“生成一张类似图片”，这会让模型更容易重绘整张图。
-
 ## 常见问题
 
 <AccordionGroup>
-  <Accordion title="为什么 Chat Completions 里没有 data[0].url？">
-    `/v1/chat/completions` 返回的是对话补全结构。图片 URL 在 `choices[0].message.content` 的 Markdown 图片链接里。`data[0].url` 是 Images API 的返回结构。
+  <Accordion title="为什么都是 gpt-image-2，但说明不一样？">
+    因为线路由令牌分组决定。默认分组的 `gpt-image-2` 是逆向 ChatGPT 网页版；`Sora2Official` 分组的 `gpt-image-2` 是官转 API。
+  </Accordion>
+  <Accordion title="默认分组的 gpt-image-2 能传 size 吗？">
+    不支持。默认分组里需要尺寸参数时，用 `gpt-image-2-vip`。
+  </Accordion>
+  <Accordion title="gpt-image-2-vip 能传 quality 吗？">
+    不支持。`gpt-image-2-vip` 只支持 `size`。如果需要 `quality`，请使用 `Sora2Official` 分组的 `gpt-image-2`。
+  </Accordion>
+  <Accordion title="Sora2Official 官转能用 chat/completions 吗？">
+    这页不把官转线路作为 `/v1/chat/completions` 来文档化。官转生图使用 `/v1/images/generations`，官转图改图使用 `/v1/images/edits`。
+  </Accordion>
+  <Accordion title="官转 API 要怎么迁移官方代码？">
+    创建 `Sora2Official` 分组令牌后，保留官方请求体，把 base URL 改为 `https://api.laozhang.ai/v1`，把 API Key 改成 LaoZhang API 令牌。
   </Accordion>
   <Accordion title="为什么 b64_json 解码失败？">
-    先检查返回值是否包含 `data:image/png;base64,` 前缀。包含前缀时，先按第一个逗号切分，再对后半段做 base64 解码。
-  </Accordion>
-  <Accordion title="价格是多少？">
-    `gpt-image-2` 按次计费，价格为 **$0.03/次**。
-  </Accordion>
-  <Accordion title="可以先在线试效果吗？">
-    可以。访问 [yingtu.ai](https://yingtu.ai) 在线测试，再把确认后的提示词迁移到 API 调用中。
+    常见原因是返回值带了 `data:image/png;base64,` 前缀，或者末尾缺少 padding。先去掉前缀，再补齐 `=` 后再做 base64 解码。
   </Accordion>
 </AccordionGroup>

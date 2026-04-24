@@ -7,28 +7,31 @@ icon: "newspaper"
 
 ## 📅 April 2026
 
-### 🎨 GPT-Image-2 Reverse Route Now Available; sora_image Official Route Offline
+### 🎨 GPT-Image-2 Reverse Routes Updated; sora_image Official Route Offline
 **April 22, 2026**
 
 <Card>
   **Image generation route update**
 
-  - 🚀 **New route**: `gpt-image-2` reverse route is now available for text-to-image and image-to-image workflows
+  - 🚀 **New routes**:
+    - `gpt-image-2` reverse ChatGPT Web route is now available for text-to-image and image-to-image workflows
+    - `gpt-image-2-vip` reverse Codex route is now available with `size` support for workflows that need explicit output dimensions
 
   - ⚠️ **Route change**:
     - The `sora_image` official route is now offline
-    - New image generation integrations should use `gpt-image-2` first
+    - New image generation integrations should use `gpt-image-2` or `gpt-image-2-vip`
     - Existing `sora_image` calls should migrate model and endpoint configuration as soon as possible
 
   - 💵 **Pricing**:
     - `gpt-image-2` is billed per request at **$0.03/call**
+    - `gpt-image-2-vip` is also billed per request at **$0.03/call**
     - You can test the model online at [yingtu.ai](https://yingtu.ai) before integrating the API
 
   - 📝 **Developer documentation**:
     - [GPT Image 2 API](/en/api-capabilities/gpt-image-2)
 
   <Info>
-    We recommend migrating new image generation workflows to `gpt-image-2`. For simple prompt-to-image-URL workflows, use Chat Completions; for standard Images API response shapes, use Images Generations or Images Edits.
+    Default-group reverse routes support Chat Completions, Images Generations, and Images Edits. Use `gpt-image-2` for standard generation, and use `gpt-image-2-vip` when you need the `size` parameter.
   </Info>
 </Card>
 
@@ -521,13 +524,13 @@ icon: "newspaper"
 ## 📊 Update Statistics
 
 ### This Month's Highlights (April 2026)
-- 🎨 Image API update: GPT-Image-2 reverse route is now available; `sora_image` official route is offline
+- 🎨 Image API update: `gpt-image-2` and `gpt-image-2-vip` reverse routes are now available; `sora_image` official route is offline
 - 🧠 New Model Launch: Claude Opus 4.7 / Thinking is now available
 - 💰 Pricing Update: New pricing for Nano Banana Pro / Nano Banana2 is now in effect
 - 📝 Docs Sync: Announcement page now reflects the latest model and pricing updates
 
 ### Historical Milestones
-- April 2026: GPT-Image-2 reverse route launched; `sora_image` official route went offline; Claude Opus 4.7 / Thinking launched; Nano Banana series pricing updated
+- April 2026: GPT-Image-2 reverse routes launched with the new `gpt-image-2-vip` size-parameter route; `sora_image` official route went offline; Claude Opus 4.7 / Thinking launched; Nano Banana series pricing updated
 - January 2026: Documentation fully updated for new year; Claude 3 Opus officially retired
 - December 2025: GPT-5.2 stunning release, 30% less hallucination
 - November 2025: Claude Opus 4.5 most intelligent model released; Gemini 3 series launched; GPT-5.1 series launched

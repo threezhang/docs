@@ -1,48 +1,199 @@
 ---
 title: GPT Image 2 API
 sidebarTitle: GPT-Image-2
-description: "Developer guide for using GPT-Image-2 through LaoZhang API with OpenAI-compatible image generation and image editing endpoints."
+description: "Developer guide for GPT-Image-2, covering the default-group reverse routes, gpt-image-2-vip size support, and the Sora2Official official-transit route."
 icon: "image"
 ---
 
-## Quick Overview
+## Start With the Token Group
 
-`gpt-image-2` is an image generation and image editing model available through LaoZhang API. Use it when you need an OpenAI-compatible path that can cover both text-to-image and image-to-image workflows.
+For GPT Image 2, the **token group** decides which route your request uses. The same `gpt-image-2` model name maps to different routes in the default group and the `Sora2Official` group.
 
 <CardGroup cols={2}>
-  <Card title="Price" icon="badge-dollar">
-    `gpt-image-2` is billed per request at **$0.03/call**.
+  <Card title="Default Group: Reverse Routes" icon="rotate-cw">
+    Per-call billing. `gpt-image-2` is the reverse ChatGPT Web route, `gpt-image-2-vip` is the reverse Codex route, and both are **$0.03/call**.
   </Card>
-  <Card title="Online Test" icon="external-link" href="https://yingtu.ai">
-    Test the model online at [yingtu.ai](https://yingtu.ai) before integrating the API.
+  <Card title="Sora2Official: Official Transit" icon="shield-check">
+    Usage-based billing with the same pricing as the official API. The model name is still `gpt-image-2`, and the request shape matches the official Images API.
   </Card>
 </CardGroup>
 
-## Which Endpoint Should You Use?
-
-| Need | Recommended endpoint | Response shape |
-| --- | --- | --- |
-| You already use Chat Completions and want minimal changes | `/v1/chat/completions` | Markdown image URL in `choices[0].message.content` |
-| You only need text-to-image with the standard Images API shape | `/v1/images/generations` | `data[0].b64_json` by default, or `data[0].url` |
-| You need multipart local image upload for image editing | `/v1/images/edits` | `data[0].b64_json` by default, or `data[0].url` |
-| Your source image is already a CDN URL or base64 data URL | `/v1/chat/completions` | Markdown image URL |
-
 <Tip>
-If your app only needs "prompt in, image URL out", start with `/v1/chat/completions`. If you already have OpenAI Images API code, use `/v1/images/generations` and `/v1/images/edits`.
+Check the token group first, then the model name. Default-group `gpt-image-2` and `Sora2Official` `gpt-image-2` share the same model name but have different routing, billing, and parameter support.
 </Tip>
+
+<Card title="Online Test" icon="external-link" href="https://yingtu.ai">
+  You can test the output first at [yingtu.ai](https://yingtu.ai), then move the prompt into your API integration.
+</Card>
+
+## Route Matrix
+
+| Token group | Model name | Route | Billing | `size` | `quality` | Available endpoints |
+| --- | --- | --- | --- | --- | --- | --- |
+| Default group | `gpt-image-2` | Reverse ChatGPT Web | **$0.03/call** | Not supported | Not supported | Chat Completions, Images generation, Images edits |
+| Default group | `gpt-image-2-vip` | Reverse Codex | **$0.03/call** | Supported | Not supported | Chat Completions, Images generation, Images edits |
+| `Sora2Official` | `gpt-image-2` | Official-transit API | Same as official pricing | Supported | Supported | Images generation, Images edits |
+
+## Which Route Should You Use?
+
+| Need | Use |
+| --- | --- |
+| Quick access without size control | Default-group `gpt-image-2` |
+| Reverse route with explicit image size | Default-group `gpt-image-2-vip` |
+| Existing official OpenAI GPT Image 2 code with full parameter compatibility | `Sora2Official` `gpt-image-2` |
+| `quality` or more official parameters | `Sora2Official` `gpt-image-2` |
 
 ## Base Configuration
 
+All routes use the same OpenAI-compatible gateway URL:
+
 ```bash
-export LAOZHANG_API_KEY="sk-your-key"
+export LAOZHANG_API_KEY="sk-your-token"
 export BASE_URL="https://api.laozhang.ai/v1"
 ```
 
-Use the unified OpenAI-compatible gateway URL `https://api.laozhang.ai/v1`. Do not set the base URL to a model-level path.
+<Info>
+Do not set the base URL to a model-specific path. The actual route is determined by the token group and the `model` field.
+</Info>
 
-## Chat Completions Text-to-Image
+## Parameter Support
 
-This is the simplest integration path. Set `model` to `gpt-image-2` and put the image request in `messages`.
+### Default-group gpt-image-2
+
+Default-group `gpt-image-2` is the reverse ChatGPT Web route. Use it when you want the simplest integration and do not need size control.
+
+- `size`: not supported
+- `quality`: not supported
+- Price: **$0.03/call**
+
+### Default-group gpt-image-2-vip
+
+Default-group `gpt-image-2-vip` is the reverse Codex route. Use it when you need explicit output size on a reverse route.
+
+- `size`: supported
+- `quality`: not supported
+- Price: **$0.03/call**
+
+Common `size` values:
+
+- `1024x1024`
+- `1536x1024`
+- `1024x1536`
+- `2048x2048`
+- `2048x1152`
+- `3840x2160`
+- `2160x3840`
+- `auto`
+
+`size` constraints:
+
+- Maximum edge length must be less than or equal to `3840px`
+- Both edges must be multiples of `16px`
+- Long edge to short edge ratio must not exceed `3:1`
+- Total pixels must be at least `655,360` and no more than `8,294,400`
+
+### Sora2Official-group gpt-image-2
+
+`Sora2Official` `gpt-image-2` is the official-transit API route. Billing is usage-based with the same pricing as the official OpenAI GPT Image 2 API.
+
+Setup:
+
+1. Create a new token in the console.
+2. Select the `Sora2Official` group for that token.
+3. Keep `model="gpt-image-2"` in the request body.
+4. Keep the official request body and replace only the base URL and API key.
+
+This route supports official parameters, including `size`, `quality`, and other parameters supported by the official API.
+
+Common `size` values:
+
+- `1024x1024`
+- `1536x1024`
+- `1024x1536`
+- `2048x2048`
+- `2048x1152`
+- `3840x2160`
+- `2160x3840`
+- `auto`
+
+Available `quality` values:
+
+- `low`
+- `medium`
+- `high`
+- `auto`
+
+## Endpoint Support
+
+Default-group reverse routes support both Chat Completions and Images endpoints:
+
+| Need | Endpoint | Notes |
+| --- | --- | --- |
+| Text-to-image or image-to-image through chat | `/v1/chat/completions` | The image is usually in a Markdown link at `choices[0].message.content` |
+| Images API text-to-image | `/v1/images/generations` | Returns `data[0].b64_json` by default, or `data[0].url` |
+| Images API image-to-image | `/v1/images/edits` | Multipart local image upload |
+
+The `Sora2Official` official-transit route must use official-style Images API endpoints:
+
+| Need | Endpoint | Notes |
+| --- | --- | --- |
+| Text-to-image | `/v1/images/generations` | Matches the official Images generation endpoint |
+| Image-to-image | `/v1/images/edits` | Matches the official Images edit endpoint |
+
+<Warning>
+This page does not document `Sora2Official` `gpt-image-2` as a `/v1/chat/completions` route. For official transit, use `/v1/images/generations` and `/v1/images/edits`.
+</Warning>
+
+## Text-to-Image Examples
+
+### Default-group gpt-image-2
+
+Do not pass `size` or `quality`.
+
+```bash
+curl "$BASE_URL/images/generations" \
+  -H "Content-Type: application/json" \
+  -H "Authorization: Bearer $LAOZHANG_API_KEY" \
+  -d '{
+    "model": "gpt-image-2",
+    "prompt": "Create a clean product render of a white ceramic mug on a gray desk, soft natural light, minimal background"
+  }'
+```
+
+### Default-group gpt-image-2-vip
+
+Pass `size` only. Do not pass `quality`.
+
+```bash
+curl "$BASE_URL/images/generations" \
+  -H "Content-Type: application/json" \
+  -H "Authorization: Bearer $LAOZHANG_API_KEY" \
+  -d '{
+    "model": "gpt-image-2-vip",
+    "prompt": "Create a clean product render of a white ceramic mug on a gray desk, soft natural light, minimal background",
+    "size": "1536x1024"
+  }'
+```
+
+### Sora2Official-group gpt-image-2
+
+Use the official-style Images generation endpoint. You can pass `size` and `quality`.
+
+```bash
+curl "$BASE_URL/images/generations" \
+  -H "Content-Type: application/json" \
+  -H "Authorization: Bearer $LAOZHANG_API_KEY" \
+  -d '{
+    "model": "gpt-image-2",
+    "prompt": "Create a clean product render of a white ceramic mug on a gray desk, soft natural light, minimal background",
+    "size": "1536x1024",
+    "quality": "high"
+  }'
+```
+
+### Default-group Chat Completions
+
+Default-group reverse routes can also generate images through `/v1/chat/completions`:
 
 ```bash
 curl "$BASE_URL/chat/completions" \
@@ -60,55 +211,46 @@ curl "$BASE_URL/chat/completions" \
   }'
 ```
 
-The generated image usually appears as a Markdown image link in `choices[0].message.content`:
+## Image-to-Image Examples
 
-```json
-{
-  "choices": [
-    {
-      "message": {
-        "role": "assistant",
-        "content": "![image](https://example.com/generated.png)"
-      }
-    }
-  ]
-}
-```
-
-## Chat Completions Image-to-Image
-
-Use `/v1/chat/completions` when your source image is available as a CDN URL or a base64 data URL. In this mode, `messages[].content` is an array that includes both the text instruction and the image input.
-
-### Use an Image URL
+### Default-group Images Edits
 
 ```bash
-curl "$BASE_URL/chat/completions" \
-  -H "Content-Type: application/json" \
+curl "$BASE_URL/images/edits" \
   -H "Authorization: Bearer $LAOZHANG_API_KEY" \
-  -d '{
-    "model": "gpt-image-2",
-    "messages": [
-      {
-        "role": "user",
-        "content": [
-          {
-            "type": "text",
-            "text": "Use the provided image as the source. Keep the subject, composition, and text. Only change the sticker to red and add a very thin gold rim to the mug."
-          },
-          {
-            "type": "image_url",
-            "image_url": {
-              "url": "https://example.com/source.png"
-            }
-          }
-        ]
-      }
-    ],
-    "stream": false
-  }'
+  -F "model=gpt-image-2" \
+  -F "prompt=Use the provided image as the source. Keep the subject, composition, and text. Only change the sticker to red and add a very thin gold rim to the mug." \
+  -F "image=@source.png"
 ```
 
-### Use a base64 Data URL
+### Default-group gpt-image-2-vip Images Edits
+
+```bash
+curl "$BASE_URL/images/edits" \
+  -H "Authorization: Bearer $LAOZHANG_API_KEY" \
+  -F "model=gpt-image-2-vip" \
+  -F "prompt=Use the provided image as the source. Keep the subject, composition, and text. Only change the sticker to blue." \
+  -F "image=@source.png" \
+  -F "size=1024x1024"
+```
+
+### Sora2Official-group Images Edits
+
+Official-transit image editing must use `/v1/images/edits`, with official-style parameters.
+
+```bash
+curl "$BASE_URL/images/edits" \
+  -H "Authorization: Bearer $LAOZHANG_API_KEY" \
+  -F "model=gpt-image-2" \
+  -F "prompt=Use the provided image as the source. Keep the subject, composition, and text. Only change the sticker to green." \
+  -F "image=@source.png" \
+  -F "size=1024x1024" \
+  -F "quality=high"
+```
+
+### Default-group Chat Completions Image-to-Image
+
+Default-group reverse routes can also send a CDN image URL or base64 data URL through `/v1/chat/completions`:
 
 ```bash
 curl "$BASE_URL/chat/completions" \
@@ -127,7 +269,7 @@ curl "$BASE_URL/chat/completions" \
           {
             "type": "image_url",
             "image_url": {
-              "url": "data:image/png;base64,put-image-base64-here"
+              "url": "https://example.com/source.png"
             }
           }
         ]
@@ -135,60 +277,6 @@ curl "$BASE_URL/chat/completions" \
     ],
     "stream": false
   }'
-```
-
-## Images Generations Text-to-Image
-
-If your code already uses the OpenAI Images API shape, call `/v1/images/generations`.
-
-The default response returns `data[0].b64_json`:
-
-```bash
-curl "$BASE_URL/images/generations" \
-  -H "Content-Type: application/json" \
-  -H "Authorization: Bearer $LAOZHANG_API_KEY" \
-  -d '{
-    "model": "gpt-image-2",
-    "prompt": "Create a clean product poster: a white card on a wooden desk with IMG-42 printed in the lower-right corner"
-  }'
-```
-
-Add `response_format` when you want a URL:
-
-```bash
-curl "$BASE_URL/images/generations" \
-  -H "Content-Type: application/json" \
-  -H "Authorization: Bearer $LAOZHANG_API_KEY" \
-  -d '{
-    "model": "gpt-image-2",
-    "prompt": "Create a clean product poster: a white card on a wooden desk with IMG-42 printed in the lower-right corner",
-    "response_format": "url"
-  }'
-```
-
-## Images Edits Image-to-Image
-
-Use `/v1/images/edits` when your source image is a local file and multipart upload is the most convenient path.
-
-The default response returns `data[0].b64_json`:
-
-```bash
-curl "$BASE_URL/images/edits" \
-  -H "Authorization: Bearer $LAOZHANG_API_KEY" \
-  -F "model=gpt-image-2" \
-  -F "prompt=Use the provided image as the source. Keep the desk, card, and IMG-42 label. Only add a very thin red border to the card." \
-  -F "image=@source.png"
-```
-
-Return a URL:
-
-```bash
-curl "$BASE_URL/images/edits" \
-  -H "Authorization: Bearer $LAOZHANG_API_KEY" \
-  -F "model=gpt-image-2" \
-  -F "prompt=Use the provided image as the source. Keep the desk, card, and IMG-42 label. Only add a very thin blue border to the card." \
-  -F "image=@source.png" \
-  -F "response_format=url"
 ```
 
 ## Parse Responses
@@ -212,6 +300,8 @@ value = response["data"][0]["b64_json"]
 if value.startswith("data:"):
     value = value.split(",", 1)[1]
 
+value += "=" * ((4 - len(value) % 4) % 4)
+
 with open("output.png", "wb") as f:
     f.write(base64.b64decode(value))
 ```
@@ -222,33 +312,25 @@ with open("output.png", "wb") as f:
 image_url = response["data"][0]["url"]
 ```
 
-## Prompt Pattern for Image Editing
-
-For image-to-image, tell the model what to preserve and what to change. A reliable pattern is:
-
-```text
-Use the provided image as the source. Keep the subject, composition, camera angle, and key text. Change only one specific detail: turn X into Y.
-```
-
-More stable instructions:
-
-- Keep the product, background, and camera angle; change only a color or local decoration.
-- Keep the card position and text; add only a border, label, or small icon.
-- Avoid "generate a similar image", which can encourage the model to redraw the whole image.
-
 ## FAQ
 
 <AccordionGroup>
-  <Accordion title="Why is there no data[0].url in Chat Completions?">
-    `/v1/chat/completions` returns a chat completion shape. The image URL is inside the Markdown image link at `choices[0].message.content`. `data[0].url` belongs to Images API responses.
+  <Accordion title="Why does gpt-image-2 mean different things on this page?">
+    The token group decides the route. Default-group `gpt-image-2` is the reverse ChatGPT Web route. `Sora2Official` `gpt-image-2` is the official-transit API route.
+  </Accordion>
+  <Accordion title="Can default-group gpt-image-2 accept size?">
+    No. Use `gpt-image-2-vip` in the default group when you need size control.
+  </Accordion>
+  <Accordion title="Can gpt-image-2-vip accept quality?">
+    No. `gpt-image-2-vip` supports `size` only. Use `gpt-image-2` in the `Sora2Official` group when you need `quality`.
+  </Accordion>
+  <Accordion title="Can Sora2Official use chat/completions?">
+    This page does not document the official-transit route as `/v1/chat/completions`. Use `/v1/images/generations` for generation and `/v1/images/edits` for edits.
+  </Accordion>
+  <Accordion title="How do I migrate official OpenAI code?">
+    Create a token under the `Sora2Official` group, keep the official request body, replace the base URL with `https://api.laozhang.ai/v1`, and replace the API key with your LaoZhang API token.
   </Accordion>
   <Accordion title="Why does b64_json decoding fail?">
-    Check whether the value includes a `data:image/png;base64,` prefix. If it does, split on the first comma and decode only the second part.
-  </Accordion>
-  <Accordion title="How much does it cost?">
-    `gpt-image-2` is billed per request at **$0.03/call**.
-  </Accordion>
-  <Accordion title="Can I test it online first?">
-    Yes. Visit [yingtu.ai](https://yingtu.ai) to test prompts online, then move the confirmed prompt into your API call.
+    The value may include a `data:image/png;base64,` prefix, or it may need padding at the end. Remove the prefix first, then pad with `=` before decoding.
   </Accordion>
 </AccordionGroup>
