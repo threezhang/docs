@@ -1,7 +1,7 @@
 ---
 title: GPT Image 2 API
 sidebarTitle: GPT-Image-2
-description: "Developer guide for GPT-Image-2, covering the default-group reverse routes, gpt-image-2-vip size support, and the Sora2Official official-transit route."
+description: "Developer guide for GPT-Image-2, covering the default-group reverse routes, gpt-image-2-vip common size support, and the Sora2Official official-transit route."
 icon: "image"
 ---
 
@@ -31,7 +31,7 @@ Check the token group first, then the model name. Default-group `gpt-image-2` an
 | Token group | Model name | Route | Billing | `size` | `quality` | Available endpoints |
 | --- | --- | --- | --- | --- | --- | --- |
 | Default group | `gpt-image-2` | Reverse ChatGPT Web | **$0.03/call** | Not supported | Not supported | Chat Completions, Images generation, Images edits |
-| Default group | `gpt-image-2-vip` | Reverse Codex | **$0.03/call** | Supported | Not supported | Chat Completions, Images generation, Images edits |
+| Default group | `gpt-image-2-vip` | Reverse Codex | **$0.03/call** | Common sizes only, no 4K | Not supported | Chat Completions, Images generation, Images edits |
 | `Sora2Official` | `gpt-image-2` | Official-transit API | Same as official pricing | Supported | Supported | Images generation, Images edits |
 
 ## Which Route Should You Use?
@@ -39,7 +39,7 @@ Check the token group first, then the model name. Default-group `gpt-image-2` an
 | Need | Use |
 | --- | --- |
 | Quick access without size control | Default-group `gpt-image-2` |
-| Reverse route with explicit image size | Default-group `gpt-image-2-vip` |
+| Reverse route with a common explicit image size | Default-group `gpt-image-2-vip` |
 | Existing official OpenAI GPT Image 2 code with full parameter compatibility | `Sora2Official` `gpt-image-2` |
 | `quality` or more official parameters | `Sora2Official` `gpt-image-2` |
 
@@ -68,29 +68,30 @@ Default-group `gpt-image-2` is the reverse ChatGPT Web route. Use it when you wa
 
 ### Default-group gpt-image-2-vip
 
-Default-group `gpt-image-2-vip` is the reverse Codex route. Use it when you need explicit output size on a reverse route.
+Default-group `gpt-image-2-vip` is the reverse Codex route. Use it when you need a common explicit output size on a reverse route.
 
-- `size`: supported
+- `size`: common sizes supported
 - `quality`: not supported
 - Price: **$0.03/call**
 
-Common `size` values:
+Recommended `size` values:
 
 - `1024x1024`
 - `1536x1024`
 - `1024x1536`
 - `2048x2048`
 - `2048x1152`
-- `3840x2160`
-- `2160x3840`
 - `auto`
 
-`size` constraints:
+VIP size notes:
 
-- Maximum edge length must be less than or equal to `3840px`
-- Both edges must be multiples of `16px`
-- Long edge to short edge ratio must not exceed `3:1`
-- Total pixels must be at least `655,360` and no more than `8,294,400`
+- Prefer the common sizes listed above.
+- `2048x2048` and `2048x1152` are 2K-level sizes. Do not apply official 4K size parameters directly to the VIP reverse route.
+- `3840x2160` and `2160x3840` currently trigger upstream `invalid_request_error` / `Unknown error` responses on the VIP reverse route, so treat them as unsupported.
+
+<Warning>
+`gpt-image-2-vip` is a reverse route, not the official GPT Image 2 API. Use `gpt-image-2` under the `Sora2Official` group when you need `3840x2160`, `2160x3840`, or full official size support.
+</Warning>
 
 ### Sora2Official-group gpt-image-2
 
@@ -322,7 +323,10 @@ image_url = response["data"][0]["url"]
     No. Use `gpt-image-2-vip` in the default group when you need size control.
   </Accordion>
   <Accordion title="Can gpt-image-2-vip accept quality?">
-    No. `gpt-image-2-vip` supports `size` only. Use `gpt-image-2` in the `Sora2Official` group when you need `quality`.
+    No. `gpt-image-2-vip` supports common `size` values only. Use `gpt-image-2` in the `Sora2Official` group when you need `quality`.
+  </Accordion>
+  <Accordion title="Can gpt-image-2-vip use 4K sizes?">
+    Treat them as unsupported for now. `3840x2160` and `2160x3840` are official GPT Image 2 sizes, but they fail on the `gpt-image-2-vip` reverse route. Use `gpt-image-2` under the `Sora2Official` group when you need 4K output.
   </Accordion>
   <Accordion title="Can Sora2Official use chat/completions?">
     This page does not document the official-transit route as `/v1/chat/completions`. Use `/v1/images/generations` for generation and `/v1/images/edits` for edits.

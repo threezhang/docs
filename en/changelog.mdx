@@ -15,7 +15,7 @@ icon: "newspaper"
 
   - 🚀 **New routes**:
     - `gpt-image-2` reverse ChatGPT Web route is now available for text-to-image and image-to-image workflows
-    - `gpt-image-2-vip` reverse Codex route is now available with `size` support for workflows that need explicit output dimensions
+    - `gpt-image-2-vip` reverse Codex route is now available with common `size` support; treat the two 4K sizes, `3840x2160` and `2160x3840`, as unsupported
 
   - ⚠️ **Route change**:
     - The `sora_image` official route is now offline
@@ -31,7 +31,7 @@ icon: "newspaper"
     - [GPT Image 2 API](/en/api-capabilities/gpt-image-2)
 
   <Info>
-    Default-group reverse routes support Chat Completions, Images Generations, and Images Edits. Use `gpt-image-2` for standard generation, and use `gpt-image-2-vip` when you need the `size` parameter.
+    Default-group reverse routes support Chat Completions, Images Generations, and Images Edits. Use `gpt-image-2` for standard generation, use `gpt-image-2-vip` when you need common `size` values, and use `gpt-image-2` under the `Sora2Official` group when you need 4K or full official size support.
   </Info>
 </Card>
 
@@ -530,7 +530,7 @@ icon: "newspaper"
 - 📝 Docs Sync: Announcement page now reflects the latest model and pricing updates
 
 ### Historical Milestones
-- April 2026: GPT-Image-2 reverse routes launched with the new `gpt-image-2-vip` size-parameter route; `sora_image` official route went offline; Claude Opus 4.7 / Thinking launched; Nano Banana series pricing updated
+- April 2026: GPT-Image-2 reverse routes launched with the new `gpt-image-2-vip` common-size route; `sora_image` official route went offline; Claude Opus 4.7 / Thinking launched; Nano Banana series pricing updated
 - January 2026: Documentation fully updated for new year; Claude 3 Opus officially retired
 - December 2025: GPT-5.2 stunning release, 30% less hallucination
 - November 2025: Claude Opus 4.5 most intelligent model released; Gemini 3 series launched; GPT-5.1 series launched
